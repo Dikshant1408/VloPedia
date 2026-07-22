@@ -8,7 +8,7 @@ async function startServer() {
 
   // Intercept robots.txt dynamically to match the current request host
   app.get("/robots.txt", (req, res) => {
-    const host = req.get("host") || "vlopedia.app";
+    const host = req.get("host") || "vlopedia.vercel.app";
     // Detect protocol (behind reverse proxy, look for x-forwarded-proto)
     const protocol = req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
     const origin = `${protocol}://${host}`;
@@ -32,7 +32,7 @@ Sitemap: ${origin}/sitemap.xml
 
   // Intercept sitemap.xml dynamically to match the current request host
   app.get("/sitemap.xml", (req, res) => {
-    const host = req.get("host") || "vlopedia.app";
+    const host = req.get("host") || "vlopedia.vercel.app";
     const protocol = req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
     const origin = `${protocol}://${host}`;
 

@@ -8,4 +8,4 @@ Disallow: /build/
 Disallow: /.vercel/
 
 # Sitemap location
-Sitemap: https://vlopedia.app/sitemap.xml
+Sitemap: https://vlopedia.vercel.app/sitemap.xml

@@ -2,56 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage -->
   <url>
-    <loc>https://vlopedia.app/</loc>
+    <loc>https://vlopedia.vercel.app/</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
   </url>
   <!-- Agents Database -->
   <url>
-    <loc>https://vlopedia.app/#/agents</loc>
+    <loc>https://vlopedia.vercel.app/#/agents</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <!-- Weapons Armory & Skin Store -->
   <url>
-    <loc>https://vlopedia.app/#/weapons</loc>
+    <loc>https://vlopedia.vercel.app/#/weapons</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <!-- Interactive Tactical Radar Maps -->
   <url>
-    <loc>https://vlopedia.app/#/maps</loc>
+    <loc>https://vlopedia.vercel.app/#/maps</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <!-- Bundles & Skin Collection Store -->
   <url>
-    <loc>https://vlopedia.app/#/collection</loc>
+    <loc>https://vlopedia.vercel.app/#/collection</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <!-- Crosshair Labs & Sensitivity Converter -->
   <url>
-    <loc>https://vlopedia.app/#/meta</loc>
+    <loc>https://vlopedia.vercel.app/#/meta</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <!-- Leaderboards & Career Profiles -->
   <url>
-    <loc>https://vlopedia.app/#/player-registry</loc>
+    <loc>https://vlopedia.vercel.app/#/player-registry</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <!-- Game Modes & Competitive Guides -->
   <url>
-    <loc>https://vlopedia.app/#/game-modes</loc>
+    <loc>https://vlopedia.vercel.app/#/game-modes</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
