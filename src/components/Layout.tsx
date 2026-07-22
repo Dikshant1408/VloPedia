@@ -26,6 +26,7 @@ interface LayoutProps {
   setActiveTab: (tab: string) => void;
   accentColor: string;
   setAccentColor: (color: string) => void;
+  navigate: (path: string) => void;
 }
 
 export const NAVIGATION_TABS = [
@@ -118,6 +119,7 @@ export default function Layout({
   setActiveTab,
   accentColor,
   setAccentColor,
+  navigate,
 }: LayoutProps) {
   const [isMuted, setIsMuted] = useState(audio.isMuted());
   const [ambientEnabled, setAmbientEnabled] = useState(audio.isAmbientPlaying());
@@ -442,7 +444,7 @@ export default function Layout({
 
   const handleTabChange = (tabId: string) => {
     audio.playSelect();
-    setActiveTab(tabId);
+    navigate(tabId === "home" ? "/" : `/${tabId}`);
   };
 
   return (

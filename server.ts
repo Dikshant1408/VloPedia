@@ -41,56 +41,56 @@ Sitemap: ${origin}/sitemap.xml
   <!-- Homepage -->
   <url>
     <loc>${origin}/</loc>
-    <lastmod>2026-07-20</lastmod>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
   </url>
   <!-- Agents Database -->
   <url>
-    <loc>${origin}/#/agents</loc>
-    <lastmod>2026-07-20</lastmod>
+    <loc>${origin}/agents</loc>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <!-- Weapons Armory & Skin Store -->
   <url>
-    <loc>${origin}/#/weapons</loc>
-    <lastmod>2026-07-20</lastmod>
+    <loc>${origin}/weapons</loc>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <!-- Interactive Tactical Radar Maps -->
   <url>
-    <loc>${origin}/#/maps</loc>
-    <lastmod>2026-07-20</lastmod>
+    <loc>${origin}/maps</loc>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <!-- Bundles & Skin Collection Store -->
   <url>
-    <loc>${origin}/#/collection</loc>
-    <lastmod>2026-07-20</lastmod>
+    <loc>${origin}/collection</loc>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <!-- Crosshair Labs & Sensitivity Converter -->
   <url>
-    <loc>${origin}/#/meta</loc>
-    <lastmod>2026-07-20</lastmod>
+    <loc>${origin}/meta</loc>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <!-- Leaderboards & Career Profiles -->
   <url>
-    <loc>${origin}/#/player-registry</loc>
-    <lastmod>2026-07-20</lastmod>
+    <loc>${origin}/player-registry</loc>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <!-- Game Modes & Competitive Guides -->
   <url>
-    <loc>${origin}/#/game-modes</loc>
-    <lastmod>2026-07-20</lastmod>
+    <loc>${origin}/game-modes</loc>
+    <lastmod>2026-07-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { BrowserRouter, useLocation, useNavigate, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Homepage from "./components/Homepage";
 import AgentsTab from "./components/AgentsTab";
@@ -16,13 +17,45 @@ import GameModesTab from "./components/GameModesTab";
 import { Search, Compass, Award, Cpu, Globe, Sliders, Shield, Activity, Bookmark } from "lucide-react";
 import { audio } from "./services/audio";
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState<string>("home");
+const ROUTE_MAP: Record<string, string> = {
+  "/agents": "agents",
+  "/weapons": "weapons",
+  "/maps": "maps",
+  "/collection": "collection",
+  "/meta": "meta",
+  "/player-registry": "player-registry",
+  "/game-modes": "game-modes",
+};
+
+const TAB_TO_ROUTE: Record<string, string> = {
+  agents: "/agents",
+  weapons: "/weapons",
+  maps: "/maps",
+  collection: "/collection",
+  meta: "/meta",
+  "player-registry": "/player-registry",
+  "game-modes": "/game-modes",
+};
+
+function AppContent() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [accentColor, setAccentColor] = useState<string>("#00f5ff");
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Keyboard shortcut listener for CTRL + K
+  const activeTab = ROUTE_MAP[location.pathname] || "home";
+
+  const goToTab = (tabId: string, _itemId?: string) => {
+    audio.playSelect();
+    const route = TAB_TO_ROUTE[tabId];
+    if (route) {
+      navigate(route);
+    } else {
+      navigate("/");
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -39,7 +72,6 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // SEO & Google Indexing Dynamic Schema & Tag Injector
   useEffect(() => {
     const baseOrigin = window.location.origin;
 
@@ -56,7 +88,7 @@ export default function App() {
         description: "Complete database of all VALORANT agents with tactical breakdown, signature abilities, interactive voice line audio player, and custom metadata analytics.",
         breadcrumbs: [
           { name: "Home", item: `${baseOrigin}/` },
-          { name: "Agents Database", item: `${baseOrigin}/#/agents` }
+          { name: "Agents Database", item: `${baseOrigin}/agents` }
         ]
       },
       weapons: {
@@ -64,7 +96,7 @@ export default function App() {
         description: "Analyze VALORANT weapon recoil profiles, stats, fire rates, damage graphs, skin shops, and simulated performance comparisons.",
         breadcrumbs: [
           { name: "Home", item: `${baseOrigin}/` },
-          { name: "Weapons Armory", item: `${baseOrigin}/#/weapons` }
+          { name: "Weapons Armory", item: `${baseOrigin}/weapons` }
         ]
       },
       maps: {
@@ -72,7 +104,7 @@ export default function App() {
         description: "High-fidelity interactive tactical radar overlay for VALORANT maps. Discover attack vectors, smoke chokes, plant sites, sightlines, and operator suggestions.",
         breadcrumbs: [
           { name: "Home", item: `${baseOrigin}/` },
-          { name: "Interactive Maps", item: `${baseOrigin}/#/maps` }
+          { name: "Interactive Maps", item: `${baseOrigin}/maps` }
         ]
       },
       collection: {
@@ -80,7 +112,7 @@ export default function App() {
         description: "Browse featured custom gun skins, current client bundles, buddy buddies, player cards, and check store rotations.",
         breadcrumbs: [
           { name: "Home", item: `${baseOrigin}/` },
-          { name: "Skins & Bundles Store", item: `${baseOrigin}/#/collection` }
+          { name: "Skins & Bundles Store", item: `${baseOrigin}/collection` }
         ]
       },
       meta: {
@@ -88,7 +120,7 @@ export default function App() {
         description: "Customize crosshairs with a fully interactive simulator, convert mouse sensitivities between popular FPS titles, and take tactical competency quizzes.",
         breadcrumbs: [
           { name: "Home", item: `${baseOrigin}/` },
-          { name: "Crosshair & Sensitivity Labs", item: `${baseOrigin}/#/meta` }
+          { name: "Crosshair & Sensitivity Labs", item: `${baseOrigin}/meta` }
         ]
       },
       "player-registry": {
@@ -96,7 +128,7 @@ export default function App() {
         description: "View regional Radiant leaderboards, look up verified competitive profiles, analyze combat scores, winrates, and career statistics.",
         breadcrumbs: [
           { name: "Home", item: `${baseOrigin}/` },
-          { name: "Radiant Leaderboards", item: `${baseOrigin}/#/player-registry` }
+          { name: "Radiant Leaderboards", item: `${baseOrigin}/player-registry` }
         ]
       },
       "game-modes": {
@@ -104,17 +136,15 @@ export default function App() {
         description: "Master all VALORANT game modes, standard spikes, competitive ranking structures, and rank ladders with our exhaustive reference book.",
         breadcrumbs: [
           { name: "Home", item: `${baseOrigin}/` },
-          { name: "Game Modes Guide", item: `${baseOrigin}/#/game-modes` }
+          { name: "Game Modes Guide", item: `${baseOrigin}/game-modes` }
         ]
       },
     };
 
     const currentMeta = metaMap[activeTab] || metaMap.home;
 
-    // 1. Update Document Title
     document.title = currentMeta.title;
 
-    // 2. Update Description Meta Tag
     let descMeta = document.querySelector('meta[name="description"]');
     if (!descMeta) {
       descMeta = document.createElement("meta");
@@ -123,34 +153,29 @@ export default function App() {
     }
     descMeta.setAttribute("content", currentMeta.description);
 
-    // Update Open Graph (OG) description
     let ogDescMeta = document.querySelector('meta[property="og:description"]');
     if (ogDescMeta) {
       ogDescMeta.setAttribute("content", currentMeta.description);
     }
 
-    // Update OG title
     let ogTitleMeta = document.querySelector('meta[property="og:title"]');
     if (ogTitleMeta) {
       ogTitleMeta.setAttribute("content", currentMeta.title);
     }
 
-    // Update Canonical URL
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement("link");
       canonicalLink.setAttribute("rel", "canonical");
       document.head.appendChild(canonicalLink);
     }
-    canonicalLink.setAttribute("href", `${baseOrigin}${activeTab === 'home' ? '/' : '/#/' + activeTab}`);
+    canonicalLink.setAttribute("href", `${baseOrigin}${activeTab === 'home' ? '/' : '/' + activeTab}`);
 
-    // Update OG URL
     let ogUrlMeta = document.querySelector('meta[property="og:url"]');
     if (ogUrlMeta) {
-      ogUrlMeta.setAttribute("content", `${baseOrigin}${activeTab === 'home' ? '/' : '/#/' + activeTab}`);
+      ogUrlMeta.setAttribute("content", `${baseOrigin}${activeTab === 'home' ? '/' : '/' + activeTab}`);
     }
 
-    // 3. Update/Inject JSON-LD Schema (WebSite & BreadcrumbList)
     const websiteSchema = {
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -158,7 +183,7 @@ export default function App() {
       "url": baseOrigin,
       "potentialAction": {
         "@type": "SearchAction",
-        "target": `${baseOrigin}/#/search?q={search_term_string}`,
+        "target": `${baseOrigin}/search?q={search_term_string}`,
         "query-input": "required name=search_term_string"
       }
     };
@@ -185,7 +210,6 @@ export default function App() {
     scriptElement.textContent = JSON.stringify([websiteSchema, breadcrumbSchema], null, 2);
   }, [activeTab]);
 
-  // Registry list of searchable navigation points and databases
   const searchableItems = [
     { name: "Jett", category: "Agent", targetTab: "agents" },
     { name: "Omen", category: "Agent", targetTab: "agents" },
@@ -216,7 +240,7 @@ export default function App() {
 
   const handleSearchSelect = (targetTab: string) => {
     audio.playSelect();
-    setActiveTab(targetTab);
+    goToTab(targetTab);
     setSearchOpen(false);
     setSearchQuery("");
   };
@@ -224,7 +248,7 @@ export default function App() {
   const renderActiveTab = () => {
     switch (activeTab) {
       case "home":
-        return <Homepage onNavigate={setActiveTab} accentColor={accentColor} />;
+        return <Homepage onNavigate={goToTab} accentColor={accentColor} />;
       case "agents":
         return <AgentsTab accentColor={accentColor} />;
       case "weapons":
@@ -240,7 +264,7 @@ export default function App() {
       case "game-modes":
         return <GameModesTab accentColor={accentColor} />;
       default:
-        return <Homepage onNavigate={setActiveTab} accentColor={accentColor} />;
+        return <Homepage onNavigate={goToTab} accentColor={accentColor} />;
     }
   };
 
@@ -248,7 +272,7 @@ export default function App() {
     <>
       <Layout
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={goToTab}
         accentColor={accentColor}
         setAccentColor={setAccentColor}
       >
@@ -328,5 +352,15 @@ export default function App() {
         </div>
       )}
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/*" element={<AppContent />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
