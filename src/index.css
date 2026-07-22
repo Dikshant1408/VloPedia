@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-val-black: #0b0e11;
+  --color-val-dark: #12151b;
+  --color-val-navy: #1a1e24;
+  --color-val-red: #ff4655;
+  --color-val-cyan: #00f5ff;
+  --color-val-purple: #c846ff;
+  --color-val-orange: #ff7f00;
+  --color-val-gray-light: #ece8e1;
+  
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 12s linear infinite;
+  --animate-spin-reverse-slow: spin-reverse 20s linear infinite;
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b131c;
+}
+::-webkit-scrollbar-thumb {
+  background: #ff4655;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f5ff;
+}
+
+/* Valorant angled cuts and custom styles */
+.clip-val-card {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+
+.clip-val-btn {
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+.clip-val-top-right {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+
+.val-grid-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Hide cursor if using custom cursor */
+.custom-cursor-active {
+  cursor: none;
+}
+.custom-cursor-active a,
+.custom-cursor-active button,
+.custom-cursor-active input,
+.custom-cursor-active select,
+.custom-cursor-active [role="button"] {
+  cursor: none;
+}
