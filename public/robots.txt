@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Prevent indexing of build artifacts
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /build/
+Disallow: /.vercel/
+
+# Sitemap location
+Sitemap: https://vlopedia.app/sitemap.xml
