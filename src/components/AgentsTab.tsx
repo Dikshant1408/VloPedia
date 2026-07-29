@@ -371,12 +371,17 @@ export default function AgentsTab({ initialAgentId, accentColor }: AgentsTabProp
   };
 
   // Filter agents based on search query and selected role
-  const filteredAgents = agents.filter((agent) => {
-    const matchesSearch = agent.displayName.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesRole =
-      selectedRole === "all" || agent.role?.displayName.toLowerCase() === selectedRole.toLowerCase();
-    return matchesSearch && matchesRole;
-  });
+  // Memoized to prevent recalculation on frequent audio currentTime updates
+  const filteredAgents = React.useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    const roleMatch = selectedRole.toLowerCase();
+    return agents.filter((agent) => {
+      const matchesSearch = agent.displayName.toLowerCase().includes(query);
+      const matchesRole =
+        selectedRole === "all" || agent.role?.displayName.toLowerCase() === roleMatch;
+      return matchesSearch && matchesRole;
+    });
+  }, [agents, searchQuery, selectedRole]);
 
   const getDifficulty = (devName: string) => {
     // Generate difficulty level from dev name length
