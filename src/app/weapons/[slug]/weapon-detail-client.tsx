@@ -12,6 +12,7 @@ import { SkinCard } from "@/components/skin-card";
 import WeaponViewer3D from "@/components/WeaponViewer3D";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 import type { ValorantWeapon, ValorantSkin } from "@/lib/valorant-types";
+import { toast } from "sonner";
 
 // Clean category label
 function categoryLabel(cat: string) {
@@ -69,12 +70,24 @@ export function WeaponDetailClient({ weapon, sameCategory }: Props) {
         {/* Back nav + title strip */}
         <div className="border-b border-border bg-background pt-16 pb-10">
           <Container>
-            <Link href="/weapons" className="inline-flex items-center gap-2 font-mono-tactical text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-primary mb-6 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-              <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-              All Weapons
-            </Link>
+            <div className="flex items-center justify-between mb-6">
+              <Link href="/weapons" className="inline-flex items-center gap-2 font-mono-tactical text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
+                <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                All Weapons
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast.success("Weapon guide link copied to clipboard!");
+                }}
+                className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white hover:border-primary/40 transition-colors"
+              >
+                Share Weapon
+              </button>
+            </div>
 
-            <div className="flex flex-wrap items-end gap-6">
+            <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />

@@ -13,12 +13,12 @@ interface EsportsHubProps {
 }
 
 export default function EsportsHub({ subTab }: EsportsHubProps) {
-  // 1. Live Scores State
+  // 1. Live Scores State - clearly labeled sample data
   const proMatches = [
     {
       id: 1,
-      tournament: "VCT AMERICAS STAGE 2",
-      status: "LIVE - MAP 2 IN PROGRESS",
+      tournament: "VCT AMERICAS STAGE 2 (SAMPLE ARCHIVE)",
+      status: "HISTORICAL / DEMO DATA",
       teamA: "SENTINELS",
       teamB: "100 THIEVES",
       scoreA: 1,
@@ -28,10 +28,10 @@ export default function EsportsHub({ subTab }: EsportsHubProps) {
     },
     {
       id: 2,
-      tournament: "VCT EMEA STAGE 2",
-      status: "UPCOMING - 18:30 UTC",
+      tournament: "VCT EMEA STAGE 2 (SAMPLE ARCHIVE)",
+      status: "SCHEDULED MATCH SAMPLE",
       teamA: "FNATIC",
-      teamB: "NATIVE NAVI",
+      teamB: "NAVI",
       scoreA: 0,
       scoreB: 0,
       mapScores: [],
@@ -39,8 +39,8 @@ export default function EsportsHub({ subTab }: EsportsHubProps) {
     },
     {
       id: 3,
-      tournament: "VCT PACIFIC STAGE 2",
-      status: "COMPLETED",
+      tournament: "VCT PACIFIC STAGE 2 (SAMPLE ARCHIVE)",
+      status: "COMPLETED ARCHIVE",
       teamA: "PAPER REX",
       teamB: "T1 ESPORTS",
       scoreA: 2,
@@ -75,16 +75,26 @@ export default function EsportsHub({ subTab }: EsportsHubProps) {
         transition={{ duration: 0.35, ease: "easeOut" }}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16"
       >
+        {/* Demo Disclaimer Banner */}
+        <div className="mb-8 border border-amber-500/30 bg-amber-500/10 p-4 flex items-center gap-3">
+          <span className="font-mono text-xs text-amber-400 font-bold uppercase tracking-wider">
+            [DEMO DATA & ARCHIVE]
+          </span>
+          <span className="font-sans text-xs text-amber-200/80">
+            The match scores and tournament brackets below are sample illustrations.
+          </span>
+        </div>
+
         <div className="mb-14">
           <div className="eyebrow mb-3">
-            <span className="w-2 h-2 bg-[#FA4454]" />
-            Live Transponders
+            <span className="w-2 h-2 bg-[#0DF2F2]" />
+            Tournament Archive
           </div>
           <h2 className="font-display font-black text-4xl sm:text-5xl text-[#ECE8E1] tracking-tight uppercase">
-            VCT Live Match Matrix
+            VCT Match Matrix
           </h2>
           <p className="text-white/50 text-base max-w-xl mt-3">
-            Track real-time tournament standings, match points, and map-by-map scores from official Valorant Champions Tour brackets.
+            Explore match records, team rosters, and historical map-by-map scores from the Valorant Champions Tour.
           </p>
         </div>
 

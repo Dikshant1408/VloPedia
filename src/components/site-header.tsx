@@ -7,18 +7,21 @@ import { AuthActions } from "@/components/auth-actions";
 import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/progress-bar";
 import { MegaMenu, NAV_GROUPS } from "@/components/mega-menu";
-import { Menu, X, Search, ChevronDown, Radio } from "lucide-react";
+import { GlobalSearchDialog } from "@/components/global-search-dialog";
+import { Menu, X, Search, ChevronDown, Radio, Volume2, VolumeX } from "lucide-react";
 
 interface SiteHeaderProps {
   version?: string | null;
 }
 
 const PRIMARY_LINKS = [
-  { label: "Agents",  href: "/agents"  },
-  { label: "Weapons", href: "/weapons" },
-  { label: "Maps",    href: "/maps"    },
-  { label: "Skins",   href: "/skins"   },
-  { label: "Search",  href: "/search"  },
+  { label: "Agents",       href: "/agents"       },
+  { label: "Weapons",      href: "/weapons"      },
+  { label: "Maps",         href: "/maps"         },
+  { label: "Skins",        href: "/skins"        },
+  { label: "Comp Builder", href: "/comp-builder" },
+  { label: "Sensitivity",  href: "/sensitivity"  },
+  { label: "Guides",       href: "/guides"       },
 ];
 
 export function SiteHeader({ version }: SiteHeaderProps) {
@@ -26,6 +29,21 @@ export function SiteHeader({ version }: SiteHeaderProps) {
   const [drawerOpen, setDrawerOpen]   = useState(false);
   const [megaOpen,   setMegaOpen]     = useState(false);
   const [cachedVer,  setCachedVer]    = useState<string | null>(null);
+  const [sfxEnabled, setSfxEnabled]   = useState(false);
+
+  useEffect(() => {
+    // Sound effect preference - default off
+    const savedSfx = localStorage.getItem("valovault_sfx_enabled");
+    if (savedSfx === "true") {
+      setSfxEnabled(true);
+    }
+  }, []);
+
+  const toggleSfx = () => {
+    const next = !sfxEnabled;
+    setSfxEnabled(next);
+    localStorage.setItem("valovault_sfx_enabled", next ? "true" : "false");
+  };
 
   useEffect(() => {
     if (version) {
@@ -54,6 +72,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
 
   return (
     <>
+      <GlobalSearchDialog />
       <header className="sticky top-0 z-50 border-b border-[rgba(236,232,225,0.10)] bg-[#0B141A]/92 backdrop-blur-xl">
         {/* Route progress bar */}
         <Suspense fallback={null}>
@@ -70,10 +89,10 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             </div>
             <div className="flex flex-col leading-none">
               <span className="font-display font-black text-xl tracking-tight text-foreground group-hover:text-primary transition-colors uppercase">
-                ValoVault
+                VloPedia
               </span>
               <span className="font-mono text-[9px] text-[#0DF2F2] tracking-[0.2em] opacity-70 uppercase mt-0.5">
-                Tactical Encyclopedia
+                VALORANT Knowledge Engine
               </span>
             </div>
           </Link>
@@ -82,15 +101,15 @@ export function SiteHeader({ version }: SiteHeaderProps) {
           <nav
             role="navigation"
             aria-label="Main navigation"
-            className="hidden items-center md:flex h-[36px] min-h-[36px] border border-[rgba(236,232,225,0.08)] bg-[rgba(11,20,26,0.6)] backdrop-blur-sm px-1 py-0.5"
+            className="hidden items-center lg:flex h-[36px] min-h-[36px] border border-[rgba(236,232,225,0.08)] bg-[rgba(11,20,26,0.6)] backdrop-blur-sm px-1 py-0.5"
           >
             {PRIMARY_LINKS.map(item => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={[
-                  "border-r border-[rgba(236,232,225,0.06)] px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-wider transition-all last:border-0",
-                  pathname === item.href
+                  "border-r border-[rgba(236,232,225,0.06)] px-3.5 py-2 font-mono text-[11px] font-bold uppercase tracking-wider transition-all last:border-0",
+                  pathname === item.href || pathname.startsWith(item.href + "/")
                     ? "text-primary text-glow-red bg-primary/5"
                     : "text-muted hover:bg-primary/5 hover:text-foreground",
                 ].join(" ")}
@@ -107,41 +126,60 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               aria-expanded={megaOpen}
               aria-haspopup="true"
               aria-label="More sections"
-              className="flex items-center gap-1 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-wider text-muted transition-all hover:bg-primary/5 hover:text-foreground"
+              className="flex items-center gap-1 px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-wider text-muted transition-all hover:bg-primary/5 hover:text-foreground"
             >
-              More
+              All Hubs
               <ChevronDown className={["h-3 w-3 transition-transform duration-200", megaOpen ? "rotate-180" : ""].join(" ")} aria-hidden="true" />
             </button>
           </nav>
 
           {/* ── Right side ── */}
-          <div className="flex items-center gap-3">
-            {/* Version badge */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Version & sync badge */}
             {displayVer && (
-              <div className="hidden lg:flex flex-col items-end font-mono leading-tight">
+              <div className="hidden xl:flex flex-col items-end font-mono leading-tight">
                 <span className="text-[#0DF2F2] text-[10px] font-bold tracking-wider">
-                  CORE: {displayVer.split("-")[0]}
+                  PATCH: {displayVer.split("-")[0]}
                 </span>
                 <span className="text-muted text-[9px] flex items-center gap-1">
-                  <Radio className="h-2.5 w-2.5 animate-pulse text-[#0DF2F2]" aria-hidden="true" />
-                  ONLINE
+                  <Radio className="h-2.5 w-2.5 animate-pulse text-success" aria-hidden="true" />
+                  DATABASE SYNCED
                 </span>
               </div>
             )}
 
-            {/* Search */}
-            <Link
-              href="/search"
-              aria-label="Search ValoVault"
-              className="flex items-center gap-1.5 border border-[rgba(236,232,225,0.1)] px-2 py-2 sm:px-3 sm:py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-muted transition-colors hover:border-primary/50 hover:text-primary"
+            {/* Tactical SFX toggle (Default OFF) */}
+            <button
+              type="button"
+              onClick={toggleSfx}
+              title={sfxEnabled ? "Tactical Audio: ON (Click to mute)" : "Tactical Audio: OFF (Click to enable)"}
+              className={`hidden sm:flex items-center gap-1.5 border px-2 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-colors ${
+                sfxEnabled 
+                  ? "border-primary/50 text-primary bg-primary/10" 
+                  : "border-[rgba(236,232,225,0.08)] text-muted hover:text-foreground"
+              }`}
             >
-              <Search className="h-3.5 w-3.5" aria-hidden="true" />
+              {sfxEnabled ? <Volume2 className="h-3.5 w-3.5 text-primary" /> : <VolumeX className="h-3.5 w-3.5 text-muted" />}
+              <span className="text-[9px]">{sfxEnabled ? "SFX ON" : "SFX OFF"}</span>
+            </button>
+
+            {/* Search Trigger */}
+            <button
+              type="button"
+              onClick={() => {
+                const e = new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true });
+                window.dispatchEvent(e);
+              }}
+              aria-label="Search VloPedia"
+              className="flex items-center gap-1.5 border border-[rgba(236,232,225,0.1)] px-2.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-muted transition-colors hover:border-primary/50 hover:text-primary"
+            >
+              <Search className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
               <span className="hidden sm:inline">Search</span>
-              <kbd className="hidden rounded-none border border-[rgba(236,232,225,0.1)] bg-surface px-1 py-0.5 font-mono text-[9px] lg:inline">⌘K</kbd>
-            </Link>
+              <kbd className="rounded-none border border-[rgba(236,232,225,0.1)] bg-surface px-1 py-0.5 font-mono text-[9px]">Ctrl+K</kbd>
+            </button>
 
             {/* Auth */}
-            <div className="border-l border-[rgba(236,232,225,0.1)] pl-3">
+            <div className="border-l border-[rgba(236,232,225,0.1)] pl-2 sm:pl-3">
               <AuthActions />
             </div>
 
@@ -149,7 +187,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             <Button
               variant="secondary"
               size="sm"
-              className="md:hidden border-[rgba(236,232,225,0.1)] bg-[rgba(11,20,26,0.6)]"
+              className="lg:hidden border-[rgba(236,232,225,0.1)] bg-[rgba(11,20,26,0.6)]"
               onClick={() => setDrawerOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={drawerOpen}

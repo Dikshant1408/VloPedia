@@ -23,14 +23,14 @@ import type { ValorantAgent, ValorantBundle, ValorantMap, ValorantSkin } from "@
 const TRENDING = ["Jett", "Vandal", "Reaver", "Ascent", "Omen", "Operator"];
 
 const QUICK_LINKS = [
-  { href: "/agents",       label: "Roster Agents",      desc: "29 agents" },
-  { href: "/weapons",      label: "Arsenal Procurement", desc: "20 weapons" },
-  { href: "/maps",         label: "Tactical Maps",       desc: "12 maps"   },
-  { href: "/skins",        label: "Weapon Skins",        desc: "1,400+ skins" },
-  { href: "/tier-list",    label: "Agent Tier List",     desc: "Meta rankings" },
-  { href: "/economy",      label: "Economy Guide",       desc: "Credit strategy" },
-  { href: "/matchups",     label: "Agent Matchups",      desc: "Counter picks" },
-  { href: "/strat-roulette",label: "Strat Roulette",    desc: "Random missions" },
+  { href: "/agents",       label: "Agents Database",    desc: "Every operative & ability" },
+  { href: "/weapons",      label: "Weapons & Stats",    desc: "Damage falloffs & specs" },
+  { href: "/maps",         label: "Tactical Maps",      desc: "Executes & callouts" },
+  { href: "/skins",        label: "Skin Database",      desc: "1,400+ skins & chromas" },
+  { href: "/comp-builder", label: "Comp Builder",       desc: "Evaluate 5-agent synergy" },
+  { href: "/sensitivity",  label: "Sens Calculator",    desc: "Convert CS2/Apex & eDPI" },
+  { href: "/setup",        label: "My Setup Card",      desc: "Build & share your loadout" },
+  { href: "/guides",       label: "Tactical Guides",    desc: "Masterclasses & lineups" },
 ];
 
 const CAROUSEL_AGENT_NAMES = ["Jett", "Omen", "Iso", "Clove", "Neon"];
@@ -193,76 +193,73 @@ export function HomepageClient() {
               <div className="flex items-center gap-3">
                 <span className="w-2 h-2 bg-primary animate-pulse" aria-hidden="true" />
                 <span className="font-mono text-xs text-primary tracking-[0.25em] uppercase font-bold">
-                  SYSTEM_DATABASE // v2.0 ONLINE
+                  VLOPEDIA KNOWLEDGE & TOOLS ENGINE // v2.0
                 </span>
               </div>
 
               {/* Main title */}
               <h1 className="font-display font-black text-5xl uppercase leading-none tracking-tighter text-foreground sm:text-7xl lg:text-8xl">
-                <span className="text-primary text-glow-red">VALO</span>VAULT
-                <span className="mt-3 block font-display text-3xl font-black tracking-tight text-foreground/50 sm:text-4xl lg:text-5xl">
-                  Tactical Encyclopedia
+                <span className="text-primary text-glow-red">VALO</span>RANT
+                <span className="mt-3 block font-display text-3xl font-black tracking-tight text-foreground/80 sm:text-4xl lg:text-5xl">
+                  Knowledge + Tools Engine
                 </span>
               </h1>
 
-              <p className="max-w-xl font-sans text-sm leading-relaxed text-muted">
-                The definitive VALORANT database — agents, weapons, maps, skins, meta tools, and the intel you need to dominate.
+              <p className="max-w-xl font-sans text-base leading-relaxed text-secondary">
+                Everything you need to master VALORANT. In-depth operative guides, weapon damage tables, tactical map executes, and pro sensitivity calculators.
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link href="/agents">
-                  <Button variant="primary" size="lg" className="clip-diagonal-sm group gap-2">
-                    Enter Database
+                  <Button variant="primary" size="lg" className="clip-diagonal-sm group gap-2 font-mono text-xs uppercase">
+                    Explore Database
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                   </Button>
                 </Link>
-                <Link href="/search">
-                  <Button variant="outline" size="lg" className="clip-diagonal-sm border-[rgba(236,232,225,0.15)] text-muted hover:border-primary/50 hover:text-foreground">
-                    Search everything
+                <Link href="/comp-builder">
+                  <Button variant="secondary" size="lg" className="clip-diagonal-sm font-mono text-xs uppercase text-white">
+                    Comp Builder
+                  </Button>
+                </Link>
+                <Link href="/sensitivity">
+                  <Button variant="outline" size="lg" className="clip-diagonal-sm border-[rgba(236,232,225,0.15)] text-muted hover:border-primary/50 hover:text-foreground font-mono text-xs uppercase">
+                    Sens Calculator
                   </Button>
                 </Link>
               </div>
             </Reveal>
 
-            {/* Command deck card */}
+            {/* Live Tactical Pulse Deck */}
             <Reveal className="mt-10 hidden lg:flex lg:mt-0">
-              <div className="relative w-full border border-[rgba(236,232,225,0.08)] bg-[rgba(11,20,26,0.92)] backdrop-blur-xl p-6 clip-diagonal space-y-4">
-                <div className="absolute right-0 top-0 bg-primary px-3 py-1 font-mono text-[9px] font-black tracking-wider text-[#0B141A]">
-                  COMMAND DECK
+              <div className="relative w-full border border-[rgba(236,232,225,0.1)] bg-[rgba(11,20,26,0.92)] backdrop-blur-xl p-6 clip-diagonal space-y-4 shadow-2xl">
+                <div className="absolute right-0 top-0 bg-[#0DF2F2] px-3 py-1 font-mono text-[9px] font-black tracking-wider text-[#0B141A]">
+                  LIVE PULSE
                 </div>
                 <div className="border-b border-[rgba(236,232,225,0.08)] pb-3">
-                  <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-muted">ACCOUNT STATUS</span>
-                  <p className="mt-1 font-display font-black text-base uppercase text-foreground">
-                    {user ? (user.displayName ?? user.email) : "Guest Session"}
+                  <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-muted">TACTICAL INTEL TICKER</span>
+                  <p className="mt-1 font-display font-black text-sm uppercase text-foreground">
+                    What&apos;s happening today
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-3 py-2">
-                  <div>
-                    <span className="block font-mono text-[9px] font-bold uppercase tracking-wider text-muted">SYSTEM</span>
-                    <span className="mt-1 flex items-center gap-1.5 font-display font-bold text-success text-sm">
-                      <Radio className="h-3 w-3 animate-pulse" aria-hidden="true" /> ONLINE
-                    </span>
+                <div className="space-y-2.5 py-1 text-xs font-mono">
+                  <div className="flex items-center justify-between border border-[rgba(236,232,225,0.06)] bg-surface p-2">
+                    <span className="text-muted uppercase text-[10px]">LATEST PATCH</span>
+                    <Link href="/patch-notes/9-04" className="font-bold text-primary hover:underline">Patch 9.04 Live →</Link>
                   </div>
-                  <div>
-                    <span className="block font-mono text-[9px] font-bold uppercase tracking-wider text-muted">REGION</span>
-                    <span className="mt-1 block font-display font-bold text-sm text-foreground">GLOBAL</span>
+                  <div className="flex items-center justify-between border border-[rgba(236,232,225,0.06)] bg-surface p-2">
+                    <span className="text-muted uppercase text-[10px]">NEW SKINS</span>
+                    <Link href="/skins" className="font-bold text-[#0DF2F2] hover:underline">Kuronami & Reaver →</Link>
+                  </div>
+                  <div className="flex items-center justify-between border border-[rgba(236,232,225,0.06)] bg-surface p-2">
+                    <span className="text-muted uppercase text-[10px]">META COMP</span>
+                    <Link href="/comp-builder?map=ascent&agents=jett,omen,sova,killjoy,kayo" className="font-bold text-success hover:underline">Ascent S-Tier 88/100 →</Link>
                   </div>
                 </div>
-                {user ? (
-                  <Link href="/dashboard" className="w-full block">
-                    <Button variant="secondary" className="w-full clip-diagonal-sm">Open Dashboard</Button>
-                  </Link>
-                ) : (
-                  <div className="relative group/tooltip w-full">
-                    <Button variant="primary" onClick={signInWithDiscord} className="w-full clip-diagonal-sm">
-                      Sign in with Discord
-                    </Button>
-                    <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 scale-95 opacity-0 transition-all duration-200 group-hover/tooltip:scale-100 group-hover/tooltip:opacity-100 bg-[#0D1A22] border border-[rgba(236,232,225,0.15)] px-3 py-2 text-[10px] font-mono text-muted uppercase tracking-wider text-center w-64 clip-diagonal-sm shadow-xl">
-                      <span className="text-primary font-bold block mb-1">[ SECURE SYNC BENEFITS ]</span>
-                      Save your mains, customize queue prep plans, and track your skins wishlist.
-                    </div>
-                  </div>
-                )}
+                <Link href="/setup" className="w-full block pt-1">
+                  <Button variant="primary" className="w-full clip-diagonal-sm font-mono text-xs uppercase">
+                    Build My Loadout
+                  </Button>
+                </Link>
               </div>
             </Reveal>
           </Container>

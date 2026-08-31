@@ -102,5 +102,39 @@ export default async function WeaponDetailPage({ params }: Props) {
     .filter(w => w.category === weapon.category && w.uuid !== weapon.uuid)
     .slice(0, 8);
 
-  return <WeaponDetailClient weapon={weapon} sameCategory={sameCategory} />;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": siteConfig.url },
+          { "@type": "ListItem", "position": 2, "name": "Weapons", "item": `${siteConfig.url}/weapons` },
+          { "@type": "ListItem", "position": 3, "name": weapon.displayName, "item": `${siteConfig.url}/weapons/${slug}` }
+        ]
+      },
+      {
+        "@type": "Product",
+        "name": `${weapon.displayName} - VALORANT Weapon`,
+        "image": [weapon.displayIcon],
+        "description": `Full tactical stats and damage falloff profiles for the ${weapon.displayName} in VALORANT.`,
+        "offers": {
+          "@type": "Offer",
+          "price": weapon.shopData?.cost || 0,
+          "priceCurrency": "VP",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    ]
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <WeaponDetailClient weapon={weapon} sameCategory={sameCategory} />
+    </>
+  );
 }
