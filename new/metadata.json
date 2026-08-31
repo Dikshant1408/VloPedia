@@ -1,0 +1,6 @@
+{
+  "name": "ValoVault",
+  "description": "A cinematic tactical encyclopedia for Valorant agents, weapons, maps, meta, tools, and news.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

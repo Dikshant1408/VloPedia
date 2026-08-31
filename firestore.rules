@@ -1,0 +1,208 @@
+rules_version='2'
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users
+// Document ID: Firebase Auth uid
+// Fields:
+//   - uid: string (required, immutable) - must match the authenticated uid
+//   - email: string | null (optional) - user email from Firebase Auth
+//   - displayName: string | null (optional) - user display name from Firebase Auth
+//   - photoURL: string | null (optional) - user avatar from Firebase Auth
+//   - onboardingCompleted: boolean (required) - app-owned onboarding state
+//
+// Collection: users/{userId}/wishlistItems
+// Document ID: auto-generated
+// Fields:
+//   - title: string (required, 1-80 chars) - saved item title
+//   - category: string (required, enum) - one of bundle|weapon|skin|agent|other
+//   - notes: string | null (optional, 0-240 chars) - user notes
+//   - createdAt: timestamp (required) - creation time
+//   - updatedAt: timestamp (required) - last updated time
+//
+// Collection: users/{userId}/queuePrepPlans
+// Document ID: auto-generated
+// Fields:
+//   - title: string (required, 3-72 chars) - user-facing plan name
+//   - mapName: string (required, 3-32 chars) - selected VALORANT map or Any map
+//   - mode: string (required, enum) - one of Competitive|Premier|Swiftplay|Deathmatch
+//   - agentRole: string (required, enum) - one of Flex|Duelist|Controller|Initiator|Sentinel
+//   - status: string (required, enum) - one of draft|ready|archived
+//   - notes: string (required, 5-360 chars) - private prep notes
+//   - createdAt: timestamp (required, immutable) - creation time
+//   - updatedAt: timestamp (required) - last updated time
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function isBoundedNullableString(value, minLength, maxLength) {
+      return value == null || (value is string && value.size() >= minLength && value.size() <= maxLength);
+    }
+
+    function isValidUserDocument(data, userId) {
+      return data.keys().hasOnly([
+          "uid",
+          "email",
+          "displayName",
+          "photoURL",
+          "onboardingCompleted"
+        ]) &&
+        data.uid is string &&
+        data.uid.size() >= 1 &&
+        data.uid.size() <= 128 &&
+        data.uid == userId &&
+        isBoundedNullableString(data.email, 3, 320) &&
+        isBoundedNullableString(data.displayName, 1, 80) &&
+        isBoundedNullableString(data.photoURL, 1, 2048) &&
+        data.onboardingCompleted is bool;
+    }
+
+    function isWishlistCategory(value) {
+      return value in ["bundle", "weapon", "skin", "agent", "other"];
+    }
+
+    function isQueuePrepMode(value) {
+      return value in ["Competitive", "Premier", "Swiftplay", "Deathmatch"];
+    }
+
+    function isQueuePrepRole(value) {
+      return value in ["Flex", "Duelist", "Controller", "Initiator", "Sentinel"];
+    }
+
+    function isQueuePrepStatus(value) {
+      return value in ["draft", "ready", "archived"];
+    }
+
+    function isValidWishlistItem(data) {
+      return data.keys().hasOnly(["title", "category", "notes", "createdAt", "updatedAt"]) &&
+        data.title is string &&
+        data.title.size() >= 1 &&
+        data.title.size() <= 80 &&
+        data.category is string &&
+        isWishlistCategory(data.category) &&
+        isBoundedNullableString(data.notes, 0, 240) &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidQueuePrepPlan(data) {
+      return data.keys().hasOnly([
+          "title",
+          "mapName",
+          "mode",
+          "agentRole",
+          "status",
+          "notes",
+          "createdAt",
+          "updatedAt"
+        ]) &&
+        data.title is string &&
+        data.title.size() >= 3 &&
+        data.title.size() <= 72 &&
+        data.mapName is string &&
+        data.mapName.size() >= 3 &&
+        data.mapName.size() <= 32 &&
+        data.mode is string &&
+        isQueuePrepMode(data.mode) &&
+        data.agentRole is string &&
+        isQueuePrepRole(data.agentRole) &&
+        data.status is string &&
+        isQueuePrepStatus(data.status) &&
+        data.notes is string &&
+        data.notes.size() >= 5 &&
+        data.notes.size() <= 360 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow create: if isOwner(userId) && isValidUserDocument(request.resource.data, userId);
+      allow read: if isOwner(userId);
+      allow update: if isOwner(userId) && isValidUserDocument(request.resource.data, userId);
+      allow delete: if isOwner(userId);
+
+      match /wishlistItems/{wishlistItemId} {
+        allow create: if isOwner(userId) && isValidWishlistItem(request.resource.data);
+        allow read: if isOwner(userId);
+        allow delete: if isOwner(userId);
+      }
+
+      match /queuePrepPlans/{queuePrepPlanId} {
+        allow create: if isOwner(userId) &&
+          isValidQueuePrepPlan(request.resource.data) &&
+          request.resource.data.createdAt == request.time &&
+          request.resource.data.updatedAt == request.time;
+        allow read: if isOwner(userId);
+        allow update: if isOwner(userId) &&
+          isValidQueuePrepPlan(request.resource.data) &&
+          request.resource.data.createdAt == resource.data.createdAt &&
+          request.resource.data.updatedAt == request.time;
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    match /agents/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /weapons/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /skins/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /bundles/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /maps/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /lore/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /leaks/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /patches/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /pro_settings/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /collections/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /search_index/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+    match /import_logs/{document=**} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
