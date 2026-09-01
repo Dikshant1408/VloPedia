@@ -14,6 +14,24 @@ export const metadata: Metadata = {
 
 const TOOLS = [
   {
+    id: "what-to-play",
+    name: "What Should I Play? (Recommender)",
+    desc: "Answer 4 quick tactical preferences to get an algorithmically matched VALORANT agent recommendation with signature weapon and map synergy.",
+    href: "/tools/what-to-play",
+    icon: Sparkles,
+    tag: "NEW // RECOMMENDER",
+    color: "#0DF2F2",
+  },
+  {
+    id: "profile",
+    name: "My VALORANT Personal Command",
+    desc: "Your personal loadout, aiming kinematics, saved bookmarks, and custom 'Before You Queue' pre-match briefing.",
+    href: "/profile",
+    icon: Laptop,
+    tag: "PERSONAL HUB",
+    color: "#10B981",
+  },
+  {
     id: "sensitivity",
     name: "Sensitivity & DPI Converter",
     desc: "Accurately convert your mouse sensitivity between CS2, Apex Legends, Overwatch 2, Fortnite, Rainbow Six Siege, COD, and VALORANT. Calculate exact eDPI and cm/360° with VCT pro benchmarks.",
@@ -33,12 +51,12 @@ const TOOLS = [
   },
   {
     id: "setup",
-    name: "My VALORANT Setup / Loadout",
+    name: "Player Setup & Loadout Cards",
     desc: "Generate and share your personalized player card featuring your main agent, sensitivity @ DPI, crosshair code, signature weapon & skin, and hardware peripherals.",
     href: "/setup",
     icon: Laptop,
     tag: "SHAREABLE",
-    color: "#10B981",
+    color: "#38BDF8",
   },
   {
     id: "compare",

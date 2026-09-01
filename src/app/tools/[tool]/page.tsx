@@ -14,6 +14,8 @@ export function generateStaticParams() {
     { tool: "setup" },
     { tool: "loadout" },
     { tool: "compare" },
+    { tool: "what-to-play" },
+    { tool: "what-should-i-play" },
   ];
 }
 
@@ -24,6 +26,10 @@ interface Props {
 export default async function ToolSubroutePage({ params }: Props) {
   const { tool } = await params;
   const norm = tool.toLowerCase().trim();
+
+  if (norm === "what-to-play" || norm === "what-should-i-play") {
+    redirect("/tools/what-to-play");
+  }
 
   if (norm === "sensitivity" || norm === "sens") {
     redirect("/sensitivity");
