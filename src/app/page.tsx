@@ -8,14 +8,14 @@ import { HomepageClient } from "./homepage-client";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "ValoVault — The VALORANT Encyclopedia",
+  title: "VloPedia — VALORANT Database, Tools & Lore Encyclopedia",
   description:
-    "The complete VALORANT encyclopedia. Agents, weapons, maps, skins, lore, and the tools you use to win.",
+    "The authoritative VALORANT database, tactical utility engine, and lore encyclopedia. Operative guides, damage falloffs, weapon compare, comp builder, and verified lore timeline.",
   openGraph: {
     type: "website",
-    title: "ValoVault — The VALORANT Encyclopedia",
+    title: "VloPedia — VALORANT Database, Tools & Lore Encyclopedia",
     description:
-      "The complete VALORANT encyclopedia. Agents, weapons, maps, skins, lore, and the tools you use to win.",
+      "The authoritative VALORANT database, tactical utility engine, and lore encyclopedia. Operative guides, damage falloffs, weapon compare, comp builder, and verified lore timeline.",
     url: siteConfig.url,
   },
   alternates: {
