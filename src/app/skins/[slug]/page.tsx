@@ -96,10 +96,19 @@ export async function generateStaticParams() {
 
 type Props = { params: Promise<{ slug: string }> };
 
+function slugify(text: string): string {
+  return text.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function findSkin(skins: ValorantSkin[], slug: string) {
+  const norm = slug.toLowerCase().trim();
+  return skins.find(s => s.uuid.toLowerCase() === norm || slugify(s.displayName) === norm);
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const skins = await getAllSkins();
-  const skin = skins.find(s => s.uuid === slug);
+  const skin = findSkin(skins, slug);
   if (!skin) return { title: "Skin Not Found | ValoVault", robots: { index: false } };
 
   const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""];
@@ -136,14 +145,45 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SkinDetailPage({ params }: Props) {
   const { slug } = await params;
   const skins = await getAllSkins();
-  const skin = skins.find(s => s.uuid === slug);
+  const skin = findSkin(skins, slug);
   if (!skin) notFound();
 
   const inspectSkin = toInspectShape(skin);
   const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": siteConfig.url },
+          { "@type": "ListItem", "position": 2, "name": "Skins", "item": `${siteConfig.url}/skins` },
+          { "@type": "ListItem", "position": 3, "name": skin.displayName, "item": `${siteConfig.url}/skins/${slug}` }
+        ]
+      },
+      {
+        "@type": "Product",
+        "name": `${skin.displayName} - VALORANT Skin`,
+        "image": skin.chromas?.[0]?.fullRender ?? skin.displayIcon,
+        "description": `VALORANT cosmetic skin ${skin.displayName} featuring custom variants, chromas, and inspect animations.`,
+        "offers": {
+          "@type": "Offer",
+          "price": tier?.price ?? 1775,
+          "priceCurrency": "VP",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    ]
+  };
+
   return (
-    <PageTransition>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <PageTransition>
       <div className="min-h-screen bg-background text-foreground">
 
         {/* Header strip */}
@@ -189,5 +229,6 @@ export default async function SkinDetailPage({ params }: Props) {
         </Container>
       </div>
     </PageTransition>
+    </>
   );
 }
