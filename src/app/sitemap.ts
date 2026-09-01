@@ -229,6 +229,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.7,
   }));
 
+  // 15. Dynamic Best-For Intent pages
+  const bestSlugs = [
+    "agents-for-beginners",
+    "agents-for-solo-queue",
+    "duelists",
+    "controllers",
+    "agents-on-ascent",
+  ];
+  const bestRoutes: MetadataRoute.Sitemap = bestSlugs.map(slug => ({
+    url:             `${base}/best/${slug}`,
+    lastModified:    now,
+    changeFrequency: "weekly",
+    priority:        0.8,
+  }));
+
   // Deduplicate entries by URL
   const allRoutes = [
     ...staticRoutes,
@@ -238,6 +253,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...patchRoutes,
     ...loreRoutes,
     ...compareRoutes,
+    ...bestRoutes,
     ...leaksRoutes,
     ...collectionRoutes,
     ...skinRoutes,

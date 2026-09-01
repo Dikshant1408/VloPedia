@@ -146,10 +146,18 @@ export function GlobalSearchDialog() {
       .catch(() => {});
   }, []);
 
-  // Listen for Ctrl+K / Cmd+K
+  // Listen for Ctrl+K / Cmd+K or '/' key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      const activeElement = document.activeElement;
+      const isInput = activeElement && (
+        activeElement.tagName === "INPUT" || 
+        activeElement.tagName === "TEXTAREA" || 
+        activeElement.tagName === "SELECT" ||
+        (activeElement as HTMLElement).isContentEditable
+      );
+
+      if (((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") || (e.key === "/" && !isInput)) {
         e.preventDefault();
         setOpen(prev => !prev);
       }

@@ -14,6 +14,7 @@ import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 import type { ValorantWeapon, ValorantSkin } from "@/lib/valorant-types";
 import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { AnswerBox } from "@/components/answer-box";
 
 // Clean category label
 function categoryLabel(cat: string) {
@@ -115,7 +116,24 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
           </Container>
         </div>
 
-        <Container className="py-16">
+        <Container className="py-16 space-y-10">
+          {/* Quick Answer Box */}
+          <Reveal>
+            <AnswerBox
+              question={`When should you buy the ${weapon.displayName}?`}
+              verdict={`${cost ? `${cost.toLocaleString()} VP` : "Free"} ${categoryLabel(weapon.category)}`}
+              explanation={`The ${weapon.displayName} is tailored for ${stats?.fireRate && stats.fireRate > 10 ? "rapid close-to-medium spray control" : "high-precision single-tap lethality"} with ${stats?.firstBulletAccuracy ? `${(stats.firstBulletAccuracy * 100).toFixed(0)}%` : "standard"} first-bullet accuracy.`}
+              keyTakeaways={[
+                `Magazine Capacity: ${stats?.magazineSize ?? 0} rounds`,
+                `Fire Rate: ${stats?.fireRate ?? 0} rds/sec`,
+                `Wall Penetration: ${stats?.wallPenetration ? stats.wallPenetration.replace(/EWallPenetrationDisplayType::/i, "") : "Medium"}`,
+                `Reload Speed: ${stats?.reloadTimeSeconds ?? 0}s`
+              ]}
+              ctaLabel={`Compare ${weapon.displayName} with other weapons`}
+              ctaHref={weapon.displayName.toLowerCase() === "vandal" ? "/compare/weapons/vandal-vs-phantom" : "/compare"}
+            />
+          </Reveal>
+
           {/* ── Main grid ── */}
           <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
 

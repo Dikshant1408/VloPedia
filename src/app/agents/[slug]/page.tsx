@@ -13,6 +13,7 @@ import { AgentRelatedWeapons } from "./related-weapons";
 import type { ValorantAgent } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { AnswerBox } from "@/components/answer-box";
 
 const API = "https://valorant-api.com/v1";
 
@@ -107,6 +108,10 @@ export default async function AgentDetailPage({ params }: Props) {
 
   const gradient = agent.backgroundGradientColors?.[0];
   const gradientHex = gradient ? `#${gradient}` : undefined;
+
+  const metaTier = AGENT_TIERS[agent.displayName] || "A-Tier";
+  const pickRate = AGENT_PICK_RATES[agent.displayName] || "55.0%";
+  const difficulty = AGENT_DIFFICULTY[agent.displayName] || "MEDIUM";
 
   const bestMaps = AGENT_BEST_MAPS[agent.displayName] ?? ["Ascent", "Bind", "Haven"];
   const teammates = AGENT_TEAMMATES[agent.displayName] ?? ["Omen", "Sova", "Killjoy"];
@@ -284,6 +289,23 @@ export default async function AgentDetailPage({ params }: Props) {
 
             {/* Right — info + abilities + synergies */}
             <div className="space-y-12">
+
+              {/* Instant Answer Box */}
+              <Reveal>
+                <AnswerBox
+                  question={`Is ${agent.displayName} good in the current meta?`}
+                  verdict={`${metaTier} Operative`}
+                  explanation={`${agent.displayName} is a tier-defining ${agent.role?.displayName || "Agent"} holding a ${pickRate} competitive presence. Excels on ${bestMaps.slice(0, 2).join(" & ")} with high-impact utility.`}
+                  keyTakeaways={[
+                    `Primary Role: ${agent.role?.displayName}`,
+                    `Best Team Synergy: ${teammates.slice(0, 2).join(", ")}`,
+                    `Hard Countered By: ${counters.slice(0, 2).join(", ")}`,
+                    `Execution Difficulty: ${difficulty}`
+                  ]}
+                  ctaLabel={`Build Team Comp for ${agent.displayName}`}
+                  ctaHref={`/comp-builder?agents=${slug}`}
+                />
+              </Reveal>
 
               {/* Operative Profile Header */}
               <Reveal>
@@ -471,6 +493,14 @@ export default async function AgentDetailPage({ params }: Props) {
 /* ------------------------------------------------------------------ */
 /* Extended Tactical Meta Data                                        */
 /* ------------------------------------------------------------------ */
+
+const AGENT_TIERS: Record<string, string> = {
+  Jett: "S-Tier", Omen: "S-Tier", Sova: "S-Tier", Cypher: "S-Tier", Killjoy: "S-Tier",
+  Viper: "S-Tier", Fade: "A-Tier", Breach: "A-Tier", Raze: "S-Tier", Gekko: "A-Tier",
+  "KAY/O": "A-Tier", Clove: "S-Tier", Iso: "B-Tier", Reyna: "B-Tier", Phoenix: "B-Tier",
+  Skye: "A-Tier", Astra: "A-Tier", Harbor: "B-Tier", Deadlock: "B-Tier", Chamber: "B-Tier",
+  Sage: "B-Tier", Vyse: "A-Tier", Neon: "A-Tier", Yoru: "A-Tier",
+};
 
 const AGENT_PICK_RATES: Record<string, string> = {
   Jett: "84.5%", Omen: "78.2%", Sova: "72.4%", Cypher: "69.1%", Killjoy: "68.3%",
