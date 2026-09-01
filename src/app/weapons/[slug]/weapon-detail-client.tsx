@@ -13,6 +13,7 @@ import WeaponViewer3D from "@/components/WeaponViewer3D";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 import type { ValorantWeapon, ValorantSkin } from "@/lib/valorant-types";
 import { toast } from "sonner";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 // Clean category label
 function categoryLabel(cat: string) {
@@ -35,12 +36,12 @@ function StatBar({ label, value, display, max }: { label: string; value: number;
   );
 }
 
-interface Props {
+interface WeaponDetailClientProps {
   weapon: ValorantWeapon;
   sameCategory: ValorantWeapon[];
 }
 
-export function WeaponDetailClient({ weapon, sameCategory }: Props) {
+export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientProps) {
   const [compareWith, setCompareWith] = useState<ValorantWeapon | null>(null);
   const [compareOpen, setCompareOpen] = useState(false);
   const [skinsExpanded, setSkinsExpanded] = useState(false);
@@ -64,17 +65,20 @@ export function WeaponDetailClient({ weapon, sameCategory }: Props) {
   const SKINS_PREVIEW = 6;
   const displayedSkins = skinsExpanded ? allSkins : allSkins.slice(0, SKINS_PREVIEW);
 
+  const breadcrumbItems = [
+    { label: "Weapons", href: "/weapons" },
+    { label: categoryLabel(weapon.category), href: `/weapons#${categoryLabel(weapon.category).toLowerCase()}` },
+    { label: weapon.displayName }
+  ];
+
   return (
     <PageTransition>
       <div className="min-h-screen bg-background text-foreground">
         {/* Back nav + title strip */}
-        <div className="border-b border-border bg-background pt-16 pb-10">
+        <div className="border-b border-border bg-background pt-10 pb-10">
           <Container>
-            <div className="flex items-center justify-between mb-6">
-              <Link href="/weapons" className="inline-flex items-center gap-2 font-mono-tactical text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-                <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-                All Weapons
-              </Link>
+            <div className="flex items-center justify-between mb-4">
+              <Breadcrumbs items={breadcrumbItems} />
               <button
                 type="button"
                 onClick={() => {

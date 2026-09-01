@@ -7,6 +7,7 @@ import { CanonEvidenceCard, type CanonStatus } from "@/components/canon-evidence
 import { siteConfig } from "@/lib/site";
 import loreData from "@/data/lore-database.json";
 import { ArrowLeft, Clock, Share2, BookOpen, ChevronRight } from "lucide-react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const dynamic = "force-static";
 
@@ -59,6 +60,12 @@ export default async function LoreDetailPage({ params }: Props) {
 
   const otherArticles = loreData.articles.filter(a => a.slug !== slug).slice(0, 3);
 
+  const breadcrumbItems = [
+    { label: "Lore", href: "/lore" },
+    { label: article.category.replace("_", " "), href: `/lore#${article.category.toLowerCase()}` },
+    { label: article.title }
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -98,15 +105,10 @@ export default async function LoreDetailPage({ params }: Props) {
         <div className="min-h-screen bg-[#0B141A] text-foreground">
           
           {/* Header */}
-          <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+          <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-10 pb-10">
             <Container>
-              <div className="flex items-center justify-between mb-6">
-                <Link
-                  href="/lore"
-                  className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-muted hover:text-primary transition-colors"
-                >
-                  <ArrowLeft className="h-3.5 w-3.5" /> All Lore Archives
-                </Link>
+              <div className="flex items-center justify-between mb-4">
+                <Breadcrumbs items={breadcrumbItems} />
                 <span className="font-mono text-[10px] uppercase tracking-wider text-muted border border-[rgba(236,232,225,0.1)] px-2.5 py-1">
                   Canon Status: {article.canonStatus}
                 </span>

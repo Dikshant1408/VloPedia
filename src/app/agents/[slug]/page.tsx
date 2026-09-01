@@ -12,6 +12,7 @@ import { AbilitySelector } from "@/components/ability-selector";
 import { AgentRelatedWeapons } from "./related-weapons";
 import type { ValorantAgent } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const API = "https://valorant-api.com/v1";
 
@@ -160,6 +161,12 @@ export default async function AgentDetailPage({ params }: Props) {
     ]
   };
 
+  const breadcrumbItems = [
+    { label: "Agents", href: "/agents" },
+    { label: agent.role?.displayName || "Operative", href: `/agents?role=${encodeURIComponent(agent.role?.displayName || "")}` },
+    { label: agent.displayName }
+  ];
+
   return (
     <PageTransition>
       <script
@@ -167,6 +174,13 @@ export default async function AgentDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="min-h-screen bg-background text-foreground">
+
+        {/* Top Breadcrumbs Strip */}
+        <div className="border-b border-border bg-[#0B141A] pt-6 pb-4">
+          <Container>
+            <Breadcrumbs items={breadcrumbItems} />
+          </Container>
+        </div>
 
         {/* Full-bleed hero */}
         <PageHero

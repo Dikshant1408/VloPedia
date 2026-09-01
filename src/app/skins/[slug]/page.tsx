@@ -10,6 +10,7 @@ import { SkinInspectClient } from "@/components/skin-inspect-client";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 import type { ValorantSkin } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const API = "https://valorant-api.com/v1";
 
@@ -151,6 +152,12 @@ export default async function SkinDetailPage({ params }: Props) {
   const inspectSkin = toInspectShape(skin);
   const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""];
 
+  const breadcrumbItems = [
+    { label: "Skins", href: "/skins" },
+    { label: weaponFromName(skin.displayName, skin.assetPath).toUpperCase(), href: `/weapons/${weaponFromName(skin.displayName, skin.assetPath)}` },
+    { label: skin.displayName }
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -187,17 +194,13 @@ export default async function SkinDetailPage({ params }: Props) {
       <div className="min-h-screen bg-background text-foreground">
 
         {/* Header strip */}
-        <div className="border-b border-border bg-background pt-16 pb-10">
+        <div className="border-b border-border bg-background pt-10 pb-10">
           <Container>
-            <Link
-              href="/skins"
-              className="inline-flex items-center gap-2 font-mono-tactical text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-primary mb-6 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-              All Skins
-            </Link>
+            <div className="mb-6">
+              <Breadcrumbs items={breadcrumbItems} />
+            </div>
 
-            <div className="flex flex-wrap items-end gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />

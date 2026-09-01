@@ -10,6 +10,9 @@ const PRIMARY_NAV = [
   { label: "Weapons",  href: "/weapons"  },
   { label: "Maps",     href: "/maps"     },
   { label: "Skins",    href: "/skins"    },
+  { label: "Tools",    href: "/tools"    },
+  { label: "Compare",  href: "/compare"  },
+  { label: "Lore",     href: "/lore"     },
   { label: "Guides",   href: "/guides"   },
   { label: "About",    href: "/about"    },
   { label: "Contact",  href: "/contact"  },
@@ -36,7 +39,7 @@ export function SiteFooter({ version }: SiteFooterProps) {
                 <span className="font-display font-black text-sm text-[#0B141A] -rotate-45">V</span>
               </div>
               <span className="font-display font-black text-lg uppercase text-foreground tracking-tight">
-                ValoVault
+                VloPedia
               </span>
               {version && (
                 <span className="border border-[rgba(13,242,242,0.25)] bg-[rgba(13,242,242,0.05)] px-2 py-0.5 font-mono text-[9px] text-[#0DF2F2] tracking-wider">
@@ -49,9 +52,7 @@ export function SiteFooter({ version }: SiteFooterProps) {
             <div className="flex items-start gap-2">
               <Shield className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
               <p className="font-mono text-[9px] leading-relaxed text-muted uppercase">
-                ValoVault is an independent companion app and is not affiliated with, sponsored by, or
-                approved by Riot Games. VALORANT and Riot Games are registered trademarks or trademarks
-                of Riot Games, Inc.
+                VloPedia is a non-commercial community encyclopedia and companion tool. VloPedia isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing VALORANT. VALORANT and Riot Games are trademarks or registered trademarks of Riot Games, Inc.
               </p>
             </div>
           </div>
