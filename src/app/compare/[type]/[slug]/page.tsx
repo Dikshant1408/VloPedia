@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/container";
 import { PageTransition, Reveal } from "@/components/motion-system";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { siteConfig } from "@/lib/site";
 import { fetchWithCache } from "@/lib/api-cache";
 import type { ValorantWeapon, ValorantAgent } from "@/lib/valorant-types";
-import { ArrowLeft, GitCompare, CheckCircle, XCircle, ArrowRight } from "lucide-react";
+import { ArrowLeft, GitCompare, CheckCircle, XCircle, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 
 export const dynamic = "force-static";
 
@@ -68,6 +69,12 @@ export default async function ComparePage({ params }: Props) {
   const slug1 = parts[0];
   const slug2 = parts[1];
 
+  const breadcrumbItems = [
+    { label: "Compare", href: "/compare" },
+    { label: type === "weapons" ? "Weapons" : "Operatives", href: "/compare" },
+    { label: `${slug1.toUpperCase()} vs ${slug2.toUpperCase()}` }
+  ];
+
   if (type === "weapons") {
     const res = await fetchWithCache<{ data: ValorantWeapon[] }>("https://valorant-api.com/v1/weapons");
     const weapons = res.data ?? [];
@@ -82,11 +89,11 @@ export default async function ComparePage({ params }: Props) {
     return (
       <PageTransition>
         <div className="min-h-screen bg-[#0B141A] text-foreground">
-          <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+          <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-10 pb-10">
             <Container>
-              <Link href="/weapons" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-muted hover:text-primary mb-6 transition-colors">
-                <ArrowLeft className="h-3.5 w-3.5" /> All Weapons
-              </Link>
+              <div className="mb-4">
+                <Breadcrumbs items={breadcrumbItems} />
+              </div>
               <div className="flex items-center gap-3 mb-2">
                 <span className="w-2 h-2 bg-primary" />
                 <span className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-primary">
@@ -177,6 +184,34 @@ export default async function ComparePage({ params }: Props) {
                 </div>
               </div>
             )}
+
+            {/* Tactical Situational Verdict */}
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="border border-primary/20 bg-primary/5 p-6 clip-diagonal space-y-3">
+                <div className="flex items-center gap-2 text-primary font-mono text-xs font-bold uppercase">
+                  <Zap className="h-4 w-4" />
+                  <span>Choose {w1.displayName} If:</span>
+                </div>
+                <ul className="font-sans text-xs sm:text-sm text-secondary space-y-2 list-disc list-inside leading-relaxed">
+                  <li>You prioritize guaranteed one-tap headshot lethality at all engagement ranges (0-50m+).</li>
+                  <li>Your playstyle emphasizes tapping and short 2-bullet burst discipline.</li>
+                  <li>You hold long sightlines (e.g. Ascent Mid, Breeze B Long, Pearl B Main).</li>
+                </ul>
+              </div>
+
+              <div className="border border-[#0DF2F2]/20 bg-[#0DF2F2]/5 p-6 clip-diagonal space-y-3">
+                <div className="flex items-center gap-2 text-[#0DF2F2] font-mono text-xs font-bold uppercase">
+                  <ShieldCheck className="h-4 w-4" />
+                  <span>Choose {w2.displayName} If:</span>
+                </div>
+                <ul className="font-sans text-xs sm:text-sm text-secondary space-y-2 list-disc list-inside leading-relaxed">
+                  <li>You frequently spam through controller smokes without bullet tracers revealing your location.</li>
+                  <li>You excel in close-to-medium range multi-target spray transfers.</li>
+                  <li>You want a faster fire rate (11 rds/s) and a larger 30-round magazine reserve.</li>
+                </ul>
+              </div>
+            </div>
+
           </Container>
         </div>
       </PageTransition>
@@ -194,11 +229,11 @@ export default async function ComparePage({ params }: Props) {
   return (
     <PageTransition>
       <div className="min-h-screen bg-[#0B141A] text-foreground">
-        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-10 pb-10">
           <Container>
-            <Link href="/agents" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-muted hover:text-primary mb-6 transition-colors">
-              <ArrowLeft className="h-3.5 w-3.5" /> All Operatives
-            </Link>
+            <div className="mb-4">
+              <Breadcrumbs items={breadcrumbItems} />
+            </div>
             <div className="flex items-center gap-3 mb-2">
               <span className="w-2 h-2 bg-[#0DF2F2]" />
               <span className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-[#0DF2F2]">
@@ -239,6 +274,29 @@ export default async function ComparePage({ params }: Props) {
               <Link href={`/agents/${slug2}`} className="block text-center font-mono text-xs uppercase py-2 border border-[#0DF2F2]/40 bg-[#0DF2F2]/10 text-[#0DF2F2] hover:bg-[#0DF2F2]/20 transition-colors">
                 View Full {a2.displayName} Dossier →
               </Link>
+            </div>
+          </div>
+
+          {/* Tactical Operative Verdict */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="border border-primary/20 bg-primary/5 p-6 clip-diagonal space-y-3">
+              <div className="flex items-center gap-2 text-primary font-mono text-xs font-bold uppercase">
+                <Zap className="h-4 w-4" />
+                <span>Pick {a1.displayName} If:</span>
+              </div>
+              <p className="font-sans text-xs sm:text-sm text-secondary leading-relaxed">
+                You excel with high-mobility duelists who can create instantaneous space for your team or aggressively hold Operator angles with an escape mechanism.
+              </p>
+            </div>
+
+            <div className="border border-[#0DF2F2]/20 bg-[#0DF2F2]/5 p-6 clip-diagonal space-y-3">
+              <div className="flex items-center gap-2 text-[#0DF2F2] font-mono text-xs font-bold uppercase">
+                <ShieldCheck className="h-4 w-4" />
+                <span>Pick {a2.displayName} If:</span>
+              </div>
+              <p className="font-sans text-xs sm:text-sm text-secondary leading-relaxed">
+                You prefer explosive AOE area denial, clearing sentinel trap setups, and taking site control with aggressive vertical movement.
+              </p>
             </div>
           </div>
         </Container>
