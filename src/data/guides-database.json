@@ -1,0 +1,118 @@
+[
+  {
+    "slug": "best-agents-for-beginners",
+    "title": "Best VALORANT Agents for Beginners (2026 Tier List & Guide)",
+    "category": "Beginner",
+    "readTime": "6 min read",
+    "summary": "The easiest agents to learn with straightforward abilities, high team value, and forgiving mechanics for new players.",
+    "author": "ValoVault Coaching",
+    "publishedAt": "August 2026",
+    "relatedAgents": ["Brimstone", "Reyna", "Killjoy", "Phoenix", "Sova"],
+    "relatedTools": ["/tools/sensitivity", "/tools/crosshair"],
+    "content": "Starting your VALORANT journey can feel overwhelming with dozens of abilities, smokes, and line-ups. For new players, picking agents with simple, transparent utility allows you to focus on fundamental crosshair placement, movement, and game sense.\n\n### 1. Brimstone (Controller)\nBrimstone's Sky Smokes use an intuitive top-down tablet interface. Unlike Omen or Astra, you don't need complex camera manipulation. Drop 3 smokes across site entrances, place a Stim Beacon to boost your team's fire rate, and hold your crosshair at head level.\n\n### 2. Phoenix (Duelist)\nPhoenix is self-sufficient. His Hot Hands and Blaze wall heal him, his flashes are simple corner curves, and his ultimate (Run It Back) grants a risk-free extra life to scout bombsites.\n\n### 3. Killjoy (Sentinel)\nKilljoy lets your automated utility watch your back. Place an Alarmbot and Turret at chokepoints—when they fire or sound alarms, you instantly know where the enemy is without having to facecheck.\n\n### 4. Reyna (Duelist)\nIf you have FPS background and want pure gun duels, Reyna's kit rewards fragging. Dismiss lets you reposition safely after kills, and Devour restores 100 HP."
+  },
+  {
+    "slug": "best-agents-for-solo-queue",
+    "title": "Best Agents for Solo Queue Ranked (1v9 Impact & Carry Potential)",
+    "category": "Ranked",
+    "readTime": "7 min read",
+    "summary": "Rank up faster in solo queue with self-sufficient agents who can create their own space, gather intel, and clutch rounds.",
+    "author": "ValoVault Radiant Desk",
+    "publishedAt": "August 2026",
+    "relatedAgents": ["Omen", "Jett", "Clove", "Cypher", "Iso"],
+    "relatedTools": ["/tools/comp-builder"],
+    "content": "Solo queue ranked in VALORANT is notorious for inconsistent comms and uncoordinated teammates. To climb consistently from Silver to Immortal, you need agents who don't rely on teammates to execute.\n\n### 1. Omen (Controller)\nOmen is the undisputed solo queue king. His rechargeable Dark Cover smokes ensure your team always has vision denial, Paranoia is a massive teamfight blind through walls, and Shrouded Step lets you outplay enemies in 1vX clutches.\n\n### 2. Clove (Controller / Duelist Hybrid)\nClove solves the biggest problem in solo queue: aggressive controllers who die early. Clove can drop smokes even after death, self-buff movement speed, and self-resurrect with Not Dead Yet.\n\n### 3. Jett (Duelist)\nJett's Tailwind dash allows you to take aggressive first-blood angles with an Operator or Vandal and reset safely without trading out.\n\n### 4. Cypher (Sentinel)\nIn solo queue where teammates rarely watch flanks, Cypher's Trapwires and Spycam lock down entire halves of the map, preventing enemy rotations."
+  },
+  {
+    "slug": "best-agents-for-ascent",
+    "title": "Best Agents on Ascent: Optimal Compositions & Map Meta",
+    "category": "Map Meta",
+    "readTime": "8 min read",
+    "summary": "Dominate Ascent with the highest win-rate team compositions, S-tier mid control agents, and site execution setups.",
+    "author": "ValoVault Analytics",
+    "publishedAt": "August 2026",
+    "relatedAgents": ["Sova", "Jett", "Omen", "Killjoy", "KAY/O"],
+    "relatedTools": ["/comp-builder?map=ascent&agents=jett,omen,sova,killjoy,kayo"],
+    "content": "Ascent is defined by thin paper-thin walls, wide mid courtyard sightlines, and closing mechanical doors.\n\n### The S-Tier Ascent Comp (88/100 Synergy)\n* **Jett (Duelist):** Operator dominance on Mid and Dash entries over smokes onto A Site and B Site.\n* **Sova (Initiator):** Recon Bolt scans entire bombsites through open skyboxes; Shock Darts clear B Main and Mid cubby.\n* **Omen (Controller):** One-way smokes on A Main and B Main, plus Mid Pizza vision blocks.\n* **Killjoy (Sentinel):** Lockdown covers the entirety of B Site for uncounterable retakes and attacker executes.\n* **KAY/O (Flex Initiator):** ZERO/POINT suppresses Killjoy utility and Jett dashes through mid."
+  },
+  {
+    "slug": "how-to-counter-jett",
+    "title": "How to Counter Jett in VALORANT: Operator & Dash Neutralization",
+    "category": "Strategy",
+    "readTime": "6 min read",
+    "summary": "Neutralize aggressive Jett players, bait out Tailwind dashes, and shut down Blade Storm eco rounds.",
+    "author": "ValoVault Strategy",
+    "publishedAt": "August 2026",
+    "relatedAgents": ["Cypher", "KAY/O", "Breach", "Fade"],
+    "relatedTools": ["/matchups"],
+    "content": "Jett remains the most picked Duelist across VCT and competitive ranked due to her instant escape dash and Operator synergy.\n\n### 1. Flash and Suppress (KAY/O & Breach)\nNever dry-peek an angle where Jett is suspected of holding with an Operator. Use KAY/O's knife (ZERO/POINT) to suppress her dash. A suppressed Jett cannot escape and is forced into a standard rifle trade.\n\n### 2. Trapwire Placement (Cypher)\nPosition Cypher Trapwires at non-standard ankle-height levels at site choke points. When Jett dashes into site, she gets tagged, revealed, and stunned, making her an easy kill.\n\n### 3. Bait the Dash Timer\nJett's Tailwind has a 12-second activation window once primed. Use utility (drones, prowlers, jump-peeks) to force her to activate Tailwind, then wait 12 seconds before executing."
+  },
+  {
+    "slug": "vandal-vs-phantom",
+    "title": "Vandal vs. Phantom: The Definitive Damage & Range Breakdown",
+    "category": "Weapons",
+    "readTime": "7 min read",
+    "summary": "Mathematical comparison of fire rate, recoil reset, spray patterns, damage falloff, and when to pick Vandal over Phantom.",
+    "author": "ValoVault Weapon Labs",
+    "publishedAt": "August 2026",
+    "relatedWeapons": ["vandal", "phantom"],
+    "relatedTools": ["/weapons/vandal", "/weapons/phantom"],
+    "content": "The eternal debate in VALORANT: $2,900 Vandal vs $2,900 Phantom.\n\n### 1. Damage Falloff\n* **Vandal:** 160 Head / 40 Body / 34 Leg at ALL ranges (0-50m). One-tap headshot kill through heavy armor at any distance.\n* **Phantom:**\n  * 0-15m: 156 Head (1-shot kill)\n  * 15-30m: 140 Head (leaves enemy with 10 HP through heavy shields!)\n  * 30-50m: 124 Head\n\n### 2. Phantom's Hidden Advantages\n* Faster fire rate (11 rds/s vs 9.75 rds/s)\n* Silencer: No bullet tracers through smoke (enemies cannot spam back accurately)\n* Larger magazine (30 rounds vs 25 rounds)\n* Quicker first-bullet recovery and tighter spray\n\n### When to Pick Which:\n* Pick **Vandal** for long-range maps (Breeze, Icebox, Ascent A Long).\n* Pick **Phantom** for Controller agents spamming smokes (Omen, Viper, Brimstone) and close-quarters maps (Split, Bind, Sunset)."
+  },
+  {
+    "slug": "best-sensitivity-for-valorant",
+    "title": "Best Sensitivity & DPI for VALORANT (VCT Pro Averages & eDPI Guide)",
+    "category": "Aim & Settings",
+    "readTime": "6 min read",
+    "summary": "Calculate your optimal eDPI, understand arm vs wrist aiming, and benchmark against top VCT professional players.",
+    "author": "ValoVault Hardware",
+    "publishedAt": "August 2026",
+    "relatedTools": ["/tools/sensitivity"],
+    "content": "High sensitivity in tactical shooters causes micro-inaccuracies. In VALORANT, precision headshots require calibrated eDPI (Effective DPI = In-game Sens × Mouse DPI).\n\n### The Pro Meta Standard (200 – 300 eDPI)\n* Over **75% of VCT Pro players** play between 200 and 300 eDPI (e.g. 0.25 to 0.35 at 800 DPI).\n* **Average cm/360°:** ~45 cm to 55 cm per full 360-degree rotation.\n\n### How to Find Your Sweet Spot\n1. Set mouse DPI to 800 or 1600.\n2. Start at in-game sens **0.30 at 800 DPI** (240 eDPI).\n3. Go to The Range on Medium bots. If you are constantly overshooting the head, lower by 0.02. If you are undershooting, raise by 0.02."
+  },
+  {
+    "slug": "how-valorant-economy-works",
+    "title": "How VALORANT Economy Works: Full Buy, Force & Loss Bonus Mastery",
+    "category": "Economy",
+    "readTime": "8 min read",
+    "summary": "Master credit management, round thresholds, loss streaks, and weapon saving protocols to win matches.",
+    "author": "ValoVault Stats",
+    "publishedAt": "August 2026",
+    "relatedTools": ["/economy"],
+    "content": "Credits win games. A team with superior economy will consistently fight with Vandal + Heavy Armor against inferior SMGs.\n\n### Core Rules\n* **Win Reward:** +3,000 credits\n* **Loss Reward:** +1,900 (Base) -> +2,400 (Loss 2) -> +2,900 (Loss 3+)\n* **Kill Reward:** +200 credits\n* **Spike Plant:** +300 credits to the whole team\n\n### Golden Rule of Buying\nLook at the 'Minimum Next Round' number on your buy menu. If saving this round keeps your minimum next round above **3,900 credits**, you are guaranteed a full Vandal + Heavy Shield buy next round."
+  },
+  {
+    "slug": "best-crosshair-settings",
+    "title": "Best Crosshair Settings & Pro Codes in VALORANT",
+    "category": "Aim & Settings",
+    "readTime": "5 min read",
+    "summary": "Clean, distraction-free crosshairs used by VCT Champions with one-click import profile codes.",
+    "author": "ValoVault Coaching",
+    "publishedAt": "August 2026",
+    "relatedTools": ["/tools/crosshair"],
+    "content": "A good crosshair offers high contrast against backgrounds (Cyan or Green) without obstructing head targets.\n\n### Top Pro Crosshair Codes\n* **TenZ Classic Dot/Inner:** `0;s;1;P;c;5;h;0;m;1;0t;1;0l;2;0o;2;0a;1`\n* **Demon1 Small Plus:** `0;s;1;P;c;1;o;1;d;1;0b;0;1b;0`\n* **Aspas Tight 1-4-2-2:** `0;P;c;5;o;1;d;1;z;1;f;0;0t;1;0l;1;0o;1;0a;1`"
+  },
+  {
+    "slug": "how-to-rank-up-from-gold",
+    "title": "How to Rank Up from Gold to Diamond in VALORANT",
+    "category": "Ranked",
+    "readTime": "8 min read",
+    "summary": "The 5 critical skills that separate Gold hardstuck players from Ascendant and Diamond contenders.",
+    "author": "ValoVault Ranked Analysis",
+    "publishedAt": "August 2026",
+    "relatedTools": ["/tools/sensitivity", "/tools/comp-builder"],
+    "content": "Gold players usually understand the basics, but suffer from poor gunfight hygiene and uncoordinated trading.\n\n### The 5 Levers to Reach Diamond\n1. **Stop Crouching on Every Duel:** In Gold, spraying and crouching places your head right into enemy crosshairs. Burst 2-3 bullets, strafe, and burst again.\n2. **Isolate 1v1s:** Never take open-angle 1v2 fights. Slice the angle so only one enemy can see you at any time.\n3. **Trading Kills:** Always position within 2 seconds of your entry Duelist. If your teammate dies, swing immediately to trade the kill.\n4. **Play the Spike Timer:** Attackers win when the bomb explodes. Don't hunt the last defender off the site.\n5. **Main 2 Agents Max:** Master all lineups and nuances of two agents rather than filling randomly."
+  },
+  {
+    "slug": "best-agents-for-low-elo",
+    "title": "Best Agents for Low Elo (Iron to Silver Ranked Guide)",
+    "category": "Beginner",
+    "readTime": "6 min read",
+    "summary": "Simple, high-impact agents that punish common low-elo mistakes and help you carry out of Iron and Bronze.",
+    "author": "ValoVault Coaching",
+    "publishedAt": "August 2026",
+    "relatedAgents": ["Reyna", "Killjoy", "Brimstone", "Fade"],
+    "relatedTools": ["/tier-list"],
+    "content": "In Iron, Bronze, and Silver, players rarely check corners, constantly push through smokes, and ignore flank audio.\n\n### 1. Reyna\nLow elo players struggle to hit headshots. Reyna's Devour lets you heal to full health after every kill, allowing you to easily win 1v3 rounds.\n\n### 2. Killjoy\nLow elo players rush onto site without destroying utility. Killjoy's Nanoswarms and Turret will easily score multi-kills without you risking your life.\n\n### 3. Brimstone\nDrop three orbital smokes with your tablet and use Incendiary to deny defuses completely from safe cover."
+  }
+]

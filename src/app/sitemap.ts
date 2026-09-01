@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
 import { valorantDb } from "@/lib/valorant-db";
 import { guidesDb } from "@/lib/guides-db";
+import loreData from "@/data/lore-database.json";
 
 export const dynamic = "force-static";
 
@@ -40,12 +41,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/flex`,                lastModified: now, changeFrequency: "weekly",  priority: 0.6 },
     { url: `${base}/gamemodes`,           lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/tiers`,              lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/lore`,               lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${base}/lore`,               lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${base}/tools`,              lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${base}/compare`,            lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/patch-notes`,        lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/tier-list`,          lastModified: now, changeFrequency: "daily",   priority: 0.7 },
-    { url: `${base}/comp-builder`,       lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/crosshair`,          lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/sensitivity`,        lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/comp-builder`,       lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/crosshair`,          lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/sensitivity`,        lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/pro-settings`,       lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${base}/store`,              lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     { url: `${base}/search`,             lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
@@ -112,15 +115,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.6,
   }));
 
-  // 8. Dynamic lore logs (from mock valorantDb)
-  const loreRoutes: MetadataRoute.Sitemap = valorantDb.lore.map(l => ({
+  // 8. Dynamic lore archives (from loreData.articles)
+  const loreRoutes: MetadataRoute.Sitemap = loreData.articles.map(l => ({
     url:             `${base}/lore/${l.slug}`,
     lastModified:    now,
-    changeFrequency: "monthly",
-    priority:        0.5,
+    changeFrequency: "weekly",
+    priority:        0.8,
   }));
 
-  // 9. Dynamic leaks logs (from mock valorantDb)
+  // 9. Dynamic comparison routes
+  const comparisonSlugs = [
+    "weapons/vandal-vs-phantom",
+    "weapons/operator-vs-outlaw",
+    "weapons/spectre-vs-stinger",
+    "weapons/sheriff-vs-ghost",
+    "weapons/ares-vs-odin",
+    "weapons/bulldog-vs-guardian",
+    "agents/jett-vs-raze",
+    "agents/omen-vs-clove",
+    "agents/sova-vs-fade",
+    "agents/cypher-vs-killjoy",
+    "agents/viper-vs-harbor",
+    "agents/breach-vs-kayo",
+  ];
+  const compareRoutes: MetadataRoute.Sitemap = comparisonSlugs.map(slug => ({
+    url:             `${base}/compare/${slug}`,
+    lastModified:    now,
+    changeFrequency: "weekly",
+    priority:        0.7,
+  }));
+
+  // 10. Dynamic leaks logs (from mock valorantDb)
   const leaksRoutes: MetadataRoute.Sitemap = valorantDb.leaks.map(l => ({
     url:             `${base}/leaks/${l.slug}`,
     lastModified:    now,
@@ -128,7 +153,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.5,
   }));
 
-  // 10. Dynamic collections Checklist routes
+  // 11. Dynamic collections Checklist routes
   const collectionSlugs = ["kuronami-vandal", "reaver-vandal", "oni-phantom"];
   const collectionRoutes: MetadataRoute.Sitemap = collectionSlugs.map(slug => ({
     url:             `${base}/collections/${slug}`,
@@ -212,6 +237,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...mapRoutes,
     ...patchRoutes,
     ...loreRoutes,
+    ...compareRoutes,
     ...leaksRoutes,
     ...collectionRoutes,
     ...skinRoutes,

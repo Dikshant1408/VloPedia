@@ -32,8 +32,10 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     title: "Tactical Tools",
     items: [
+      { label: "Tools Hub",         href: "/tools",        desc: "All competitive calculators & builders" },
       { label: "Comp Builder",      href: "/comp-builder", desc: "Evaluate 5-agent team synergy & scores" },
       { label: "Sensitivity Calc",  href: "/sensitivity",  desc: "Convert sens across games & calculate eDPI" },
+      { label: "Tactical Compare",  href: "/compare",      desc: "Head-to-head weapon & agent comparisons" },
       { label: "My Setup / Loadout",href: "/setup",        desc: "Build & share your gear and crosshair" },
       { label: "Crosshair Library", href: "/crosshair",    desc: "Pro crosshair codes & generator" },
       { label: "Agent Tier List",   href: "/tier-list",    desc: "Competitive meta tier rankings" },
@@ -43,14 +45,14 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    title: "Guides & Meta",
+    title: "Lore & Guides",
     items: [
+      { label: "Lore & Timeline",   href: "/lore",         desc: "Chronological history, factions & canon evidence" },
+      { label: "First Light Era",   href: "/lore/first-light", desc: "The cataclysm that rewrote humanity" },
+      { label: "Kingdom Corp Dossier", href: "/lore/kingdom", desc: "Global Radianite monopoly & secrets" },
       { label: "Tactical Guides",   href: "/guides",       desc: "In-depth execute & lineup walkthroughs" },
       { label: "Patch History",     href: "/patch-notes",  desc: "Chronological balance buffs & nerfs" },
-      { label: "Agent Lore",        href: "/lore",         desc: "Kingdom Corp & Radianite backstory" },
       { label: "Competitive Ranks", href: "/tiers",        desc: "Rank distributions and badge tiers" },
-      { label: "Game Modes",        href: "/gamemodes",    desc: "Swiftplay, Spike Rush & Premier rules" },
-      { label: "Episode Seasons",   href: "/seasons",      desc: "Act timeline and battlepass records" },
     ],
   },
   {

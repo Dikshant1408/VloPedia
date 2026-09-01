@@ -1,93 +1,181 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Container } from "@/components/container";
-import { PageTransition, Reveal } from "@/components/motion-system";
-import { valorantDb } from "@/lib/valorant-db";
-import type { ValorantAgent } from "@/lib/valorant-types";
+import { PageTransition, Reveal, StaggerContainer } from "@/components/motion-system";
+import { CanonBadge, type CanonStatus } from "@/components/canon-evidence-card";
+import loreData from "@/data/lore-database.json";
+import { ArrowRight, BookOpen, Clock, Layers, ShieldCheck, Users, Sparkles, Filter } from "lucide-react";
 
-export default function LorePage() {
-  const [agents, setAgents] = useState<ValorantAgent[]>([]);
+export default function LoreHubPage() {
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+  const [selectedCanon, setSelectedCanon] = useState<string>("ALL");
 
-  useEffect(() => {
-    fetch("https://valorant-api.com/v1/agents?isPlayableCharacter=true")
-      .then(r => r.json())
-      .then(j => setAgents(j.data ?? []))
-      .catch(() => {});
-  }, []);
+  const categories = ["ALL", "TIMELINE", "EVENT", "FACTION", "DIMENSION", "SUBSTANCE", "AGENT_LORE"];
 
-  const loreItems = valorantDb.lore;
+  const filteredArticles = loreData.articles.filter(article => {
+    const matchCat = selectedCategory === "ALL" || article.category === selectedCategory;
+    const matchCanon = selectedCanon === "ALL" || article.canonStatus === selectedCanon;
+    return matchCat && matchCanon;
+  });
 
   return (
     <PageTransition>
       <div className="min-h-screen bg-[#0B141A] text-foreground">
+        
         {/* Header */}
-        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-12">
           <Container>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="w-2 h-2 bg-[#0DF2F2] animate-pulse" aria-hidden="true" />
-              <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">LORE ARCHIVES</span>
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <span className="w-2 h-2 bg-[#0DF2F2] animate-pulse" aria-hidden="true" />
+                <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">
+                  VLOPEDIA NARRATIVE ARCHIVES // CANON EVIDENCE ENGINE
+                </span>
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-wider text-muted border border-[rgba(236,232,225,0.1)] px-2.5 py-1">
+                Data Freshness: Editorial Verified (Patch 9.04)
+              </span>
             </div>
-            <h1 className="font-display text-6xl uppercase tracking-tight text-white sm:text-7xl">LORE</h1>
-            <p className="mt-3 max-w-xl font-sans text-sm leading-relaxed text-secondary">
-              Kingdom Corp, Radianite origins, and the stories behind every operative.
+
+            <h1 className="font-display font-black text-5xl uppercase tracking-tight text-white sm:text-6xl lg:text-7xl">
+              VALORANT <span className="text-[#0DF2F2]">Lore & Factions</span>
+            </h1>
+            <p className="mt-4 max-w-2xl font-sans text-sm sm:text-base leading-relaxed text-secondary">
+              The verified historical timeline, faction secrets, interdimensional conflict between Alpha and Omega Earths, and deep-cover agent dossiers with full canon evidence verification.
             </p>
+
+            {/* Quick Link Highlights */}
+            <div className="mt-8 flex flex-wrap gap-2.5">
+              <Link href="/lore/timeline" className="font-mono text-xs font-bold uppercase px-3 py-1.5 border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                Chronological Timeline →
+              </Link>
+              <Link href="/lore/kingdom" className="font-mono text-xs uppercase px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white transition-colors">
+                Kingdom Corp
+              </Link>
+              <Link href="/lore/omega-earth" className="font-mono text-xs uppercase px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white transition-colors">
+                Omega Earth & Legion
+              </Link>
+              <Link href="/lore/hourglass" className="font-mono text-xs uppercase px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white transition-colors">
+                Scions of the Hourglass
+              </Link>
+              <Link href="/lore/omen" className="font-mono text-xs uppercase px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white transition-colors">
+                Omen&apos;s Identity Dossier
+              </Link>
+            </div>
           </Container>
         </div>
 
-        <Container className="py-16">
-          {/* Timeline layout */}
-          <div className="relative">
-            {/* Center spine */}
-            <div aria-hidden="true" className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-primary via-border to-transparent sm:left-1/2" />
+        <Container className="py-16 space-y-16">
 
-            <div className="space-y-12">
-              {loreItems.map((item, i) => {
-                // Try to match an agent portrait by comparing lore title to agent names
-                const matchedAgent = agents.find(a =>
-                  item.title.toLowerCase().includes(a.displayName.toLowerCase()) ||
-                  a.displayName.toLowerCase().includes(item.title.toLowerCase().split(" ")[0])
-                );
-                const portraitImg = matchedAgent?.bustPortrait ?? matchedAgent?.displayIcon ?? null;
-                const isLeft = i % 2 === 0;
-
-                return (
-                  <Reveal key={item.slug} delay={i * 0.04}>
-                    <div className={`relative flex flex-col gap-4 pl-12 sm:pl-0 sm:w-[46%] ${isLeft ? "sm:pr-16 sm:ml-0" : "sm:pl-16 sm:ml-auto"}`}>
-                      {/* Timeline dot */}
-                      <div
-                        aria-hidden="true"
-                        className={`absolute top-3 h-4 w-4 rounded-full border-2 border-primary bg-background left-0 sm:left-auto ${isLeft ? "sm:right-[-0.55rem]" : "sm:left-[-0.55rem]"}`}
-                      />
-
-                      <Link href={`/lore/${item.slug}`}
-                        className="group border border-border bg-[#0D1A22] transition-all duration-300 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-                        {/* Image */}
-                        {portraitImg && (
-                          <div className="relative h-32 overflow-hidden border-b border-[rgba(236,232,225,0.08)] bg-[#08111A]">
-                            <Image src={portraitImg} alt={item.title} fill sizes="400px"
-                              className="object-cover object-top opacity-50 transition-opacity duration-300 group-hover:opacity-80" unoptimized />
-                            <div className="absolute inset-0 bg-gradient-to-t from-surface-card to-transparent" />
-                          </div>
-                        )}
-                        <div className="p-5 space-y-2">
-                          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
-                            Chapter {item.chapter}
-                          </span>
-                          <h2 className="font-display text-xl uppercase tracking-wide text-white group-hover:text-primary transition-colors">
-                            {item.title}
-                          </h2>
-                          <p className="font-sans text-xs leading-relaxed text-muted line-clamp-2">{item.summary}</p>
-                        </div>
-                      </Link>
-                    </div>
-                  </Reveal>
-                );
-              })}
+          {/* ═══════════════════════════════════════════
+              1. THE CHRONOLOGICAL ERAS
+          ═══════════════════════════════════════════ */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-3 border-b border-[rgba(236,232,225,0.08)] pb-4">
+              <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
+              <h2 className="font-display font-black text-2xl uppercase tracking-wide text-white">
+                Historical Eras
+              </h2>
             </div>
-          </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {loreData.eras.map((era, i) => (
+                <div key={era.id} className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal-sm relative flex flex-col justify-between group hover:border-[#0DF2F2]/40 transition-colors">
+                  <div className="space-y-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#0DF2F2] font-bold">
+                      {era.years}
+                    </span>
+                    <h3 className="font-display font-black text-lg uppercase text-white group-hover:text-[#0DF2F2] transition-colors">
+                      {era.name}
+                    </h3>
+                    <p className="font-sans text-xs leading-relaxed text-muted">
+                      {era.summary}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-[rgba(236,232,225,0.06)] flex items-center justify-between text-[10px] font-mono text-muted">
+                    <span>Phase 0{i + 1}</span>
+                    <span className="text-[#0DF2F2]">ARCHIVED</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ═══════════════════════════════════════════
+              2. EVIDENCE-BASED ARTICLE ARCHIVES
+          ═══════════════════════════════════════════ */}
+          <section className="space-y-8">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
+              <div className="flex items-center gap-3">
+                <span className="h-[2px] w-8 bg-[#0DF2F2]" aria-hidden="true" />
+                <h2 className="font-display font-black text-2xl uppercase tracking-wide text-white">
+                  Lore Files & Dossiers ({filteredArticles.length})
+                </h2>
+              </div>
+
+              {/* Filters */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-1.5 mr-2">
+                  <Filter className="h-3.5 w-3.5 text-muted" />
+                  <span className="font-mono text-[10px] uppercase text-muted">Category:</span>
+                </div>
+                {categories.map(cat => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`font-mono text-[10px] uppercase tracking-wider px-2.5 py-1 transition-colors ${
+                      selectedCategory === cat
+                        ? "bg-primary text-black font-bold"
+                        : "border border-[rgba(236,232,225,0.1)] text-muted hover:text-white"
+                    }`}
+                  >
+                    {cat.replace("_", " ")}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Articles Grid */}
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredArticles.map(article => (
+                <Link
+                  key={article.slug}
+                  href={`/lore/${article.slug}`}
+                  className="group border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal flex flex-col justify-between hover:border-primary/50 hover:bg-[#0D1A22]/90 transition-all shadow-lg"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#0DF2F2]">
+                        {article.category.replace("_", " ")}
+                      </span>
+                      <CanonBadge status={article.canonStatus as CanonStatus} />
+                    </div>
+
+                    <h3 className="font-display font-black text-xl uppercase tracking-wide text-white group-hover:text-primary transition-colors">
+                      {article.title}
+                    </h3>
+
+                    <p className="font-sans text-xs leading-relaxed text-secondary line-clamp-3">
+                      {article.summary}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-[rgba(236,232,225,0.06)] flex items-center justify-between text-xs font-mono">
+                    <span className="text-muted flex items-center gap-1.5">
+                      <Clock className="h-3 w-3" /> {article.readTime}
+                    </span>
+                    <span className="text-primary font-bold inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      Inspect Dossier <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
         </Container>
       </div>
     </PageTransition>

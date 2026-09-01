@@ -1,0 +1,19 @@
+{
+  "games": [
+    { "id": "cs2", "name": "Counter-Strike 2 / CS:GO", "multiplier": 0.3142857143, "defaultSens": 1.2 },
+    { "id": "apex", "name": "Apex Legends", "multiplier": 0.3142857143, "defaultSens": 1.4 },
+    { "id": "ow2", "name": "Overwatch 2", "multiplier": 0.0942857143, "defaultSens": 4.0 },
+    { "id": "r6s", "name": "Rainbow Six Siege", "multiplier": 0.0528571429, "defaultSens": 8.0 },
+    { "id": "fortnite", "name": "Fortnite", "multiplier": 0.252, "defaultSens": 6.0 },
+    { "id": "cod", "name": "Call of Duty: Warzone", "multiplier": 0.0942857143, "defaultSens": 5.0 },
+    { "id": "valorant", "name": "VALORANT (Native)", "multiplier": 1.0, "defaultSens": 0.32 }
+  ],
+  "proBenchmarks": [
+    { "player": "TenZ", "team": "Sentinels", "role": "Duelist / Controller", "dpi": 800, "valSens": 0.3, "edpi": 240, "mouse": "Lamzu Atlantis Mini" },
+    { "player": "Demon1", "team": "NRG", "role": "Duelist", "dpi": 1600, "valSens": 0.1, "edpi": 160, "mouse": "G Pro X Superlight" },
+    { "player": "Aspas", "team": "Leviatán", "role": "Duelist", "dpi": 800, "valSens": 0.4, "edpi": 320, "mouse": "Zowie EC2-CW" },
+    { "player": "Chronicle", "team": "Fnatic", "role": "Initiator", "dpi": 800, "valSens": 0.23, "edpi": 184, "mouse": "G Pro X Superlight 2" },
+    { "player": "Boaster", "team": "Fnatic", "role": "IGL / Controller", "dpi": 800, "valSens": 0.25, "edpi": 200, "mouse": "G Pro X Superlight 2" },
+    { "player": "Derke", "team": "Vitality", "role": "Duelist", "dpi": 400, "valSens": 0.74, "edpi": 296, "mouse": "G Pro Wireless" }
+  ]
+}

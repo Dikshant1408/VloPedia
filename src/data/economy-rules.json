@@ -1,0 +1,46 @@
+{
+  "currency": "Credits",
+  "maxCredits": 9000,
+  "startingCredits": 800,
+  "roundRewards": {
+    "win": 3000,
+    "lossBase": 1900,
+    "lossStreak2": 2400,
+    "lossStreak3Plus": 2900,
+    "kill": 200,
+    "spikePlantPlanter": 300,
+    "spikePlantTeamBonus": 300
+  },
+  "loadoutThresholds": {
+    "fullBuyVandalHeavyShield": 3900,
+    "fullBuyOperatorHeavyShield": 5700,
+    "halfBuyThreshold": 2400,
+    "saveRoundTargetMinimumNext": 3900
+  },
+  "strategies": [
+    {
+      "type": "Pistol Round",
+      "roundIndex": "Rounds 1 & 13",
+      "budget": 800,
+      "recommendations": ["Ghost (500) + 1 Ability", "Light Shields (400) + Classic + Abilities", "Frenzy (450) on close entry"]
+    },
+    {
+      "type": "Bonus Round",
+      "roundIndex": "Round 3 (after 2-0 start)",
+      "budget": "Preserved SMGs / Bulldogs",
+      "recommendations": ["Play saved weapons from Round 2", "Do NOT force full rifles; focus on chip damage and weapon upgrades"]
+    },
+    {
+      "type": "Full Buy",
+      "roundIndex": "When team average > 4,000",
+      "budget": 3900,
+      "recommendations": ["Vandal / Phantom (2900) + Heavy Shields (1000) + Full Utility"]
+    },
+    {
+      "type": "Eco / Save Round",
+      "roundIndex": "When team average < 2,500",
+      "budget": 0,
+      "recommendations": ["Buy Classic / Sheriff only if Next Round Minimum stays >= 3,900", "Play for exit kills and weapons"]
+    }
+  ]
+}

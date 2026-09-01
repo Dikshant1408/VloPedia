@@ -22,10 +22,11 @@ import {
 } from "lucide-react";
 import { valorantDb } from "@/lib/valorant-db";
 import { slugify } from "@/lib/utils";
+import loreData from "@/data/lore-database.json";
 
 interface SearchItem {
   id: string;
-  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Tools" | "Guides" | "Patches";
+  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Tools" | "Guides" | "Lore" | "Compare" | "Patches";
   title: string;
   subtitle: string;
   href: string;
@@ -36,17 +37,26 @@ const STATIC_TOOLS: SearchItem[] = [
   { id: "tool-comp-builder", category: "Tools", title: "Tactical Comp Builder", subtitle: "Analyze team composition synergy, roles, and map compatibility", href: "/comp-builder", badge: "Engine" },
   { id: "tool-sens-calc", category: "Tools", title: "Sensitivity Calculator", subtitle: "Convert sens from CS2, Apex, Overwatch & calculate eDPI / cm/360", href: "/sensitivity", badge: "Converter" },
   { id: "tool-my-setup", category: "Tools", title: "My VALORANT Setup", subtitle: "Create & share your personal loadout, sensitivity, and crosshair card", href: "/setup", badge: "Shareable" },
+  { id: "tool-compare", category: "Tools", title: "Tactical Compare Engine", subtitle: "Head-to-head weapon & agent comparison matrices", href: "/compare", badge: "Compare" },
   { id: "tool-crosshair", category: "Tools", title: "Crosshair Library & Generator", subtitle: "Browse pro crosshair codes and customize in-game reticles", href: "/crosshair", badge: "Generator" },
   { id: "tool-tier-list", category: "Tools", title: "Meta Agent Tier List", subtitle: "Current patch competitive agent ranking & win rates", href: "/tier-list", badge: "Tier List" },
   { id: "tool-economy", category: "Tools", title: "Economy Guide & Calculator", subtitle: "Round buy thresholds, loss bonus progression, and save calculations", href: "/economy", badge: "Economy" },
 ];
 
+const STATIC_COMPARES: SearchItem[] = [
+  { id: "compare-vandal-phantom", category: "Compare", title: "Vandal vs. Phantom", subtitle: "Damage falloff, bullet tracers, fire rate, and recoil reset comparison", href: "/compare/weapons/vandal-vs-phantom", badge: "Weapon Duel" },
+  { id: "compare-op-outlaw", category: "Compare", title: "Operator vs. Outlaw", subtitle: "High-yield snipers, half-shield kill thresholds, and cost efficiency", href: "/compare/weapons/operator-vs-outlaw", badge: "Weapon Duel" },
+  { id: "compare-jett-raze", category: "Compare", title: "Jett vs. Raze", subtitle: "Duelist entry space creation, verticality, and ultimate impact", href: "/compare/agents/jett-vs-raze", badge: "Operative Duel" },
+  { id: "compare-omen-clove", category: "Compare", title: "Omen vs. Clove", subtitle: "Controller smoke coverage, post-death utility, and solo queue carry", href: "/compare/agents/omen-vs-clove", badge: "Operative Duel" },
+];
+
 const STATIC_GUIDES: SearchItem[] = [
-  { id: "guide-ascent", category: "Guides", title: "Ascent Map Masterclass: Execute & Default Strategy", subtitle: "A-Site & B-Site execute lineups, Mid control, and defender rotations", href: "/guides/best-agents-for-ascent", badge: "Map Guide" },
-  { id: "guide-bind", category: "Guides", title: "Bind Teleporter Tactics & Default Playbook", subtitle: "Hookah control, Showers executes, and TP rotation strategies", href: "/guides/bind-teleporter-tactics", badge: "Map Guide" },
-  { id: "guide-haven", category: "Guides", title: "Haven 3-Site Defense & Retake Fundamentals", subtitle: "Garage anchor setup, C-Long op angles, and A-Retake coordination", href: "/guides/haven-3-site-defense-strategy", badge: "Map Guide" },
-  { id: "guide-sunset", category: "Guides", title: "Best Agents & Compositions for Sunset", subtitle: "Market control, B-Main flashes, and Cypher/Omen meta picks", href: "/guides/best-agents-for-sunset", badge: "Comp Guide" },
-  { id: "guide-economy", category: "Guides", title: "VALORANT Economy Playbook & Buy Calculator", subtitle: "Bonus round conversions, light armor meta, and hero Vandals", href: "/guides/valorant-economy-guide", badge: "Economy" },
+  { id: "guide-beginners", category: "Guides", title: "Best Agents for Beginners", subtitle: "Easy mechanics, high team utility, and forgiving abilities", href: "/guides/best-agents-for-beginners", badge: "Guide" },
+  { id: "guide-solo-queue", category: "Guides", title: "Best Agents for Solo Queue Ranked", subtitle: "Self-sufficient 1v9 agents to climb from Silver to Ascendant", href: "/guides/best-agents-for-solo-queue", badge: "Guide" },
+  { id: "guide-ascent", category: "Guides", title: "Best Agents on Ascent", subtitle: "Optimal S-tier comp (Jett, Omen, Sova, Killjoy, KAY/O)", href: "/guides/best-agents-for-ascent", badge: "Guide" },
+  { id: "guide-counter-jett", category: "Guides", title: "How to Counter Jett", subtitle: "Baiting Tailwind, Operator suppression, and Cypher setups", href: "/guides/how-to-counter-jett", badge: "Guide" },
+  { id: "guide-vandal-phantom", category: "Guides", title: "Vandal vs. Phantom Breakdown", subtitle: "Mathematical damage dropoff and situational recommendations", href: "/guides/vandal-vs-phantom", badge: "Guide" },
+  { id: "guide-sens", category: "Guides", title: "Best Sensitivity & DPI Guide", subtitle: "VCT pro averages, eDPI ranges (200-300), and cm/360 calculations", href: "/guides/best-sensitivity-for-valorant", badge: "Guide" },
 ];
 
 export function GlobalSearchDialog() {
@@ -170,7 +180,16 @@ export function GlobalSearchDialog() {
       badge: "Patch",
     }));
 
-    return [...STATIC_TOOLS, ...STATIC_GUIDES, ...liveItems, ...patchItems];
+    const loreItems: SearchItem[] = loreData.articles.map(a => ({
+      id: `lore-${a.slug}`,
+      category: "Lore",
+      title: a.title,
+      subtitle: `${a.category.replace("_", " ")} · ${a.summary.slice(0, 70)}...`,
+      href: `/lore/${a.slug}`,
+      badge: a.canonStatus,
+    }));
+
+    return [...STATIC_TOOLS, ...STATIC_COMPARES, ...STATIC_GUIDES, ...loreItems, ...liveItems, ...patchItems];
   }, [liveItems]);
 
   // Filter items
@@ -276,6 +295,8 @@ export function GlobalSearchDialog() {
                         item.category === "Weapons" ? "border-primary/40 bg-primary/10 text-primary" :
                         item.category === "Maps" ? "border-role-initiator/40 bg-role-initiator/10 text-role-initiator" :
                         item.category === "Tools" ? "border-[#0DF2F2]/40 bg-[#0DF2F2]/10 text-[#0DF2F2]" :
+                        item.category === "Compare" ? "border-[#C084FC]/40 bg-[#C084FC]/10 text-[#C084FC]" :
+                        item.category === "Lore" ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400" :
                         item.category === "Guides" ? "border-role-sentinel/40 bg-role-sentinel/10 text-role-sentinel" :
                         "border-muted/40 bg-surface text-muted"
                       }`}>

@@ -1,0 +1,308 @@
+{
+  "eras": [
+    {
+      "id": "pre-first-light",
+      "name": "Era 1: Pre-First Light & Kingdom Origins",
+      "years": "Prior to 2039",
+      "summary": "The world operated on standard fossil fuels and conventional geopolitical boundaries. Kingdom Corporation was founded in the 1990s as a petroleum and energy extraction firm."
+    },
+    {
+      "id": "first-light-era",
+      "name": "Era 2: The First Light Cataclysm",
+      "years": "2039",
+      "summary": "A worldwide cataclysmic event occurred. An unknown extraterrestrial / hyper-dimensional mineral named Radianite erupted across the globe, introducing clean energy and granting anomalous abilities to select humans known as Radiants."
+    },
+    {
+      "id": "valorant-protocol-era",
+      "name": "Era 3: The VALORANT Protocol Founded",
+      "years": "2043–2049",
+      "summary": "Following the emergence of rogue Radiants and catastrophic Radianite disasters, the United Nations covertly chartered the VALORANT Protocol, led by former commander Liam Byrne (Brimstone) and chemist Dr. Sabine Callas (Viper)."
+    },
+    {
+      "id": "omega-earth-war",
+      "name": "Era 4: The Mirror Earth Conflict (Omega Earth & Legion)",
+      "years": "2050–Present",
+      "summary": "The VALORANT Protocol discovers that Earth is under attack not by aliens, but by an alternate universe duplicate: Omega Earth. Omega's Radianite reserves have collapsed, driving their counterpart agents (VALORANT Legion) to steal Alpha Earth's Radianite using Spike teleportation devices."
+    },
+    {
+      "id": "hourglass-era",
+      "name": "Era 5: The Secret Order of the Hourglass & Landfall",
+      "years": "Current Arc",
+      "summary": "Deep-cover investigations reveal that ancient underground syndicates known as the Hourglass and secret weapon programs like Project Landfall have been manipulating both Alpha and Omega Earths behind the scenes."
+    }
+  ],
+  "articles": [
+    {
+      "slug": "timeline",
+      "title": "Complete Chronological VALORANT Lore Timeline",
+      "category": "TIMELINE",
+      "readTime": "12 min read",
+      "summary": "The definitive chronological history of VALORANT: from the founding of Kingdom Corporation to the First Light, the Omega invasion, and the revelation of the Hourglass.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Riot Games Cinematics (DUALITY, WARM UP, RECKONING), Patch Dossiers & Voice Logs",
+      "whyDoWeKnowThis": "This sequence of events is pieced together directly from in-game environmental storytelling, Kingdom Corp terminal emails, agent voice lines, and official Riot Games narrative cinematics from Episode 1 through Episode 9.",
+      "sections": [
+        {
+          "heading": "1. The Pre-First Light World",
+          "content": "Before the discovery of Radianite, Earth was culturally and technologically comparable to our modern world. In the late 20th century, Kingdom Corporation emerged as a powerful industrial syndicate, initially dealing in energy infrastructure and mining. Scientists like Dr. Sabine Callas (Viper) and research pioneers pushed the boundaries of biological and chemical physics."
+        },
+        {
+          "heading": "2. The Event: First Light (2039)",
+          "content": "In 2039, an unprecedented worldwide event known as 'First Light' altered reality forever. Massive rings of blue crystalline energy erupted across continents. This new element was named Radianite. Radianite possessed near-limitless energy density, sparking a new Industrial Revolution spearheaded almost entirely by Kingdom Corporation. However, exposure to high-intensity Radianite waves caused biological mutations in a small percentage of humans, turning them into 'Radiants' with supernatural powers over wind, fire, cosmos, and dimensional planes."
+        },
+        {
+          "heading": "3. The Founding of the VALORANT Protocol (VP)",
+          "content": "As Radianite instability caused regional collapses (such as the floating islands of Ascent in Venice and the Rift disaster), the United Nations covertly chartered a global covert response unit: The VALORANT Protocol. Agent 01, Liam Byrne (Brimstone), and Agent 02, Dr. Sabine Callas (Viper), were tasked with assembling the world's most elite combatants, whether Radiant or tech-augmented non-Radiants."
+        },
+        {
+          "heading": "4. The Discovery of Omega Earth (Mirror Invasion)",
+          "content": "During the Venice incident and subsequent attacks at Bind and Haven, the Protocol captured surveillance footage of attackers wearing identical faces to their own agents (e.g. Phoenix encountering another Phoenix in the Duality cinematic). Sova, Killjoy, and Cypher reverse-engineered captured Spike technology, proving that Omega Earth was suffering from catastrophic environmental collapse and stealing Alpha Earth's Radianite to power their dying world."
+        },
+        {
+          "heading": "5. The Secret Factions: Realm, Atlas, and The Hourglass",
+          "content": "Recent discoveries in Lisbon (Pearl), Los Angeles (Sunset), and the secret underground facilities of Abyss have exposed third-party syndicates: the Scions of the Hourglass, private security contractors Realm and Atlas, and rogue agents like Vincent Fabron (Chamber) who orchestrated the destruction of the Fracture collider to force Alpha and Omega Earths into contact."
+        }
+      ]
+    },
+    {
+      "slug": "first-light",
+      "title": "First Light: The Cataclysm That Rewrote Humanity",
+      "category": "EVENT",
+      "readTime": "8 min read",
+      "summary": "An in-depth investigation into the 2039 First Light event: how Radianite emerged, what triggered the global wave, and how humanity adapted.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "VALORANT Episode 1 Intro Cinematic, In-Game Map Plaques, Brimstone's Office Audio Logs",
+      "whyDoWeKnowThis": "Confirmed through in-game timeline references in Brimstone's office, official Riot Games lore compendiums, and the opening cinematic of VALORANT showing Venice before and after the floating rupture.",
+      "sections": [
+        {
+          "heading": "The Day the Sky Turned Cyan",
+          "content": "First Light is the single historical demarcation line between the Old World and the Modern Radiant Era. In 2039, strange atmospheric disturbances culminated in glowing aurora-like phenomena across the globe. When the wave subsided, pure crystalline Radianite deposits were discovered embedded in the earth, deep oceans, and high-altitude mountain ranges."
+        },
+        {
+          "heading": "Radiants vs. Tech-Augmented Humans",
+          "content": "First Light divided humanity into two distinct biological categories: standard humans (who require technological harness devices to utilize Radianite) and Radiants (humans whose DNA permanently fused with Radianite, allowing them to channel raw energy, as seen with Jett, Phoenix, Reyna, and Sage)."
+        }
+      ]
+    },
+    {
+      "slug": "radianite",
+      "title": "Radianite: The Miracle Mineral & Its Dark Secrets",
+      "category": "SUBSTANCE",
+      "readTime": "7 min read",
+      "summary": "Chemical properties, storage hazards, weaponization, and the geopolitical battle for global Radianite supremacy.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Kingdom Extraction Facility Blueprints, Spike Plant Mechanics, Killjoy Voice Logs",
+      "whyDoWeKnowThis": "Confirmed by Killjoy's technical dialogue during Spike defusal protocols and in-game environmental assets depicting Radianite refinement crates (labeled K-SEC 75) across Bind, Icebox, and Breeze.",
+      "sections": [
+        {
+          "heading": "Energy Density and Refinement",
+          "content": "A single refined Radianite core can power an entire metropolitan city for decades. However, unrefined Radianite is highly volatile, capable of causing localized space-time collapses and anti-gravity rifts when destabilized."
+        },
+        {
+          "heading": "The Spike: A Radianite Siphon",
+          "content": "The device known as the 'Spike' is not a conventional explosive. It is a high-yield Radianite extraction and teleportation beacon designed by Omega Earth. When detonated, it collapses a 50-meter radius into a compressed Radianite vacuum, teleporting the harvested mineral directly across dimensional barriers to Omega Earth."
+        }
+      ]
+    },
+    {
+      "slug": "kingdom",
+      "title": "Kingdom Corporation: Saviors or Corporate Overlords?",
+      "category": "FACTION",
+      "readTime": "9 min read",
+      "summary": "How a small energy company became the undisputed ruler of Alpha Earth's economy, politics, and defense sector.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Kingdom Corporate Emails (Brimstone PC), Map Environmental Logos (Split, Haven, Icebox), Agent Dialogues",
+      "whyDoWeKnowThis": "Kingdom logos and subsidiaries (Kingdom Defense, K-SEC, Kingdom Energy, K-Bio) appear on almost every map in VALORANT. Emails discovered on Brimstone's computer reveal their corporate espionage.",
+      "sections": [
+        {
+          "heading": "The 75% Monopoly",
+          "content": "Kingdom Corporation controls over three-quarters of the entire global supply of Radianite energy. On Alpha Earth, Kingdom portrays itself as a benevolent clean-energy provider, while covertly conducting dangerous human experimentation in off-grid sites like Icebox (Bennett Island) and Sunset (Los Angeles)."
+        },
+        {
+          "heading": "Kingdom Omega (K-SEC Omega)",
+          "content": "On Omega Earth, Kingdom operates without government oversight as the supreme governing authority (Kingdom Industries). Because Omega's Radianite is exhausted, Kingdom Omega constructed massive terraforming domes (like Pearl in Lisbon) and launched the dimensional extraction wars."
+        }
+      ]
+    },
+    {
+      "slug": "alpha-earth",
+      "title": "Alpha Earth: The Defending Dimension",
+      "category": "DIMENSION",
+      "readTime": "6 min read",
+      "summary": "The primary reality of the VALORANT Protocol. A world with abundant Radianite struggling to defend its borders from mirror incursions.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Duality Cinematic, Fracture Map Environmental Clues, Episode 5 Pearl Narrative",
+      "whyDoWeKnowThis": "Explicitly confirmed in the 'Duality' cinematic and the Episode 5 release trailer where Alpha agents cross the dimensional rift into Lisbon, Portugal on Omega Earth.",
+      "sections": [
+        {
+          "heading": "The Radianite Wealth of Alpha",
+          "content": "Alpha Earth's natural ecosystems and atmosphere remain largely intact, and its natural Radianite deposits are rich and stable. However, widespread public ignorance about the existence of Omega Earth leaves Alpha vulnerable to unexpected strikes."
+        }
+      ]
+    },
+    {
+      "slug": "omega-earth",
+      "title": "Omega Earth: The Desperate Dying Mirror",
+      "category": "DIMENSION",
+      "readTime": "8 min read",
+      "summary": "The alternate universe counterpart of Earth: advanced technology, dying ecosystems, and desperate survival measures.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Pearl Map Narrative, Episode 5 Cinematic 'SHATTERED', Legion Dossiers",
+      "whyDoWeKnowThis": "In the Lisbon (Pearl) map on Omega Earth, museum displays celebrate the Omega VALORANT Legion as heroic saviors who are harvesting energy from Alpha Earth to keep Omega's life-support domes running.",
+      "sections": [
+        {
+          "heading": "The Climate Collapse of Omega",
+          "content": "Unlike Alpha Earth, Omega experienced uncontrolled Radianite extraction that poisoned their oceans and collapsed their global climate. Cities like Lisbon survive only inside deep-sea geodesic Radianite domes built by Kingdom Industries."
+        }
+      ]
+    },
+    {
+      "slug": "valorant-protocol",
+      "title": "The VALORANT Protocol: Structure, Roster & Mandate",
+      "category": "FACTION",
+      "readTime": "10 min read",
+      "summary": "The secret international black-ops force tasked with safeguarding Alpha Earth. Agents 01 through 26, command structure, and operational directives.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Official Agent Numbering (01 Brimstone, 02 Viper, 03 Omen, etc.), In-Game Audio Communications",
+      "whyDoWeKnowThis": "Agent IDs (Agent 01 through Agent 26) are officially designated in agent player cards, locker room assets in The Range, and mission briefings.",
+      "sections": [
+        {
+          "heading": "Command Hierarchy",
+          "content": "The Protocol is commanded by Brimstone (Agent 01) and executive second-in-command Viper (Agent 02). Cypher (Agent 05) heads the surveillance network, while Killjoy (Agent 04) leads R&D and weapon defenses."
+        }
+      ]
+    },
+    {
+      "slug": "legion",
+      "title": "VALORANT Legion: The Omega Counterparts",
+      "category": "FACTION",
+      "readTime": "7 min read",
+      "summary": "Omega Earth's official tactical defense corps. Celebrated public heroes in their own reality, ruthless invaders in ours.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Pearl Map Statues, Legion Propaganda Posters, Duality Cinematic",
+      "whyDoWeKnowThis": "On Omega Earth, public monuments and comic books depict the Legion (Omega Jett, Omega Phoenix, Omega Viper) as protectors of humanity fighting against mysterious resource hoarders on Alpha Earth.",
+      "sections": [
+        {
+          "heading": "Public Heroes vs. Covert Operatives",
+          "content": "While Alpha Earth's VALORANT Protocol is an ultra-classified black-ops unit that governments deny exists, Omega's VALORANT Legion is an openly celebrated public military branch with celebrity status."
+        }
+      ]
+    },
+    {
+      "slug": "realm",
+      "title": "REALM: The Global Historic Artifact Custodians",
+      "category": "FACTION",
+      "readTime": "6 min read",
+      "summary": "The international anti-poaching and archaeological preservation force associated with Agent 21 (Harbor).",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Harbor Agent Trailer, Lotus Map Audio Logs, Realm Relic Dossiers",
+      "whyDoWeKnowThis": "Harbor (Varun Batra) was a task force operative for REALM who went rogue after recovering a legendary ancient Radianite water artifact in Mumbai that REALM executives sought to steal.",
+      "sections": [
+        {
+          "heading": "The Hunt for Ancient Relics",
+          "content": "REALM operates worldwide to recover ancient Radianite artifacts pre-dating the First Light, suggesting that Radianite has touched Earth throughout ancient mythological history (as seen in Lotus and Sunset)."
+        }
+      ]
+    },
+    {
+      "slug": "atlas",
+      "title": "ATLAS: Autonomous Security & Private Military Operations",
+      "category": "FACTION",
+      "readTime": "6 min read",
+      "summary": "The high-tech corporate defense contractor designing automated defense turrets, suppression weapons, and autonomous combat units.",
+      "canonStatus": "STRONGLY IMPLIED",
+      "evidenceSource": "KAY/O Alternate Future Lore, Deadlock Training Notes, Equipment Markings",
+      "whyDoWeKnowThis": "Equipment serial codes found on specialized robotic chassis and suppression darts in The Range bear the ATLAS corporate seal.",
+      "sections": [
+        {
+          "heading": "Autonomous Warfare",
+          "content": "ATLAS engineers weapons designed specifically to neutralize Radiant abilities without relying on human combatants, acting as both an ally and competitor to Kingdom Defense."
+        }
+      ]
+    },
+    {
+      "slug": "hourglass",
+      "title": "The Scions of the Hourglass: The Hidden Puppet Masters",
+      "category": "FACTION",
+      "readTime": "8 min read",
+      "summary": "An ancient, covert assassin syndicate that has manipulated global events, assassinated scientists, and controlled Radianite from the shadows.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Iso Agent Lore, Omen Memory Fragments, Abyss Map Lore Audio Logs (Patch 8.11+)",
+      "whyDoWeKnowThis": "Iso (Li Zhao Yu) was employed as a fixer for the Scions of the Hourglass before discovering that his organization was attempting to assassinate VALORANT Protocol agents, including Omen.",
+      "sections": [
+        {
+          "heading": "The Abyss Facility",
+          "content": "The map 'Abyss' is an ancient clandestine headquarters operated by the Scions of the Hourglass, containing mysterious massive Radianite cocoons and memory-altering technology."
+        }
+      ]
+    },
+    {
+      "slug": "project-landfall",
+      "title": "Project Landfall: The Doomsday Weapon Protocol",
+      "category": "EVENT",
+      "readTime": "7 min read",
+      "summary": "The deep-cover mega-project connecting Fracture's particle collider, dimensional portals, and the potential convergence of both worlds.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Fracture Map Interactive Narrative Screens, Chamber & Viper Voicemails",
+      "whyDoWeKnowThis": "Interactive narrative terminals scattered across the Fracture facility reveal emails between Kingdom Alpha and Kingdom Omega researchers working together on the Radianite particle collider before Chamber sabotaged it.",
+      "sections": [
+        {
+          "heading": "The Fracture Disaster",
+          "content": "Vincent Fabron (Chamber) collaborated with his Omega counterpart to fire a specialized sniper shot into the core of the Fracture collider, destroying the bridge between dimensions and forcing the two Earths into an active war."
+        }
+      ]
+    },
+    {
+      "slug": "omen",
+      "title": "Agent Lore Dossier: The Mystery of Omen (Sabine's Past)",
+      "category": "AGENT_LORE",
+      "readTime": "9 min read",
+      "summary": "Who was Omen before he was ripped apart? His connection to Dr. Sabine Callas (Viper), Kingdom Laboratories, and the Hourglass.",
+      "canonStatus": "STRONGLY IMPLIED",
+      "evidenceSource": "Agent Voice Interactions (Viper & Omen), Abyss Audio Logs, Fade Blackmail Dossier",
+      "whyDoWeKnowThis": "In-game voice lines between Viper and Omen ('Just think of it as research, Sabine' and 'I promised to keep you safe, Fred') strongly indicate Omen was a former human research partner named Fred who was destroyed in a Kingdom experiment.",
+      "sections": [
+        {
+          "heading": "The Shattered Human: 'Fred'",
+          "content": "Omen was once a human scientist or operative named Fred who worked alongside Sabine (Viper) inside Kingdom's early Radianite laboratories. During a catastrophic containment failure or deliberate sabotage by the Hourglass, his body was ripped across dimensional shadows, leaving him in a state of eternal agony."
+        },
+        {
+          "heading": "Viper's Guilt and the Search for Memories",
+          "content": "Viper feels immense personal guilt for Omen's condition and actively aids him in seeking out his lost identity, warning him of the dangers of looking too deeply into Kingdom's confidential archives."
+        }
+      ]
+    },
+    {
+      "slug": "viper",
+      "title": "Agent Lore Dossier: Dr. Sabine Callas (Viper)",
+      "category": "AGENT_LORE",
+      "readTime": "8 min read",
+      "summary": "The chief scientific advisor of Kingdom turned ruthless defender of Alpha Earth. Her role as co-founder of the VALORANT Protocol.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Viper Player Cards, In-Game Lore Emails, Kingdom Corporate R&D Dossiers",
+      "whyDoWeKnowThis": "Viper's identity as Dr. Sabine Callas, former Chief Research Scientist at Kingdom Corporation, is confirmed across multiple lore cards, audio logs in The Range, and her medical laboratory setup.",
+      "sections": [
+        {
+          "heading": "From Chief Chemist to Protocol Executive",
+          "content": "Dr. Sabine Callas held the highest scientific clearance in Kingdom Corporation before resigning to co-found the VALORANT Protocol with Brimstone. Her deep knowledge of Radianite toxins and weapons development makes her both feared and respected by all operatives."
+        }
+      ]
+    },
+    {
+      "slug": "chamber",
+      "title": "Agent Lore Dossier: Vincent Fabron (Chamber)",
+      "category": "AGENT_LORE",
+      "readTime": "8 min read",
+      "summary": "The French weapons designer who orchestrated the destruction of Fracture and plays both sides of the interdimensional war for profit and power.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Fracture Security Camera Footage, Agent Voice Lines, Brimstone Office Voicemails",
+      "whyDoWeKnowThis": "Surveillance recordings on the Fracture map and voicemails on Brimstone's computer reveal Chamber collaborating with his Omega counterpart to deliberately destabilize the Everett-Linde collider.",
+      "sections": [
+        {
+          "heading": "The Dual Agent",
+          "content": "Vincent Fabron is a former French military marksman turned high-end weapons designer. Unbeknownst to Brimstone, Chamber orchestrated the destruction of the joint Alpha-Omega research facility (Fracture) to force both Earths to rely exclusively on his custom-crafted weaponry and teleportation teleporters."
+        }
+      ]
+    }
+  ]
+}
