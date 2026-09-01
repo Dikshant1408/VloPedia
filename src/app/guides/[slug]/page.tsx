@@ -5,6 +5,7 @@ import { PageTransition, Reveal } from "@/components/motion-system";
 import { guidesDb } from "@/lib/guides-db";
 import { ArrowLeft, BookOpen, Clock, Calendar, ChevronRight } from "lucide-react";
 import { Metadata } from "next";
+import { BookmarkButton } from "@/components/bookmark-button";
 
 interface GuideDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -58,13 +59,21 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
               <span className="text-white truncate max-w-[200px] sm:max-w-xs">{guide.title}</span>
             </nav>
 
-            {/* Back button */}
-            <Link 
-              href="/guides" 
-              className="inline-flex items-center gap-2 border border-border bg-[rgba(15,28,36,0.6)] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-muted hover:border-primary hover:text-primary transition-colors mb-8 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
-            >
-              <ArrowLeft className="h-4 w-4" /> Back to Guides
-            </Link>
+            {/* Back button & Bookmark */}
+            <div className="flex items-center gap-3 mb-8">
+              <Link 
+                href="/guides" 
+                className="inline-flex items-center gap-2 border border-border bg-[rgba(15,28,36,0.6)] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-muted hover:border-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+              >
+                <ArrowLeft className="h-4 w-4" /> Back to Guides
+              </Link>
+              <BookmarkButton
+                id={`guide-${guide.slug}`}
+                title={guide.title}
+                category="Guide"
+                url={`/guides/${slug}`}
+              />
+            </div>
 
             <div className="grid gap-8 lg:grid-cols-[1fr_300px] items-start">
               

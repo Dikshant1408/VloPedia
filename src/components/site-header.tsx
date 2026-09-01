@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/progress-bar";
 import { MegaMenu, NAV_GROUPS } from "@/components/mega-menu";
 import { GlobalSearchDialog } from "@/components/global-search-dialog";
+import { BookmarksDrawer } from "@/components/bookmarks-drawer";
 import { Menu, X, Search, ChevronDown, Radio, Volume2, VolumeX } from "lucide-react";
 
 interface SiteHeaderProps {
@@ -162,6 +163,9 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               {sfxEnabled ? <Volume2 className="h-3.5 w-3.5 text-primary" /> : <VolumeX className="h-3.5 w-3.5 text-muted" />}
               <span className="text-[9px]">{sfxEnabled ? "SFX ON" : "SFX OFF"}</span>
             </button>
+
+            {/* Bookmarks Quick Drawer */}
+            <BookmarksDrawer />
 
             {/* Search Trigger */}
             <button

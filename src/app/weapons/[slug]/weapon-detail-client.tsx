@@ -15,6 +15,7 @@ import type { ValorantWeapon, ValorantSkin } from "@/lib/valorant-types";
 import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AnswerBox } from "@/components/answer-box";
+import { BookmarkButton } from "@/components/bookmark-button";
 
 // Clean category label
 function categoryLabel(cat: string) {
@@ -78,18 +79,26 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
         {/* Back nav + title strip */}
         <div className="border-b border-border bg-background pt-10 pb-10">
           <Container>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <Breadcrumbs items={breadcrumbItems} />
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
-                  toast.success("Weapon guide link copied to clipboard!");
-                }}
-                className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white hover:border-primary/40 transition-colors"
-              >
-                Share Weapon
-              </button>
+              <div className="flex items-center gap-2">
+                <BookmarkButton
+                  id={`weapon-${weapon.uuid}`}
+                  title={weapon.displayName}
+                  category="Weapon"
+                  url={`/weapons/${weapon.displayName.toLowerCase().replace(/\s+/g, "-")}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    toast.success("Weapon guide link copied to clipboard!");
+                  }}
+                  className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white hover:border-primary/40 transition-colors"
+                >
+                  Share Weapon
+                </button>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-end justify-between gap-6">

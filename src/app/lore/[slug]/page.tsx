@@ -8,6 +8,7 @@ import { siteConfig } from "@/lib/site";
 import loreData from "@/data/lore-database.json";
 import { ArrowLeft, Clock, Share2, BookOpen, ChevronRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { BookmarkButton } from "@/components/bookmark-button";
 
 export const dynamic = "force-static";
 
@@ -107,11 +108,19 @@ export default async function LoreDetailPage({ params }: Props) {
           {/* Header */}
           <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-10 pb-10">
             <Container>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <Breadcrumbs items={breadcrumbItems} />
-                <span className="font-mono text-[10px] uppercase tracking-wider text-muted border border-[rgba(236,232,225,0.1)] px-2.5 py-1">
-                  Canon Status: {article.canonStatus}
-                </span>
+                <div className="flex items-center gap-2">
+                  <BookmarkButton
+                    id={`lore-${article.slug}`}
+                    title={article.title}
+                    category="Lore"
+                    url={`/lore/${slug}`}
+                  />
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-muted border border-[rgba(236,232,225,0.1)] px-2.5 py-1">
+                    Canon: {article.canonStatus}
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-4 max-w-4xl">

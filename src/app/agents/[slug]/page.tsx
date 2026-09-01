@@ -14,6 +14,8 @@ import type { ValorantAgent } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AnswerBox } from "@/components/answer-box";
+import { BookmarkButton } from "@/components/bookmark-button";
+import agentMetaData from "@/data/agent-meta.json";
 
 const API = "https://valorant-api.com/v1";
 
@@ -108,14 +110,13 @@ export default async function AgentDetailPage({ params }: Props) {
 
   const gradient = agent.backgroundGradientColors?.[0];
   const gradientHex = gradient ? `#${gradient}` : undefined;
+  const metaTier = (agentMetaData.tiers as Record<string, string>)[agent.displayName] || "A-Tier";
+  const pickRate = (agentMetaData.pickRates as Record<string, string>)[agent.displayName] || "Pro Benchmark Pending";
+  const difficulty = (agentMetaData.difficulty as Record<string, string>)[agent.displayName] || "MEDIUM";
 
-  const metaTier = AGENT_TIERS[agent.displayName] || "A-Tier";
-  const pickRate = AGENT_PICK_RATES[agent.displayName] || "55.0%";
-  const difficulty = AGENT_DIFFICULTY[agent.displayName] || "MEDIUM";
-
-  const bestMaps = AGENT_BEST_MAPS[agent.displayName] ?? ["Ascent", "Bind", "Haven"];
-  const teammates = AGENT_TEAMMATES[agent.displayName] ?? ["Omen", "Sova", "Killjoy"];
-  const counters = AGENT_COUNTERS[agent.displayName] ?? ["KAY/O", "Cypher"];
+  const bestMaps = (agentMetaData.bestMaps as Record<string, string[]>)[agent.displayName] ?? ["Ascent", "Haven"];
+  const teammates = (agentMetaData.teammates as Record<string, string[]>)[agent.displayName] ?? ["Omen", "Sova"];
+  const counters = (agentMetaData.counters as Record<string, string[]>)[agent.displayName] ?? ["KAY/O", "Cypher"];
   const tips = AGENT_TIPS[agent.displayName] ?? {
     beginner: ["Focus on understanding ability ranges and cast times.", "Coordinate with initiators before pushing through chokepoints."],
     advanced: ["Use audio cues to mask movement abilities.", "Combine abilities with teammate utility for guaranteed site entry."],
@@ -198,6 +199,12 @@ export default async function AgentDetailPage({ params }: Props) {
         >
           <div className="flex flex-wrap items-center gap-3">
             <RoleBadge role={agent.role?.displayName ?? ""} size="md" />
+            <BookmarkButton
+              id={`agent-${agent.uuid}`}
+              title={agent.displayName}
+              category="Agent"
+              url={`/agents/${slug}`}
+            />
             <Link href={`/comp-builder?agents=${slug}`}>
               <Button variant="primary" size="sm" className="gap-2 font-mono text-xs">
                 Build Team Comp
@@ -258,30 +265,37 @@ export default async function AgentDetailPage({ params }: Props) {
                 </div>
 
                 {/* Tactical Meta Stats Grid */}
-                <div className="grid grid-cols-3 gap-2 border border-border bg-[#0D1820] p-4 text-center">
-                  <div>
-                    <span className="font-mono-tactical text-[9px] uppercase tracking-widest text-muted block mb-1">
-                      ROLE TIER
-                    </span>
-                    <span className="font-display font-black text-xl text-[#0DF2F2]">
-                      S-TIER
-                    </span>
+                <div className="border border-border bg-[#0D1820] p-4 space-y-3">
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div>
+                      <span className="font-mono-tactical text-[9px] uppercase tracking-widest text-muted block mb-1">
+                        ROLE TIER
+                      </span>
+                      <span className="font-display font-black text-xl text-[#0DF2F2]">
+                        {metaTier}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-mono-tactical text-[9px] uppercase tracking-widest text-muted block mb-1">
+                        PRO PRESENCE
+                      </span>
+                      <span className="font-display font-black text-xl text-primary">
+                        {pickRate}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-mono-tactical text-[9px] uppercase tracking-widest text-muted block mb-1">
+                        DIFFICULTY
+                      </span>
+                      <span className="font-display font-black text-xl text-white">
+                        {difficulty}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-mono-tactical text-[9px] uppercase tracking-widest text-muted block mb-1">
-                      PRO PICK RATE
-                    </span>
-                    <span className="font-display font-black text-xl text-primary">
-                      {AGENT_PICK_RATES[agent.displayName] || "64.2%"}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-mono-tactical text-[9px] uppercase tracking-widest text-muted block mb-1">
-                      DIFFICULTY
-                    </span>
-                    <span className="font-display font-black text-xl text-white">
-                      {AGENT_DIFFICULTY[agent.displayName] || "MEDIUM"}
-                    </span>
+
+                  <div className="border-t border-[rgba(236,232,225,0.06)] pt-2 flex items-center justify-between text-[9px] font-mono text-muted">
+                    <span>{agentMetaData.metadata.source} · {agentMetaData.metadata.patchVersion}</span>
+                    <span>Verified: {agentMetaData.metadata.lastVerified}</span>
                   </div>
                 </div>
               </div>
@@ -295,12 +309,12 @@ export default async function AgentDetailPage({ params }: Props) {
                 <AnswerBox
                   question={`Is ${agent.displayName} good in the current meta?`}
                   verdict={`${metaTier} Operative`}
-                  explanation={`${agent.displayName} is a tier-defining ${agent.role?.displayName || "Agent"} holding a ${pickRate} competitive presence. Excels on ${bestMaps.slice(0, 2).join(" & ")} with high-impact utility.`}
+                  explanation={`${agent.displayName} is evaluated as an ${metaTier} ${agent.role?.displayName || "Agent"} with ${pickRate !== "Pro Benchmark Pending" ? `a ${pickRate} competitive pro tournament presence` : "active tactical utility"}. Recommended on ${bestMaps.slice(0, 2).join(" & ")}.`}
                   keyTakeaways={[
                     `Primary Role: ${agent.role?.displayName}`,
                     `Best Team Synergy: ${teammates.slice(0, 2).join(", ")}`,
-                    `Hard Countered By: ${counters.slice(0, 2).join(", ")}`,
-                    `Execution Difficulty: ${difficulty}`
+                    `Counter Threats: ${counters.slice(0, 2).join(", ")}`,
+                    `Tactical Difficulty: ${difficulty}`
                   ]}
                   ctaLabel={`Build Team Comp for ${agent.displayName}`}
                   ctaHref={`/comp-builder?agents=${slug}`}
@@ -491,84 +505,8 @@ export default async function AgentDetailPage({ params }: Props) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Extended Tactical Meta Data                                        */
+/* Extended Tactical Meta Data & Gameplay Coaching Tips               */
 /* ------------------------------------------------------------------ */
-
-const AGENT_TIERS: Record<string, string> = {
-  Jett: "S-Tier", Omen: "S-Tier", Sova: "S-Tier", Cypher: "S-Tier", Killjoy: "S-Tier",
-  Viper: "S-Tier", Fade: "A-Tier", Breach: "A-Tier", Raze: "S-Tier", Gekko: "A-Tier",
-  "KAY/O": "A-Tier", Clove: "S-Tier", Iso: "B-Tier", Reyna: "B-Tier", Phoenix: "B-Tier",
-  Skye: "A-Tier", Astra: "A-Tier", Harbor: "B-Tier", Deadlock: "B-Tier", Chamber: "B-Tier",
-  Sage: "B-Tier", Vyse: "A-Tier", Neon: "A-Tier", Yoru: "A-Tier",
-};
-
-const AGENT_PICK_RATES: Record<string, string> = {
-  Jett: "84.5%", Omen: "78.2%", Sova: "72.4%", Cypher: "69.1%", Killjoy: "68.3%",
-  Viper: "65.0%", Fade: "58.6%", Breach: "44.2%", Raze: "61.8%", Gekko: "55.4%",
-  "KAY/O": "49.0%", Clove: "52.3%", Iso: "38.5%", Reyna: "42.1%", Phoenix: "28.4%",
-};
-
-const AGENT_DIFFICULTY: Record<string, string> = {
-  Jett: "HARD", Astra: "VERY HARD", Sova: "HARD", Viper: "HARD", Yoru: "VERY HARD",
-  Cypher: "MEDIUM", Killjoy: "MEDIUM", Omen: "MEDIUM", Breach: "MEDIUM",
-  Reyna: "EASY", Phoenix: "EASY", Brimstone: "EASY", Clove: "EASY", Gekko: "MEDIUM",
-};
-
-const AGENT_TEAMMATES: Record<string, string[]> = {
-  Jett: ["Omen", "Sova", "KAY/O"],
-  Raze: ["Fade", "Breach", "Omen"],
-  Reyna: ["Omen", "Skye", "Cypher"],
-  Phoenix: ["Skye", "Brimstone", "Killjoy"],
-  Yoru: ["Fade", "Breach", "Omen"],
-  Neon: ["Breach", "Fade", "Omen"],
-  Iso: ["Sova", "Omen", "KAY/O"],
-  Omen: ["Jett", "Fade", "Killjoy"],
-  Brimstone: ["Raze", "Viper", "Cypher"],
-  Viper: ["Harbor", "Sova", "Killjoy"],
-  Astra: ["Jett", "Fade", "KAY/O"],
-  Harbor: ["Viper", "Skye", "Jett"],
-  Clove: ["Jett", "Fade", "Cypher"],
-  Sova: ["Jett", "Killjoy", "Omen"],
-  Fade: ["Raze", "Omen", "Killjoy"],
-  Breach: ["Raze", "Neon", "Brimstone"],
-  Skye: ["Jett", "Viper", "Killjoy"],
-  Gekko: ["Jett", "Omen", "Cypher"],
-  "KAY/O": ["Jett", "Sova", "Omen"],
-  Cypher: ["Omen", "Sova", "Jett"],
-  Killjoy: ["Sova", "Omen", "Jett"],
-  Deadlock: ["Raze", "Sova", "Omen"],
-  Chamber: ["Viper", "Sova", "Omen"],
-  Sage: ["Jett", "Omen", "Sova"],
-  Vyse: ["Omen", "Sova", "Raze"],
-};
-
-const AGENT_COUNTERS: Record<string, string[]> = {
-  Jett: ["Cypher", "KAY/O"],
-  Raze: ["Cypher", "Killjoy"],
-  Reyna: ["KAY/O", "Cypher"],
-  Phoenix: ["KAY/O", "Omen"],
-  Yoru: ["Cypher", "Fade"],
-  Neon: ["Cypher", "Deadlock"],
-  Iso: ["KAY/O", "Fade"],
-  Omen: ["KAY/O", "Sova"],
-  Brimstone: ["Fade", "KAY/O"],
-  Viper: ["KAY/O", "Gekko"],
-  Astra: ["KAY/O", "Jett"],
-  Harbor: ["Sova", "KAY/O"],
-  Clove: ["KAY/O", "Cypher"],
-  Sova: ["KAY/O", "Jett"],
-  Fade: ["KAY/O", "Omen"],
-  Breach: ["Jett", "KAY/O"],
-  Skye: ["KAY/O", "Cypher"],
-  Gekko: ["KAY/O", "Cypher"],
-  "KAY/O": ["Sova", "Brimstone"],
-  Cypher: ["Sova", "Raze"],
-  Killjoy: ["Sova", "Raze"],
-  Deadlock: ["Sova", "Raze"],
-  Chamber: ["KAY/O", "Fade"],
-  Sage: ["Sova", "Raze"],
-  Vyse: ["Sova", "KAY/O"],
-};
 
 const AGENT_TIPS: Record<string, { beginner: string[]; advanced: string[] }> = {
   Jett: {
