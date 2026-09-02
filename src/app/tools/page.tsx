@@ -14,12 +14,30 @@ export const metadata: Metadata = {
 
 const TOOLS = [
   {
+    id: "match-prep",
+    name: "Match Prep Tactical Companion",
+    desc: "Pre-match round gameplans, buy protocols, 5-agent map comps, and opposing utility hazard warnings for your active match.",
+    href: "/match-prep",
+    icon: ShieldAlert,
+    tag: "PRE-MATCH",
+    color: "#FA4454",
+  },
+  {
+    id: "round-assistant",
+    name: "Round Economy & Buy Assistant",
+    desc: "Live credit calculator that computes exact buy/save directives with guaranteed next-round loss buffer thresholds.",
+    href: "/tools/round-assistant",
+    icon: Calculator,
+    tag: "ECONOMY",
+    color: "#F59E0B",
+  },
+  {
     id: "what-to-play",
     name: "What Should I Play? (Recommender)",
     desc: "Answer 4 quick tactical preferences to get an algorithmically matched VALORANT agent recommendation with signature weapon and map synergy.",
     href: "/tools/what-to-play",
     icon: Sparkles,
-    tag: "NEW // RECOMMENDER",
+    tag: "RECOMMENDER",
     color: "#0DF2F2",
   },
   {

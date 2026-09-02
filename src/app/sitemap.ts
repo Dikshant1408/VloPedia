@@ -57,9 +57,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/terms`,              lastModified: now, changeFrequency: "monthly", priority: 0.3 },
     { url: `${base}/privacy`,            lastModified: now, changeFrequency: "monthly", priority: 0.3 },
     { url: `${base}/about`,              lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/contact`,            lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/guides`,             lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/setup`,              lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${base}/match-prep`,         lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${base}/methodology`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/tools/what-to-play`, lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${base}/tools/round-assistant`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
 
   // Helper function to slugify text

@@ -2,8 +2,8 @@ import { Container } from "@/components/container";
 import { PageTransition } from "@/components/motion-system";
 
 export const metadata = {
-  title: "Terms of Service — ValoVault",
-  description: "Read the Terms of Service for using ValoVault.",
+  title: "Terms of Service — VloPedia",
+  description: "Read the Terms of Service for using VloPedia.",
   alternates: {
     canonical: "/terms",
   },
@@ -39,7 +39,7 @@ export default function TermsPage() {
                 1. Acceptance of Terms
               </h2>
               <p>
-                By accessing, browsing, or signing in to ValoVault (the &quot;Site&quot; or &quot;Service&quot;), you agree to be bound by these Terms of Service, all applicable laws and regulations, and agree that you are responsible for compliance with any local laws. If you do not agree with any of these terms, you are prohibited from using this Site.
+                By accessing, browsing, or signing in to VloPedia (the &quot;Site&quot; or &quot;Service&quot;), you agree to be bound by these Terms of Service, all applicable laws and regulations, and agree that you are responsible for compliance with any local laws. If you do not agree with any of these terms, you are prohibited from using this Site.
               </p>
             </section>
 
@@ -48,7 +48,7 @@ export default function TermsPage() {
                 2. Use License
               </h2>
               <p>
-                Permission is granted to temporarily view the assets, skins, maps, and information on ValoVault for personal, non-commercial, informational viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+                Permission is granted to temporarily view the assets, skins, maps, and information on VloPedia for personal, non-commercial, informational viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
               </p>
               <ul className="list-disc pl-5 space-y-2">
                 <li>Modify or copy the materials.</li>
@@ -64,10 +64,10 @@ export default function TermsPage() {
                 3. Disclaimer &amp; Intellectual Property
               </h2>
               <p>
-                The materials on ValoVault are provided &quot;as is&quot;. ValoVault makes no warranties, expressed or implied, and hereby disclaims all other warranties, including without limitation, implied warranties of merchantability, fitness for a particular purpose, or non-infringement of intellectual property.
+                The materials on VloPedia are provided &quot;as is&quot;. VloPedia makes no warranties, expressed or implied, and hereby disclaims all other warranties, including without limitation, implied warranties of merchantability, fitness for a particular purpose, or non-infringement of intellectual property.
               </p>
               <p>
-                <strong className="text-white">Riot Games Disclaimer:</strong> ValoVault is a community-driven fan project. All game content, assets, images, weapon statistics, and agent media belong to Riot Games. We do not claim ownership over any official Valorant IP.
+                <strong className="text-white">Riot Games Disclaimer:</strong> VloPedia is a community-driven fan project. All game content, assets, images, weapon statistics, and agent media belong to Riot Games. We do not claim ownership over any official Valorant IP.
               </p>
             </section>
 
@@ -76,7 +76,7 @@ export default function TermsPage() {
                 4. Account Responsibility
               </h2>
               <p>
-                If you sign in using your Discord credentials, you are responsible for maintaining the security of your session and account details. You must notify us immediately of any unauthorized use or security breach. ValoVault is not responsible for any actions taken under your account session.
+                If you sign in using your Discord credentials, you are responsible for maintaining the security of your session and account details. You must notify us immediately of any unauthorized use or security breach. VloPedia is not responsible for any actions taken under your account session.
               </p>
             </section>
 
@@ -85,7 +85,7 @@ export default function TermsPage() {
                 5. Limitations of Liability
               </h2>
               <p>
-                In no event shall ValoVault or its contributors be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on the Site, even if ValoVault has been notified of the possibility of such damage.
+                In no event shall VloPedia or its contributors be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on the Site, even if VloPedia has been notified of the possibility of such damage.
               </p>
             </section>
 
@@ -94,7 +94,7 @@ export default function TermsPage() {
                 6. Revisions &amp; Errata
               </h2>
               <p>
-                The materials appearing on ValoVault could include technical, typographical, or photographic errors. While we pull official data from public APIs, we do not warrant that any of the materials on the Site are accurate, complete, or current. ValoVault may make changes to the materials contained on its web site at any time without notice.
+                The materials appearing on VloPedia could include technical, typographical, or photographic errors. While we pull official data from public APIs, we do not warrant that any of the materials on the Site are accurate, complete, or current. VloPedia may make changes to the materials contained on its web site at any time without notice.
               </p>
             </section>
 

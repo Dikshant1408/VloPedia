@@ -1,23 +1,24 @@
 import Link from "next/link";
 import { Shield, Cpu } from "lucide-react";
+import { ReportIssueModal } from "@/components/report-issue-modal";
 
 interface SiteFooterProps {
   version?: string | null;
 }
 
 const PRIMARY_NAV = [
-  { label: "Agents",   href: "/agents"   },
-  { label: "Weapons",  href: "/weapons"  },
-  { label: "Maps",     href: "/maps"     },
-  { label: "Skins",    href: "/skins"    },
-  { label: "Tools",    href: "/tools"    },
-  { label: "Compare",  href: "/compare"  },
-  { label: "Lore",     href: "/lore"     },
-  { label: "Guides",   href: "/guides"   },
-  { label: "About",    href: "/about"    },
-  { label: "Contact",  href: "/contact"  },
-  { label: "Terms",    href: "/terms"    },
-  { label: "Privacy",  href: "/privacy"  },
+  { label: "Agents",      href: "/agents"      },
+  { label: "Weapons",     href: "/weapons"     },
+  { label: "Maps",        href: "/maps"        },
+  { label: "Match Prep",  href: "/match-prep"  },
+  { label: "Skins",       href: "/skins"       },
+  { label: "Tools",       href: "/tools"       },
+  { label: "Compare",     href: "/compare"     },
+  { label: "Lore",        href: "/lore"        },
+  { label: "Guides",      href: "/guides"      },
+  { label: "Methodology", href: "/methodology" },
+  { label: "Terms",       href: "/terms"       },
+  { label: "Privacy",     href: "/privacy"     },
 ];
 
 export function SiteFooter({ version }: SiteFooterProps) {
@@ -55,6 +56,10 @@ export function SiteFooter({ version }: SiteFooterProps) {
                 VloPedia is a non-commercial community encyclopedia and companion tool. VloPedia isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing VALORANT. VALORANT and Riot Games are trademarks or registered trademarks of Riot Games, Inc.
               </p>
             </div>
+
+            <div>
+              <ReportIssueModal entityName="VloPedia Database" />
+            </div>
           </div>
 
           {/* Right — nav + meta */}
@@ -78,13 +83,13 @@ export function SiteFooter({ version }: SiteFooterProps) {
             <div className="flex items-center gap-2 border border-[rgba(236,232,225,0.06)] bg-[rgba(11,20,26,0.4)] px-3 py-2">
               <Cpu className="h-3.5 w-3.5 text-[#0DF2F2]" aria-hidden="true" />
               <div>
-                <span className="block font-mono text-[8px] font-bold uppercase tracking-widest text-[#0DF2F2]">Engine Status</span>
-                <span className="font-mono text-[9px] text-muted">NEXT.JS // FIREBASE // ACTIVE</span>
+                <span className="block font-mono text-[8px] font-bold uppercase tracking-widest text-[#0DF2F2]">Knowledge Engine</span>
+                <span className="font-mono text-[9px] text-muted">NEXT.JS // RELATIONAL GRAPH // ACTIVE</span>
               </div>
             </div>
 
             <span className="font-mono text-[10px] text-muted tracking-wider">
-              © {year} VALOVAULT
+              © {year} VLOPEDIA
             </span>
           </div>
         </div>

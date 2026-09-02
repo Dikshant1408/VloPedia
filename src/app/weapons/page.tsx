@@ -6,10 +6,10 @@ import { fetchWithCache } from "@/lib/api-cache";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "VALORANT Weapons Armory: Stats, Recoil & Skins | ValoVault",
+  title: "VALORANT Weapons Armory: Stats, Recoil & Skins | VloPedia",
   description: "Explore weapon stats, damage tables, magazines, fire rates, and custom skins for all VALORANT sidearms, rifles, smgs, snipers, and melees.",
   openGraph: {
-    title: "VALORANT Weapons Armory: Stats, Recoil & Skins | ValoVault",
+    title: "VALORANT Weapons Armory: Stats, Recoil & Skins | VloPedia",
     description: "Explore weapon stats, damage tables, magazines, fire rates, and custom skins for all VALORANT sidearms, rifles, smgs, snipers, and melees.",
   },
   alternates: {

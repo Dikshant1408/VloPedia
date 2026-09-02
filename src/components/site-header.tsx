@@ -225,7 +225,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               </div>
               <div>
                 <span className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-[#0DF2F2]">All Sections</span>
-                <p className="font-display font-black text-xl uppercase text-foreground leading-none mt-0.5">ValoVault</p>
+                <p className="font-display font-black text-xl uppercase text-foreground leading-none mt-0.5">VloPedia</p>
               </div>
             </div>
             <button
@@ -266,7 +266,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
 
           {/* Drawer footer */}
           <div className="relative z-10 border-t border-[rgba(236,232,225,0.1)] px-6 py-4 font-mono text-[10px] text-muted">
-            © {new Date().getFullYear()} ValoVault · Not affiliated with Riot Games
+            © {new Date().getFullYear()} VloPedia · Not affiliated with Riot Games
           </div>
         </div>
       )}

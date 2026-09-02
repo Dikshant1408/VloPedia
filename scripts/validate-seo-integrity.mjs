@@ -69,9 +69,19 @@ assert(fs.existsSync(econPath), "src/data/economy-rules.json exists");
 const sensPath = path.join(rootDir, "src/data/sensitivity-conversions.json");
 assert(fs.existsSync(sensPath), "src/data/sensitivity-conversions.json exists");
 
-console.log(`\n========================================`);
+// 5. Knowledge Graph & New Tactical Pillars
+console.log("\n5. Knowledge Graph & Tactical Companion Architecture:");
+assert(fs.existsSync(path.join(rootDir, "src/lib/knowledge-graph.ts")), "src/lib/knowledge-graph.ts (Knowledge Graph Engine) exists");
+assert(fs.existsSync(path.join(rootDir, "src/app/match-prep/page.tsx")), "src/app/match-prep/page.tsx (Match Prep Companion) exists");
+assert(fs.existsSync(path.join(rootDir, "src/app/tools/round-assistant/page.tsx")), "src/app/tools/round-assistant/page.tsx (Round Decision Assistant) exists");
+assert(fs.existsSync(path.join(rootDir, "src/app/methodology/page.tsx")), "src/app/methodology/page.tsx (Methodology Documentation) exists");
+assert(fs.existsSync(path.join(rootDir, "src/components/report-issue-modal.tsx")), "src/components/report-issue-modal.tsx (Community Reporter) exists");
+
+console.log("\n========================================");
 console.log(`Validation Complete: ${passed} passed, ${failed} failed`);
+
 if (failed > 0) {
+  console.error("❌ SEO / Data validation failed. Fix errors before committing.");
   process.exit(1);
 } else {
   console.log("🎉 All SEO and data integrity tests passed!\n");

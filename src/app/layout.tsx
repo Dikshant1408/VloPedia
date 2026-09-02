@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  keywords: ["VALORANT", "ValoVault", "Agents", "Weapons", "Maps", "Skins", "Companion", "Encyclopedia"],
+  keywords: ["VALORANT", "VloPedia", "VALORANT Database", "Agents", "Weapons", "Maps", "Skins", "Companion", "Encyclopedia", "Lore", "Comp Builder", "Sensitivity"],
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   robots: {

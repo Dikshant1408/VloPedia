@@ -1,7 +1,7 @@
 export const siteConfig = {
-  name: "ValoVault",
+  name: "VloPedia",
   description:
-    "The definitive VALORANT tactical encyclopedia. Agents, weapons, maps, skins, tools and meta — all in one immersive database.",
+    "The definitive VALORANT tactical encyclopedia. Agents, weapons, maps, skins, tools, and source-backed lore — all in one unified knowledge engine.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://valovault-ivory.vercel.app",
 };
 

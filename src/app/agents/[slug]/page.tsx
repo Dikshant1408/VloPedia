@@ -15,6 +15,8 @@ import { siteConfig } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AnswerBox } from "@/components/answer-box";
 import { BookmarkButton } from "@/components/bookmark-button";
+import { KnowledgeGraphView } from "@/components/knowledge-graph-view";
+import { getAgentKnowledgeNode } from "@/lib/knowledge-graph";
 import agentMetaData from "@/data/agent-meta.json";
 
 const API = "https://valorant-api.com/v1";
@@ -500,6 +502,13 @@ export default async function AgentDetailPage({ params }: Props) {
                 <AgentFAQ agent={agent} />
               </Reveal>
             </div>
+          </div>
+
+          {/* ── Relational Knowledge Graph Section ── */}
+          <div className="mt-16">
+            <Reveal>
+              <KnowledgeGraphView node={getAgentKnowledgeNode(agent.displayName)} />
+            </Reveal>
           </div>
         </Container>
 

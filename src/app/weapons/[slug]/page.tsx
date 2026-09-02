@@ -60,9 +60,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const weapons = await getAllWeapons();
   const weapon = findWeapon(weapons, slug);
-  if (!weapon) return { title: "Weapon Not Found | ValoVault", robots: { index: false } };
+  if (!weapon) return { title: "Weapon Not Found | VloPedia", robots: { index: false } };
 
-  const pageTitle = `${weapon.displayName} VALORANT Guide: Stats, Damage & Skins | ValoVault`;
+  const pageTitle = `${weapon.displayName} VALORANT Guide: Stats, Damage & Skins | VloPedia`;
   const pageDesc = `Master the ${weapon.displayName} in VALORANT. View full damage profiles, fire rate stats, reload times, active weapon skins, and 3D models.`;
 
   return {

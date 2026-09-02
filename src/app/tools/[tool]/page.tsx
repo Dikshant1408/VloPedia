@@ -16,6 +16,9 @@ export function generateStaticParams() {
     { tool: "compare" },
     { tool: "what-to-play" },
     { tool: "what-should-i-play" },
+    { tool: "match-prep" },
+    { tool: "round-assistant" },
+    { tool: "round-decision" },
   ];
 }
 
@@ -26,6 +29,14 @@ interface Props {
 export default async function ToolSubroutePage({ params }: Props) {
   const { tool } = await params;
   const norm = tool.toLowerCase().trim();
+
+  if (norm === "match-prep") {
+    redirect("/match-prep");
+  }
+
+  if (norm === "round-assistant" || norm === "round-decision") {
+    redirect("/tools/round-assistant");
+  }
 
   if (norm === "what-to-play" || norm === "what-should-i-play") {
     redirect("/tools/what-to-play");

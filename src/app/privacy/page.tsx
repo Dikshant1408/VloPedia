@@ -2,8 +2,8 @@ import { Container } from "@/components/container";
 import { PageTransition } from "@/components/motion-system";
 
 export const metadata = {
-  title: "Privacy Policy — ValoVault",
-  description: "Learn how ValoVault collects, uses, and protects your information.",
+  title: "Privacy Policy — VloPedia",
+  description: "Learn how VloPedia collects, uses, and protects your information.",
   alternates: {
     canonical: "/privacy",
   },
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
                 1. Overview
               </h2>
               <p>
-                Welcome to ValoVault. We value your privacy and are committed to protecting your personal data. This Privacy Policy describes how we collect, use, and share information when you access or sign in to our tactical encyclopedia and companion web services.
+                Welcome to VloPedia. We value your privacy and are committed to protecting your personal data. This Privacy Policy describes how we collect, use, and share information when you access or sign in to our tactical encyclopedia and companion web services.
               </p>
             </section>
 
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
                 2. Information We Collect
               </h2>
               <p>
-                When using ValoVault, we may collect the following types of information:
+                When using VloPedia, we may collect the following types of information:
               </p>
               <ul className="list-disc pl-5 space-y-2">
                 <li>
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
                 We use cookies, local storage, and caching mechanisms to verify your sessions, recall preferences, and analyze navigation telemetry.
               </p>
               <p>
-                We partner with Google AdSense and other advertising networks to serve advertisements when you visit our website. These third-party vendors use cookies to serve ads based on your prior visits to ValoVault or other websites on the Internet:
+                We partner with Google AdSense and other advertising networks to serve advertisements when you visit our website. These third-party vendors use cookies to serve ads based on your prior visits to VloPedia or other websites on the Internet:
               </p>
               <ul className="list-disc pl-5 space-y-2">
                 <li>
@@ -123,7 +123,7 @@ export default function PrivacyPage() {
             </section>
 
             <div className="border-t border-[rgba(236,232,225,0.08)] pt-6 text-center text-xs font-mono text-muted">
-              RIOT GAMES DISCLAIMER: ValoVault is an independent fan database utilizing official community assets and is not endorsed by or affiliated with Riot Games.
+              RIOT GAMES DISCLAIMER: VloPedia is an independent fan database utilizing official community assets and is not endorsed by or affiliated with Riot Games.
             </div>
           </div>
         </Container>

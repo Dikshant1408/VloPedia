@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: GuideDetailPageProps): Promis
   if (!guide) return {};
 
   return {
-    title: `${guide.title} — ValoVault Guide`,
+    title: `${guide.title} — VloPedia Guide`,
     description: guide.summary,
     alternates: {
       canonical: `/guides/${slug}`,
