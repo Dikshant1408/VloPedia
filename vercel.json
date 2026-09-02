@@ -1,5 +1,32 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/agents/reyna-devour",
+      "destination": "/agents/reyna",
+      "permanent": true
+    },
+    {
+      "source": "/agents/summit-map",
+      "destination": "/maps",
+      "permanent": true
+    },
+    {
+      "source": "/agents/summit",
+      "destination": "/maps",
+      "permanent": true
+    },
+    {
+      "source": "/agents/kay/o",
+      "destination": "/agents/kay-o",
+      "permanent": true
+    },
+    {
+      "source": "/maps/skirmish%20a",
+      "destination": "/maps",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/sitemap.xml",

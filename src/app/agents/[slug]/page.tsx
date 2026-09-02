@@ -51,14 +51,23 @@ function slugify(text: string): string {
 async function getAgent(slug: string): Promise<ValorantAgent | null> {
   const agents = await getAllAgents();
   const norm = slug.toLowerCase();
-  return (
-    agents.find(
-      a =>
-        slugify(a.displayName) === norm ||
-        a.displayName.toLowerCase() === norm ||
-        a.displayName.toLowerCase().replace(/\s+/g, "-") === norm
-    ) ?? null
+  
+  // 1. Exact match
+  const exact = agents.find(
+    a =>
+      slugify(a.displayName) === norm ||
+      a.displayName.toLowerCase() === norm ||
+      a.displayName.toLowerCase().replace(/\s+/g, "-") === norm
   );
+  if (exact) return exact;
+
+  // 2. Prefix recovery match (e.g. "reyna-devour" -> "reyna")
+  const prefixMatch = agents.find(
+    a => norm.startsWith(slugify(a.displayName) + "-")
+  );
+  if (prefixMatch) return prefixMatch;
+
+  return null;
 }
 
 export async function generateStaticParams() {
