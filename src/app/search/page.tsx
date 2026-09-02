@@ -159,6 +159,106 @@ function SearchInner() {
     const q = debouncedQ.toLowerCase().trim();
     if (!q) return null;
 
+    // 1. Command Prefix Parsing (e.g. "> compare jett raze", "> agent omen", "> explore")
+    if (q.startsWith(">") || q.startsWith("/")) {
+      const cleanCmd = q.replace(/^[>/]\s*/, "");
+      if (cleanCmd.startsWith("explore") || cleanCmd === "graph") {
+        return {
+          question: "Command: Interactive Knowledge Graph Explorer",
+          verdict: "Direct Tool Shortcut",
+          explanation: "Launch the interactive visual knowledge graph to explore relationships between Agents, Factions, Lore, Weapons, and Maps.",
+          keyTakeaways: ["Interactive node web", "Lore and tactical pathways", "Faction breakdowns"],
+          ctaLabel: "Open Knowledge Graph Explorer",
+          ctaHref: "/explore"
+        };
+      }
+      if (cleanCmd.startsWith("match") || cleanCmd.startsWith("prep")) {
+        return {
+          question: "Command: Match Prep Companion",
+          verdict: "Direct Tool Shortcut",
+          explanation: "Launch the live pre-round match tactical planner and live credit economy assistant.",
+          keyTakeaways: ["Map-specific executes", "Live round score tracker", "Buy/save directives"],
+          ctaLabel: "Open Match Prep Companion",
+          ctaHref: "/match-prep"
+        };
+      }
+      if (cleanCmd.startsWith("round") || cleanCmd.startsWith("buy")) {
+        return {
+          question: "Command: Round Economy Assistant",
+          verdict: "Direct Tool Shortcut",
+          explanation: "Calculate buy/save thresholds with guaranteed next-round loss buffer guarantees.",
+          keyTakeaways: ["$3,900 rifle threshold", "Loss streak math", "Half buy allowances"],
+          ctaLabel: "Open Round Decision Assistant",
+          ctaHref: "/tools/round-assistant"
+        };
+      }
+    }
+
+    // 2. Weapon Ballistics Damage Intent (e.g. "vandal damage", "phantom damage")
+    if (q.includes("vandal") && (q.includes("damage") || q.includes("stats") || q.includes("20m") || q.includes("range"))) {
+      return {
+        question: "Vandal Ballistics & Damage Profile",
+        verdict: "160 Head · 40 Body · 34 Leg (All Ranges 0-50m)",
+        explanation: "The Vandal suffers zero damage drop-off over distance. A single bullet to the head delivers 160 damage at 0m, 20m, or 50m, guaranteeing a 1-tap kill against full Heavy Shields (150 HP).",
+        keyTakeaways: [
+          "Headshot: 160 HP (1-Bullet Kill)",
+          "Bodyshot: 40 HP (4-Bullet Kill)",
+          "Fire Rate: 9.75 rounds/sec · Mag: 25 rounds",
+          "Cost: 2,900 Credits"
+        ],
+        ctaLabel: "View Full Vandal Weapon Guide",
+        ctaHref: "/weapons/vandal"
+      };
+    }
+
+    if (q.includes("phantom") && (q.includes("damage") || q.includes("stats") || q.includes("range"))) {
+      return {
+        question: "Phantom Ballistics & Damage Profile",
+        verdict: "156 (0-15m) · 140 (15-30m) · 124 (30-50m) Headshot",
+        explanation: "The Phantom deals 156 damage up to 15m (1-tap). At 15-30m, headshots deal 140 damage (requiring an extra bullet). It features silenced stealth tracers and an 11 rds/s fire rate.",
+        keyTakeaways: [
+          "0-15m: 156 Head / 39 Body (1-Tap)",
+          "15-30m: 140 Head / 35 Body (Dink + Followup)",
+          "30-50m: 124 Head / 31 Body",
+          "Fire Rate: 11.0 rounds/sec · Mag: 30 rounds"
+        ],
+        ctaLabel: "View Full Phantom Weapon Guide",
+        ctaHref: "/weapons/phantom"
+      };
+    }
+
+    // 3. Counter Intent (e.g. "how to counter cypher", "counter jett")
+    if (q.includes("counter") && q.includes("cypher")) {
+      return {
+        question: "How to Counter Cypher in VALORANT?",
+        verdict: "Sova Shock Darts + Raze Grenades + KAY/O Suppression",
+        explanation: "Cypher's site lockdown relies on unbroken Trapwires. Break wires before entering using Sova Shock Darts, Raze Paint Shells, or KAY/O ZERO/POINT suppression knife to neutralize his cages and camera.",
+        keyTakeaways: [
+          "Sova: Double shock dart common tripwire spots on B Main (Sunset/Ascent)",
+          "KAY/O: ZERO/POINT disables trips and camera for 8 seconds",
+          "Raze: Blast packs & Grenades break all floor traps instantly"
+        ],
+        ctaLabel: "View Cypher Agent Dossier & Counters",
+        ctaHref: "/agents/cypher"
+      };
+    }
+
+    if (q.includes("counter") && q.includes("jett")) {
+      return {
+        question: "How to Counter Jett in VALORANT?",
+        verdict: "Cypher Trapwires + Breach Stuns + Flash Concussions",
+        explanation: "Jett's Tailwind dash is halted instantly by Cypher Trapwires. Breach Fault Lines and Fade Seizes anchor her in place, preventing escape dashes after missed Operator shots.",
+        keyTakeaways: [
+          "Cypher: Place head-high tripwires that catch dash trajectories",
+          "KAY/O: Suppression cancels Blade Storm ultimate immediately",
+          "Trade quickly: Swing within 1.5 seconds of her initial contact"
+        ],
+        ctaLabel: "Read Complete How to Counter Jett Guide",
+        ctaHref: "/guides/how-to-counter-jett"
+      };
+    }
+
+    // 4. Map & Meta Queries
     if (q.includes("controller") && q.includes("ascent")) {
       return {
         question: "Who is the best controller on Ascent?",
@@ -189,7 +289,7 @@ function SearchInner() {
       };
     }
 
-    // DPI & Sens pattern like "800 dpi 0.3"
+    // 5. DPI & Sens Kinematics (e.g. "800 dpi 0.3", "sens cs2 1.2")
     const sensMatch = q.match(/(\d{3,4})\s*(?:dpi)?\s*([0-9.]+)/i);
     if (sensMatch && (q.includes("dpi") || q.includes("sens") || q.includes("cs2") || q.includes("apex"))) {
       const dpiVal = Number(sensMatch[1]);

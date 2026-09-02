@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { PageTransition, Reveal } from "@/components/motion-system";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { 
   Zap, Shield, Target, Users, Share2, ArrowRight, 
-  Copy, CheckCircle, Crosshair, AlertTriangle, Sparkles 
+  Copy, CheckCircle, Crosshair, AlertTriangle, Sparkles, 
+  Play, RotateCcw, Plus, Minus, DollarSign, Save 
 } from "lucide-react";
 import { toast } from "sonner";
 import { getAgentKnowledgeNode } from "@/lib/knowledge-graph";
@@ -15,12 +16,6 @@ import { getAgentKnowledgeNode } from "@/lib/knowledge-graph";
 const MAPS = ["Ascent", "Bind", "Haven", "Sunset", "Lotus", "Split", "Icebox", "Breeze", "Abyss", "Fracture"];
 const AGENTS = ["Jett", "Omen", "Sova", "Raze", "Cypher", "Killjoy", "Reyna", "Clove", "Viper", "Fade", "Gekko", "KAY/O", "Breach", "Neon", "Yoru", "Iso", "Vyse", "Sage"];
 const SIDES = ["Attack", "Defense"] as const;
-const ECONOMY_STATES = [
-  { id: "full-buy", label: "Full Buy ($3,900+)", desc: "Vandal/Phantom + Full Armor + Utility" },
-  { id: "force-buy", label: "Force Buy ($2,000 - $3,500)", desc: "Spectre/Bulldog/Sheriff + Half Armor" },
-  { id: "eco-save", label: "Eco Save (<$2,000)", desc: "Classic/Ghost + Save for next round" },
-  { id: "bonus-round", label: "Round 2/3 Bonus", desc: "Carry over Round 1 winning SMG/Sheriff" },
-];
 
 const MAP_COMPS: Record<string, { comp: string[]; synergy: number; desc: string }> = {
   Ascent: { comp: ["Jett", "Omen", "Sova", "Killjoy", "KAY/O"], synergy: 96, desc: "The gold-standard pro meta comp for Ascent. Heavy Mid control with Recon and one-way smokes." },
@@ -39,43 +34,87 @@ export default function MatchPrepPage() {
   const [selectedMap, setSelectedMap] = useState("Ascent");
   const [selectedSide, setSelectedSide] = useState<"Attack" | "Defense">("Attack");
   const [selectedAgent, setSelectedAgent] = useState("Jett");
-  const [selectedEco, setSelectedEco] = useState("full-buy");
+  
+  // Live Match State Session
+  const [isLiveSession, setIsLiveSession] = useState(false);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [myScore, setMyScore] = useState(0);
+  const [enemyScore, setEnemyScore] = useState(0);
+  const [credits, setCredits] = useState(800);
+  const [lossStreak, setLossStreak] = useState(0);
+
+  // Load session from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("vlopedia_active_match_session");
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data.map) setSelectedMap(data.map);
+        if (data.side) setSelectedSide(data.side);
+        if (data.agent) setSelectedAgent(data.agent);
+        if (data.round) setCurrentRound(data.round);
+        if (data.credits) setCredits(data.credits);
+        if (data.lossStreak !== undefined) setLossStreak(data.lossStreak);
+      }
+    } catch (e) {}
+  }, []);
+
+  const saveSession = () => {
+    const session = {
+      map: selectedMap,
+      side: selectedSide,
+      agent: selectedAgent,
+      round: currentRound,
+      myScore,
+      enemyScore,
+      credits,
+      lossStreak,
+      lastUpdated: new Date().toISOString()
+    };
+    localStorage.setItem("vlopedia_active_match_session", JSON.stringify(session));
+    toast.success("Match session state saved!");
+  };
+
+  const handleRoundOutcome = (won: boolean) => {
+    const nextLossStreak = won ? 0 : Math.min(lossStreak + 1, 3);
+    const bonus = won ? 3000 : 1900 + nextLossStreak * 500;
+    const newCredits = Math.min(credits + bonus, 9000);
+
+    setCredits(newCredits);
+    setLossStreak(nextLossStreak);
+    setCurrentRound(r => r + 1);
+    if (won) setMyScore(s => s + 1);
+    else setEnemyScore(s => s + 1);
+
+    toast.info(`Round ${currentRound} recorded (${won ? "VICTORY +$3,000" : `DEFEAT +$${bonus}`}). Next Round: $${newCredits} Credits.`);
+  };
 
   const knowledgeNode = getAgentKnowledgeNode(selectedAgent);
   const mapComp = MAP_COMPS[selectedMap] || MAP_COMPS.Ascent;
+
+  // Economy calculation
+  const nextLossBonus = 1900 + lossStreak * 500;
+  let ecoCall = "FULL BUY";
+  let maxSpend = 0;
+  if (credits >= 3900) {
+    ecoCall = "FULL BUY (VANDAL/PHANTOM + FULL ARMOR)";
+    maxSpend = credits - 3900;
+  } else if (credits + nextLossBonus >= 3900) {
+    maxSpend = credits + nextLossBonus - 3900;
+    ecoCall = `HALF BUY (SPEND MAX $${maxSpend})`;
+  } else {
+    ecoCall = "FULL ECO / SAVE (BUY NOTHING)";
+  }
 
   const breadcrumbItems = [
     { label: "Tools", href: "/tools" },
     { label: "Match Prep Companion" }
   ];
 
-  // Dynamic game plan generator
-  const isAttack = selectedSide === "Attack";
-  const gamePlan = {
-    openingMove: isAttack
-      ? `Establish immediate default presence on ${selectedMap}. Use utility to pressure ${selectedMap === "Ascent" ? "Mid Top & A Main" : selectedMap === "Bind" ? "A Short & B Long" : "Main Chokepoints"} before committing executes.`
-      : `Anchor ${selectedMap === "Ascent" ? "A Tree or B Lane" : "Primary Site Chokepoints"}. Avoid taking unassisted contact without escape utility primed.`,
-    utilityTrigger: isAttack
-      ? `Coordinate your primary ability with your team's initiator when crosshairs clear the first 50/50 corner.`
-      : `Deploy stall utility only when sound cues confirm an enemy execute commitment; do not waste utility on dry probes.`,
-    primaryDanger: knowledgeNode.tactical.counters[0] 
-      ? `Beware of opposing ${knowledgeNode.tactical.counters[0].agentName}: ${knowledgeNode.tactical.counters[0].counterReason}`
-      : "Beware of opposing crowd control and suppression utility disabling your escapes.",
-    weaponRecommendation: selectedEco === "full-buy"
-      ? (knowledgeNode.tactical.signatureWeapons[0]?.name || "Vandal / Phantom") + " + Full Heavy Armor"
-      : selectedEco === "force-buy"
-      ? "Bulldog / Spectre / Sheriff + Light Armor"
-      : selectedEco === "eco-save"
-      ? "Classic / Ghost + Full Utility (Save for next round)"
-      : "Carry forward previous round gun + buy Full Armor",
-  };
-
   const copyBriefing = () => {
     const text = `[VLOPEDIA MATCH PREP // ${selectedMap.toUpperCase()} - ${selectedSide.toUpperCase()}]
-Agent: ${selectedAgent} | Econ: ${selectedEco.toUpperCase()}
-Opening Plan: ${gamePlan.openingMove}
-Buy: ${gamePlan.weaponRecommendation}
-Hazards: ${gamePlan.primaryDanger}
+Agent: ${selectedAgent} | Round: ${currentRound} (${myScore}-${enemyScore}) | Credits: $${credits}
+Call: ${ecoCall}
 Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
     navigator.clipboard.writeText(text);
     toast.success("Match briefing copied to clipboard! Paste it into team chat.");
@@ -93,24 +132,34 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
               <div className="flex items-center gap-3">
                 <span className="h-[2px] w-8 bg-primary" />
                 <span className="font-mono text-xs uppercase tracking-[0.3em] text-primary font-bold">
-                  PRE-ROUND TACTICAL ASSISTANT
+                  PRE-MATCH & LIVE ROUND COMPANION
                 </span>
               </div>
               <h1 className="font-display font-black text-4xl uppercase tracking-tight text-white sm:text-5xl">
-                MATCH PREP COMPANION
+                MATCH PREP & LIVE SESSION
               </h1>
-              <p className="font-sans text-sm text-secondary max-w-2xl">
-                Configure your active map, side, agent, and credit economy to generate an instant, pro-vetted round gameplan, buy strategy, and team synergy blueprint.
+              <p className="font-sans text-sm text-secondary max-w-2xl leading-relaxed">
+                Generate dynamic map-opening strategies, team comp synergies, and live per-round economy directives during active competitive matches.
               </p>
             </div>
 
-            <button
-              onClick={copyBriefing}
-              className="font-mono text-xs uppercase px-4 py-2.5 border border-primary/40 bg-primary/10 text-primary font-bold hover:bg-primary/20 transition-colors flex items-center gap-2 shrink-0"
-            >
-              <Copy className="h-4 w-4" />
-              <span>Copy Team Briefing</span>
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={saveSession}
+                className="font-mono text-xs uppercase px-3 py-2 border border-[rgba(236,232,225,0.15)] bg-[#0D1820] text-secondary hover:text-white flex items-center gap-1.5"
+              >
+                <Save className="h-3.5 w-3.5" />
+                <span>Save Session</span>
+              </button>
+
+              <button
+                onClick={copyBriefing}
+                className="font-mono text-xs uppercase px-4 py-2 border border-primary/40 bg-primary/10 text-primary font-bold hover:bg-primary/20 transition-colors flex items-center gap-2 shrink-0"
+              >
+                <Copy className="h-4 w-4" />
+                <span>Copy Match Briefing</span>
+              </button>
+            </div>
           </div>
 
           {/* Configuration Selector Matrix */}
@@ -151,7 +200,7 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
 
             {/* Agent */}
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal space-y-2">
-              <label className="block font-mono text-[10px] uppercase text-primary font-bold">03 // YOUR AGENT</label>
+              <label className="block font-mono text-[10px] uppercase text-primary font-bold">03 // YOUR OPERATIVE</label>
               <select
                 value={selectedAgent}
                 onChange={(e) => setSelectedAgent(e.target.value)}
@@ -161,18 +210,72 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
               </select>
             </div>
 
-            {/* Economy State */}
+            {/* Live Round Toggle / Credits */}
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal space-y-2">
-              <label className="block font-mono text-[10px] uppercase text-primary font-bold">04 // ECONOMY STATUS</label>
-              <select
-                value={selectedEco}
-                onChange={(e) => setSelectedEco(e.target.value)}
-                className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2.5 font-sans text-xs text-white focus:border-primary focus:outline-none"
-              >
-                {ECONOMY_STATES.map(eco => <option key={eco.id} value={eco.id}>{eco.label}</option>)}
-              </select>
+              <label className="block font-mono text-[10px] uppercase text-primary font-bold">04 // LIVE CREDITS</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  step="100"
+                  value={credits}
+                  onChange={(e) => setCredits(Number(e.target.value) || 0)}
+                  className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 font-mono text-sm text-white focus:border-primary focus:outline-none font-bold"
+                />
+              </div>
             </div>
 
+          </div>
+
+          {/* ── LIVE MATCH ASSISTANT BAR ── */}
+          <div className="border border-[#0DF2F2]/40 bg-gradient-to-r from-[#0DF2F2]/10 via-[#0D1A22] to-[#0D1A22] p-6 clip-diagonal space-y-4 shadow-xl">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-5 w-5 text-[#0DF2F2]" />
+                <div>
+                  <span className="font-mono text-[10px] uppercase text-[#0DF2F2] font-bold block">LIVE ROUND TRACKER</span>
+                  <h3 className="font-display font-black text-xl uppercase text-white">
+                    ROUND {currentRound} · SCORE: {myScore} – {enemyScore}
+                  </h3>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleRoundOutcome(true)}
+                  className="font-mono text-xs uppercase px-3 py-1.5 border border-primary/40 bg-primary/20 text-primary font-bold hover:bg-primary/30 transition-colors"
+                >
+                  ✓ Round Won (+3,000)
+                </button>
+                <button
+                  onClick={() => handleRoundOutcome(false)}
+                  className="font-mono text-xs uppercase px-3 py-1.5 border border-error/40 bg-error/20 text-error font-bold hover:bg-error/30 transition-colors"
+                >
+                  ✗ Round Lost (+{nextLossBonus})
+                </button>
+                <button
+                  onClick={() => { setCurrentRound(1); setMyScore(0); setEnemyScore(0); setCredits(800); setLossStreak(0); }}
+                  className="font-mono text-[10px] uppercase px-2 py-1.5 border border-[rgba(236,232,225,0.1)] text-muted hover:text-white"
+                  title="Reset Match Session"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3 font-mono text-xs">
+              <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                <span className="text-[10px] text-muted uppercase block">Economy Directive:</span>
+                <span className="font-bold text-white block mt-0.5">{ecoCall}</span>
+              </div>
+              <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                <span className="text-[10px] text-muted uppercase block">Guaranteed Next Round:</span>
+                <span className="font-bold text-[#0DF2F2] block mt-0.5">${credits + nextLossBonus} Minimum</span>
+              </div>
+              <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                <span className="text-[10px] text-muted uppercase block">Current Loss Streak:</span>
+                <span className="font-bold text-amber-400 block mt-0.5">{lossStreak} Consecutive Losses</span>
+              </div>
+            </div>
           </div>
 
           {/* ── Generated Tactical Directive ── */}
@@ -186,7 +289,7 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
                   <div className="flex items-center gap-3">
                     <Zap className="h-5 w-5 text-primary" />
                     <h2 className="font-display font-black text-2xl uppercase text-white">
-                      ROUND DIRECTIVE // {selectedAgent.toUpperCase()} ON {selectedMap.toUpperCase()} ({selectedSide.toUpperCase()})
+                      ROUND GAMEPLAN // {selectedAgent.toUpperCase()} ON {selectedMap.toUpperCase()} ({selectedSide.toUpperCase()})
                     </h2>
                   </div>
                   <span className="font-mono text-xs text-primary font-bold">
@@ -194,24 +297,14 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
                   </span>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="border border-[rgba(236,232,225,0.06)] bg-[#08111A] p-4 space-y-1.5">
-                    <span className="font-mono text-[9px] uppercase text-muted block">Recommended Gun & Armor</span>
-                    <span className="font-sans text-sm font-bold text-primary block">{gamePlan.weaponRecommendation}</span>
-                  </div>
-
-                  <div className="border border-[rgba(236,232,225,0.06)] bg-[#08111A] p-4 space-y-1.5">
-                    <span className="font-mono text-[9px] uppercase text-muted block">Utility Priority</span>
-                    <span className="font-sans text-sm font-bold text-white block">{gamePlan.utilityTrigger}</span>
-                  </div>
-                </div>
-
                 <div className="space-y-3">
                   <h3 className="font-mono text-xs uppercase font-bold text-white tracking-wider">
                     Opening Round Strategy
                   </h3>
                   <p className="font-sans text-sm text-secondary leading-relaxed bg-[#08111A] p-4 border border-[rgba(236,232,225,0.04)]">
-                    {gamePlan.openingMove}
+                    {selectedSide === "Attack"
+                      ? `Establish default presence on ${selectedMap}. Use utility to pressure ${selectedMap === "Ascent" ? "Mid Top & A Main" : "Primary Chokepoints"} before committing executes.`
+                      : `Anchor ${selectedMap === "Ascent" ? "A Tree or B Lane" : "Primary Site Chokepoints"}. Avoid taking unassisted contact without escape utility primed.`}
                   </p>
                 </div>
 
@@ -221,7 +314,7 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
                     <span>Opposing Counterplay Alert</span>
                   </div>
                   <p className="font-sans text-xs text-secondary leading-relaxed">
-                    {gamePlan.primaryDanger}
+                    {knowledgeNode.tactical.counters[0]?.counterReason || "Beware of opposing crowd control and suppression utility disabling your escape paths."}
                   </p>
                 </div>
               </div>
