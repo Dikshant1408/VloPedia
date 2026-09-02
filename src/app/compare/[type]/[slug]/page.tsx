@@ -61,6 +61,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+let weaponsCache: ValorantWeapon[] | null = null;
+async function getWeapons(): Promise<ValorantWeapon[]> {
+  if (weaponsCache) return weaponsCache;
+  try {
+    const res = await fetch("https://valorant-api.com/v1/weapons");
+    if (!res.ok) return [];
+    const json = await res.json();
+    weaponsCache = json.data ?? [];
+    return weaponsCache || [];
+  } catch {
+    return [];
+  }
+}
+
+let agentsCache: ValorantAgent[] | null = null;
+async function getAgents(): Promise<ValorantAgent[]> {
+  if (agentsCache) return agentsCache;
+  try {
+    const res = await fetch("https://valorant-api.com/v1/agents?isPlayableCharacter=true");
+    if (!res.ok) return [];
+    const json = await res.json();
+    agentsCache = json.data ?? [];
+    return agentsCache || [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function ComparePage({ params }: Props) {
   const { type, slug } = await params;
   const parts = slug.split("-vs-");
@@ -76,8 +104,7 @@ export default async function ComparePage({ params }: Props) {
   ];
 
   if (type === "weapons") {
-    const res = await fetchWithCache<{ data: ValorantWeapon[] }>("https://valorant-api.com/v1/weapons");
-    const weapons = res.data ?? [];
+    const weapons = await getWeapons();
     const w1 = weapons.find(w => w.displayName.toLowerCase().replace(/\s+/g, "-") === slug1 || w.displayName.toLowerCase() === slug1);
     const w2 = weapons.find(w => w.displayName.toLowerCase().replace(/\s+/g, "-") === slug2 || w.displayName.toLowerCase() === slug2);
 
@@ -219,8 +246,7 @@ export default async function ComparePage({ params }: Props) {
   }
 
   // Agents comparison
-  const res = await fetchWithCache<{ data: ValorantAgent[] }>("https://valorant-api.com/v1/agents?isPlayableCharacter=true");
-  const agents = res.data ?? [];
+  const agents = await getAgents();
   const a1 = agents.find(a => a.displayName.toLowerCase().replace(/\s+/g, "-") === slug1 || a.displayName.toLowerCase() === slug1);
   const a2 = agents.find(a => a.displayName.toLowerCase().replace(/\s+/g, "-") === slug2 || a.displayName.toLowerCase() === slug2);
 
