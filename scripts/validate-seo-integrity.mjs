@@ -72,12 +72,18 @@ assert(fs.existsSync(sensPath), "src/data/sensitivity-conversions.json exists");
 // 5. Knowledge Graph & New Tactical Pillars
 console.log("\n5. Knowledge Graph & Tactical Companion Architecture:");
 assert(fs.existsSync(path.join(rootDir, "src/lib/knowledge-graph.ts")), "src/lib/knowledge-graph.ts (Knowledge Graph Engine) exists");
+assert(fs.existsSync(path.join(rootDir, "src/data/canonical-graph.json")), "src/data/canonical-graph.json (Canonical Graph Database) exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/knowledge-graph-service.ts")), "src/lib/knowledge-graph-service.ts (Knowledge Graph Service) exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/patch-impact-engine.ts")), "src/lib/patch-impact-engine.ts (Patch Impact Engine) exists");
+assert(fs.existsSync(path.join(rootDir, "src/components/data-trust-badge.tsx")), "src/components/data-trust-badge.tsx (Data Trust Badge) exists");
+assert(fs.existsSync(path.join(rootDir, "src/components/follow-entity-button.tsx")), "src/components/follow-entity-button.tsx (Follow Entity Button) exists");
 assert(fs.existsSync(path.join(rootDir, "src/app/explore/page.tsx")), "src/app/explore/page.tsx (Interactive Graph Explorer) exists");
 assert(fs.existsSync(path.join(rootDir, "src/app/match-prep/page.tsx")), "src/app/match-prep/page.tsx (Match Prep Companion) exists");
 assert(fs.existsSync(path.join(rootDir, "src/app/tools/round-assistant/page.tsx")), "src/app/tools/round-assistant/page.tsx (Round Decision Assistant) exists");
 assert(fs.existsSync(path.join(rootDir, "src/app/methodology/page.tsx")), "src/app/methodology/page.tsx (Methodology Documentation) exists");
 assert(fs.existsSync(path.join(rootDir, "src/components/report-issue-modal.tsx")), "src/components/report-issue-modal.tsx (Community Reporter) exists");
 assert(fs.existsSync(path.join(rootDir, "src/lib/search-analytics.ts")), "src/lib/search-analytics.ts (Intent Analytics Engine) exists");
+assert(fs.existsSync(path.join(rootDir, "src/app/admin/health/page.tsx")), "src/app/admin/health/page.tsx (Admin Health & Moat Hub) exists");
 
 console.log("\n========================================");
 console.log(`Validation Complete: ${passed} passed, ${failed} failed`);

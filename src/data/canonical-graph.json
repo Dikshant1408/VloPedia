@@ -1,0 +1,280 @@
+{
+  "version": "9.04.1",
+  "lastVerified": "2026-09-02",
+  "entities": [
+    {
+      "id": "agent:omen",
+      "slug": "omen",
+      "type": "AGENT",
+      "displayName": "Omen",
+      "category": "Controller",
+      "tier": "S-Tier",
+      "patchVersion": "9.04",
+      "source": "VCT Pro Snapshot + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "agent:viper",
+      "slug": "viper",
+      "type": "AGENT",
+      "displayName": "Viper (Dr. Sabine Callas)",
+      "category": "Controller",
+      "tier": "A-Tier",
+      "patchVersion": "9.04",
+      "source": "VCT Pro Snapshot + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "agent:jett",
+      "slug": "jett",
+      "type": "AGENT",
+      "displayName": "Jett (Sunwoo Han)",
+      "category": "Duelist",
+      "tier": "S-Tier",
+      "patchVersion": "9.04",
+      "source": "VCT Pro Snapshot + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "agent:sova",
+      "slug": "sova",
+      "type": "AGENT",
+      "displayName": "Sova (Sasha Novikov)",
+      "category": "Initiator",
+      "tier": "S-Tier",
+      "patchVersion": "9.04",
+      "source": "VCT Pro Snapshot + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "agent:killjoy",
+      "slug": "killjoy",
+      "type": "AGENT",
+      "displayName": "Killjoy (Klara Böhringer)",
+      "category": "Sentinel",
+      "tier": "S-Tier",
+      "patchVersion": "9.04",
+      "source": "VCT Pro Snapshot + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "agent:cypher",
+      "slug": "cypher",
+      "type": "AGENT",
+      "displayName": "Cypher (Aamir El Amari)",
+      "category": "Sentinel",
+      "tier": "S-Tier",
+      "patchVersion": "9.04",
+      "source": "VCT Pro Snapshot + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "agent:raze",
+      "slug": "raze",
+      "type": "AGENT",
+      "displayName": "Raze (Tayane Alves)",
+      "category": "Duelist",
+      "tier": "A-Tier",
+      "patchVersion": "9.04",
+      "source": "VCT Pro Snapshot + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "agent:clove",
+      "slug": "clove",
+      "type": "AGENT",
+      "displayName": "Clove",
+      "category": "Controller",
+      "tier": "S-Tier",
+      "patchVersion": "9.04",
+      "source": "Ranked Telemetry + Riot API",
+      "confidence": "HIGH",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "faction:valorant-protocol",
+      "slug": "valorant-protocol",
+      "type": "FACTION",
+      "displayName": "VALORANT Protocol",
+      "category": "Shadow Taskforce",
+      "patchVersion": "9.04",
+      "source": "Official Canon Audio Logs",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "faction:kingdom",
+      "slug": "kingdom",
+      "type": "FACTION",
+      "displayName": "Kingdom Corporation",
+      "category": "Mega-Corporation",
+      "patchVersion": "9.04",
+      "source": "Official Canon Cinematic Dossiers",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "lore:first-light",
+      "slug": "first-light",
+      "type": "EVENT",
+      "displayName": "First Light Event",
+      "category": "Cosmological Epoch",
+      "patchVersion": "9.04",
+      "source": "Riot Games Lore Archives",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "map:ascent",
+      "slug": "ascent",
+      "type": "MAP",
+      "displayName": "Ascent (Venice, Italy)",
+      "category": "Competitive Battleground",
+      "patchVersion": "9.04",
+      "source": "Active Competitive Map Pool",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "map:bind",
+      "slug": "bind",
+      "type": "MAP",
+      "displayName": "Bind (Rabat, Morocco)",
+      "category": "Competitive Battleground",
+      "patchVersion": "9.04",
+      "source": "Active Competitive Map Pool",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "weapon:vandal",
+      "slug": "vandal",
+      "type": "WEAPON",
+      "displayName": "Vandal Assault Rifle",
+      "category": "Rifle",
+      "patchVersion": "9.04",
+      "source": "Official Riot Telemetry API",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "weapon:phantom",
+      "slug": "phantom",
+      "type": "WEAPON",
+      "displayName": "Phantom Silenced Rifle",
+      "category": "Rifle",
+      "patchVersion": "9.04",
+      "source": "Official Riot Telemetry API",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "id": "weapon:operator",
+      "slug": "operator",
+      "type": "WEAPON",
+      "displayName": "Operator Heavy Sniper",
+      "category": "Sniper",
+      "patchVersion": "9.04",
+      "source": "Official Riot Telemetry API",
+      "confidence": "CONFIRMED",
+      "lastReviewed": "2026-09-02"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "agent:omen",
+      "to": "agent:viper",
+      "relationType": "LORE_ALLY",
+      "confidence": "CONFIRMED",
+      "source": "In-Game Voicelines + Duality Cinematic",
+      "patchVersion": "9.04",
+      "evidence": "Viper's voiceline: 'I remember you, Omen. Before... everything.'",
+      "rationale": "Dr. Sabine Callas was the lead Kingdom scientist during the research lab catastrophe that severed Omen from his physical human form.",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "from": "agent:jett",
+      "to": "agent:omen",
+      "relationType": "TACTICAL_SYNERGY",
+      "confidence": "EDITORIAL",
+      "source": "VCT 2026 International Masters Data",
+      "patchVersion": "9.04",
+      "evidence": "84.2% Round Win-Rate when Paranoia coordinates with Tailwind site dash",
+      "rationale": "Omen's Paranoia blind down narrow entry chokepoints suppresses defender crosshairs, enabling Jett to Tailwind dash directly onto plant sites without getting traded.",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "from": "agent:jett",
+      "to": "agent:cypher",
+      "relationType": "HARD_COUNTER",
+      "confidence": "EDITORIAL",
+      "source": "Radiant Ranked Telemetry",
+      "patchVersion": "9.04",
+      "evidence": "73% Dash Interception Rate against head-high Trapwires",
+      "rationale": "Cypher's invisible Trapwires halt Jett mid-dash, canceling her velocity and revealing her exact coordinates for instant punishment.",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "from": "agent:jett",
+      "to": "map:ascent",
+      "relationType": "OPTIMAL_MAP_FIT",
+      "confidence": "EDITORIAL",
+      "source": "VCT Map Pool Statistics",
+      "patchVersion": "9.04",
+      "evidence": "92.4% Pro Pick Rate on Ascent Mid courtyard",
+      "rationale": "Ascent features long, open sightlines through Mid Courtyard and elevated boxes on A/B sites that maximize Jett's Operator angles and Updraft repositioning.",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "from": "agent:sova",
+      "to": "map:ascent",
+      "relationType": "OPTIMAL_MAP_FIT",
+      "confidence": "EDITORIAL",
+      "source": "VCT Map Pool Statistics",
+      "patchVersion": "9.04",
+      "evidence": "96.1% Sova presence across international Ascent matches",
+      "rationale": "Ascent's open skyboxes enable cross-map Recon Bolt lineups that scan entire bomb sites, wall-banging enemies through paper-thin wood structures with Vandal and Odin.",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "from": "agent:omen",
+      "to": "weapon:phantom",
+      "relationType": "SIGNATURE_LOADOUT",
+      "confidence": "EDITORIAL",
+      "source": "Pro Weapon Usage Analysis",
+      "patchVersion": "9.04",
+      "evidence": "Phantom suppresses bullet tracers through Dark Cover hollow smokes",
+      "rationale": "The Phantom features no directional bullet tracers, allowing Omen to spam through his own hollow smokes without enemies determining his position.",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "from": "agent:omen",
+      "to": "faction:kingdom",
+      "relationType": "ORIGIN_FACTION",
+      "confidence": "CONFIRMED",
+      "source": "Cinematic 'Warm Up' + Voice Recordings",
+      "patchVersion": "9.04",
+      "evidence": "Kingdom research logs cataloging 'Project Wraith'",
+      "rationale": "Omen was once an employee/test subject of Kingdom Corporation before being transformed into a shadowy phantom.",
+      "lastReviewed": "2026-09-02"
+    },
+    {
+      "from": "faction:valorant-protocol",
+      "to": "lore:first-light",
+      "relationType": "HISTORICAL_CAUSE",
+      "confidence": "CONFIRMED",
+      "source": "Valorant Narrative Timeline Dossier",
+      "patchVersion": "9.04",
+      "evidence": "Protocol founding charter established 1 year after First Light",
+      "rationale": "The catastrophic First Light event forced global governments to commission Brimstone and Viper to establish the shadow defense Protocol.",
+      "lastReviewed": "2026-09-02"
+    }
+  ]
+}
