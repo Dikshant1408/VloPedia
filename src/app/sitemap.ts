@@ -62,6 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/match-prep`,         lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/explore`,            lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/methodology`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/data-sources`,       lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/tools/what-to-play`, lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/tools/round-assistant`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];

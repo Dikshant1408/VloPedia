@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-09-03",
+  "sources": [
+    {
+      "id": "riot-character-api",
+      "name": "Official Riot Games Character API",
+      "type": "GAME_API",
+      "url": "https://valorant-api.com/v1/agents",
+      "description": "Authoritative base game telemetry for agent roles, character UUIDs, ability metadata, and voice lines.",
+      "reliability": "OFFICIAL",
+      "updateFrequency": "Every Patch Release"
+    },
+    {
+      "id": "riot-weapons-api",
+      "name": "Official Riot Games Weapons & Skins API",
+      "type": "GAME_API",
+      "url": "https://valorant-api.com/v1/weapons",
+      "description": "Official weapon damage tables, fire rates, magazine capacities, wall penetration, and skin chroma assets.",
+      "reliability": "OFFICIAL",
+      "updateFrequency": "Every Patch Release"
+    },
+    {
+      "id": "vct-pro-dataset",
+      "name": "VCT Champions & Masters Tournament Analytics",
+      "type": "VCT_SNAPSHOT",
+      "url": "https://valorantesports.com",
+      "description": "Aggregated professional esports match telemetry, agent presence rates, and map win percentages across international VCT events.",
+      "reliability": "CALCULATED",
+      "updateFrequency": "Post-Tournament (Bi-Weekly)"
+    },
+    {
+      "id": "official-canon-cinematics",
+      "name": "Official Riot Games Animated Cinematics & Audio Logs",
+      "type": "CONFIRMED_CANON",
+      "url": "https://playvalorant.com",
+      "description": "In-game voicemail terminal logs, radiocard dossiers, and official cinematic universe releases (e.g. Duality, Warm Up, Shattered).",
+      "reliability": "CONFIRMED_CANON",
+      "updateFrequency": "Per Episode/Act Release"
+    },
+    {
+      "id": "vlopedia-radiant-desk",
+      "name": "VloPedia Radiant Editorial Desk",
+      "type": "EDITORIAL_ANALYSIS",
+      "url": "https://valovault-ivory.vercel.app/methodology",
+      "description": "Qualitative solo-queue meta tiers, agent matchup counters, and situational map synergy evaluations formulated by Radiant analysts.",
+      "reliability": "EDITORIAL",
+      "updateFrequency": "Bi-Weekly Editorial Pass"
+    },
+    {
+      "id": "community-verified-reports",
+      "name": "Community Editorial Corrections Pipeline",
+      "type": "COMMUNITY",
+      "url": "https://valovault-ivory.vercel.app/admin/health",
+      "description": "Peer-reviewed player correction submissions audited and approved by the VloPedia editorial desk.",
+      "reliability": "COMMUNITY",
+      "updateFrequency": "Continuous"
+    }
+  ]
+}

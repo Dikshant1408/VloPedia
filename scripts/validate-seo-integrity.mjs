@@ -84,6 +84,10 @@ assert(fs.existsSync(path.join(rootDir, "src/app/methodology/page.tsx")), "src/a
 assert(fs.existsSync(path.join(rootDir, "src/components/report-issue-modal.tsx")), "src/components/report-issue-modal.tsx (Community Reporter) exists");
 assert(fs.existsSync(path.join(rootDir, "src/lib/search-analytics.ts")), "src/lib/search-analytics.ts (Intent Analytics Engine) exists");
 assert(fs.existsSync(path.join(rootDir, "src/app/admin/health/page.tsx")), "src/app/admin/health/page.tsx (Admin Health & Moat Hub) exists");
+assert(fs.existsSync(path.join(rootDir, "src/data/sources/registry.json")), "src/data/sources/registry.json (Source Registry) exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/sources.ts")), "src/lib/sources.ts (SourceRegistry Helper) exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/entity-resolver.ts")), "src/lib/entity-resolver.ts (EntityResolver Engine) exists");
+assert(fs.existsSync(path.join(rootDir, "src/app/data-sources/page.tsx")), "src/app/data-sources/page.tsx (Data Sources Page) exists");
 
 // 6. Relationship Dataset Integrity Tests
 console.log("\n6. Canonical Relationship Datasets Integrity:");
@@ -96,7 +100,13 @@ assert(fs.existsSync(path.join(relDir, "agent-weapons.json")), "agent-weapons.js
 const synergies = JSON.parse(fs.readFileSync(path.join(relDir, "agent-synergies.json"), "utf-8"));
 assert(Array.isArray(synergies) && synergies.length > 0, "agent-synergies contains valid array");
 synergies.forEach(s => {
-  assert(s.fromEntity && s.toEntity && s.relationType && s.sourceType && s.confidence, `Synergy edge "${s.fromEntity} -> ${s.toEntity}" is fully provenanced`);
+  assert(s.fromEntity && s.toEntity && s.relationType && s.directionality && s.sourceId && s.confidence, `Synergy edge "${s.fromEntity} -> ${s.toEntity}" is fully provenanced with directionality`);
+});
+
+const counters = JSON.parse(fs.readFileSync(path.join(relDir, "agent-counters.json"), "utf-8"));
+assert(Array.isArray(counters) && counters.length > 0, "agent-counters contains valid array");
+counters.forEach(c => {
+  assert(c.fromEntity && c.toEntity && c.relationType && c.directionality === "DIRECTED" && c.dangerLevel && c.sourceId, `Counter edge "${c.fromEntity} -> ${c.toEntity}" has explicit dangerLevel and DIRECTED directionality`);
 });
 
 // 7. Natural Language Search Intent Quality Assertions

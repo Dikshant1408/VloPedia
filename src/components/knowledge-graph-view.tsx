@@ -209,39 +209,43 @@ export function KnowledgeGraphView({ node }: Props) {
           </Link>
         )}
 
-        <Link
-          href={`/compare/agents/${node.crossLinks.compareSlug}`}
-          className="p-4 border border-purple-400/30 bg-purple-400/5 hover:bg-purple-400/10 transition-colors flex items-center justify-between group"
-        >
-          <div className="space-y-0.5">
-            <span className="font-mono text-[9px] uppercase text-purple-400 block">Head-to-Head Duel</span>
-            <span className="font-sans text-xs font-bold text-white group-hover:text-purple-400 transition-colors">
-              {node.crossLinks.compareName}
-            </span>
-          </div>
-          <GitCompare className="h-4 w-4 text-purple-400 shrink-0" />
-        </Link>
+        {node.crossLinks.compareSlug && (
+          <Link
+            href={`/compare/agents/${node.crossLinks.compareSlug}`}
+            className="p-4 border border-purple-400/30 bg-purple-400/5 hover:bg-purple-400/10 transition-colors flex items-center justify-between group"
+          >
+            <div className="space-y-0.5">
+              <span className="font-mono text-[9px] uppercase text-purple-400 block">Head-to-Head Duel</span>
+              <span className="font-sans text-xs font-bold text-white group-hover:text-purple-400 transition-colors">
+                {node.crossLinks.compareName}
+              </span>
+            </div>
+            <GitCompare className="h-4 w-4 text-purple-400 shrink-0" />
+          </Link>
+        )}
 
-        <Link
-          href={node.crossLinks.bestForUrl}
-          className="p-4 border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors flex items-center justify-between group"
-        >
-          <div className="space-y-0.5">
-            <span className="font-mono text-[9px] uppercase text-primary block">Tactical Ranking</span>
-            <span className="font-sans text-xs font-bold text-white group-hover:text-primary transition-colors">
-              Best Agents for Solo Queue
-            </span>
-          </div>
-          <ArrowRight className="h-4 w-4 text-primary shrink-0" />
-        </Link>
+        {node.crossLinks.bestForUrl && (
+          <Link
+            href={node.crossLinks.bestForUrl}
+            className="p-4 border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors flex items-center justify-between group"
+          >
+            <div className="space-y-0.5">
+              <span className="font-mono text-[9px] uppercase text-primary block">Tactical Ranking</span>
+              <span className="font-sans text-xs font-bold text-white group-hover:text-primary transition-colors">
+                {node.crossLinks.bestForTitle || "Tactical Tier List"}
+              </span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-primary shrink-0" />
+          </Link>
+        )}
       </div>
 
       {/* ── Transparent Data Attribution Bar ── */}
       <DataTrustBadge
         sourceType="EDITORIAL_ANALYSIS"
         sourceName="VloPedia Radiant Desk + VCT Pro Dataset"
-        patchVersion="9.04"
-        lastVerified="September 2, 2026"
+        patchVersion={node.fieldAttributions.tier?.patchVersion || "9.04"}
+        lastVerified={node.fieldAttributions.tier?.lastVerified || "September 3, 2026"}
         confidence="HIGH"
       />
 
