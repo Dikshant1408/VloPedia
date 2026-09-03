@@ -1,0 +1,38 @@
+[
+  {
+    "fromEntity": "agent:jett",
+    "toEntity": "weapon:operator",
+    "relationType": "SIGNATURE_LOADOUT",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Pro Loadout Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "Tailwind dash compensates for 5,000ms Operator post-shot mobility penalty",
+    "explanation": "Jett's Tailwind allows aggressive forward angle peeking with the Operator, providing instant, risk-free repositioning after firing.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:omen",
+    "toEntity": "weapon:phantom",
+    "relationType": "SIGNATURE_LOADOUT",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Pro Loadout Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "Phantom eliminates bullet tracers through Dark Cover hollow smokes",
+    "explanation": "The Phantom features zero visible bullet tracers through smoke, allowing Omen to spam through his own hollow smokes without enemies determining his muzzle location.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:sova",
+    "toEntity": "weapon:odin",
+    "relationType": "SIGNATURE_LOADOUT",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Pro Loadout Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "High wall-penetration paired with Recon Bolt wallhack scans",
+    "explanation": "Sova's Recon Bolt scans reveal enemies through wall-bangable structures on Ascent B Main and Haven Garage for lethal Odin spam finishes.",
+    "lastVerified": "2026-09-02"
+  }
+]

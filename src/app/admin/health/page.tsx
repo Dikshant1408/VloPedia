@@ -7,10 +7,11 @@ import { PageTransition } from "@/components/motion-system";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { 
   Activity, ShieldCheck, AlertTriangle, Search, 
-  Database, RefreshCw, Flag, CheckCircle2, ArrowRight, Layers 
+  Database, RefreshCw, Flag, CheckCircle2, ArrowRight, Layers, Network, Zap 
 } from "lucide-react";
 import { KnowledgeGraphService } from "@/lib/knowledge-graph-service";
 import { PatchImpactEngine } from "@/lib/patch-impact-engine";
+import { GraphIntegrityEngine, GraphIntegrityReport } from "@/lib/graph-integrity-engine";
 import { getContentGaps, getTopSearches } from "@/lib/search-analytics";
 
 export default function AdminHealthPage() {
@@ -18,11 +19,13 @@ export default function AdminHealthPage() {
   const [contentGaps, setContentGaps] = useState<any[]>([]);
   const [reports, setReports] = useState<any[]>([]);
   const [staleList, setStaleList] = useState<any[]>([]);
+  const [integrityReport, setIntegrityReport] = useState<GraphIntegrityReport | null>(null);
 
   useEffect(() => {
     setTopSearches(getTopSearches(8));
     setContentGaps(getContentGaps());
     setStaleList(PatchImpactEngine.scanStaleContent());
+    setIntegrityReport(GraphIntegrityEngine.runAudit("9.04"));
 
     try {
       const savedReports = JSON.parse(localStorage.getItem("vlopedia_user_reports") || "[]");
@@ -56,13 +59,13 @@ export default function AdminHealthPage() {
                 SYSTEM HEALTH & DATA MOAT
               </h1>
               <p className="font-sans text-sm text-secondary max-w-2xl leading-relaxed">
-                Central operating console for measuring search satisfaction, content decay, Google indexation tiering, and community issue reports.
+                Central operating console for measuring search satisfaction, graph integrity, content decay, Google indexation tiering, and community issue reports.
               </p>
             </div>
 
             <div className="flex items-center gap-2 border border-[#0DF2F2]/30 bg-[#0DF2F2]/5 px-4 py-2 clip-diagonal font-mono text-xs text-[#0DF2F2]">
               <Activity className="h-4 w-4 animate-pulse" />
-              <span>CANONICAL ENGINE: ACTIVE</span>
+              <span>GRAPH HEALTH: {integrityReport?.healthScore || 100}%</span>
             </div>
           </div>
 
@@ -77,7 +80,7 @@ export default function AdminHealthPage() {
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal">
               <span className="font-mono text-[10px] uppercase text-muted block">Active Patch Baseline</span>
               <span className="font-display font-black text-3xl text-white block mt-1">Patch 9.04</span>
-              <span className="font-mono text-[9px] text-primary block mt-1">Verified: Sep 2, 2026</span>
+              <span className="font-mono text-[9px] text-primary block mt-1">Verified: Sep 3, 2026</span>
             </div>
 
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal">
@@ -93,7 +96,46 @@ export default function AdminHealthPage() {
             </div>
           </div>
 
-          {/* ── 2 Columns: Indexation Tiering & Stale Content ── */}
+          {/* ── Graph Integrity & Dead Node Detection ── */}
+          {integrityReport && (
+            <div className="border border-primary/40 bg-[#0D1A22] p-6 clip-diagonal space-y-4 shadow-xl">
+              <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
+                <div className="flex items-center gap-2 text-primary">
+                  <Network className="h-4 w-4" />
+                  <h3 className="font-display font-black text-xl uppercase text-white">Graph Database Integrity & Contradiction Audit</h3>
+                </div>
+                <span className="font-mono text-xs text-primary font-bold">{integrityReport.totalRelationships} Relational Edges</span>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3 font-mono text-xs">
+                <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                  <span className="text-[10px] text-muted block uppercase">Orphan Nodes:</span>
+                  <strong className="text-white block mt-0.5">{integrityReport.orphanNodes.length} Unlinked Entities</strong>
+                  <span className="text-[9px] text-[#0DF2F2] block mt-1">
+                    {integrityReport.orphanNodes.length === 0 ? "✓ Zero Orphan Nodes" : "Needs edge mapping"}
+                  </span>
+                </div>
+
+                <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                  <span className="text-[10px] text-muted block uppercase">Contradiction Flags:</span>
+                  <strong className="text-white block mt-0.5">{integrityReport.contradictoryEdges.length} Conflicts</strong>
+                  <span className="text-[9px] text-primary block mt-1">
+                    {integrityReport.contradictoryEdges.length === 0 ? "✓ Zero Relationship Contradictions" : "Review needed"}
+                  </span>
+                </div>
+
+                <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                  <span className="text-[10px] text-muted block uppercase">Stale Edges:</span>
+                  <strong className="text-white block mt-0.5">{integrityReport.staleEdges.length} Outdated Edges</strong>
+                  <span className="text-[9px] text-amber-400 block mt-1">
+                    {integrityReport.staleEdges.length === 0 ? "✓ 100% Patch 9.04 Verified" : "Revalidation needed"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── 2 Columns: Indexation Tiering & Stale Content Review Queue ── */}
           <div className="grid gap-8 lg:grid-cols-2">
             
             {/* Indexation Hierarchy */}
@@ -141,30 +183,41 @@ export default function AdminHealthPage() {
               </div>
             </div>
 
-            {/* Stale Content & Patch Impact Scanner */}
+            {/* Actionable Content Review Queue */}
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-5">
               <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
                 <div className="flex items-center gap-2">
                   <RefreshCw className="h-4 w-4 text-primary" />
-                  <h3 className="font-display font-black text-xl uppercase text-white">Patch Impact & Content Freshness</h3>
+                  <h3 className="font-display font-black text-xl uppercase text-white">Actionable Review Queue (Patch 9.04)</h3>
                 </div>
-                <span className="font-mono text-xs text-primary font-bold">Patch 9.04 Impact</span>
+                <span className="font-mono text-xs text-primary font-bold">Automated Routing</span>
               </div>
 
-              <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1">
+              <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
                 {staleList.slice(0, 5).map(item => (
-                  <div key={item.entityId} className="p-2.5 bg-[#08111A] border border-[rgba(236,232,225,0.04)] flex justify-between items-center">
-                    <div>
-                      <span className="font-mono text-xs uppercase font-bold text-white block">{item.entityId}</span>
-                      <span className="font-mono text-[9px] text-muted">{item.staleCount} guides/comparisons linked</span>
+                  <div key={item.entityId} className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.04)] space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-mono text-xs uppercase font-bold text-white">{item.entityId}</span>
+                      <span className={`font-mono text-[9px] uppercase px-2 py-0.5 border font-bold ${
+                        item.status === "CRITICAL_UPDATE_REQUIRED"
+                          ? "border-primary/40 bg-primary/10 text-primary"
+                          : "border-[rgba(236,232,225,0.1)] text-muted"
+                      }`}>
+                        {item.status}
+                      </span>
                     </div>
-                    <span className={`font-mono text-[9px] uppercase px-2 py-0.5 border font-bold ${
-                      item.status === "CRITICAL_UPDATE_REQUIRED"
-                        ? "border-primary/40 bg-primary/10 text-primary"
-                        : "border-[rgba(236,232,225,0.1)] text-muted"
-                    }`}>
-                      {item.status}
-                    </span>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {item.affectedUrls?.slice(0, 4).map((url: string) => (
+                        <Link
+                          key={url}
+                          href={url}
+                          className="font-mono text-[9px] text-muted hover:text-white px-2 py-0.5 bg-[#0B141A] border border-[rgba(236,232,225,0.06)] transition-colors"
+                        >
+                          {url} →
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>

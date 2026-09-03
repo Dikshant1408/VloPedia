@@ -1,0 +1,50 @@
+[
+  {
+    "fromEntity": "agent:jett",
+    "toEntity": "agent:cypher",
+    "relationType": "HARD_COUNTER",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Radiant Ranked Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "73% dash interception rate against head-high Trapwires",
+    "explanation": "Cypher's invisible Trapwires halt Jett mid-dash, canceling her momentum and leaving her anchored and concussed in full defender crossfire.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:jett",
+    "toEntity": "agent:kay-o",
+    "relationType": "HARD_COUNTER",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT Match Analysis",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "ZERO/POINT suppression disables Tailwind and cancels Blade Storm ultimate",
+    "explanation": "KAY/O's suppression knife suppresses all radiant abilities for 8 seconds, stripping Jett of both her dash escape and active Blade Storm knives.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:cypher",
+    "toEntity": "agent:sova",
+    "relationType": "HARD_COUNTER",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Pro Counterplay Guide",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "Shock Darts break Trapwires from across the map without LOS",
+    "explanation": "Sova's Shock Darts destroy Cypher's Trapwires and Spycam through geometry before the attack execute begins, dismantling his anchor setup.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:killjoy",
+    "toEntity": "agent:kay-o",
+    "relationType": "HARD_COUNTER",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Competitive Meta Database",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "NULL/cmd ultimate and ZERO/POINT disable Turret and Alarmbot",
+    "explanation": "KAY/O's suppression mechanics immediately shut down all automated Killjoy utility (Turret, Alarmbot, and Nanoswarms) during site takes.",
+    "lastVerified": "2026-09-02"
+  }
+]

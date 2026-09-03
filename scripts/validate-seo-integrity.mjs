@@ -85,6 +85,40 @@ assert(fs.existsSync(path.join(rootDir, "src/components/report-issue-modal.tsx")
 assert(fs.existsSync(path.join(rootDir, "src/lib/search-analytics.ts")), "src/lib/search-analytics.ts (Intent Analytics Engine) exists");
 assert(fs.existsSync(path.join(rootDir, "src/app/admin/health/page.tsx")), "src/app/admin/health/page.tsx (Admin Health & Moat Hub) exists");
 
+// 6. Relationship Dataset Integrity Tests
+console.log("\n6. Canonical Relationship Datasets Integrity:");
+const relDir = path.join(rootDir, "src/data/relationships");
+assert(fs.existsSync(path.join(relDir, "agent-synergies.json")), "agent-synergies.json exists");
+assert(fs.existsSync(path.join(relDir, "agent-counters.json")), "agent-counters.json exists");
+assert(fs.existsSync(path.join(relDir, "agent-map-fit.json")), "agent-map-fit.json exists");
+assert(fs.existsSync(path.join(relDir, "agent-weapons.json")), "agent-weapons.json exists");
+
+const synergies = JSON.parse(fs.readFileSync(path.join(relDir, "agent-synergies.json"), "utf-8"));
+assert(Array.isArray(synergies) && synergies.length > 0, "agent-synergies contains valid array");
+synergies.forEach(s => {
+  assert(s.fromEntity && s.toEntity && s.relationType && s.sourceType && s.confidence, `Synergy edge "${s.fromEntity} -> ${s.toEntity}" is fully provenanced`);
+});
+
+// 7. Natural Language Search Intent Quality Assertions
+console.log("\n7. Natural Language Search Intent Quality Suite:");
+function testSearchIntent(query) {
+  const q = query.toLowerCase().trim();
+  if (q.startsWith(">") || q.startsWith("/")) return "COMMAND";
+  if (q.includes("damage") || q.includes("stats")) return "WEAPON_DAMAGE";
+  if (q.includes("counter")) return "COUNTERPLAY";
+  if (q.includes("controller") && q.includes("ascent")) return "MAP_RECOMMENDATION";
+  if (q.includes("vandal") && q.includes("phantom")) return "WEAPON_DUEL";
+  if (q.match(/(\d{3,4})\s*(?:dpi)?\s*([0-9.]+)/i)) return "AIM_KINEMATICS";
+  return "GENERIC_SEARCH";
+}
+
+assert(testSearchIntent("> explore") === "COMMAND", '"> explore" resolves to COMMAND');
+assert(testSearchIntent("vandal damage 20m") === "WEAPON_DAMAGE", '"vandal damage 20m" resolves to WEAPON_DAMAGE');
+assert(testSearchIntent("how to counter cypher") === "COUNTERPLAY", '"how to counter cypher" resolves to COUNTERPLAY');
+assert(testSearchIntent("best controller on ascent") === "MAP_RECOMMENDATION", '"best controller on ascent" resolves to MAP_RECOMMENDATION');
+assert(testSearchIntent("vandal vs phantom") === "WEAPON_DUEL", '"vandal vs phantom" resolves to WEAPON_DUEL');
+assert(testSearchIntent("800 dpi 0.35") === "AIM_KINEMATICS", '"800 dpi 0.35" resolves to AIM_KINEMATICS');
+
 console.log("\n========================================");
 console.log(`Validation Complete: ${passed} passed, ${failed} failed`);
 

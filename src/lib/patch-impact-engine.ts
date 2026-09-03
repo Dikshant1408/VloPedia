@@ -4,6 +4,7 @@ import guidesDb from "@/data/guides-database.json";
 export interface PatchImpactResult {
   entityId: string;
   patchVersion: string;
+  affectedUrls: string[];
   affectedRelationships: Array<{
     targetEntity: string;
     relationType: string;
@@ -29,6 +30,14 @@ export class PatchImpactEngine {
   public static evaluateImpact(entityId: string, currentPatch: string = "9.04"): PatchImpactResult {
     const entity = KnowledgeGraphService.getEntityById(entityId);
     const slug = entity?.slug || entityId.split(":")[1] || entityId;
+    const type = entity?.type || (entityId.startsWith("agent:") ? "AGENT" : entityId.startsWith("weapon:") ? "WEAPON" : "MAP");
+
+    const affectedUrls: string[] = [];
+
+    // Core entity URL
+    if (type === "AGENT") affectedUrls.push(`/agents/${slug}`);
+    else if (type === "WEAPON") affectedUrls.push(`/weapons/${slug}`);
+    else if (type === "MAP") affectedUrls.push(`/maps/${slug}`);
 
     // 1. Relationships affected
     const relationships = KnowledgeGraphService.getRelationshipsForEntity(entityId);
@@ -54,6 +63,7 @@ export class PatchImpactEngine {
           title: guide.title,
           reason: `Guide references ${slug} tactics or kinematics`
         });
+        affectedUrls.push(`/guides/${guide.slug}`);
       }
     }
 
@@ -65,6 +75,7 @@ export class PatchImpactEngine {
         slug: "vandal-vs-phantom",
         title: "Vandal vs. Phantom Ballistics Comparison"
       });
+      affectedUrls.push(`/compare/weapons/vandal-vs-phantom`);
     }
     if (slug === "jett" || slug === "raze") {
       affectedComparisons.push({
@@ -72,6 +83,7 @@ export class PatchImpactEngine {
         slug: "jett-vs-raze",
         title: "Jett vs. Raze Entry Duelist Comparison"
       });
+      affectedUrls.push(`/compare/agents/jett-vs-raze`);
     }
     if (slug === "omen" || slug === "clove") {
       affectedComparisons.push({
@@ -79,7 +91,15 @@ export class PatchImpactEngine {
         slug: "omen-vs-clove",
         title: "Omen vs. Clove Controller Comparison"
       });
+      affectedUrls.push(`/compare/agents/omen-vs-clove`);
     }
+
+    // Best-for landing pages affected
+    if (slug === "ascent") {
+      affectedUrls.push(`/best/agents-on-ascent`);
+    }
+
+    const uniqueUrls = Array.from(new Set(affectedUrls));
 
     const reviewStatus: PatchImpactResult["reviewStatus"] = 
       affectedGuides.length > 2 || affectedRelationships.length > 2
@@ -91,6 +111,7 @@ export class PatchImpactEngine {
     return {
       entityId,
       patchVersion: currentPatch,
+      affectedUrls: uniqueUrls,
       affectedRelationships,
       affectedGuides,
       affectedComparisons,
@@ -101,13 +122,14 @@ export class PatchImpactEngine {
   /**
    * Runs automated scan over all entities to discover decaying content
    */
-  public static scanStaleContent(): Array<{ entityId: string; staleCount: number; status: string }> {
+  public static scanStaleContent(): Array<{ entityId: string; affectedUrls: string[]; staleCount: number; status: string }> {
     const entities = KnowledgeGraphService.getAllEntities();
     return entities.map(e => {
       const impact = this.evaluateImpact(e.id, e.patchVersion);
       return {
         entityId: e.id,
-        staleCount: impact.affectedGuides.length + impact.affectedComparisons.length,
+        affectedUrls: impact.affectedUrls,
+        staleCount: impact.affectedUrls.length,
         status: impact.reviewStatus
       };
     });

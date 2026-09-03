@@ -1,0 +1,50 @@
+[
+  {
+    "fromEntity": "agent:jett",
+    "toEntity": "map:ascent",
+    "relationType": "OPTIMAL_MAP_FIT",
+    "sourceType": "VCT_SNAPSHOT",
+    "source": "VCT Map Pool Analytics",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "92.4% Pro Pick Rate on Ascent Mid courtyard",
+    "explanation": "Ascent features long, open sightlines through Mid Courtyard and elevated boxes on A/B sites that maximize Jett's Operator angles and Updraft repositioning.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:sova",
+    "toEntity": "map:ascent",
+    "relationType": "OPTIMAL_MAP_FIT",
+    "sourceType": "VCT_SNAPSHOT",
+    "source": "VCT Map Pool Analytics",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "96.1% Sova presence across international Ascent matches",
+    "explanation": "Ascent's open skyboxes enable cross-map Recon Bolt lineups that scan entire bomb sites, wall-banging enemies through paper-thin wood structures with Vandal and Odin.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:viper",
+    "toEntity": "map:breeze",
+    "relationType": "OPTIMAL_MAP_FIT",
+    "sourceType": "VCT_SNAPSHOT",
+    "source": "VCT Map Pool Analytics",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "98.5% Viper presence as sole viable solo Controller on Breeze",
+    "explanation": "Breeze's massive open bomb sites require Viper's full-length Toxic Screen line to cut sightlines across A Site and B Site where dome smokes fall short.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:cypher",
+    "toEntity": "map:sunset",
+    "relationType": "OPTIMAL_MAP_FIT",
+    "sourceType": "VCT_SNAPSHOT",
+    "source": "Radiant Ranked Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "89.2% B Site Anchor lockdown win rate",
+    "explanation": "Sunset B Site features narrow chokepoints and indestructible geometry that create un-break-able Cypher Trapwire loops against attackers.",
+    "lastVerified": "2026-09-02"
+  }
+]

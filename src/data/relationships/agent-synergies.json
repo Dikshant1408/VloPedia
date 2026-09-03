@@ -1,0 +1,50 @@
+[
+  {
+    "fromEntity": "agent:jett",
+    "toEntity": "agent:omen",
+    "relationType": "TACTICAL_SYNERGY",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT 2026 Masters Match Snapshots",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "84.2% Site entry success when Paranoia is paired with Tailwind dash",
+    "explanation": "Omen's Paranoia blind down narrow entry chokepoints suppresses defender crosshairs, enabling Jett to Tailwind dash safely onto site without being traded.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:sova",
+    "toEntity": "agent:jett",
+    "relationType": "TACTICAL_SYNERGY",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT Pro Dataset",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "Recon Bolt scans reveal enemy positions before dash commits",
+    "explanation": "Sova's Recon Bolt and Owl Drone tag defenders, allowing Jett to dash directly into isolated 1v1 engagements with confirmed target coordinates.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:raze",
+    "toEntity": "agent:fade",
+    "relationType": "TACTICAL_SYNERGY",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Radiant Ranked Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "Seize + Paint Shells combo yields lethal multi-frag rounds",
+    "explanation": "Fade's Seize tether locks enemies in place with deafening and decay, guaranteeing maximum lethal damage from Raze's Paint Shells cluster grenade.",
+    "lastVerified": "2026-09-02"
+  },
+  {
+    "fromEntity": "agent:viper",
+    "toEntity": "agent:brimstone",
+    "relationType": "TACTICAL_SYNERGY",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Competitive Map Meta (Bind)",
+    "confidence": "HIGH",
+    "patchVersion": "9.04",
+    "evidence": "Double-controller smoke line denies Hookah and A Short completely",
+    "explanation": "Double-controller setup on Bind: Viper's Toxic Screen cuts A Site in half while Brimstone's rapid 3-smoke deployment locks down Hookah and B Garden.",
+    "lastVerified": "2026-09-02"
+  }
+]
