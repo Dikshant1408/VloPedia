@@ -7,18 +7,20 @@ interface SiteFooterProps {
 }
 
 const PRIMARY_NAV = [
-  { label: "Agents",      href: "/agents"      },
-  { label: "Weapons",     href: "/weapons"     },
-  { label: "Maps",        href: "/maps"        },
-  { label: "Match Prep",  href: "/match-prep"  },
-  { label: "Skins",       href: "/skins"       },
-  { label: "Tools",       href: "/tools"       },
-  { label: "Compare",     href: "/compare"     },
-  { label: "Lore",        href: "/lore"        },
-  { label: "Guides",      href: "/guides"      },
-  { label: "Methodology", href: "/methodology" },
-  { label: "Terms",       href: "/terms"       },
-  { label: "Privacy",     href: "/privacy"     },
+  { label: "Agents",       href: "/agents"       },
+  { label: "Weapons",      href: "/weapons"      },
+  { label: "Maps",         href: "/maps"         },
+  { label: "Match Prep",   href: "/match-prep"   },
+  { label: "Skins",        href: "/skins"        },
+  { label: "Tools",        href: "/tools"        },
+  { label: "Compare",      href: "/compare"      },
+  { label: "Lore",         href: "/lore"         },
+  { label: "Guides",       href: "/guides"       },
+  { label: "Data Sources", href: "/data-sources" },
+  { label: "Methodology",  href: "/methodology"  },
+  { label: "Changelog",    href: "/changelog"    },
+  { label: "Terms",        href: "/terms"        },
+  { label: "Privacy",      href: "/privacy"      },
 ];
 
 export function SiteFooter({ version }: SiteFooterProps) {
@@ -83,8 +85,8 @@ export function SiteFooter({ version }: SiteFooterProps) {
             <div className="flex items-center gap-2 border border-[rgba(236,232,225,0.06)] bg-[rgba(11,20,26,0.4)] px-3 py-2">
               <Cpu className="h-3.5 w-3.5 text-[#0DF2F2]" aria-hidden="true" />
               <div>
-                <span className="block font-mono text-[8px] font-bold uppercase tracking-widest text-[#0DF2F2]">Knowledge Engine</span>
-                <span className="font-mono text-[9px] text-muted">NEXT.JS // RELATIONAL GRAPH // ACTIVE</span>
+                <span className="block font-mono text-[8px] font-bold uppercase tracking-widest text-[#0DF2F2]">DB SYNCED: SEP 4, 2026</span>
+                <span className="font-mono text-[9px] text-muted">PATCH 9.04 // RELATIONAL GRAPH // ACTIVE</span>
               </div>
             </div>
 

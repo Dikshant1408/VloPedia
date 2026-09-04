@@ -8,7 +8,8 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { 
   Zap, Shield, Target, Users, Share2, ArrowRight, 
   Copy, CheckCircle, Crosshair, AlertTriangle, Sparkles, 
-  Play, RotateCcw, Plus, Minus, DollarSign, Save 
+  Play, RotateCcw, Plus, Minus, DollarSign, Save, 
+  BarChart2, Award, TrendingUp, HelpCircle 
 } from "lucide-react";
 import { toast } from "sonner";
 import { getAgentKnowledgeNode } from "@/lib/knowledge-graph";
@@ -30,18 +31,46 @@ const MAP_COMPS: Record<string, { comp: string[]; synergy: number; desc: string 
   Fracture: { comp: ["Raze", "Brimstone", "Breach", "Fade", "Killjoy"], synergy: 90, desc: "Pincer attacks from both spawns with rolling Breach fault lines." },
 };
 
+export interface CompletedMatchLog {
+  id: string;
+  date: string;
+  map: string;
+  agent: string;
+  result: "VICTORY" | "DEFEAT";
+  myScore: number;
+  enemyScore: number;
+  adr: number;
+  kills: number;
+  deaths: number;
+  firstKills: number;
+  firstDeaths: number;
+  clutches: number;
+  strengths: string[];
+  problems: string[];
+  recommendation: string;
+}
+
 export default function MatchPrepPage() {
   const [selectedMap, setSelectedMap] = useState("Ascent");
   const [selectedSide, setSelectedSide] = useState<"Attack" | "Defense">("Attack");
   const [selectedAgent, setSelectedAgent] = useState("Jett");
   
   // Live Match State Session
-  const [isLiveSession, setIsLiveSession] = useState(false);
   const [currentRound, setCurrentRound] = useState(1);
   const [myScore, setMyScore] = useState(0);
   const [enemyScore, setEnemyScore] = useState(0);
   const [credits, setCredits] = useState(800);
   const [lossStreak, setLossStreak] = useState(0);
+
+  // Post-Match Review Form State
+  const [postAdr, setPostAdr] = useState(164);
+  const [postKills, setPostKills] = useState(21);
+  const [postDeaths, setPostDeaths] = useState(14);
+  const [postFk, setPostFk] = useState(5);
+  const [postFd, setPostFd] = useState(3);
+  const [postClutches, setPostClutches] = useState(1);
+  const [postResult, setPostResult] = useState<"VICTORY" | "DEFEAT">("VICTORY");
+  const [postAnalysis, setPostAnalysis] = useState<CompletedMatchLog | null>(null);
 
   // Load session from localStorage
   useEffect(() => {
@@ -53,6 +82,8 @@ export default function MatchPrepPage() {
         if (data.side) setSelectedSide(data.side);
         if (data.agent) setSelectedAgent(data.agent);
         if (data.round) setCurrentRound(data.round);
+        if (data.myScore !== undefined) setMyScore(data.myScore);
+        if (data.enemyScore !== undefined) setEnemyScore(data.enemyScore);
         if (data.credits) setCredits(data.credits);
         if (data.lossStreak !== undefined) setLossStreak(data.lossStreak);
       }
@@ -89,6 +120,89 @@ export default function MatchPrepPage() {
     toast.info(`Round ${currentRound} recorded (${won ? "VICTORY +$3,000" : `DEFEAT +$${bonus}`}). Next Round: $${newCredits} Credits.`);
   };
 
+  const generatePostMatchReview = () => {
+    const kdRatio = Number((postKills / Math.max(1, postDeaths)).toFixed(2));
+    const fkDifferential = postFk - postFd;
+
+    const strengths: string[] = [];
+    const problems: string[] = [];
+
+    // Strengths evaluation
+    if (postFk >= 4) {
+      strengths.push(`High opening impact (${postFk} First Bloods) created numbers advantages for team.`);
+    }
+    if (postAdr >= 150) {
+      strengths.push(`High combat efficiency (${postAdr} ADR) dealt consistent round-winning chip damage.`);
+    }
+    if (kdRatio >= 1.2) {
+      strengths.push(`Positive frag differential (${kdRatio} K/D) provided reliable trade security.`);
+    }
+    if (postClutches >= 1) {
+      strengths.push(`Clutch composure (${postClutches} clutch won) secured high-pressure rounds.`);
+    }
+    if (strengths.length === 0) {
+      strengths.push("Disciplined utility support and team spacing.");
+    }
+
+    // Problem evaluation
+    if (postFd >= 4) {
+      problems.push(`Over-aggressive first contact (${postFd} First Deaths) left teammates in 4v5 deficits.`);
+    }
+    if (postFk >= 3 && postResult === "DEFEAT") {
+      problems.push("Low conversion after opening kills (rounds lost despite securing the first blood).");
+    }
+    if (postAdr < 110) {
+      problems.push(`Low combat contribution (${postAdr} ADR) resulted in insufficient site pressure.`);
+    }
+    if (kdRatio < 0.85) {
+      problems.push(`Negative engagement trades (${kdRatio} K/D) caused fast defensive collapses.`);
+    }
+    if (problems.length === 0) {
+      problems.push("Minor late-round communication gaps on rotations.");
+    }
+
+    // Recommendation
+    let recommendation = "Maintain crosshair discipline and anchor bomb sites with utility safety.";
+    if (postFd >= 4) {
+      recommendation = `On ${selectedMap}, avoid dry peeking main chokepoints without flash or recon support. Wait for initiator util.`;
+    } else if (postFk >= 3 && postResult === "DEFEAT") {
+      recommendation = "After finding the first blood, immediately consolidate crossfires with teammates rather than pushing for multi-kills.";
+    } else if (postAdr >= 150) {
+      recommendation = `Continue setting the offensive tempo on ${selectedAgent}. Coordinate site executes with smoke timing.`;
+    }
+
+    const log: CompletedMatchLog = {
+      id: `match-${Date.now()}`,
+      date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      map: selectedMap,
+      agent: selectedAgent,
+      result: postResult,
+      myScore: postResult === "VICTORY" ? Math.max(13, myScore) : Math.min(11, myScore),
+      enemyScore: postResult === "VICTORY" ? Math.min(11, enemyScore) : Math.max(13, enemyScore),
+      adr: postAdr,
+      kills: postKills,
+      deaths: postDeaths,
+      firstKills: postFk,
+      firstDeaths: postFd,
+      clutches: postClutches,
+      strengths,
+      problems,
+      recommendation
+    };
+
+    setPostAnalysis(log);
+
+    // Persist to match history for My VALORANT
+    try {
+      const historyRaw = localStorage.getItem("vlopedia_match_history");
+      const historyList: CompletedMatchLog[] = historyRaw ? JSON.parse(historyRaw) : [];
+      historyList.unshift(log);
+      if (historyList.length > 30) historyList.pop();
+      localStorage.setItem("vlopedia_match_history", JSON.stringify(historyList));
+      toast.success("Post-match review generated and saved to your personal match history!");
+    } catch (e) {}
+  };
+
   const knowledgeNode = getAgentKnowledgeNode(selectedAgent);
   const mapComp = MAP_COMPS[selectedMap] || MAP_COMPS.Ascent;
 
@@ -108,11 +222,11 @@ export default function MatchPrepPage() {
 
   const breadcrumbItems = [
     { label: "Tools", href: "/tools" },
-    { label: "Match Prep Companion" }
+    { label: "Match Command Companion" }
   ];
 
   const copyBriefing = () => {
-    const text = `[VLOPEDIA MATCH PREP // ${selectedMap.toUpperCase()} - ${selectedSide.toUpperCase()}]
+    const text = `[VLOPEDIA MATCH COMMAND // ${selectedMap.toUpperCase()} - ${selectedSide.toUpperCase()}]
 Agent: ${selectedAgent} | Round: ${currentRound} (${myScore}-${enemyScore}) | Credits: $${credits}
 Call: ${ecoCall}
 Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
@@ -132,14 +246,14 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
               <div className="flex items-center gap-3">
                 <span className="h-[2px] w-8 bg-primary" />
                 <span className="font-mono text-xs uppercase tracking-[0.3em] text-primary font-bold">
-                  PRE-MATCH & LIVE ROUND COMPANION
+                  VLOPEDIA MATCH COMMAND // 5-STAGE LOOP
                 </span>
               </div>
               <h1 className="font-display font-black text-4xl uppercase tracking-tight text-white sm:text-5xl">
-                MATCH PREP & LIVE SESSION
+                MATCH COMMAND & POST-REVIEW
               </h1>
               <p className="font-sans text-sm text-secondary max-w-2xl leading-relaxed">
-                Generate dynamic map-opening strategies, team comp synergies, and live per-round economy directives during active competitive matches.
+                Full tactical lifecycle: Match Setup $\to$ Opening Prep $\to$ Live Round Tracking $\to$ Economy Directives $\to$ Post-Match Diagnostics.
               </p>
             </div>
 
@@ -162,7 +276,7 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
             </div>
           </div>
 
-          {/* Configuration Selector Matrix */}
+          {/* ── STAGE 1: MATCH CONFIGURATION ── */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             
             {/* Map */}
@@ -210,29 +324,27 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
               </select>
             </div>
 
-            {/* Live Round Toggle / Credits */}
+            {/* Live Credits */}
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal space-y-2">
               <label className="block font-mono text-[10px] uppercase text-primary font-bold">04 // LIVE CREDITS</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  step="100"
-                  value={credits}
-                  onChange={(e) => setCredits(Number(e.target.value) || 0)}
-                  className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 font-mono text-sm text-white focus:border-primary focus:outline-none font-bold"
-                />
-              </div>
+              <input
+                type="number"
+                step="100"
+                value={credits}
+                onChange={(e) => setCredits(Number(e.target.value) || 0)}
+                className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 font-mono text-sm text-white focus:border-primary focus:outline-none font-bold"
+              />
             </div>
 
           </div>
 
-          {/* ── LIVE MATCH ASSISTANT BAR ── */}
+          {/* ── STAGES 2 & 3: LIVE ROUND TRACKER & ASSIST ── */}
           <div className="border border-[#0DF2F2]/40 bg-gradient-to-r from-[#0DF2F2]/10 via-[#0D1A22] to-[#0D1A22] p-6 clip-diagonal space-y-4 shadow-xl">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
               <div className="flex items-center gap-3">
                 <Sparkles className="h-5 w-5 text-[#0DF2F2]" />
                 <div>
-                  <span className="font-mono text-[10px] uppercase text-[#0DF2F2] font-bold block">LIVE ROUND TRACKER</span>
+                  <span className="font-mono text-[10px] uppercase text-[#0DF2F2] font-bold block">LIVE ROUND ASSIST</span>
                   <h3 className="font-display font-black text-xl uppercase text-white">
                     ROUND {currentRound} · SCORE: {myScore} – {enemyScore}
                   </h3>
@@ -278,7 +390,7 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
             </div>
           </div>
 
-          {/* ── Generated Tactical Directive ── */}
+          {/* ── STAGE 4: TACTICAL BLUEPRINT ── */}
           <div className="grid gap-8 lg:grid-cols-3">
             
             {/* Left 2 Columns: Round Tactical Blueprint */}
@@ -289,7 +401,7 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
                   <div className="flex items-center gap-3">
                     <Zap className="h-5 w-5 text-primary" />
                     <h2 className="font-display font-black text-2xl uppercase text-white">
-                      ROUND GAMEPLAN // {selectedAgent.toUpperCase()} ON {selectedMap.toUpperCase()} ({selectedSide.toUpperCase()})
+                      OPENING GAMEPLAN // {selectedAgent.toUpperCase()} ON {selectedMap.toUpperCase()} ({selectedSide.toUpperCase()})
                     </h2>
                   </div>
                   <span className="font-mono text-xs text-primary font-bold">
@@ -348,14 +460,165 @@ Recommended Comp: ${mapComp.comp.join(" / ")} (${mapComp.synergy}% Synergy)`;
               <p className="font-sans text-xs text-secondary leading-relaxed border-t border-[rgba(236,232,225,0.06)] pt-3">
                 {mapComp.desc}
               </p>
-
-              <Link
-                href={`/comp-builder?map=${selectedMap.toLowerCase()}&agents=${mapComp.comp.map(a => a.toLowerCase()).join(",")}`}
-                className="w-full block text-center font-mono text-xs uppercase py-2 border border-[#0DF2F2]/40 bg-[#0DF2F2]/10 text-[#0DF2F2] font-bold hover:bg-[#0DF2F2]/20 transition-colors"
-              >
-                Customize Full 5-Stack Comp →
-              </Link>
             </div>
+
+          </div>
+
+          {/* ── STAGE 5: POST-MATCH TACTICAL REVIEW & DIAGNOSTICS ── */}
+          <div className="border border-primary/40 bg-[#0D1A22] p-6 sm:p-8 clip-diagonal space-y-6 shadow-2xl">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
+              <div className="flex items-center gap-3">
+                <Award className="h-6 w-6 text-primary" />
+                <div>
+                  <span className="font-mono text-[10px] uppercase text-primary font-bold block">STAGE 05 // POST-MATCH DEBRIEF</span>
+                  <h2 className="font-display font-black text-2xl uppercase text-white">
+                    POST-MATCH REVIEW & PERFORMANCE DIAGNOSTICS
+                  </h2>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={generatePostMatchReview}
+                className="font-mono text-xs uppercase px-4 py-2 border border-primary bg-primary text-black font-black hover:bg-primary-hover transition-colors flex items-center gap-2"
+              >
+                <BarChart2 className="h-4 w-4" />
+                <span>Run Tactical Debrief</span>
+              </button>
+            </div>
+
+            {/* Input Form */}
+            <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-6 font-mono text-xs">
+              <div>
+                <label className="block text-[10px] uppercase text-muted mb-1">Result</label>
+                <select
+                  value={postResult}
+                  onChange={(e) => setPostResult(e.target.value as "VICTORY" | "DEFEAT")}
+                  className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 text-white font-bold"
+                >
+                  <option value="VICTORY">VICTORY</option>
+                  <option value="DEFEAT">DEFEAT</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase text-muted mb-1">ADR (Damage/Rnd)</label>
+                <input
+                  type="number"
+                  value={postAdr}
+                  onChange={(e) => setPostAdr(Number(e.target.value) || 0)}
+                  className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 text-white font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase text-muted mb-1">Kills / Deaths</label>
+                <div className="grid grid-cols-2 gap-1">
+                  <input
+                    type="number"
+                    value={postKills}
+                    onChange={(e) => setPostKills(Number(e.target.value) || 0)}
+                    placeholder="K"
+                    className="bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-2 py-2 text-white font-bold text-center"
+                  />
+                  <input
+                    type="number"
+                    value={postDeaths}
+                    onChange={(e) => setPostDeaths(Number(e.target.value) || 0)}
+                    placeholder="D"
+                    className="bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-2 py-2 text-white font-bold text-center"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase text-muted mb-1">First Kills (FK)</label>
+                <input
+                  type="number"
+                  value={postFk}
+                  onChange={(e) => setPostFk(Number(e.target.value) || 0)}
+                  className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 text-white font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase text-muted mb-1">First Deaths (FD)</label>
+                <input
+                  type="number"
+                  value={postFd}
+                  onChange={(e) => setPostFd(Number(e.target.value) || 0)}
+                  className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 text-white font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase text-muted mb-1">Clutches Won</label>
+                <input
+                  type="number"
+                  value={postClutches}
+                  onChange={(e) => setPostClutches(Number(e.target.value) || 0)}
+                  className="w-full bg-[#08111A] border border-[rgba(236,232,225,0.15)] px-3 py-2 text-white font-bold"
+                />
+              </div>
+            </div>
+
+            {/* Generated Diagnostic Results */}
+            {postAnalysis && (
+              <div className="pt-4 border-t border-[rgba(236,232,225,0.08)] space-y-4">
+                <div className="grid gap-4 md:grid-cols-3">
+                  
+                  {/* Strengths */}
+                  <div className="p-4 bg-[#08111A] border border-emerald-500/30 clip-diagonal space-y-2">
+                    <span className="font-mono text-[10px] uppercase text-emerald-400 font-bold flex items-center gap-1.5">
+                      <CheckCircle className="h-3.5 w-3.5" />
+                      <span>Identified Strengths</span>
+                    </span>
+                    <ul className="space-y-1 font-sans text-xs text-secondary">
+                      {postAnalysis.strengths.map((s, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-emerald-400 font-bold">•</span>
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Leaks / Problems */}
+                  <div className="p-4 bg-[#08111A] border border-error/30 clip-diagonal space-y-2">
+                    <span className="font-mono text-[10px] uppercase text-error font-bold flex items-center gap-1.5">
+                      <AlertTriangle className="h-3.5 w-3.5" />
+                      <span>Tactical Leaks & Problems</span>
+                    </span>
+                    <ul className="space-y-1 font-sans text-xs text-secondary">
+                      {postAnalysis.problems.map((p, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-error font-bold">•</span>
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Recommendations */}
+                  <div className="p-4 bg-[#08111A] border border-[#0DF2F2]/30 clip-diagonal space-y-2">
+                    <span className="font-mono text-[10px] uppercase text-[#0DF2F2] font-bold flex items-center gap-1.5">
+                      <TrendingUp className="h-3.5 w-3.5" />
+                      <span>Next Match Focus</span>
+                    </span>
+                    <p className="font-sans text-xs text-white leading-relaxed">
+                      {postAnalysis.recommendation}
+                    </p>
+                  </div>
+
+                </div>
+
+                <div className="flex items-center justify-between font-mono text-xs text-muted pt-2">
+                  <span>Logged to personal improvement history ({postAnalysis.kills}K / {postAnalysis.deaths}D · {postAnalysis.adr} ADR)</span>
+                  <Link href="/profile" className="text-primary hover:underline">
+                    View Trend in My VALORANT →
+                  </Link>
+                </div>
+              </div>
+            )}
 
           </div>
 

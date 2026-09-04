@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --check .",
+    "validate:seo": "node scripts/validate-seo-integrity.mjs",
     "prisma:generate": "prisma generate",
     "postinstall": "prisma generate"
   },

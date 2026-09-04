@@ -12,6 +12,7 @@ import { slugify } from "@/lib/utils";
 import loreData from "@/data/lore-database.json";
 import guidesData from "@/data/guides-database.json";
 import { AnswerBox } from "@/components/answer-box";
+import { logSearchEvent } from "@/lib/search-analytics";
 
 type ResultType = "AGENT" | "WEAPON" | "MAP" | "SKIN" | "BUNDLE" | "PATCH" | "LORE" | "GUIDE" | "TOOL" | "COMPARE";
 
@@ -333,6 +334,18 @@ function SearchInner() {
       return matchTitle || matchDesc || matchMeta;
     });
   }, [debouncedQ, allItems, activeFilter]);
+
+  // Telemetry log for searches
+  useEffect(() => {
+    if (debouncedQ.trim()) {
+      logSearchEvent({
+        query: debouncedQ.trim(),
+        resultCount: filtered.length,
+        category: activeFilter,
+        intent: naturalLanguageIntent ? "NATURAL_LANGUAGE_ANSWER" : "KEYWORD"
+      });
+    }
+  }, [debouncedQ, filtered.length, activeFilter, naturalLanguageIntent]);
 
   return (
     <PageTransition>
