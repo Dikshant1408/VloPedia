@@ -20,6 +20,14 @@ import { valorantDb } from "@/lib/valorant-db";
 import { CONTENT_TIER_MAP, DEFAULT_TIER } from "@/lib/valorant-types";
 import type { ValorantAgent, ValorantBundle, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 const TRENDING = ["Jett", "Vandal", "Reaver", "Ascent", "Omen", "Operator"];
 
 const QUICK_LINKS = [
@@ -444,7 +452,7 @@ export function HomepageClient() {
                     >
                       <Heart className="h-4 w-4" aria-hidden="true" /> Add to Wishlist
                     </Button>
-                    <Link href={`/skins/${randomSkin.uuid}`}>
+                    <Link href={`/skins/${slugify(randomSkin.displayName) || randomSkin.uuid}`}>
                       <Button variant="outline" className="clip-diagonal-sm border-[rgba(236,232,225,0.15)] group gap-2">
                         Inspect Skin <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                       </Button>

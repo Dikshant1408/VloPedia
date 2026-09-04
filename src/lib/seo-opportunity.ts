@@ -2,19 +2,21 @@
  * VloPedia — Google Search Console & SEO Opportunity Scoring Engine
  * 
  * Computes high-yield SEO opportunities by combining search impressions,
- * position ranking potential (pages on striking distance 8-20), content gap, and CTR potential.
+ * position ranking potential (pages on striking distance 4-20), content gap, and CTR potential.
  */
 
 export interface PageSearchMetric {
   url: string;
   title: string;
-  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Guides" | "Lore" | "Compare" | "Tools";
+  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Guides" | "Lore" | "Compare" | "Tools" | "Collections";
   impressions: number;
   clicks: number;
   ctr: number; // e.g., 0.034 for 3.4%
-  position: number; // e.g., 12.4
+  position: number; // e.g., 8.93
   isIndexed: boolean;
   contentGapScore: number; // 0.1 (complete) to 1.0 (major gap)
+  primaryQuery?: string;
+  isAlmostRanking?: boolean;
 }
 
 export interface OpportunityScoreResult extends PageSearchMetric {
@@ -22,6 +24,20 @@ export interface OpportunityScoreResult extends PageSearchMetric {
   rankingPotential: number;
   clickPotential: number;
   opportunityLevel: "CRITICAL" | "HIGH" | "MEDIUM" | "STABLE";
+  recommendedAction: string;
+  estimatedClickGain: number;
+}
+
+export interface AlmostRankingOpportunity {
+  query: string;
+  url: string;
+  title: string;
+  category: string;
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  position: number;
+  potentialClicksAt5Pct: number;
   recommendedAction: string;
 }
 
@@ -36,8 +52,101 @@ export interface VerticalIndexPerformance {
   clicksPerIndexedPage: number;
 }
 
-// Production GSC Telemetry Baseline Snapshot (Real-world aligned)
+export interface DeviceSearchPerformance {
+  device: "Mobile" | "Desktop" | "Tablet";
+  impressions: number;
+  avgPosition: number;
+  clicks: number;
+  ctr: number;
+}
+
+export interface CountrySearchPerformance {
+  country: string;
+  code: string;
+  impressions: number;
+  avgPosition: number;
+}
+
+// Production GSC Real Search Telemetry Snapshot
 export const GSC_TELEMETRY_SNAPSHOT: PageSearchMetric[] = [
+  {
+    url: "/skins/aemondir-vandal",
+    title: "Aemondir Vandal",
+    category: "Skins",
+    impressions: 104,
+    clicks: 0,
+    ctr: 0.0,
+    position: 8.93,
+    isIndexed: true,
+    contentGapScore: 0.85,
+    primaryQuery: "aemondir vandal",
+    isAlmostRanking: true,
+  },
+  {
+    url: "/skins/aeris-vandal",
+    title: "Aeris Vandal",
+    category: "Skins",
+    impressions: 46,
+    clicks: 0,
+    ctr: 0.0,
+    position: 8.87,
+    isIndexed: true,
+    contentGapScore: 0.85,
+    primaryQuery: "aeris vandal",
+    isAlmostRanking: true,
+  },
+  {
+    url: "/skins/minima-karambit",
+    title: "Minima Karambit",
+    category: "Skins",
+    impressions: 23,
+    clicks: 0,
+    ctr: 0.0,
+    position: 10.13,
+    isIndexed: true,
+    contentGapScore: 0.80,
+    primaryQuery: "minima karambit",
+    isAlmostRanking: true,
+  },
+  {
+    url: "/skins/montage-axe",
+    title: "Montage Axe",
+    category: "Skins",
+    impressions: 20,
+    clicks: 0,
+    ctr: 0.0,
+    position: 6.45,
+    isIndexed: true,
+    contentGapScore: 0.75,
+    primaryQuery: "montage axe",
+    isAlmostRanking: true,
+  },
+  {
+    url: "/skins/helix-phantom",
+    title: "Helix Phantom",
+    category: "Skins",
+    impressions: 18,
+    clicks: 0,
+    ctr: 0.0,
+    position: 9.50,
+    isIndexed: true,
+    contentGapScore: 0.80,
+    primaryQuery: "helix phantom",
+    isAlmostRanking: true,
+  },
+  {
+    url: "/skins/reaver-vandal",
+    title: "Reaver Vandal",
+    category: "Skins",
+    impressions: 71,
+    clicks: 1,
+    ctr: 0.014,
+    position: 9.28,
+    isIndexed: true,
+    contentGapScore: 0.70,
+    primaryQuery: "reaver vandal",
+    isAlmostRanking: true,
+  },
   {
     url: "/guides/how-to-counter-jett",
     title: "How to Counter Jett in VALORANT",
@@ -47,7 +156,7 @@ export const GSC_TELEMETRY_SNAPSHOT: PageSearchMetric[] = [
     ctr: 0.029,
     position: 13.8,
     isIndexed: true,
-    contentGapScore: 0.8
+    contentGapScore: 0.80,
   },
   {
     url: "/compare/weapons/vandal-vs-phantom",
@@ -58,7 +167,7 @@ export const GSC_TELEMETRY_SNAPSHOT: PageSearchMetric[] = [
     ctr: 0.045,
     position: 11.2,
     isIndexed: true,
-    contentGapScore: 0.7
+    contentGapScore: 0.70,
   },
   {
     url: "/agents/jett",
@@ -69,18 +178,7 @@ export const GSC_TELEMETRY_SNAPSHOT: PageSearchMetric[] = [
     ctr: 0.054,
     position: 9.6,
     isIndexed: true,
-    contentGapScore: 0.5
-  },
-  {
-    url: "/skins/reaver-vandal",
-    title: "Reaver Vandal Skin Showcase & Chromas",
-    category: "Skins",
-    impressions: 3200,
-    clicks: 48,
-    ctr: 0.015,
-    position: 18.4,
-    isIndexed: true,
-    contentGapScore: 0.9
+    contentGapScore: 0.50,
   },
   {
     url: "/agents/omen",
@@ -91,71 +189,32 @@ export const GSC_TELEMETRY_SNAPSHOT: PageSearchMetric[] = [
     ctr: 0.050,
     position: 10.1,
     isIndexed: true,
-    contentGapScore: 0.6
+    contentGapScore: 0.60,
   },
-  {
-    url: "/best/agents-on-ascent",
-    title: "Best Agents on Ascent Meta Tier List",
-    category: "Guides",
-    impressions: 2950,
-    clicks: 160,
-    ctr: 0.054,
-    position: 8.9,
-    isIndexed: true,
-    contentGapScore: 0.6
-  },
-  {
-    url: "/lore/first-light",
-    title: "What Happened During First Light? (Canon Lore)",
-    category: "Lore",
-    impressions: 1840,
-    clicks: 98,
-    ctr: 0.053,
-    position: 12.0,
-    isIndexed: true,
-    contentGapScore: 0.5
-  },
-  {
-    url: "/tools/round-assistant",
-    title: "Round Economy & Buy Calculator",
-    category: "Tools",
-    impressions: 1420,
-    clicks: 84,
-    ctr: 0.059,
-    position: 14.5,
-    isIndexed: true,
-    contentGapScore: 0.7
-  },
-  {
-    url: "/weapons/vandal",
-    title: "Vandal Weapon Damage & Recoil Profile",
-    category: "Weapons",
-    impressions: 5100,
-    clicks: 220,
-    ctr: 0.043,
-    position: 12.8,
-    isIndexed: true,
-    contentGapScore: 0.6
-  },
-  {
-    url: "/maps/ascent",
-    title: "Ascent Map Layout & Callouts",
-    category: "Maps",
-    impressions: 2400,
-    clicks: 110,
-    ctr: 0.046,
-    position: 15.2,
-    isIndexed: true,
-    contentGapScore: 0.7
-  }
+];
+
+export const DEVICE_PERFORMANCE: DeviceSearchPerformance[] = [
+  { device: "Mobile", impressions: 261, avgPosition: 8.18, clicks: 1, ctr: 0.0038 },
+  { device: "Desktop", impressions: 549, avgPosition: 31.12, clicks: 1, ctr: 0.0018 },
+  { device: "Tablet", impressions: 4, avgPosition: 12.50, clicks: 0, ctr: 0.0 },
+];
+
+export const COUNTRY_PERFORMANCE: CountrySearchPerformance[] = [
+  { country: "United States", code: "US", impressions: 127, avgPosition: 17.90 },
+  { country: "India", code: "IN", impressions: 123, avgPosition: 26.97 },
+  { country: "Philippines", code: "PH", impressions: 84, avgPosition: 14.20 },
+  { country: "Canada", code: "CA", impressions: 40, avgPosition: 10.75 },
+  { country: "United Kingdom", code: "GB", impressions: 29, avgPosition: 11.80 },
+  { country: "Germany", code: "DE", impressions: 28, avgPosition: 7.32 },
+  { country: "Australia", code: "AU", impressions: 28, avgPosition: 9.71 },
 ];
 
 export class SeoOpportunityEngine {
   /**
-   * Calculates ranking potential factor. Pages ranking in positions 8-20
+   * Calculates ranking potential factor. Pages ranking in positions 4-15
    * have the highest potential for massive traffic leaps if pushed to top 3.
    */
-  private static calculateRankingPotential(position: number): number {
+  public static calculateRankingPotential(position: number): number {
     if (position >= 4 && position <= 15) return 1.0; // Striking distance
     if (position > 15 && position <= 25) return 0.8;
     if (position > 25 && position <= 50) return 0.5;
@@ -166,8 +225,7 @@ export class SeoOpportunityEngine {
   /**
    * Calculates click potential from impressions and unrealized CTR
    */
-  private static calculateClickPotential(ctr: number): number {
-    // If current CTR is low (e.g. 1%), potential gain is high (0.99)
+  public static calculateClickPotential(ctr: number): number {
     return Math.max(0.1, 1 - ctr);
   }
 
@@ -179,22 +237,26 @@ export class SeoOpportunityEngine {
     const clickPotential = this.calculateClickPotential(metric.ctr);
     
     // Core formula: Impressions * RankPotential * ContentGap * ClickPotential
-    // Normalized to a scale of 0 - 1000
     const rawScore = (metric.impressions / 100) * rankingPotential * metric.contentGapScore * clickPotential * 10;
     const opportunityScore = Math.round(rawScore);
+    const estimatedClickGain = Math.round(metric.impressions * 0.05); // Potential clicks at 5% CTR
 
     let opportunityLevel: OpportunityScoreResult["opportunityLevel"] = "STABLE";
-    if (opportunityScore >= 200) opportunityLevel = "CRITICAL";
-    else if (opportunityScore >= 100) opportunityLevel = "HIGH";
-    else if (opportunityScore >= 50) opportunityLevel = "MEDIUM";
+    if (opportunityScore >= 200 || (metric.isAlmostRanking && metric.impressions >= 40)) {
+      opportunityLevel = "CRITICAL";
+    } else if (opportunityScore >= 100 || metric.isAlmostRanking) {
+      opportunityLevel = "HIGH";
+    } else if (opportunityScore >= 50) {
+      opportunityLevel = "MEDIUM";
+    }
 
-    let recommendedAction = "Maintain freshness and internal links.";
-    if (metric.category === "Guides") {
+    let recommendedAction = "Maintain freshness and internal link mesh.";
+    if (metric.category === "Skins") {
+      recommendedAction = "Deploy clean slug canonical URL, prominent above-the-fold price/variant answer box, and collection/weapon internal links.";
+    } else if (metric.category === "Guides") {
       recommendedAction = "Expand actionable tactical setups and counterplay steps to capture top 3 search intent.";
     } else if (metric.category === "Compare") {
       recommendedAction = "Add situational map verdict matrix and weapon recoil comparison clip.";
-    } else if (metric.category === "Skins") {
-      recommendedAction = "Add editorial review on sound effects, finisher inspection, and similar alternative skin variants.";
     } else if (metric.category === "Agents") {
       recommendedAction = "Update Patch 9.04 balance commentary and verified synergy partners.";
     }
@@ -205,7 +267,8 @@ export class SeoOpportunityEngine {
       rankingPotential,
       clickPotential,
       opportunityLevel,
-      recommendedAction
+      recommendedAction,
+      estimatedClickGain,
     };
   }
 
@@ -217,6 +280,27 @@ export class SeoOpportunityEngine {
       .map(m => this.scorePage(m))
       .sort((a, b) => b.opportunityScore - a.opportunityScore)
       .slice(0, limit);
+  }
+
+  /**
+   * Identifies 'Almost-Ranking' pages on striking distance (Position 4-20, Impr >= 10, CTR < 2%)
+   */
+  public static getAlmostRankingQueries(): AlmostRankingOpportunity[] {
+    return GSC_TELEMETRY_SNAPSHOT
+      .filter(m => m.position >= 4 && m.position <= 20 && m.impressions >= 10 && m.ctr < 0.02)
+      .map(m => ({
+        query: m.primaryQuery || m.title,
+        url: m.url,
+        title: m.title,
+        category: m.category,
+        impressions: m.impressions,
+        clicks: m.clicks,
+        ctr: m.ctr,
+        position: m.position,
+        potentialClicksAt5Pct: Math.max(1, Math.round(m.impressions * 0.05)),
+        recommendedAction: `Position ${m.position.toFixed(1)} on Google with ${m.impressions} impressions. Rewrite title to '${m.title} — Price, Variants & Upgrades', embed quick answer box, and connect weapon skin hub.`,
+      }))
+      .sort((a, b) => b.impressions - a.impressions);
   }
 
   /**
@@ -261,3 +345,4 @@ export class SeoOpportunityEngine {
     });
   }
 }
+

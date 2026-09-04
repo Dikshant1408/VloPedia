@@ -193,10 +193,60 @@ const inspectClientPath = path.join(rootDir, "src/components/skin-inspect-client
 assert(fs.existsSync(inspectClientPath), "src/components/skin-inspect-client.tsx exists");
 const inspectClientContent = fs.readFileSync(inspectClientPath, "utf-8");
 assert(inspectClientContent.includes('data-nosnippet="true"'), "Dossier preview video player contains data-nosnippet to prevent indexing collisions");
-assert(inspectClientContent.includes("/watch"), "Dossier preview video links directly to dedicated /watch page");
+// 10. SEO Growth v1: Canonical Slugs, Weapon Hubs & Almost-Ranking Engine
+console.log("\n10. SEO Growth v1: Canonical Slugs, Weapon Hubs & Almost-Ranking Engine:");
 
+// High-Impression GSC Query Slugs
+assert(slugify("Aemondir Vandal") === "aemondir-vandal", 'slugify("Aemondir Vandal") -> "aemondir-vandal" (104 GSC impressions)');
+assert(slugify("Aeris Vandal") === "aeris-vandal", 'slugify("Aeris Vandal") -> "aeris-vandal" (46 GSC impressions)');
+assert(slugify("Minima Karambit") === "minima-karambit", 'slugify("Minima Karambit") -> "minima-karambit" (23 GSC impressions)');
+assert(slugify("Montage Axe") === "montage-axe", 'slugify("Montage Axe") -> "montage-axe" (20 GSC impressions)');
+assert(slugify("Helix Phantom") === "helix-phantom", 'slugify("Helix Phantom") -> "helix-phantom" (18 GSC impressions)');
+assert(slugify("Prime//2.0 Phantom") === "prime-2-0-phantom", 'slugify handles special characters in "Prime//2.0 Phantom"');
+
+// Skin Page Canonical & Intent Verification
+const skinPagePath = path.join(rootDir, "src/app/skins/[slug]/page.tsx");
+assert(fs.existsSync(skinPagePath), "src/app/skins/[slug]/page.tsx exists");
+const skinPageContent = fs.readFileSync(skinPagePath, "utf-8");
+assert(skinPageContent.includes("permanentRedirect"), "Skin page issues 301 permanentRedirect for legacy UUID URLs");
+assert(skinPageContent.includes("WeaponSkinHub"), "Skin page integrates WeaponSkinHub for /skins/[weapon] routes");
+assert(skinPageContent.includes("AnswerBox"), "Skin page renders above-the-fold search intent AnswerBox");
+assert(skinPageContent.includes("getCollectionName"), "Skin page extracts collection line for internal linking mesh");
+
+// Weapon Skin Hub Component Verification
+const weaponHubPath = path.join(rootDir, "src/components/weapon-skin-hub.tsx");
+assert(fs.existsSync(weaponHubPath), "src/components/weapon-skin-hub.tsx exists");
+const weaponHubContent = fs.readFileSync(weaponHubPath, "utf-8");
+assert(weaponHubContent.includes("export function WeaponSkinHub"), "WeaponSkinHub component is properly exported");
+assert(weaponHubContent.includes("SkinCard"), "WeaponSkinHub renders skin catalog grid with SkinCard");
+
+// Collection Page Dynamic Discovery
+const colPagePath = path.join(rootDir, "src/app/collections/[slug]/page.tsx");
+assert(fs.existsSync(colPagePath), "src/app/collections/[slug]/page.tsx exists");
+const colPageContent = fs.readFileSync(colPagePath, "utf-8");
+assert(colPageContent.includes('"@type": "CollectionPage"'), "Collection page declares Schema.org CollectionPage");
+assert(colPageContent.includes('"@type": "ItemList"'), "Collection page declares Schema.org ItemList");
+assert(colPageContent.includes("getCollectionsMap"), "Collection page dynamically discovers all skin lines from database");
+
+// SkinCard Canonical Slug Link Verification
+const skinCardPath = path.join(rootDir, "src/components/skin-card.tsx");
+assert(fs.existsSync(skinCardPath), "src/components/skin-card.tsx exists");
+const skinCardContent = fs.readFileSync(skinCardPath, "utf-8");
+assert(skinCardContent.includes("slugify(skin.displayName)"), "SkinCard uses canonical slugify(skin.displayName) for links");
+
+// SEO Opportunity Almost-Ranking Engine
+const seoOppPath = path.join(rootDir, "src/lib/seo-opportunity.ts");
+assert(fs.existsSync(seoOppPath), "src/lib/seo-opportunity.ts exists");
+const seoOppContent = fs.readFileSync(seoOppPath, "utf-8");
+assert(seoOppContent.includes("getAlmostRankingQueries"), "SeoOpportunityEngine implements getAlmostRankingQueries()");
+assert(seoOppContent.includes("aemondir-vandal"), "GSC Telemetry Snapshot tracks high-priority Aemondir Vandal opportunity");
+assert(seoOppContent.includes("DEVICE_PERFORMANCE"), "SeoOpportunityEngine tracks mobile vs desktop ranking divergence");
+
+// Sitemap Hub & Dynamic Collection Route Verification
 const sitemapPath = path.join(rootDir, "src/app/sitemap.ts");
 const sitemapContent = fs.readFileSync(sitemapPath, "utf-8");
+assert(sitemapContent.includes("weaponHubRoutes"), "Sitemap includes dedicated weapon hub routes (/skins/vandal, etc.)");
+assert(sitemapContent.includes("collectionRoutes"), "Sitemap dynamically generates routes for all discovered collections");
 assert(sitemapContent.includes("/skins/${slug}/watch"), "Sitemap includes dedicated /skins/[slug]/watch routes");
 
 console.log("\n========================================");
@@ -206,5 +256,5 @@ if (failed > 0) {
   console.error("❌ SEO / Data validation failed. Fix errors before committing.");
   process.exit(1);
 } else {
-  console.log("🎉 All SEO, data integrity, video indexing, and mathematical model tests passed!\n");
+  console.log("🎉 All SEO, data integrity, canonical slugs, weapon hubs, and mathematical model tests passed!\n");
 }

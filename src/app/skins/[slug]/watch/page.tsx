@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Container } from "@/components/container";
 import { PageTransition } from "@/components/motion-system";
 import { siteConfig } from "@/lib/site";
@@ -9,31 +9,60 @@ import { WatchClient } from "./watch-client";
 
 type Props = { params: Promise<{ slug: string }> };
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function findSkin(skins: ValorantSkin[], slug: string) {
+  const norm = slug.toLowerCase().trim();
+  return skins.find((s) => s.uuid.toLowerCase() === norm || slugify(s.displayName) === norm);
+}
+
 export async function generateStaticParams() {
   const skins = await getAllSkins();
-  // Statically generate watch pages for all skins containing showcase videos
-  return skins
+  const params: { slug: string }[] = [];
+
+  // Statically generate watch pages for all skins containing showcase videos (clean slugs + legacy UUIDs)
+  skins
     .filter(
       (s) =>
         s.levels?.some((l) => l.streamedVideo) ||
         s.chromas?.some((c) => c.streamedVideo)
     )
-    .map((s) => ({ slug: s.uuid }));
+    .forEach((s) => {
+      const cleanSlug = slugify(s.displayName);
+      if (cleanSlug) {
+        params.push({ slug: cleanSlug });
+      }
+      params.push({ slug: s.uuid });
+    });
+
+  const seen = new Set<string>();
+  return params.filter((p) => {
+    if (seen.has(p.slug)) return false;
+    seen.add(p.slug);
+    return true;
+  });
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const skins = await getAllSkins();
-  const skin = skins.find((s) => s.uuid === slug);
+  const skin = findSkin(skins, slug);
   if (!skin) return { title: "Showcase Not Found | VloPedia", robots: { index: false } };
 
+  const canonicalSlug = slugify(skin.displayName) || skin.uuid;
   const defaultVideoUrl =
     skin.levels?.find((l) => l.streamedVideo)?.streamedVideo ||
     skin.chromas?.find((c) => c.streamedVideo)?.streamedVideo ||
     "";
 
-  const pageTitle = `${skin.displayName} Video Showcase: Animations & VFX | VloPedia`;
-  const pageDesc = `Watch the official video showcase for the ${skin.displayName} VALORANT weapon skin. Play level upgrades, finishers, reload sounds, and visual effects in theater mode.`;
+  const pageTitle = `${skin.displayName} Video Showcase: Animations, SFX & Finisher | VloPedia`;
+  const pageDesc = `Watch the official video showcase for the ${skin.displayName} VALORANT weapon skin in theater mode. Inspect level upgrades, reload sounds, finisher VFX, and colorways.`;
   const img = skin.chromas?.[0]?.fullRender ?? skin.displayIcon;
   const thumbnailUrl = img
     ? (img.startsWith("http") ? img : `${siteConfig.url}${img.startsWith("/") ? "" : "/"}${img}`)
@@ -57,7 +86,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "video.other",
       title: pageTitle,
       description: pageDesc,
-      url: `${siteConfig.url}/skins/${slug}/watch`,
+      url: `${siteConfig.url}/skins/${canonicalSlug}/watch`,
       siteName: "VloPedia",
       images: [
         {
@@ -86,7 +115,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       players: defaultVideoUrl
         ? [
             {
-              playerUrl: `${siteConfig.url}/skins/${slug}/watch`,
+              playerUrl: `${siteConfig.url}/skins/${canonicalSlug}/watch`,
               streamUrl: defaultVideoUrl,
               width: 1920,
               height: 1080,
@@ -95,7 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         : [],
     },
     alternates: {
-      canonical: `${siteConfig.url}/skins/${slug}/watch`,
+      canonical: `${siteConfig.url}/skins/${canonicalSlug}/watch`,
     },
   };
 }
@@ -103,8 +132,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SkinWatchPage({ params }: Props) {
   const { slug } = await params;
   const skins = await getAllSkins();
-  const skin = skins.find((s) => s.uuid === slug);
+  const skin = findSkin(skins, slug);
   if (!skin) notFound();
+
+  const canonicalSlug = slugify(skin.displayName);
+
+  // 301 Permanent Redirect if accessed via legacy UUID
+  if (canonicalSlug && slug.toLowerCase() === skin.uuid.toLowerCase() && slug.toLowerCase() !== canonicalSlug) {
+    permanentRedirect(`/skins/${canonicalSlug}/watch`);
+  }
 
   // Collate video assets from levels and chromas
   const videoAssets: { uuid: string; name: string; videoUrl: string; isChroma?: boolean }[] = [];
@@ -173,13 +209,13 @@ export default async function SkinWatchPage({ params }: Props) {
             "@type": "ListItem",
             "position": 3,
             "name": skin.displayName,
-            "item": `${siteConfig.url}/skins/${slug}`,
+            "item": `${siteConfig.url}/skins/${canonicalSlug}`,
           },
           {
             "@type": "ListItem",
             "position": 4,
             "name": `${skin.displayName} Video Showcase`,
-            "item": `${siteConfig.url}/skins/${slug}/watch`,
+            "item": `${siteConfig.url}/skins/${canonicalSlug}/watch`,
           },
         ],
       },
@@ -190,11 +226,11 @@ export default async function SkinWatchPage({ params }: Props) {
         "thumbnailUrl": [thumbnailUrl],
         "uploadDate": "2024-01-01T00:00:00Z",
         "contentUrl": defaultVideo.videoUrl,
-        "embedUrl": `${siteConfig.url}/skins/${slug}/watch`,
+        "embedUrl": `${siteConfig.url}/skins/${canonicalSlug}/watch`,
         "duration": "PT15S",
         "inLanguage": "en-US",
         "isFamilyFriendly": true,
-        "mainEntityOfPage": `${siteConfig.url}/skins/${slug}/watch`,
+        "mainEntityOfPage": `${siteConfig.url}/skins/${canonicalSlug}/watch`,
         "publisher": {
           "@type": "Organization",
           "name": "VloPedia",
@@ -206,7 +242,7 @@ export default async function SkinWatchPage({ params }: Props) {
         },
         "potentialAction": {
           "@type": "WatchAction",
-          "target": `${siteConfig.url}/skins/${slug}/watch`,
+          "target": `${siteConfig.url}/skins/${canonicalSlug}/watch`,
         },
       },
     ],
@@ -236,3 +272,4 @@ export default async function SkinWatchPage({ params }: Props) {
     </PageTransition>
   );
 }
+

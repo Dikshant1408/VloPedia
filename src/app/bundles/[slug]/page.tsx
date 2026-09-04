@@ -11,6 +11,14 @@ import { BundleWishlistButton } from "./bundle-wishlist-button";
 import type { ValorantBundle, ValorantSkin } from "@/lib/valorant-types";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 const API = "https://valorant-api.com/v1";
 
 let bundlesCache: Promise<ValorantBundle[]> | null = null;
@@ -185,10 +193,11 @@ export default async function BundleDetailPage({ params }: Props) {
                   {includedSkins.map(skin => {
                     const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""];
                     const img  = skin.chromas?.[0]?.fullRender ?? skin.displayIcon ?? "";
+                    const skinSlug = slugify(skin.displayName) || skin.uuid;
                     return (
                       <Link
                         key={skin.uuid}
-                        href={`/skins/${skin.uuid}`}
+                        href={`/skins/${skinSlug}`}
                         className="group relative border border-border bg-surface-card transition-all duration-300 hover:border-primary/50"
                         style={{ borderLeftColor: tier?.color ?? "#C084FC", borderLeftWidth: "2px" }}
                       >

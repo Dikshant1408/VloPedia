@@ -26,9 +26,18 @@ interface WatchClientProps {
   videoAssets: VideoAsset[];
 }
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export function WatchClient({ skin, videoAssets }: WatchClientProps) {
   const [activeAsset, setActiveAsset] = useState<VideoAsset>(videoAssets[0]);
 
+  const canonicalSlug = slugify(skin.displayName) || skin.uuid;
   const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""] ?? DEFAULT_TIER;
   const rarityColor = tier.color;
 
@@ -36,7 +45,7 @@ export function WatchClient({ skin, videoAssets }: WatchClientProps) {
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Top compact utility bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <Link href={`/skins/${skin.uuid}`}>
+        <Link href={`/skins/${canonicalSlug}`}>
           <Button
             variant="secondary"
             size="sm"
@@ -51,7 +60,7 @@ export function WatchClient({ skin, videoAssets }: WatchClientProps) {
             SKINS
           </Link>
           <span>/</span>
-          <Link href={`/skins/${skin.uuid}`} className="hover:text-white transition-colors">
+          <Link href={`/skins/${canonicalSlug}`} className="hover:text-white transition-colors">
             {skin.displayName.toUpperCase()}
           </Link>
           <span>/</span>
@@ -215,7 +224,7 @@ export function WatchClient({ skin, videoAssets }: WatchClientProps) {
           <span className="text-[11px] font-mono text-muted">
             Looking for complete weapon statistics, 3D model canvases, and wishlist syncing?
           </span>
-          <Link href={`/skins/${skin.uuid}`}>
+          <Link href={`/skins/${canonicalSlug}`}>
             <Button className="bg-primary hover:bg-primary-soft text-black font-bold font-mono tracking-wider text-xs h-9">
               OPEN FULL COSMETIC DOSSIER →
             </Button>

@@ -13,6 +13,14 @@ interface SkinCardProps {
   className?: string;
 }
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 /**
  * V2 Skin card — luxury catalog style.
  * Left-edge 2px accent bar in content-tier color.
@@ -24,7 +32,7 @@ export function SkinCard({ skin, onWishlist, className }: SkinCardProps) {
   const displayImage =
     skin.chromas?.[0]?.fullRender ?? skin.chromas?.[0]?.displayIcon ?? skin.displayIcon;
 
-  const slug = skin.uuid;
+  const slug = slugify(skin.displayName) || skin.uuid;
 
   return (
     <div

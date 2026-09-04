@@ -7,11 +7,11 @@ import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "VALORANT Weapon Skins Catalogue | ValoVault",
-  description: "Browse the complete database of all weapon skins in VALORANT. Filter by content tier, sort by price, search, and view HD variants.",
+  title: "VALORANT Weapon Skins Database: Tier Lists, Prices & All 1,400+ Skins | VloPedia",
+  description: "Browse the complete database of all 1,400+ weapon skins in VALORANT. Filter by content tier, VP prices, inspect finisher visual effects, and explore dedicated weapon hubs.",
   openGraph: {
-    title: "VALORANT Weapon Skins Catalogue | ValoVault",
-    description: "Browse the complete database of all weapon skins in VALORANT. Filter by content tier, sort by price, search, and view HD variants.",
+    title: "VALORANT Weapon Skins Database: Tier Lists, Prices & All 1,400+ Skins | VloPedia",
+    description: "Browse the complete database of all 1,400+ weapon skins in VALORANT. Filter by content tier, VP prices, inspect finisher visual effects, and explore dedicated weapon hubs.",
   },
   alternates: {
     canonical: "/skins",

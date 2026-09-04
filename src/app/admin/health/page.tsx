@@ -14,9 +14,18 @@ import {
 import { KnowledgeGraphService } from "@/lib/knowledge-graph-service";
 import { PatchImpactEngine } from "@/lib/patch-impact-engine";
 import { GraphIntegrityEngine, GraphIntegrityReport } from "@/lib/graph-integrity-engine";
-import { getContentGaps, getTopSearches, getSearchSatisfactionMetrics, SearchSatisfactionReport } from "@/lib/search-analytics";
 import { DataCoverageAuditor, EntityCoverageAudit } from "@/lib/data-coverage-auditor";
-import { SeoOpportunityEngine, OpportunityScoreResult, VerticalIndexPerformance } from "@/lib/seo-opportunity";
+import { getContentGaps, getTopSearches, getSearchSatisfactionMetrics, SearchSatisfactionReport } from "@/lib/search-analytics";
+import { 
+  SeoOpportunityEngine, 
+  OpportunityScoreResult, 
+  VerticalIndexPerformance,
+  AlmostRankingOpportunity,
+  DEVICE_PERFORMANCE,
+  COUNTRY_PERFORMANCE,
+  DeviceSearchPerformance,
+  CountrySearchPerformance
+} from "@/lib/seo-opportunity";
 
 export default function AdminHealthPage() {
   const [topSearches, setTopSearches] = useState<Array<{ query: string; count: number }>>([]);
@@ -31,7 +40,10 @@ export default function AdminHealthPage() {
     topIncomplete: EntityCoverageAudit[];
   } | null>(null);
   const [opportunities, setOpportunities] = useState<OpportunityScoreResult[]>([]);
+  const [almostRanking, setAlmostRanking] = useState<AlmostRankingOpportunity[]>([]);
   const [verticalStats, setVerticalStats] = useState<VerticalIndexPerformance[]>([]);
+  const [deviceStats, setDeviceStats] = useState<DeviceSearchPerformance[]>(DEVICE_PERFORMANCE);
+  const [countryStats, setCountryStats] = useState<CountrySearchPerformance[]>(COUNTRY_PERFORMANCE);
 
   useEffect(() => {
     setTopSearches(getTopSearches(8));
@@ -41,6 +53,7 @@ export default function AdminHealthPage() {
     setIntegrityReport(GraphIntegrityEngine.runAudit("9.04"));
     setCoverageData(DataCoverageAuditor.runFullAudit());
     setOpportunities(SeoOpportunityEngine.getTopOpportunities(6));
+    setAlmostRanking(SeoOpportunityEngine.getAlmostRankingQueries());
     setVerticalStats(SeoOpportunityEngine.getVerticalPerformance());
 
     try {
@@ -275,6 +288,100 @@ export default function AdminHealthPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ── SECTION 2.5: ALMOST-RANKING STRIKING DISTANCE & CTR ACCELERATOR ── */}
+          <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 sm:p-8 clip-diagonal space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
+              <div className="flex items-center gap-3 text-primary">
+                <Zap className="h-5 w-5 animate-pulse" />
+                <div>
+                  <span className="font-mono text-[10px] uppercase text-primary font-bold block">CTR ACCELERATOR</span>
+                  <h2 className="font-display font-black text-2xl uppercase text-white">Almost-Ranking Striking Distance Queries (Pos 4–20)</h2>
+                </div>
+              </div>
+              <span className="font-mono text-xs text-muted">
+                Target: Convert Position 7-10 impressions into clicks via clean slugs & intent answer blocks
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left font-mono text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-[rgba(236,232,225,0.08)] bg-[#08111A] text-muted text-[10px] uppercase">
+                    <th className="p-3">Search Query / Intent</th>
+                    <th className="p-3">Target Slug URL</th>
+                    <th className="p-3 text-right">Impressions</th>
+                    <th className="p-3 text-right">Avg Position</th>
+                    <th className="p-3 text-right">Current CTR</th>
+                    <th className="p-3 text-right">Potential Clicks (5% CTR)</th>
+                    <th className="p-3">Optimization Directive</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[rgba(236,232,225,0.04)]">
+                  {almostRanking.map((ar, idx) => (
+                    <tr key={ar.query} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="p-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-primary font-bold">#{idx + 1}</span>
+                          <span className="text-white font-bold">{ar.query}</span>
+                        </div>
+                      </td>
+                      <td className="p-3">
+                        <Link href={ar.url} className="text-muted hover:text-primary transition-colors text-[11px]">
+                          {ar.url}
+                        </Link>
+                      </td>
+                      <td className="p-3 text-right text-white font-bold">{ar.impressions}</td>
+                      <td className="p-3 text-right text-[#0DF2F2] font-bold">{ar.position.toFixed(2)}</td>
+                      <td className="p-3 text-right text-error font-bold">{(ar.ctr * 100).toFixed(1)}%</td>
+                      <td className="p-3 text-right text-emerald-400 font-bold">+{ar.potentialClicksAt5Pct} clicks/mo</td>
+                      <td className="p-3 text-[11px] text-secondary max-w-sm">{ar.recommendedAction}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Device & Country Search Footprint Split */}
+            <div className="grid gap-6 md:grid-cols-2 pt-4 border-t border-[rgba(236,232,225,0.08)]">
+              {/* Device Performance */}
+              <div className="p-4 bg-[#08111A] border border-[rgba(236,232,225,0.06)] space-y-3 font-mono text-xs">
+                <div className="flex justify-between items-center border-b border-[rgba(236,232,225,0.06)] pb-2">
+                  <span className="font-bold text-white uppercase">Device Indexing Health</span>
+                  <span className="text-[10px] text-muted">Mobile-First Status</span>
+                </div>
+                <div className="space-y-2">
+                  {deviceStats.map((d) => (
+                    <div key={d.device} className="flex justify-between items-center py-1 border-b border-[rgba(236,232,225,0.03)]">
+                      <span className="text-muted">{d.device}:</span>
+                      <div className="flex items-center gap-4">
+                        <span className="text-white font-bold">{d.impressions} impr</span>
+                        <span className={`font-bold ${d.avgPosition < 12 ? "text-emerald-400" : "text-amber-400"}`}>
+                          Pos {d.avgPosition.toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Country Footprint */}
+              <div className="p-4 bg-[#08111A] border border-[rgba(236,232,225,0.06)] space-y-3 font-mono text-xs">
+                <div className="flex justify-between items-center border-b border-[rgba(236,232,225,0.06)] pb-2">
+                  <span className="font-bold text-white uppercase">Global Demand Footprint</span>
+                  <span className="text-[10px] text-muted">Top Search Geographies</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {countryStats.slice(0, 6).map((c) => (
+                    <div key={c.code} className="p-2 bg-black/30 border border-[rgba(236,232,225,0.04)] flex justify-between items-center text-[11px]">
+                      <span className="text-muted truncate">{c.country}</span>
+                      <span className="text-primary font-bold">{c.impressions}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

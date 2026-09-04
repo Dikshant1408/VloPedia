@@ -158,31 +158,50 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.5,
   }));
 
-  // 11. Dynamic collections Checklist routes
-  const collectionSlugs = ["kuronami-vandal", "reaver-vandal", "oni-phantom"];
-  const collectionRoutes: MetadataRoute.Sitemap = collectionSlugs.map(slug => ({
-    url:             `${base}/collections/${slug}`,
+  // 10. Dynamic Weapon Skin Hubs (/skins/vandal, /skins/phantom, etc.)
+  const weaponHubSlugs = [
+    "vandal","phantom","operator","spectre","ghost","classic","sheriff",
+    "frenzy","shorty","stinger","bucky","judge","bulldog","guardian",
+    "marshal","ares","odin","outlaw","melee","karambit"
+  ];
+  const weaponHubRoutes: MetadataRoute.Sitemap = weaponHubSlugs.map(w => ({
+    url:             `${base}/skins/${w}`,
     lastModified:    now,
     changeFrequency: "weekly",
-    priority:        0.6,
+    priority:        0.8,
   }));
 
-  // 11. Dynamic skin pages and watch pages (excluding Standard base skins)
+  // 11. Dynamic skin pages, watch pages, and collection lines
   let skinSlugs: string[] = [];
   let watchSlugs: string[] = [];
+  let collectionSlugs: string[] = ["kuronami", "reaver", "oni", "prime", "glitchpop", "aemondir", "aeris", "helix", "minima", "montage"];
+
   try {
     const skinsRes = await fetch("https://valorant-api.com/v1/weapons/skins", { next: { revalidate: 3600 } });
     if (skinsRes.ok) {
       const skinsJson = await skinsRes.json();
       const allSkins = skinsJson.data ?? [];
+      const discoveredCols = new Set<string>();
+
       allSkins.forEach((s: any) => {
         if (s.displayName.toLowerCase().startsWith("standard")) return;
-        skinSlugs.push(s.uuid);
-        const hasVideo = s.levels?.some((l: any) => l.streamedVideo) || s.chromas?.some((c: any) => c.streamedVideo);
-        if (hasVideo) {
-          watchSlugs.push(s.uuid);
+        const cleanSlug = slugify(s.displayName);
+        if (cleanSlug) {
+          skinSlugs.push(cleanSlug);
+          const hasVideo = s.levels?.some((l: any) => l.streamedVideo) || s.chromas?.some((c: any) => c.streamedVideo);
+          if (hasVideo) {
+            watchSlugs.push(cleanSlug);
+          }
+          // Parse collection line
+          const parts = s.displayName.trim().split(/\s+/);
+          if (parts.length > 1) {
+            const colPrefix = parts.slice(0, -1).join(" ");
+            const colSlug = slugify(colPrefix);
+            if (colSlug) discoveredCols.add(colSlug);
+          }
         }
       });
+      collectionSlugs = Array.from(discoveredCols);
     }
   } catch (e) {
     // Ignore fetch error
@@ -192,11 +211,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url:             `${base}/skins/${slug}`,
     lastModified:    now,
     changeFrequency: "weekly",
-    priority:        0.6,
+    priority:        0.8,
   }));
 
   const watchRoutes: MetadataRoute.Sitemap = watchSlugs.map(slug => ({
     url:             `${base}/skins/${slug}/watch`,
+    lastModified:    now,
+    changeFrequency: "weekly",
+    priority:        0.8,
+  }));
+
+  const collectionRoutes: MetadataRoute.Sitemap = collectionSlugs.map(slug => ({
+    url:             `${base}/collections/${slug}`,
     lastModified:    now,
     changeFrequency: "weekly",
     priority:        0.8,
@@ -254,6 +280,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticRoutes,
     ...agentRoutes,
     ...weaponRoutes,
+    ...weaponHubRoutes,
     ...mapRoutes,
     ...patchRoutes,
     ...loreRoutes,
