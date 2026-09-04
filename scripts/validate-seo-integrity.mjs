@@ -249,12 +249,69 @@ assert(sitemapContent.includes("weaponHubRoutes"), "Sitemap includes dedicated w
 assert(sitemapContent.includes("collectionRoutes"), "Sitemap dynamically generates routes for all discovered collections");
 assert(sitemapContent.includes("/skins/${slug}/watch"), "Sitemap includes dedicated /skins/[slug]/watch routes");
 
+// 11. VloPedia Growth OS & SEO Experimentation Suite
+console.log("\n11. VloPedia Growth OS & SEO Experimentation Suite:");
+
+// GSC Snapshot Data
+const gscSnapshotsPath = path.join(rootDir, "src/data/gsc-snapshots.json");
+assert(fs.existsSync(gscSnapshotsPath), "src/data/gsc-snapshots.json exists");
+const gscSnapshotsData = JSON.parse(fs.readFileSync(gscSnapshotsPath, "utf-8"));
+assert(gscSnapshotsData.querySnapshots.length >= 8, "GSC Snapshots dataset contains time-series baseline records");
+
+// Multi-scenario CTR Modeling in SEO Opportunity Engine
+assert(seoOppContent.includes("calculateMultiScenarioClicks"), "SeoOpportunityEngine implements calculateMultiScenarioClicks()");
+assert(seoOppContent.includes("scenario2Pct") && seoOppContent.includes("scenario5Pct") && seoOppContent.includes("scenario8Pct"), "SeoOpportunityEngine computes 2%, 5%, and 8% CTR scenarios");
+assert(seoOppContent.includes("getTrendVelocity"), "SeoOpportunityEngine computes historical trend velocity and momentum");
+assert(seoOppContent.includes("getContentDecayAlerts"), "SeoOpportunityEngine implements automated Content Decay alarms");
+assert(seoOppContent.includes("getBreakthroughCandidates"), "SeoOpportunityEngine detects Position 3-6 Breakthrough Candidates");
+assert(seoOppContent.includes("getDeviceAnomalies"), "SeoOpportunityEngine diagnoses Mobile vs Desktop divergence");
+
+// SEO Experiments Engine
+const expEnginePath = path.join(rootDir, "src/lib/seo-experiments.ts");
+assert(fs.existsSync(expEnginePath), "src/lib/seo-experiments.ts exists");
+const expEngineContent = fs.readFileSync(expEnginePath, "utf-8");
+assert(expEngineContent.includes("SeoExperimentsEngine"), "SeoExperimentsEngine is exported");
+assert(expEngineContent.includes("exp-aemondir-vandal"), "SEO Experiments pre-seeds Aemondir Vandal A/B test");
+assert(expEngineContent.includes("calculateAggregateUplift"), "SeoExperimentsEngine calculates aggregate CTR and position uplift");
+
+// Low-CTR Intent Diagnostics & Mismatch Engine
+const diagEnginePath = path.join(rootDir, "src/lib/seo-intent-diagnostics.ts");
+assert(fs.existsSync(diagEnginePath), "src/lib/seo-intent-diagnostics.ts exists");
+const diagEngineContent = fs.readFileSync(diagEnginePath, "utf-8");
+assert(diagEngineContent.includes("calculateQueryPageMatch"), "SeoIntentDiagnosticsEngine calculates query-to-page semantic match");
+assert(diagEngineContent.includes("ZERO_CLICK_SERP"), "SeoIntentDiagnosticsEngine classifies ZERO_CLICK_SERP intent");
+assert(diagEngineContent.includes("WRONG_LANDING_PAGE"), "SeoIntentDiagnosticsEngine classifies WRONG_LANDING_PAGE routing");
+
+// Query Clustering & Graph Mesh
+const clusterEnginePath = path.join(rootDir, "src/lib/query-clustering.ts");
+assert(fs.existsSync(clusterEnginePath), "src/lib/query-clustering.ts exists");
+const clusterEngineContent = fs.readFileSync(clusterEnginePath, "utf-8");
+assert(clusterEngineContent.includes("QueryClusteringEngine"), "QueryClusteringEngine is exported");
+assert(clusterEngineContent.includes("cluster-aemondir-vandal"), "Query clusters aggregate Aemondir Vandal search demand (140 impr)");
+assert(clusterEngineContent.includes("graphConnections"), "Query clusters link to parent weapon and collection hubs");
+
+// Patch Impact -> SEO Organic Landing Pages
+const patchEnginePath = path.join(rootDir, "src/lib/patch-impact-engine.ts");
+const patchEngineContent = fs.readFileSync(patchEnginePath, "utf-8");
+assert(patchEngineContent.includes("getSeoLandingPageDependencies"), "PatchImpactEngine maps balance updates to dependent SEO landing pages");
+
+// Source Health & Entity Collision Audit
+const sourcesPath = path.join(rootDir, "src/lib/sources.ts");
+const sourcesContent = fs.readFileSync(sourcesPath, "utf-8");
+assert(sourcesContent.includes("checkSourceHealth"), "SourceRegistry implements checkSourceHealth()");
+assert(sourcesContent.includes("RELIABILITY_METHODOLOGY"), "SourceRegistry defines transparency methodology criteria");
+
+const entityResolverPath = path.join(rootDir, "src/lib/entity-resolver.ts");
+const entityResolverContent = fs.readFileSync(entityResolverPath, "utf-8");
+assert(entityResolverContent.includes("detectCollisions"), "EntityResolver implements automated collision audit");
+
+// Summary
 console.log("\n========================================");
 console.log(`Validation Complete: ${passed} passed, ${failed} failed`);
-
-if (failed > 0) {
-  console.error("❌ SEO / Data validation failed. Fix errors before committing.");
-  process.exit(1);
+if (failed === 0) {
+  console.log("🎉 All SEO, Growth OS, experimentation, data integrity, and mathematical model tests passed!");
+  process.exit(0);
 } else {
-  console.log("🎉 All SEO, data integrity, canonical slugs, weapon hubs, and mathematical model tests passed!\n");
+  console.error("❌ Some validation checks failed.");
+  process.exit(1);
 }

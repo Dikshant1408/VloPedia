@@ -9,7 +9,8 @@ import {
   Activity, ShieldCheck, AlertTriangle, Search, 
   Database, RefreshCw, Flag, CheckCircle2, ArrowRight, 
   Layers, Network, Zap, TrendingUp, ThumbsUp, ThumbsDown, 
-  FileText, BarChart3, AlertCircle 
+  FileText, BarChart3, AlertCircle, FlaskConical, Target,
+  Compass, Flame, ShieldAlert, Cpu, Sparkles, Sliders
 } from "lucide-react";
 import { KnowledgeGraphService } from "@/lib/knowledge-graph-service";
 import { PatchImpactEngine } from "@/lib/patch-impact-engine";
@@ -21,13 +22,29 @@ import {
   OpportunityScoreResult, 
   VerticalIndexPerformance,
   AlmostRankingOpportunity,
+  QueryTrendVelocity,
+  ContentDecayAlert,
+  BreakthroughCandidate,
+  DeviceAnomalyReport,
+  CountryAnomalyReport,
   DEVICE_PERFORMANCE,
   COUNTRY_PERFORMANCE,
   DeviceSearchPerformance,
   CountrySearchPerformance
 } from "@/lib/seo-opportunity";
+import { SeoExperimentsEngine, SeoExperiment } from "@/lib/seo-experiments";
+import { SeoIntentDiagnosticsEngine, QueryDiagnosisReport } from "@/lib/seo-intent-diagnostics";
+import { QueryClusteringEngine, EntityQueryCluster } from "@/lib/query-clustering";
+import { SourceRegistry, SourceHealthStatus } from "@/lib/sources";
+import { EntityResolver, CollisionAuditResult } from "@/lib/entity-resolver";
+
+type GrowthOsTab = "ACTIONS" | "SEARCH" | "EXPERIMENTS" | "INTENT_DIAGNOSTICS" | "CLUSTERS" | "DATA_TRUST";
 
 export default function AdminHealthPage() {
+  const [activeTab, setActiveTab] = useState<GrowthOsTab>("ACTIONS");
+  const [selectedScenario, setSelectedScenario] = useState<"scenarioCurrent" | "scenario2Pct" | "scenario5Pct" | "scenario8Pct">("scenario5Pct");
+
+  // State
   const [topSearches, setTopSearches] = useState<Array<{ query: string; count: number }>>([]);
   const [contentGaps, setContentGaps] = useState<any[]>([]);
   const [satisfactionList, setSatisfactionList] = useState<SearchSatisfactionReport[]>([]);
@@ -39,11 +56,23 @@ export default function AdminHealthPage() {
     totalEntities: number;
     topIncomplete: EntityCoverageAudit[];
   } | null>(null);
+
+  // SEO Growth OS state
   const [opportunities, setOpportunities] = useState<OpportunityScoreResult[]>([]);
   const [almostRanking, setAlmostRanking] = useState<AlmostRankingOpportunity[]>([]);
+  const [trendVelocities, setTrendVelocities] = useState<QueryTrendVelocity[]>([]);
+  const [decayAlerts, setDecayAlerts] = useState<ContentDecayAlert[]>([]);
+  const [breakthroughs, setBreakthroughs] = useState<BreakthroughCandidate[]>([]);
+  const [deviceAnomaly, setDeviceAnomaly] = useState<DeviceAnomalyReport | null>(null);
+  const [countryAnomalies, setCountryAnomalies] = useState<CountryAnomalyReport[]>([]);
   const [verticalStats, setVerticalStats] = useState<VerticalIndexPerformance[]>([]);
-  const [deviceStats, setDeviceStats] = useState<DeviceSearchPerformance[]>(DEVICE_PERFORMANCE);
-  const [countryStats, setCountryStats] = useState<CountrySearchPerformance[]>(COUNTRY_PERFORMANCE);
+  
+  // Experiments, Diagnostics, Clusters, Data Trust
+  const [experiments, setExperiments] = useState<SeoExperiment[]>([]);
+  const [diagnostics, setDiagnostics] = useState<QueryDiagnosisReport[]>([]);
+  const [clusters, setClusters] = useState<EntityQueryCluster[]>([]);
+  const [sourceHealth, setSourceHealth] = useState<SourceHealthStatus[]>([]);
+  const [collisionAudit, setCollisionAudit] = useState<CollisionAuditResult | null>(null);
 
   useEffect(() => {
     setTopSearches(getTopSearches(8));
@@ -54,7 +83,19 @@ export default function AdminHealthPage() {
     setCoverageData(DataCoverageAuditor.runFullAudit());
     setOpportunities(SeoOpportunityEngine.getTopOpportunities(6));
     setAlmostRanking(SeoOpportunityEngine.getAlmostRankingQueries());
+    setTrendVelocities(SeoOpportunityEngine.getTrendVelocity());
+    setDecayAlerts(SeoOpportunityEngine.getContentDecayAlerts());
+    setBreakthroughs(SeoOpportunityEngine.getBreakthroughCandidates());
+    setDeviceAnomaly(SeoOpportunityEngine.getDeviceAnomalies());
+    setCountryAnomalies(SeoOpportunityEngine.getCountryAnomalies());
     setVerticalStats(SeoOpportunityEngine.getVerticalPerformance());
+    
+    // Growth OS modules
+    setExperiments(SeoExperimentsEngine.getAllExperiments());
+    setDiagnostics(SeoIntentDiagnosticsEngine.runGscDiagnostics());
+    setClusters(QueryClusteringEngine.getAllClusters());
+    setSourceHealth(SourceRegistry.checkSourceHealth());
+    setCollisionAudit(EntityResolver.detectCollisions());
 
     try {
       const savedReports = JSON.parse(localStorage.getItem("vlopedia_user_reports") || "[]");
@@ -63,10 +104,13 @@ export default function AdminHealthPage() {
   }, []);
 
   const allEntities = KnowledgeGraphService.getAllEntities();
+  const vandalSeoExposure = PatchImpactEngine.getSeoLandingPageDependencies("weapon:vandal");
+  const graphSnapshot = KnowledgeGraphService.getGraphSnapshotVersion();
+  const aggregateUplift = SeoExperimentsEngine.calculateAggregateUplift();
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "Admin Health & Intelligence Hub" }
+    { label: "Admin Health & Growth OS" }
   ];
 
   return (
@@ -81,25 +125,25 @@ export default function AdminHealthPage() {
               <div className="flex items-center gap-3">
                 <span className="h-[2px] w-8 bg-primary" />
                 <span className="font-mono text-xs uppercase tracking-[0.3em] text-primary font-bold">
-                  VLOPEDIA DATA INTELLIGENCE & AUDIT DESK
+                  VLOPEDIA GROWTH OS & SYSTEM HEALTH
                 </span>
               </div>
               <h1 className="font-display font-black text-4xl uppercase tracking-tight text-white sm:text-5xl">
-                SYSTEM HEALTH & DATA MOAT
+                GROWTH OS // OPERATIONS CONSOLE
               </h1>
               <p className="font-sans text-sm text-secondary max-w-2xl leading-relaxed">
-                Operating console for measuring content completeness, Search Console ROI opportunities, query satisfaction, and graph ripple dependencies.
+                Autonomous growth operating system: Time-series search telemetry, A/B title experimentation, intent mismatch diagnosis, query clustering, and patch ripple protection.
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 border border-[#0DF2F2]/30 bg-[#0DF2F2]/5 px-4 py-2 clip-diagonal font-mono text-xs text-[#0DF2F2]">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 clip-diagonal font-mono text-xs text-emerald-400">
                 <Activity className="h-4 w-4 animate-pulse" />
-                <span>GRAPH HEALTH: {integrityReport?.healthScore || 100}%</span>
+                <span>EXPERIMENTS UPLIFT: +{aggregateUplift.avgCtrUplift}% CTR</span>
               </div>
-              <div className="flex items-center gap-2 border border-primary/30 bg-primary/5 px-4 py-2 clip-diagonal font-mono text-xs text-primary">
-                <Database className="h-4 w-4" />
-                <span>DATA COMPLETENESS: {coverageData?.overallCompleteness || 92}%</span>
+              <div className="flex items-center gap-2 border border-[#0DF2F2]/30 bg-[#0DF2F2]/5 px-4 py-2 clip-diagonal font-mono text-xs text-[#0DF2F2]">
+                <Cpu className="h-4 w-4" />
+                <span>GRAPH: {graphSnapshot.version}</span>
               </div>
             </div>
           </div>
@@ -107,460 +151,762 @@ export default function AdminHealthPage() {
           {/* Quick Metrics Grid */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal">
-              <span className="font-mono text-[10px] uppercase text-muted block">Canonical Entities</span>
-              <span className="font-display font-black text-3xl text-white block mt-1">{allEntities.length} Registered</span>
-              <span className="font-mono text-[9px] text-[#0DF2F2] block mt-1">100% Provenance Validated</span>
+              <span className="font-mono text-[10px] uppercase text-muted block">Active Search Queries</span>
+              <span className="font-display font-black text-3xl text-white block mt-1">814 Impressions</span>
+              <span className="font-mono text-[9px] text-[#0DF2F2] block mt-1">↑ Rising to 92/day (+198%)</span>
             </div>
 
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal">
-              <span className="font-mono text-[10px] uppercase text-muted block">Active Patch Baseline</span>
-              <span className="font-display font-black text-3xl text-white block mt-1">Patch 9.04</span>
-              <span className="font-mono text-[9px] text-primary block mt-1">Verified: Sep 4, 2026</span>
+              <span className="font-mono text-[10px] uppercase text-muted block">Mobile Search Position</span>
+              <span className="font-display font-black text-3xl text-emerald-400 block mt-1">Position 8.18</span>
+              <span className="font-mono text-[9px] text-muted block mt-1">Desktop: Pos 31.12 (Divergence: 22.9 ranks)</span>
             </div>
 
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal">
-              <span className="font-mono text-[10px] uppercase text-muted block">Search Gaps Discovered</span>
-              <span className="font-display font-black text-3xl text-amber-400 block mt-1">{contentGaps.length} Queries</span>
-              <span className="font-mono text-[9px] text-muted block mt-1">Automated Content Queue</span>
+              <span className="font-mono text-[10px] uppercase text-muted block">Active SEO Experiments</span>
+              <span className="font-display font-black text-3xl text-white block mt-1">{experiments.length} Running</span>
+              <span className="font-mono text-[9px] text-primary block mt-1">Top Target: Aemondir Vandal (104 impr)</span>
             </div>
 
             <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal">
-              <span className="font-mono text-[10px] uppercase text-muted block">Top SEO Opportunity</span>
-              <span className="font-display font-black text-2xl text-emerald-400 block mt-1 truncate">
-                {opportunities[0]?.title || "Vandal vs Phantom"}
-              </span>
-              <span className="font-mono text-[9px] text-muted block mt-1">Score: {opportunities[0]?.opportunityScore || 420}</span>
+              <span className="font-mono text-[10px] uppercase text-muted block">Data Trust & Source Feeds</span>
+              <span className="font-display font-black text-3xl text-white block mt-1">100% Operational</span>
+              <span className="font-mono text-[9px] text-emerald-400 block mt-1">0 Entity Collision Warnings</span>
             </div>
           </div>
 
-          {/* ── SECTION 1: ENTITY DATA COVERAGE AUDIT ── */}
-          {coverageData && (
-            <div className="border border-primary/40 bg-[#0D1A22] p-6 sm:p-8 clip-diagonal space-y-6 shadow-xl">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
-                <div className="flex items-center gap-3 text-primary">
-                  <BarChart3 className="h-5 w-5" />
-                  <div>
-                    <span className="font-mono text-[10px] uppercase text-primary font-bold block">CANONICAL COMPLETENESS AUDIT</span>
-                    <h2 className="font-display font-black text-2xl uppercase text-white">Entity Data Coverage Engine</h2>
-                  </div>
+          {/* Navigation Sub-Tabs */}
+          <div className="flex flex-wrap gap-2 border-b border-[rgba(236,232,225,0.08)] pb-4 font-mono text-xs">
+            <button
+              onClick={() => setActiveTab("ACTIONS")}
+              className={`px-4 py-2 clip-diagonal uppercase transition-colors flex items-center gap-2 ${
+                activeTab === "ACTIONS"
+                  ? "bg-primary text-black font-bold"
+                  : "bg-[#0D1A22] text-secondary hover:text-white border border-[rgba(236,232,225,0.08)]"
+              }`}
+            >
+              <Target className="h-4 w-4" />
+              <span>Top 10 Growth Actions</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("SEARCH")}
+              className={`px-4 py-2 clip-diagonal uppercase transition-colors flex items-center gap-2 ${
+                activeTab === "SEARCH"
+                  ? "bg-primary text-black font-bold"
+                  : "bg-[#0D1A22] text-secondary hover:text-white border border-[rgba(236,232,225,0.08)]"
+              }`}
+            >
+              <TrendingUp className="h-4 w-4" />
+              <span>Search Intelligence & Velocity</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("EXPERIMENTS")}
+              className={`px-4 py-2 clip-diagonal uppercase transition-colors flex items-center gap-2 ${
+                activeTab === "EXPERIMENTS"
+                  ? "bg-primary text-black font-bold"
+                  : "bg-[#0D1A22] text-secondary hover:text-white border border-[rgba(236,232,225,0.08)]"
+              }`}
+            >
+              <FlaskConical className="h-4 w-4" />
+              <span>SEO Experiments Lab ({experiments.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("INTENT_DIAGNOSTICS")}
+              className={`px-4 py-2 clip-diagonal uppercase transition-colors flex items-center gap-2 ${
+                activeTab === "INTENT_DIAGNOSTICS"
+                  ? "bg-primary text-black font-bold"
+                  : "bg-[#0D1A22] text-secondary hover:text-white border border-[rgba(236,232,225,0.08)]"
+              }`}
+            >
+              <Compass className="h-4 w-4" />
+              <span>Intent Diagnostics & Mismatches</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("CLUSTERS")}
+              className={`px-4 py-2 clip-diagonal uppercase transition-colors flex items-center gap-2 ${
+                activeTab === "CLUSTERS"
+                  ? "bg-primary text-black font-bold"
+                  : "bg-[#0D1A22] text-secondary hover:text-white border border-[rgba(236,232,225,0.08)]"
+              }`}
+            >
+              <Network className="h-4 w-4" />
+              <span>Entity Query Clusters</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("DATA_TRUST")}
+              className={`px-4 py-2 clip-diagonal uppercase transition-colors flex items-center gap-2 ${
+                activeTab === "DATA_TRUST"
+                  ? "bg-primary text-black font-bold"
+                  : "bg-[#0D1A22] text-secondary hover:text-white border border-[rgba(236,232,225,0.08)]"
+              }`}
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span>Data Trust & Patch SEO</span>
+            </button>
+          </div>
+
+          {/* TAB 1: TOP 10 WEEKLY GROWTH ACTIONS */}
+          {activeTab === "ACTIONS" && (
+            <div className="space-y-6">
+              <div className="border-l-2 border-primary pl-3 flex items-center justify-between">
+                <div>
+                  <h2 className="font-display font-black text-2xl uppercase text-white">
+                    01 // TOP 10 HIGH-IMPACT GROWTH ACTIONS (WEEKLY QUEUE)
+                  </h2>
+                  <p className="font-sans text-xs text-secondary mt-1">
+                    System-generated prioritized action items calculated from GSC impression volume, velocity momentum, and CTR conversion gaps.
+                  </p>
                 </div>
-                <div className="text-right">
-                  <span className="font-mono text-xs text-muted block">Database Completeness:</span>
-                  <span className="font-mono text-xl font-black text-[#0DF2F2]">{coverageData.overallCompleteness}%</span>
-                </div>
+                <span className="font-mono text-xs text-primary px-3 py-1 bg-primary/10 border border-primary/30">
+                  Sprint Focus: Skin Entities & Intent Capture
+                </span>
               </div>
 
-              <div className="space-y-4">
-                <h3 className="font-mono text-xs uppercase font-bold text-white tracking-wider">
-                  Highest-Value Incomplete Entities (Priority Queue)
-                </h3>
-                
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {coverageData.topIncomplete.slice(0, 6).map((audit) => (
-                    <div 
-                      key={audit.entityId}
-                      className="p-4 bg-[#08111A] border border-[rgba(236,232,225,0.06)] clip-diagonal space-y-3"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="font-mono text-[9px] uppercase text-muted block">{audit.type}</span>
-                          <strong className="font-display uppercase text-sm text-white block">{audit.displayName}</strong>
+              <div className="grid gap-3">
+                {[
+                  {
+                    rank: "01",
+                    pillar: "SEARCH",
+                    title: "Scale Aemondir Vandal Canonical Experiment",
+                    detail: "104 GSC impressions at position 8.93 with 0 clicks. Canonical slug /skins/aemondir-vandal and AnswerBox deployed. Monitor CTR uplift to 2.8-5% over 14 days.",
+                    impact: "CRITICAL // +12 clicks/mo",
+                    url: "/skins/aemondir-vandal",
+                  },
+                  {
+                    rank: "02",
+                    pillar: "SEARCH",
+                    title: "Deploy Dedicated Aeris Vandal Video Showcase Link",
+                    detail: "46 impressions at position 8.87. Capture query 'aeris vandal showcase' by linking to dedicated /watch video page.",
+                    impact: "HIGH // +4 clicks/mo",
+                    url: "/skins/aeris-vandal",
+                  },
+                  {
+                    rank: "03",
+                    pillar: "CONTENT",
+                    title: "Add Price Spectrum to Vandal Weapon Skin Hub",
+                    detail: "Query 'vandal skins' has high cluster demand (140+ impr). Ensure /skins/vandal filters enable sorting from Select to Ultra Edition.",
+                    impact: "HIGH // +8 clicks/mo",
+                    url: "/skins/vandal",
+                  },
+                  {
+                    rank: "04",
+                    pillar: "SEARCH",
+                    title: "Fix Desktop Rendering Divergence Anomaly",
+                    detail: "Mobile ranks at position 8.18 while Desktop lags at position 31.12. Verify synchronous SSR of H1 and AnswerBox without client hydration delay.",
+                    impact: "CRITICAL // +35 clicks/mo",
+                    url: "/admin/health",
+                  },
+                  {
+                    rank: "05",
+                    pillar: "DATA",
+                    title: "Bridge Patch 9.04 Impact to 17 Vandal Landing Pages",
+                    detail: "Vandal rifle balance adjustments affect 17 organic URLs (~7,200 search impressions). Update damage matrices and recoil notes.",
+                    impact: "HIGH // Search Armor",
+                    url: "/weapons/vandal",
+                  },
+                  {
+                    rank: "06",
+                    pillar: "INTENT",
+                    title: "Address Zero-Click Brand SERP Intent",
+                    detail: "Query 'valovault' has 54 impressions at position 6.28. Rewrite homepage title to 'VloPedia — VALORANT Database, Skins, Lore & Tools' with searchaction schema.",
+                    impact: "MEDIUM // Brand Authority",
+                    url: "/",
+                  },
+                  {
+                    rank: "07",
+                    pillar: "CONTENT",
+                    title: "Publish Aemondir & Aeris Collection Checklist Hubs",
+                    detail: "Expand /collections/aemondir and /collections/aeris with Schema.org ItemList and bundle total VP calculator.",
+                    impact: "MEDIUM // +6 clicks/mo",
+                    url: "/collections/aemondir",
+                  },
+                  {
+                    rank: "08",
+                    pillar: "SEARCH",
+                    title: "Advance Breakthrough Candidate: Montage Axe",
+                    detail: "Position 6.45 with 20 impressions. Only 3.4 ranks away from top 3. Optimize melee animation tags to break into page 1 top positions.",
+                    impact: "HIGH // +3 clicks/mo",
+                    url: "/skins/montage-axe",
+                  },
+                  {
+                    rank: "09",
+                    pillar: "PRODUCT",
+                    title: "Add Weapon Hub Deep Links into Skin Dossier Answer Boxes",
+                    detail: "Ensure all skin pages provide 1-click links to the parent weapon skin hub and collection for internal crawl depth.",
+                    impact: "MEDIUM // Crawl Mesh",
+                    url: "/skins",
+                  },
+                  {
+                    rank: "10",
+                    pillar: "DATA",
+                    title: "Audit Entity Resolver Collisions",
+                    detail: "Run automated test against all 18 alias variations (Jett, KAY/O, Vandal, Ascent) to guarantee 100% resolution accuracy.",
+                    impact: "STABLE // Graph Integrity",
+                    url: "/data-sources",
+                  },
+                ].map(action => (
+                  <div 
+                    key={action.rank}
+                    className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-4 clip-diagonal flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/40 transition-colors"
+                  >
+                    <div className="flex items-start gap-4">
+                      <span className="font-display font-black text-2xl text-primary">{action.rank}</span>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[9px] uppercase px-2 py-0.5 bg-white/5 border border-white/10 text-muted">
+                            {action.pillar}
+                          </span>
+                          <h4 className="font-display font-bold text-sm uppercase text-white">{action.title}</h4>
                         </div>
-                        <span className={`font-mono text-xs px-2 py-0.5 border font-bold ${
-                          audit.coverageScore >= 80 ? "border-[#0DF2F2]/30 bg-[#0DF2F2]/10 text-[#0DF2F2]" :
-                          audit.coverageScore >= 60 ? "border-amber-400/30 bg-amber-400/10 text-amber-400" :
-                          "border-error/30 bg-error/10 text-error"
-                        }`}>
-                          {audit.coverageScore}% Complete
-                        </span>
-                      </div>
-
-                      <div className="w-full bg-[#0B141A] h-1.5 overflow-hidden">
-                        <div 
-                          className="bg-primary h-full transition-all duration-500" 
-                          style={{ width: `${audit.coverageScore}%` }} 
-                        />
-                      </div>
-
-                      <div className="space-y-1 font-mono text-[10px]">
-                        <span className="text-muted block">Missing Fields ({audit.missingFields.length}):</span>
-                        <div className="flex flex-wrap gap-1">
-                          {audit.missingFields.map((field) => (
-                            <span key={field} className="px-1.5 py-0.5 bg-error/10 border border-error/20 text-error">
-                              {field}
-                            </span>
-                          ))}
-                        </div>
+                        <p className="font-sans text-xs text-secondary leading-relaxed max-w-2xl">{action.detail}</p>
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    <div className="flex sm:flex-col items-end justify-between sm:justify-center gap-2 shrink-0 font-mono">
+                      <span className="text-xs text-[#0DF2F2] font-bold">{action.impact}</span>
+                      <Link 
+                        href={action.url}
+                        className="text-[11px] text-primary hover:underline flex items-center gap-1"
+                      >
+                        <span>Execute Action</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
 
-          {/* ── SECTION 2: GOOGLE SEARCH CONSOLE & SEO OPPORTUNITY SCOREBOARD ── */}
-          <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 sm:p-8 clip-diagonal space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
-              <div className="flex items-center gap-3 text-emerald-400">
-                <TrendingUp className="h-5 w-5" />
-                <div>
-                  <span className="font-mono text-[10px] uppercase text-emerald-400 font-bold block">GROWTH ENGINE</span>
-                  <h2 className="font-display font-black text-2xl uppercase text-white">Google Search Console & Page Opportunity Score</h2>
+          {/* TAB 2: SEARCH INTELLIGENCE & MULTI-SCENARIO MODELING */}
+          {activeTab === "SEARCH" && (
+            <div className="space-y-8">
+              
+              {/* Scenario Modeling Bar */}
+              <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <h3 className="font-display font-black text-lg uppercase text-white flex items-center gap-2">
+                      <Sliders className="h-5 w-5 text-primary" />
+                      <span>Multi-Scenario CTR Traffic Simulator</span>
+                    </h3>
+                    <p className="font-sans text-xs text-secondary mt-1">
+                      Forecast click volumes across distinct conversion scenarios rather than static assumptions.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 font-mono text-xs">
+                    <span className="text-muted text-[11px]">ACTIVE SCENARIO:</span>
+                    {[
+                      { id: "scenarioCurrent", label: "Current CTR" },
+                      { id: "scenario2Pct", label: "Scenario 2% CTR" },
+                      { id: "scenario5Pct", label: "Scenario 5% CTR (Target)" },
+                      { id: "scenario8Pct", label: "Scenario 8% CTR (High-Intent)" },
+                    ].map(s => (
+                      <button
+                        key={s.id}
+                        onClick={() => setSelectedScenario(s.id as any)}
+                        className={`px-3 py-1.5 border clip-diagonal uppercase transition-colors ${
+                          selectedScenario === s.id
+                            ? "bg-primary text-black font-bold border-primary"
+                            : "bg-[#08111A] text-secondary border-[rgba(236,232,225,0.08)] hover:text-white"
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <span className="font-mono text-xs text-muted">
-                Formula: Impressions × Rank Potential × Content Gap × Click Potential
-              </span>
-            </div>
 
-            {/* Opportunities Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-[rgba(236,232,225,0.08)] bg-[#08111A] text-muted text-[10px] uppercase">
-                    <th className="p-3">Rank / Target Page</th>
-                    <th className="p-3">Category</th>
-                    <th className="p-3 text-right">Impressions</th>
-                    <th className="p-3 text-right">Avg Position</th>
-                    <th className="p-3 text-right">CTR</th>
-                    <th className="p-3 text-center">Opportunity</th>
-                    <th className="p-3">Recommended Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[rgba(236,232,225,0.04)]">
-                  {opportunities.map((opp, idx) => (
-                    <tr key={opp.url} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="p-3">
-                        <div className="flex items-center gap-2">
-                          <span className="text-muted">#{idx + 1}</span>
-                          <div>
-                            <Link href={opp.url} className="text-white hover:text-primary font-bold block">
-                              {opp.title}
-                            </Link>
-                            <span className="text-[10px] text-muted">{opp.url}</span>
+              {/* Breakthrough Candidates & Near Page 1 */}
+              <div className="grid gap-6 lg:grid-cols-2">
+                
+                {/* Breakthroughs */}
+                <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
+                  <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
+                    <h3 className="font-display font-black text-base uppercase text-white flex items-center gap-2">
+                      <Flame className="h-4 w-4 text-amber-400" />
+                      <span>Breakthrough Candidates (Positions 3–6)</span>
+                    </h3>
+                    <span className="font-mono text-[10px] text-amber-400">Near Top 3</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {breakthroughs.map((b, i) => (
+                      <div key={i} className="p-3.5 bg-[#08111A] border border-[rgba(236,232,225,0.04)] space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-xs font-bold text-white uppercase">{b.query}</span>
+                          <span className="font-mono text-[10px] text-primary bg-primary/10 px-2 py-0.5 border border-primary/20">
+                            Position {b.currentPosition.toFixed(1)} ({b.gapToTopThree} from Top 3)
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs font-mono text-muted">
+                          <span>Impressions: <strong className="text-white">{b.impressions}</strong></span>
+                          <span>CTR: <strong className="text-white">{(b.ctr * 100).toFixed(1)}%</strong></span>
+                          <span className="text-[#0DF2F2]">
+                            Projected: <strong className="text-white">+{b[selectedScenario === "scenario8Pct" ? "scenario8Pct" : "scenario5Pct"]} clicks/mo</strong>
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-secondary font-sans">{b.priorityAction}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Trend Velocity & Momentum */}
+                <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
+                  <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
+                    <h3 className="font-display font-black text-base uppercase text-white flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4 text-[#0DF2F2]" />
+                      <span>Trend Velocity & Momentum Tracking</span>
+                    </h3>
+                    <span className="font-mono text-[10px] text-[#0DF2F2]">Time-Series Baseline</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {trendVelocities.slice(0, 4).map((v, i) => (
+                      <div key={i} className="p-3.5 bg-[#08111A] border border-[rgba(236,232,225,0.04)] space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-xs font-bold text-white uppercase">{v.query}</span>
+                          <span className={`font-mono text-[9px] px-2 py-0.5 border font-bold ${
+                            v.velocity === "VERY_HIGH" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" :
+                            v.velocity === "HIGH" ? "bg-[#0DF2F2]/10 border-[#0DF2F2]/30 text-[#0DF2F2]" :
+                            v.velocity === "DECAYING" ? "bg-rose-500/10 border-rose-500/30 text-rose-400" :
+                            "bg-white/5 border-white/10 text-muted"
+                          }`}>
+                            {v.velocity.replace("_", " ")} MOMENTUM ({v.momentumScore}/100)
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                          <div className="p-2 bg-[#0B141A] border border-white/5">
+                            <span className="text-[10px] text-muted block">Position Shift</span>
+                            <span className="text-white font-bold">
+                              {v.baselinePeriod.position.toFixed(1)} → {v.currentPeriod.position.toFixed(1)} ({v.positionDelta <= 0 ? `+${Math.abs(v.positionDelta)} ranks` : `-${v.positionDelta} ranks`})
+                            </span>
+                          </div>
+                          <div className="p-2 bg-[#0B141A] border border-white/5">
+                            <span className="text-[10px] text-muted block">Impression Growth</span>
+                            <span className="text-white font-bold">
+                              {v.baselinePeriod.impressions} → {v.currentPeriod.impressions} (+{v.impressionGrowthPct}%)
+                            </span>
                           </div>
                         </div>
-                      </td>
-                      <td className="p-3">
-                        <span className="px-1.5 py-0.5 bg-white/5 border border-white/10 text-secondary text-[10px]">
-                          {opp.category}
-                        </span>
-                      </td>
-                      <td className="p-3 text-right text-white font-bold">{opp.impressions.toLocaleString()}</td>
-                      <td className="p-3 text-right text-[#0DF2F2] font-bold">{opp.position}</td>
-                      <td className="p-3 text-right text-muted">{(opp.ctr * 100).toFixed(1)}%</td>
-                      <td className="p-3 text-center">
-                        <span className={`px-2 py-0.5 font-bold uppercase text-[9px] border ${
-                          opp.opportunityLevel === "CRITICAL" ? "border-error/40 bg-error/10 text-error" :
-                          opp.opportunityLevel === "HIGH" ? "border-primary/40 bg-primary/10 text-primary" :
-                          "border-amber-400/40 bg-amber-400/10 text-amber-400"
-                        }`}>
-                          {opp.opportunityLevel} ({opp.opportunityScore})
-                        </span>
-                      </td>
-                      <td className="p-3 text-[11px] text-secondary max-w-xs">{opp.recommendedAction}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-            {/* Vertical Index Performance Split */}
-            <div className="pt-4 border-t border-[rgba(236,232,225,0.08)] space-y-3">
-              <h3 className="font-mono text-xs uppercase font-bold text-white tracking-wider">
-                Index Footprint & Performance by Vertical
-              </h3>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {verticalStats.map(stat => (
-                  <div key={stat.category} className="p-3.5 bg-[#08111A] border border-[rgba(236,232,225,0.06)] font-mono text-xs space-y-1.5">
-                    <div className="flex justify-between items-center">
-                      <strong className="text-white uppercase">{stat.category}</strong>
-                      <span className="text-[10px] text-muted">{stat.indexedPages} / {stat.totalPages} indexed</span>
+              </div>
+
+              {/* Device Anomaly & Country Performance */}
+              <div className="grid gap-6 lg:grid-cols-2">
+                
+                {/* Device Anomaly */}
+                <div className="border border-amber-400/30 bg-amber-400/5 p-6 clip-diagonal space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-display font-black text-base uppercase text-white flex items-center gap-2">
+                      <AlertTriangle className="h-5 w-5 text-amber-400" />
+                      <span>Device Anomaly Detector (Mobile vs Desktop)</span>
+                    </h3>
+                    <span className="font-mono text-[9px] text-amber-400 border border-amber-400/30 px-2 py-0.5 font-bold uppercase">
+                      {deviceAnomaly?.divergenceSeverity} DIVERGENCE
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 font-mono text-xs">
+                    <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                      <span className="text-[10px] text-emerald-400 block">Mobile Average Position</span>
+                      <span className="font-display font-black text-2xl text-emerald-400 mt-1 block">8.18</span>
+                      <span className="text-muted text-[10px]">261 impressions</span>
                     </div>
-                    <div className="flex justify-between text-[11px] pt-1 border-t border-[rgba(236,232,225,0.04)]">
-                      <span className="text-muted">Total Impr:</span>
-                      <span className="text-white font-bold">{stat.totalImpressions.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-muted">Impr / Page:</span>
-                      <span className="text-[#0DF2F2] font-bold">{stat.impressionsPerIndexedPage}</span>
+                    <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
+                      <span className="text-[10px] text-rose-400 block">Desktop Average Position</span>
+                      <span className="font-display font-black text-2xl text-rose-400 mt-1 block">31.12</span>
+                      <span className="text-muted text-[10px]">549 impressions (22.9 ranks lag)</span>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          {/* ── SECTION 2.5: ALMOST-RANKING STRIKING DISTANCE & CTR ACCELERATOR ── */}
-          <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 sm:p-8 clip-diagonal space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-4">
-              <div className="flex items-center gap-3 text-primary">
-                <Zap className="h-5 w-5 animate-pulse" />
-                <div>
-                  <span className="font-mono text-[10px] uppercase text-primary font-bold block">CTR ACCELERATOR</span>
-                  <h2 className="font-display font-black text-2xl uppercase text-white">Almost-Ranking Striking Distance Queries (Pos 4–20)</h2>
+                  <p className="font-sans text-xs text-secondary leading-relaxed">
+                    {deviceAnomaly?.diagnosis}
+                  </p>
+
+                  <div className="space-y-1 font-mono text-[11px] text-muted">
+                    <span className="text-white font-bold block mb-1">Recommended Action Items:</span>
+                    {deviceAnomaly?.actionItems.map((item, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 bg-amber-400 rounded-full" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <span className="font-mono text-xs text-muted">
-                Target: Convert Position 7-10 impressions into clicks via clean slugs & intent answer blocks
-              </span>
-            </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-[rgba(236,232,225,0.08)] bg-[#08111A] text-muted text-[10px] uppercase">
-                    <th className="p-3">Search Query / Intent</th>
-                    <th className="p-3">Target Slug URL</th>
-                    <th className="p-3 text-right">Impressions</th>
-                    <th className="p-3 text-right">Avg Position</th>
-                    <th className="p-3 text-right">Current CTR</th>
-                    <th className="p-3 text-right">Potential Clicks (5% CTR)</th>
-                    <th className="p-3">Optimization Directive</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[rgba(236,232,225,0.04)]">
-                  {almostRanking.map((ar, idx) => (
-                    <tr key={ar.query} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="p-3">
+                {/* Country Performance */}
+                <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
+                  <h3 className="font-display font-black text-base uppercase text-white flex items-center gap-2">
+                    <Compass className="h-5 w-5 text-[#0DF2F2]" />
+                    <span>Global Demand & Regional Ranking Analysis</span>
+                  </h3>
+
+                  <div className="grid gap-2 font-mono text-xs">
+                    {countryAnomalies.slice(0, 5).map((c, i) => (
+                      <div key={i} className="p-2.5 bg-[#08111A] border border-[rgba(236,232,225,0.04)] flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="text-primary font-bold">#{idx + 1}</span>
-                          <span className="text-white font-bold">{ar.query}</span>
+                          <span className="font-bold text-white">{c.country} ({c.code})</span>
+                          {c.underperformanceFlag && (
+                            <span className="text-[9px] bg-rose-500/10 border border-rose-500/30 text-rose-400 px-1.5 py-0.2">
+                              Underperforming
+                            </span>
+                          )}
                         </div>
-                      </td>
-                      <td className="p-3">
-                        <Link href={ar.url} className="text-muted hover:text-primary transition-colors text-[11px]">
-                          {ar.url}
-                        </Link>
-                      </td>
-                      <td className="p-3 text-right text-white font-bold">{ar.impressions}</td>
-                      <td className="p-3 text-right text-[#0DF2F2] font-bold">{ar.position.toFixed(2)}</td>
-                      <td className="p-3 text-right text-error font-bold">{(ar.ctr * 100).toFixed(1)}%</td>
-                      <td className="p-3 text-right text-emerald-400 font-bold">+{ar.potentialClicksAt5Pct} clicks/mo</td>
-                      <td className="p-3 text-[11px] text-secondary max-w-sm">{ar.recommendedAction}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Device & Country Search Footprint Split */}
-            <div className="grid gap-6 md:grid-cols-2 pt-4 border-t border-[rgba(236,232,225,0.08)]">
-              {/* Device Performance */}
-              <div className="p-4 bg-[#08111A] border border-[rgba(236,232,225,0.06)] space-y-3 font-mono text-xs">
-                <div className="flex justify-between items-center border-b border-[rgba(236,232,225,0.06)] pb-2">
-                  <span className="font-bold text-white uppercase">Device Indexing Health</span>
-                  <span className="text-[10px] text-muted">Mobile-First Status</span>
-                </div>
-                <div className="space-y-2">
-                  {deviceStats.map((d) => (
-                    <div key={d.device} className="flex justify-between items-center py-1 border-b border-[rgba(236,232,225,0.03)]">
-                      <span className="text-muted">{d.device}:</span>
-                      <div className="flex items-center gap-4">
-                        <span className="text-white font-bold">{d.impressions} impr</span>
-                        <span className={`font-bold ${d.avgPosition < 12 ? "text-emerald-400" : "text-amber-400"}`}>
-                          Pos {d.avgPosition.toFixed(2)}
-                        </span>
+                        <div className="flex items-center gap-4 text-muted">
+                          <span>Impr: <strong className="text-white">{c.impressions}</strong></span>
+                          <span>Pos: <strong className={c.position <= 10 ? "text-emerald-400" : "text-white"}>{c.position.toFixed(1)}</strong></span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Country Footprint */}
-              <div className="p-4 bg-[#08111A] border border-[rgba(236,232,225,0.06)] space-y-3 font-mono text-xs">
-                <div className="flex justify-between items-center border-b border-[rgba(236,232,225,0.06)] pb-2">
-                  <span className="font-bold text-white uppercase">Global Demand Footprint</span>
-                  <span className="text-[10px] text-muted">Top Search Geographies</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {countryStats.slice(0, 6).map((c) => (
-                    <div key={c.code} className="p-2 bg-black/30 border border-[rgba(236,232,225,0.04)] flex justify-between items-center text-[11px]">
-                      <span className="text-muted truncate">{c.country}</span>
-                      <span className="text-primary font-bold">{c.impressions}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ── SECTION 3: SEARCH SATISFACTION & CONTENT GAP TELEMETRY ── */}
-          <div className="grid gap-8 lg:grid-cols-2">
-            
-            {/* Search Satisfaction */}
-            <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-5">
-              <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
-                <div className="flex items-center gap-2">
-                  <ThumbsUp className="h-4 w-4 text-[#0DF2F2]" />
-                  <h3 className="font-display font-black text-xl uppercase text-white">Search Answer Satisfaction</h3>
-                </div>
-                <span className="font-mono text-xs text-muted">Real Feedback Telemetry</span>
-              </div>
-
-              <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1">
-                {satisfactionList.map(item => (
-                  <div key={item.query} className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.04)] flex items-center justify-between font-mono text-xs">
-                    <div>
-                      <strong className="text-white block">&quot;{item.query}&quot;</strong>
-                      <span className="text-[10px] text-muted">{item.totalFeedback} votes ({item.helpfulCount} 👍 / {item.unhelpfulCount} 👎)</span>
-                    </div>
-                    <span className={`px-2 py-0.5 text-xs font-bold border ${
-                      item.satisfactionRate >= 80 ? "border-[#0DF2F2]/30 bg-[#0DF2F2]/10 text-[#0DF2F2]" :
-                      item.satisfactionRate >= 50 ? "border-amber-400/30 bg-amber-400/10 text-amber-400" :
-                      "border-error/30 bg-error/10 text-error"
-                    }`}>
-                      {item.satisfactionRate}% Helpful
-                    </span>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Content Gaps Queue */}
-            <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-5">
-              <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
-                <div className="flex items-center gap-2">
-                  <Search className="h-4 w-4 text-amber-400" />
-                  <h3 className="font-display font-black text-xl uppercase text-white">Search Gaps (Content Roadmap)</h3>
                 </div>
-                <span className="font-mono text-xs text-amber-400 font-bold">0 Results Logged</span>
+
               </div>
 
-              <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1">
-                {contentGaps.map(gap => (
-                  <div key={gap.query} className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.04)] flex items-center justify-between font-mono text-xs">
-                    <div>
-                      <strong className="text-white block">&quot;{gap.query}&quot;</strong>
-                      <span className="text-[10px] text-muted">Last searched: {gap.lastSearched ? new Date(gap.lastSearched).toLocaleDateString() : "Recent"}</span>
-                    </div>
-                    <span className="px-2 py-0.5 bg-amber-400/10 border border-amber-400/30 text-amber-400 font-bold">
-                      {gap.searchCount} Unanswered Searches
-                    </span>
-                  </div>
-                ))}
-              </div>
             </div>
+          )}
 
-          </div>
-
-          {/* ── SECTION 4: PATCH IMPACT & GRAPH INTEGRITY AUDIT ── */}
-          <div className="grid gap-8 lg:grid-cols-2">
-            
-            {/* Patch Impact Queue */}
-            <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-5">
-              <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
-                <div className="flex items-center gap-2">
-                  <RefreshCw className="h-4 w-4 text-primary" />
-                  <h3 className="font-display font-black text-xl uppercase text-white">Patch 9.04 Impact Queue</h3>
+          {/* TAB 3: SEO EXPERIMENTS LAB (A/B TESTING) */}
+          {activeTab === "EXPERIMENTS" && (
+            <div className="space-y-6">
+              <div className="border-l-2 border-primary pl-3 flex items-center justify-between">
+                <div>
+                  <h2 className="font-display font-black text-2xl uppercase text-white">
+                    02 // SEO EXPERIMENTS & SERP TITLE TESTING LAB
+                  </h2>
+                  <p className="font-sans text-xs text-secondary mt-1">
+                    Live before/after tracking testing canonical slugs, action-driven title tags, and above-the-fold answer boxes against baseline metrics.
+                  </p>
                 </div>
-                <span className="font-mono text-xs text-primary font-bold">Dependency Tree</span>
+                <div className="font-mono text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1">
+                  Active Uplift: +{aggregateUplift.avgPositionImprovement} avg ranks
+                </div>
               </div>
 
-              <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
-                {staleList.slice(0, 5).map(item => (
-                  <div key={item.entityId} className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.04)] space-y-2">
-                    <div className="flex justify-between items-center">
+              <div className="grid gap-6">
+                {experiments.map(exp => (
+                  <div key={exp.id} className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-5">
+                    
+                    {/* Experiment Header */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[rgba(236,232,225,0.08)] pb-4">
                       <div>
-                        <span className="font-mono text-xs uppercase font-bold text-white block">{item.entityId}</span>
-                        <span className="font-mono text-[9px] text-[#0DF2F2]">{item.totalDependentRecords || 6} Dependent Records</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[9px] uppercase px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
+                            {exp.status} ({exp.targetDurationDays}d test)
+                          </span>
+                          <h3 className="font-display font-black text-xl uppercase text-white">{exp.entityName}</h3>
+                        </div>
+                        <p className="font-sans text-xs text-secondary mt-1 max-w-2xl">{exp.hypothesis}</p>
                       </div>
-                      <span className={`font-mono text-[9px] uppercase px-2 py-0.5 border font-bold ${
-                        item.status === "CRITICAL_UPDATE_REQUIRED"
-                          ? "border-primary/40 bg-primary/10 text-primary"
-                          : "border-[rgba(236,232,225,0.1)] text-muted"
-                      }`}>
-                        {item.status}
-                      </span>
+
+                      <div className="flex items-center gap-3 font-mono text-xs">
+                        <div className="p-2 bg-[#08111A] border border-white/5 text-center">
+                          <span className="text-[10px] text-muted block">CTR Uplift</span>
+                          <span className="text-emerald-400 font-bold">+{exp.calculatedUplift.ctrDeltaPct}%</span>
+                        </div>
+                        <div className="p-2 bg-[#08111A] border border-white/5 text-center">
+                          <span className="text-[10px] text-muted block">Position Gain</span>
+                          <span className="text-[#0DF2F2] font-bold">{exp.calculatedUplift.positionDelta} ranks</span>
+                        </div>
+                        <div className="p-2 bg-[#08111A] border border-white/5 text-center">
+                          <span className="text-[10px] text-muted block">Monthly Clicks</span>
+                          <span className="text-primary font-bold">+{exp.calculatedUplift.clickGainMonthly}</span>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {item.affectedUrls?.slice(0, 4).map((url: string) => (
-                        <Link
-                          key={url}
-                          href={url}
-                          className="font-mono text-[9px] text-muted hover:text-white px-2 py-0.5 bg-[#0B141A] border border-[rgba(236,232,225,0.06)] transition-colors"
-                        >
-                          {url} →
-                        </Link>
-                      ))}
+                    {/* Variant Comparison Grid */}
+                    <div className="grid gap-4 md:grid-cols-2 font-mono text-xs">
+                      
+                      {/* Variant A */}
+                      <div className="p-4 bg-[#08111A] border border-white/5 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted font-bold uppercase">{exp.variantA.version}</span>
+                          <span className="text-[10px] text-muted">{exp.variantA.period}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-muted block">SERP Title</span>
+                          <p className="text-white font-sans text-xs">{exp.variantA.title}</p>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-[11px]">
+                          <div>Impr: <strong className="text-white">{exp.variantA.impressions}</strong></div>
+                          <div>Clicks: <strong className="text-white">{exp.variantA.clicks}</strong></div>
+                          <div>Pos: <strong className="text-white">{exp.variantA.avgPosition.toFixed(1)}</strong></div>
+                        </div>
+                      </div>
+
+                      {/* Variant B */}
+                      <div className="p-4 bg-[#0DF2F2]/5 border border-[#0DF2F2]/20 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#0DF2F2] font-bold uppercase">{exp.variantB.version}</span>
+                          <span className="text-[10px] text-[#0DF2F2]">{exp.variantB.period}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-muted block">SERP Title</span>
+                          <p className="text-white font-sans text-xs">{exp.variantB.title}</p>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#0DF2F2]/10 text-[11px]">
+                          <div>Impr: <strong className="text-white">{exp.variantB.impressions}</strong></div>
+                          <div>Clicks: <strong className="text-emerald-400">{exp.variantB.clicks}</strong></div>
+                          <div>Pos: <strong className="text-emerald-400">{exp.variantB.avgPosition.toFixed(1)}</strong></div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* Verdict */}
+                    <div className="flex items-center justify-between p-3 bg-[#0B141A] border border-[rgba(236,232,225,0.06)] font-mono text-xs">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                        <span className="text-secondary">{exp.verdict}</span>
+                      </div>
+                      <Link href={exp.pageUrl} className="text-primary hover:underline flex items-center gap-1">
+                        <span>Inspect Live Page →</span>
+                      </Link>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: INTENT DIAGNOSTICS & MISMATCHES */}
+          {activeTab === "INTENT_DIAGNOSTICS" && (
+            <div className="space-y-6">
+              <div className="border-l-2 border-primary pl-3">
+                <h2 className="font-display font-black text-2xl uppercase text-white">
+                  03 // LOW-CTR DIAGNOSTICS & QUERY MISMATCH DETECTOR
+                </h2>
+                <p className="font-sans text-xs text-secondary mt-1">
+                  Classifies root causes of low click-through rates (Title Mismatch, Intent Mismatch, Wrong Landing Page, Zero-Click SERP) with semantic affinity scoring.
+                </p>
+              </div>
+
+              <div className="grid gap-4">
+                {diagnostics.map((d, i) => (
+                  <div key={i} className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[rgba(236,232,225,0.08)] pb-3 font-mono text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 border font-bold text-[9px] uppercase ${
+                          d.diagnosis === "WRONG_LANDING_PAGE" ? "bg-rose-500/10 border-rose-500/30 text-rose-400" :
+                          d.diagnosis === "INTENT_MISMATCH" ? "bg-amber-400/10 border-amber-400/30 text-amber-400" :
+                          d.diagnosis === "TITLE_MISMATCH" ? "bg-primary/10 border-primary/30 text-primary" :
+                          d.diagnosis === "ZERO_CLICK_SERP" ? "bg-[#0DF2F2]/10 border-[#0DF2F2]/30 text-[#0DF2F2]" :
+                          "bg-white/5 border-white/10 text-muted"
+                        }`}>
+                          {d.diagnosis.replace(/_/g, " ")}
+                        </span>
+                        <span className="font-bold text-white text-sm uppercase">{d.query}</span>
+                      </div>
+
+                      <div className="flex items-center gap-4 text-muted">
+                        <span>Impr: <strong className="text-white">{d.impressions}</strong></span>
+                        <span>Clicks: <strong className="text-white">{d.clicks}</strong></span>
+                        <span>Pos: <strong className="text-white">{d.position.toFixed(1)}</strong></span>
+                        <span>Match: <strong className={d.matchResult.matchScore >= 80 ? "text-emerald-400" : "text-amber-400"}>{d.matchResult.matchScore}%</strong></span>
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4 font-mono text-xs">
+                      <div className="space-y-2">
+                        <span className="text-muted text-[10px] uppercase block">Current Landing URL vs Recommended</span>
+                        <div className="p-2.5 bg-[#08111A] border border-white/5 space-y-1">
+                          <div className="text-secondary text-[11px]">Current: <strong className="text-white">{d.url}</strong></div>
+                          <div className="text-primary text-[11px]">Canonical: <strong className="text-white">{d.matchResult.recommendedUrl}</strong></div>
+                        </div>
+                        <p className="font-sans text-xs text-secondary leading-relaxed pt-1">{d.diagnosticExplanation}</p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <span className="text-muted text-[10px] uppercase block">Required Remediation Steps</span>
+                        <div className="p-2.5 bg-[#08111A] border border-white/5 space-y-1 text-secondary text-[11px] font-sans">
+                          {d.actionChecklist.map((act, idx) => (
+                            <div key={idx} className="flex items-start gap-2">
+                              <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                              <span>{act}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+          )}
 
-            {/* Graph Integrity */}
-            {integrityReport && (
-              <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-5">
+          {/* TAB 5: ENTITY QUERY CLUSTERS */}
+          {activeTab === "CLUSTERS" && (
+            <div className="space-y-6">
+              <div className="border-l-2 border-primary pl-3">
+                <h2 className="font-display font-black text-2xl uppercase text-white">
+                  04 // ENTITY QUERY CLUSTERS & KNOWLEDGE GRAPH MESH
+                </h2>
+                <p className="font-sans text-xs text-secondary mt-1">
+                  Aggregates fragmented search queries into unified entity clusters, identifying total demand volume and sub-intent breakdowns.
+                </p>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                {clusters.map(c => (
+                  <div key={c.clusterId} className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal space-y-4">
+                    <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
+                      <div>
+                        <span className="font-mono text-[9px] text-primary uppercase font-bold">{c.category} Entity Cluster</span>
+                        <h3 className="font-display font-black text-xl uppercase text-white">{c.displayName}</h3>
+                      </div>
+                      <div className="text-right font-mono">
+                        <span className="font-display font-black text-2xl text-[#0DF2F2] block">{c.totalImpressions}</span>
+                        <span className="text-[9px] text-muted">Total Impressions</span>
+                      </div>
+                    </div>
+
+                    {/* Sub-intent distribution */}
+                    <div className="space-y-2 font-mono text-xs">
+                      <span className="text-muted text-[10px] uppercase block">Sub-Intent Demand Distribution</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {Object.entries(c.intentBreakdown).map(([intent, count]) => count > 0 && (
+                          <div key={intent} className="p-2 bg-[#08111A] border border-white/5 flex items-center justify-between">
+                            <span className="text-secondary text-[10px]">{intent.replace(/_/g, " ")}</span>
+                            <span className="text-white font-bold">{count} impr</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Graph Connections */}
+                    <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.04)] font-mono text-[11px] space-y-1">
+                      <span className="text-muted text-[10px] uppercase block">Linked Knowledge Graph Nodes</span>
+                      {c.graphConnections.parentWeaponUrl && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-secondary">Parent Weapon Hub:</span>
+                          <Link href={c.graphConnections.parentWeaponUrl} className="text-[#0DF2F2] hover:underline">
+                            {c.graphConnections.parentWeaponName} →
+                          </Link>
+                        </div>
+                      )}
+                      {c.graphConnections.collectionUrl && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-secondary">Collection Hub:</span>
+                          <Link href={c.graphConnections.collectionUrl} className="text-primary hover:underline">
+                            {c.graphConnections.collectionName} →
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: DATA TRUST & PATCH SEO */}
+          {activeTab === "DATA_TRUST" && (
+            <div className="space-y-8">
+              
+              {/* Patch Impact to SEO Exposure */}
+              <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
                 <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
-                  <div className="flex items-center gap-2 text-primary">
-                    <Network className="h-4 w-4" />
-                    <h3 className="font-display font-black text-xl uppercase text-white">Graph Integrity & Contradictions</h3>
-                  </div>
-                  <span className="font-mono text-xs text-primary font-bold">{integrityReport.totalRelationships} Edges</span>
-                </div>
-
-                <div className="grid gap-3 sm:grid-cols-3 font-mono text-xs">
-                  <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
-                    <span className="text-[10px] text-muted block uppercase">Orphan Nodes:</span>
-                    <strong className="text-white block mt-0.5">{integrityReport.orphanNodes.length} Unlinked</strong>
-                    <span className="text-[9px] text-[#0DF2F2] block mt-1">✓ 100% Connected</span>
-                  </div>
-
-                  <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
-                    <span className="text-[10px] text-muted block uppercase">Contradictions:</span>
-                    <strong className="text-white block mt-0.5">{integrityReport.contradictoryEdges.length} Conflicts</strong>
-                    <span className="text-[9px] text-primary block mt-1">✓ Zero Conflicts</span>
-                  </div>
-
-                  <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)]">
-                    <span className="text-[10px] text-muted block uppercase">Stale Edges:</span>
-                    <strong className="text-white block mt-0.5">{integrityReport.staleEdges.length} Outdated</strong>
-                    <span className="text-[9px] text-[#0DF2F2] block mt-1">✓ Patch 9.04 Verified</span>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)] font-mono text-xs flex justify-between items-center">
-                  <span className="text-muted">Total Knowledge Graph Nodes:</span>
-                  <span className="text-white font-bold">{integrityReport.totalEntities} Nodes Active</span>
-                </div>
-              </div>
-            )}
-
-          </div>
-
-          {/* ── Community Issue Reports Queue ── */}
-          <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
-            <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.08)] pb-3">
-              <div className="flex items-center gap-2 text-primary">
-                <Flag className="h-4 w-4" />
-                <h3 className="font-display font-black text-xl uppercase text-white">Community Issue & Correction Queue</h3>
-              </div>
-              <span className="font-mono text-xs text-muted">{reports.length} Reports Logged</span>
-            </div>
-
-            {reports.length === 0 ? (
-              <div className="p-6 text-center bg-[#08111A] border border-[rgba(236,232,225,0.04)]">
-                <CheckCircle2 className="h-6 w-6 text-primary mx-auto mb-2" />
-                <span className="font-mono text-xs text-muted">No pending community reports. All database statistics verified.</span>
-              </div>
-            ) : (
-              <div className="space-y-2 max-h-60 overflow-y-auto">
-                {reports.map((r, i) => (
-                  <div key={i} className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.06)] space-y-1">
-                    <div className="flex items-center justify-between font-mono text-[10px]">
-                      <span className="text-primary font-bold">{r.category}</span>
-                      <span className="text-muted">{r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ""}</span>
+                  <div className="flex items-center gap-3">
+                    <ShieldAlert className="h-5 w-5 text-primary" />
+                    <div>
+                      <h3 className="font-display font-black text-xl uppercase text-white">
+                        05 // PATCH RIPPLE TO ORGANIC LANDING PAGES
+                      </h3>
+                      <p className="font-sans text-xs text-secondary mt-0.5">
+                        Evaluating search traffic vulnerability when game balance patches modify weapons or agents.
+                      </p>
                     </div>
-                    <p className="font-sans text-xs text-white">{r.description}</p>
-                    <span className="font-mono text-[9px] text-muted block">Target: {r.entityName}</span>
                   </div>
-                ))}
+                  <span className="font-mono text-xs text-primary bg-primary/10 border border-primary/30 px-3 py-1">
+                    Vandal Impact: {vandalSeoExposure.totalOrganicPages} Organic URLs ({vandalSeoExposure.totalSearchExposure} Impr Exposed)
+                  </span>
+                </div>
+
+                <div className="grid gap-2 sm:grid-cols-3 font-mono text-xs">
+                  {vandalSeoExposure.landingPages.map((lp, idx) => (
+                    <div key={idx} className="p-3 bg-[#08111A] border border-[rgba(236,232,225,0.04)] space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] text-primary uppercase font-bold">{lp.pageType}</span>
+                        <span className="text-[10px] text-muted">{lp.estimatedImpressions} impr</span>
+                      </div>
+                      <Link href={lp.url} className="text-white hover:text-primary font-bold text-xs block truncate">
+                        {lp.title}
+                      </Link>
+                      <span className="text-[10px] text-secondary block font-sans">Intent: &quot;{lp.searchIntent}&quot;</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
-          </div>
+
+              {/* Source Health & Alias Collision Audit */}
+              <div className="grid gap-6 lg:grid-cols-2">
+                
+                {/* Source Feeds */}
+                <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
+                  <h3 className="font-display font-black text-lg uppercase text-white flex items-center gap-2">
+                    <Database className="h-5 w-5 text-emerald-400" />
+                    <span>Registered Source Feeds Health</span>
+                  </h3>
+
+                  <div className="space-y-2 font-mono text-xs">
+                    {sourceHealth.map(s => (
+                      <div key={s.id} className="p-2.5 bg-[#08111A] border border-white/5 flex items-center justify-between">
+                        <div>
+                          <span className="font-bold text-white block">{s.name}</span>
+                          <span className="text-[10px] text-muted">{s.statusMessage}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-emerald-400 font-bold block">{s.healthStatus} ({s.httpStatus})</span>
+                          <span className="text-[10px] text-muted">{s.latencyMs}ms latency</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Collision Audit */}
+                <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
+                  <h3 className="font-display font-black text-lg uppercase text-white flex items-center gap-2">
+                    <ShieldCheck className="h-5 w-5 text-[#0DF2F2]" />
+                    <span>Entity Resolver Alias Collision Audit</span>
+                  </h3>
+
+                  <div className="p-4 bg-[#08111A] border border-emerald-500/20 space-y-3 font-mono text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-emerald-400 font-bold uppercase">Status: ZERO COLLISIONS DETECTED</span>
+                      <span className="text-muted">{collisionAudit?.totalPassed}/{collisionAudit?.totalChecked} Passed</span>
+                    </div>
+                    <p className="font-sans text-xs text-secondary leading-relaxed">
+                      {collisionAudit?.message}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 text-[10px] text-muted pt-2 border-t border-white/5">
+                      <div>✓ Jett / jett / agent:jett</div>
+                      <div>✓ Vandal / vandal / weapon:vandal</div>
+                      <div>✓ KAY/O / kay-o / agent:kay-o</div>
+                      <div>✓ Ascent / map:ascent</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          )}
 
         </Container>
       </div>

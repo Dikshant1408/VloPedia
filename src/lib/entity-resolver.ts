@@ -13,12 +13,25 @@ export interface ResolvedEntity {
   confidence?: string;
 }
 
+export interface CollisionAuditResult {
+  totalChecked: number;
+  totalPassed: number;
+  collisionsDetected: Array<{
+    alias: string;
+    resolvedEntityA: string;
+    resolvedEntityB: string;
+    reason: string;
+  }>;
+  isHealthy: boolean;
+  message: string;
+}
+
 export class EntityResolver {
   public static resolve(query: string, preferredType?: EntityType): ResolvedEntity | null {
     if (!query || typeof query !== "string") return null;
 
     const raw = query.trim();
-    const cleanSlug = slugify(raw.replace(/^(agent|weapon|map|faction|lore|event):/, ""));
+    const cleanSlug = slugify(raw.replace(/^(agent|weapon|map|faction|lore|event):/, "").replace(/\s*(agent|rifle|map|knife|weapon)\s*$/i, ""));
 
     const allEntities = KnowledgeGraphService.getAllEntities();
 
@@ -61,6 +74,59 @@ export class EntityResolver {
     const resolved = this.resolve(entityIdOrSlug);
     if (resolved) return resolved.displayName;
     return fallback || entityIdOrSlug;
+  }
+
+  /**
+   * Collision Detector: audits entity resolution across standard test aliases to confirm 0 collisions
+   */
+  public static detectCollisions(): CollisionAuditResult {
+    const testCases: Array<{ alias: string; expectedId: string; type?: EntityType }> = [
+      { alias: "Jett", expectedId: "agent:jett", type: "AGENT" },
+      { alias: "jett", expectedId: "agent:jett", type: "AGENT" },
+      { alias: "Jett Agent", expectedId: "agent:jett", type: "AGENT" },
+      { alias: "agent:jett", expectedId: "agent:jett", type: "AGENT" },
+      { alias: "Omen", expectedId: "agent:omen", type: "AGENT" },
+      { alias: "omen", expectedId: "agent:omen", type: "AGENT" },
+      { alias: "agent:omen", expectedId: "agent:omen", type: "AGENT" },
+      { alias: "KAY/O", expectedId: "agent:kay-o", type: "AGENT" },
+      { alias: "kay-o", expectedId: "agent:kay-o", type: "AGENT" },
+      { alias: "Vandal", expectedId: "weapon:vandal", type: "WEAPON" },
+      { alias: "vandal", expectedId: "weapon:vandal", type: "WEAPON" },
+      { alias: "Vandal Rifle", expectedId: "weapon:vandal", type: "WEAPON" },
+      { alias: "weapon:vandal", expectedId: "weapon:vandal", type: "WEAPON" },
+      { alias: "Phantom", expectedId: "weapon:phantom", type: "WEAPON" },
+      { alias: "Ascent", expectedId: "map:ascent", type: "MAP" },
+      { alias: "ascent", expectedId: "map:ascent", type: "MAP" },
+      { alias: "map:ascent", expectedId: "map:ascent", type: "MAP" },
+      { alias: "Kingdom", expectedId: "faction:kingdom", type: "FACTION" },
+    ];
+
+    const collisions: CollisionAuditResult["collisionsDetected"] = [];
+    let passed = 0;
+
+    for (const test of testCases) {
+      const resolved = this.resolve(test.alias, test.type);
+      if (!resolved || resolved.id !== test.expectedId) {
+        collisions.push({
+          alias: test.alias,
+          resolvedEntityA: resolved ? resolved.id : "NULL",
+          resolvedEntityB: test.expectedId,
+          reason: `Alias '${test.alias}' resolved to '${resolved ? resolved.id : "NULL"}' but expected '${test.expectedId}'`,
+        });
+      } else {
+        passed++;
+      }
+    }
+
+    return {
+      totalChecked: testCases.length,
+      totalPassed: passed,
+      collisionsDetected: collisions,
+      isHealthy: collisions.length === 0,
+      message: collisions.length === 0 
+        ? `Entity Resolver Audit Healthy: ${passed}/${testCases.length} alias checks resolved with zero collisions.` 
+        : `Entity Collision Warning: ${collisions.length} aliases failed expected canonical resolution.`,
+    };
   }
 
   private static mapToResolved(entity: CanonicalEntity): ResolvedEntity {

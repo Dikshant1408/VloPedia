@@ -2,13 +2,16 @@
  * VloPedia — Google Search Console & SEO Opportunity Scoring Engine
  * 
  * Computes high-yield SEO opportunities by combining search impressions,
- * position ranking potential (pages on striking distance 4-20), content gap, and CTR potential.
+ * position ranking potential (pages on striking distance 4-20), content gap, multi-scenario CTR potential,
+ * historical trend velocity, and anomaly detectors.
  */
+
+import gscSnapshotsData from "@/data/gsc-snapshots.json";
 
 export interface PageSearchMetric {
   url: string;
   title: string;
-  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Guides" | "Lore" | "Compare" | "Tools" | "Collections";
+  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Guides" | "Lore" | "Compare" | "Tools" | "Collections" | "Navigation";
   impressions: number;
   clicks: number;
   ctr: number; // e.g., 0.034 for 3.4%
@@ -19,13 +22,21 @@ export interface PageSearchMetric {
   isAlmostRanking?: boolean;
 }
 
+export interface CtrScenarioForecast {
+  scenarioCurrent: number; // Clicks at current CTR
+  scenario2Pct: number;    // Scenario: clicks at 2% CTR
+  scenario5Pct: number;    // Scenario: clicks at 5% CTR
+  scenario8Pct: number;    // Scenario: clicks at 8% CTR
+}
+
 export interface OpportunityScoreResult extends PageSearchMetric {
   opportunityScore: number;
   rankingPotential: number;
   clickPotential: number;
   opportunityLevel: "CRITICAL" | "HIGH" | "MEDIUM" | "STABLE";
   recommendedAction: string;
-  estimatedClickGain: number;
+  scenarios: CtrScenarioForecast;
+  estimatedClickGain: number; // default 5% scenario
 }
 
 export interface AlmostRankingOpportunity {
@@ -37,8 +48,75 @@ export interface AlmostRankingOpportunity {
   clicks: number;
   ctr: number;
   position: number;
+  scenarios: CtrScenarioForecast;
   potentialClicksAt5Pct: number;
   recommendedAction: string;
+}
+
+export interface QueryTrendVelocity {
+  query: string;
+  url: string;
+  category: string;
+  baselinePeriod: {
+    impressions: number;
+    clicks: number;
+    position: number;
+    ctr: number;
+  };
+  currentPeriod: {
+    impressions: number;
+    clicks: number;
+    position: number;
+    ctr: number;
+  };
+  impressionGrowthPct: number;
+  positionDelta: number; // negative means rank improved (e.g., -3.47 ranks)
+  velocity: "VERY_HIGH" | "HIGH" | "STABLE" | "DECAYING";
+  momentumScore: number; // 0 - 100
+}
+
+export interface ContentDecayAlert {
+  query: string;
+  url: string;
+  category: string;
+  impressionDropPct: number;
+  positionLossRanks: number;
+  riskSeverity: "HIGH" | "MEDIUM" | "LOW";
+  likelyCauses: string[];
+  recommendedFix: string;
+}
+
+export interface BreakthroughCandidate {
+  query: string;
+  url: string;
+  title: string;
+  currentPosition: number;
+  impressions: number;
+  ctr: number;
+  gapToTopThree: number; // e.g., position 4.2 -> 1.2 ranks away
+  scenario5Pct: number;
+  scenario8Pct: number;
+  priorityAction: string;
+}
+
+export interface DeviceAnomalyReport {
+  deviceDivergenceRanks: number;
+  desktopPosition: number;
+  mobilePosition: number;
+  mobileImpressions: number;
+  desktopImpressions: number;
+  divergenceSeverity: "CRITICAL" | "HIGH" | "NORMAL";
+  diagnosis: string;
+  actionItems: string[];
+}
+
+export interface CountryAnomalyReport {
+  country: string;
+  code: string;
+  impressions: number;
+  position: number;
+  underperformanceFlag: boolean;
+  notes: string;
 }
 
 export interface VerticalIndexPerformance {
@@ -148,6 +226,44 @@ export const GSC_TELEMETRY_SNAPSHOT: PageSearchMetric[] = [
     isAlmostRanking: true,
   },
   {
+    url: "/skins/kuronami-vandal",
+    title: "Kuronami Vandal",
+    category: "Skins",
+    impressions: 38,
+    clicks: 0,
+    ctr: 0.0,
+    position: 9.10,
+    isIndexed: true,
+    contentGapScore: 0.70,
+    primaryQuery: "kuronami vandal",
+    isAlmostRanking: true,
+  },
+  {
+    url: "/",
+    title: "VloPedia Homepage",
+    category: "Navigation",
+    impressions: 68,
+    clicks: 0,
+    ctr: 0.0,
+    position: 11.21,
+    isIndexed: true,
+    contentGapScore: 0.40,
+    primaryQuery: "valovault",
+    isAlmostRanking: true,
+  },
+  {
+    url: "/skins",
+    title: "VALORANT Weapon Skins Catalog",
+    category: "Skins",
+    impressions: 28,
+    clicks: 0,
+    ctr: 0.0,
+    position: 65.07,
+    isIndexed: true,
+    contentGapScore: 0.85,
+    primaryQuery: "valorant skins catalog",
+  },
+  {
     url: "/guides/how-to-counter-jett",
     title: "How to Counter Jett in VALORANT",
     category: "Guides",
@@ -211,6 +327,18 @@ export const COUNTRY_PERFORMANCE: CountrySearchPerformance[] = [
 
 export class SeoOpportunityEngine {
   /**
+   * Calculates Multi-Scenario CTR projections: Current, 2%, 5%, and 8% CTR
+   */
+  public static calculateMultiScenarioClicks(impressions: number, currentCtr: number): CtrScenarioForecast {
+    return {
+      scenarioCurrent: Math.round(impressions * currentCtr),
+      scenario2Pct: Math.max(1, Math.round(impressions * 0.02)),
+      scenario5Pct: Math.max(1, Math.round(impressions * 0.05)),
+      scenario8Pct: Math.max(1, Math.round(impressions * 0.08)),
+    };
+  }
+
+  /**
    * Calculates ranking potential factor. Pages ranking in positions 4-15
    * have the highest potential for massive traffic leaps if pushed to top 3.
    */
@@ -239,7 +367,8 @@ export class SeoOpportunityEngine {
     // Core formula: Impressions * RankPotential * ContentGap * ClickPotential
     const rawScore = (metric.impressions / 100) * rankingPotential * metric.contentGapScore * clickPotential * 10;
     const opportunityScore = Math.round(rawScore);
-    const estimatedClickGain = Math.round(metric.impressions * 0.05); // Potential clicks at 5% CTR
+    const scenarios = this.calculateMultiScenarioClicks(metric.impressions, metric.ctr);
+    const estimatedClickGain = scenarios.scenario5Pct;
 
     let opportunityLevel: OpportunityScoreResult["opportunityLevel"] = "STABLE";
     if (opportunityScore >= 200 || (metric.isAlmostRanking && metric.impressions >= 40)) {
@@ -268,6 +397,7 @@ export class SeoOpportunityEngine {
       clickPotential,
       opportunityLevel,
       recommendedAction,
+      scenarios,
       estimatedClickGain,
     };
   }
@@ -288,19 +418,167 @@ export class SeoOpportunityEngine {
   public static getAlmostRankingQueries(): AlmostRankingOpportunity[] {
     return GSC_TELEMETRY_SNAPSHOT
       .filter(m => m.position >= 4 && m.position <= 20 && m.impressions >= 10 && m.ctr < 0.02)
-      .map(m => ({
-        query: m.primaryQuery || m.title,
-        url: m.url,
-        title: m.title,
-        category: m.category,
-        impressions: m.impressions,
-        clicks: m.clicks,
-        ctr: m.ctr,
-        position: m.position,
-        potentialClicksAt5Pct: Math.max(1, Math.round(m.impressions * 0.05)),
-        recommendedAction: `Position ${m.position.toFixed(1)} on Google with ${m.impressions} impressions. Rewrite title to '${m.title} — Price, Variants & Upgrades', embed quick answer box, and connect weapon skin hub.`,
-      }))
+      .map(m => {
+        const scenarios = this.calculateMultiScenarioClicks(m.impressions, m.ctr);
+        return {
+          query: m.primaryQuery || m.title,
+          url: m.url,
+          title: m.title,
+          category: m.category,
+          impressions: m.impressions,
+          clicks: m.clicks,
+          ctr: m.ctr,
+          position: m.position,
+          scenarios,
+          potentialClicksAt5Pct: scenarios.scenario5Pct,
+          recommendedAction: `Position ${m.position.toFixed(1)} on Google with ${m.impressions} impressions. Rewrite title to '${m.title} — Price, Variants & Upgrades', embed quick answer box, and connect weapon skin hub.`,
+        };
+      })
       .sort((a, b) => b.impressions - a.impressions);
+  }
+
+  /**
+   * Computes trend velocity by comparing historical snapshot periods
+   */
+  public static getTrendVelocity(): QueryTrendVelocity[] {
+    const rawSnapshots = gscSnapshotsData.querySnapshots || [];
+    return rawSnapshots.map(item => {
+      const imprGrowth = item.baseline.impressions > 0 
+        ? ((item.current.impressions - item.baseline.impressions) / item.baseline.impressions) * 100 
+        : 100;
+      
+      const posDelta = Number((item.current.position - item.baseline.position).toFixed(2));
+      
+      let velocity: QueryTrendVelocity["velocity"] = "STABLE";
+      let momentumScore = 50;
+
+      if (posDelta <= -2.0 && imprGrowth >= 50) {
+        velocity = "VERY_HIGH";
+        momentumScore = 95;
+      } else if (posDelta < 0 || imprGrowth > 20) {
+        velocity = "HIGH";
+        momentumScore = 75;
+      } else if (posDelta > 2.0 && imprGrowth < -10) {
+        velocity = "DECAYING";
+        momentumScore = 20;
+      }
+
+      return {
+        query: item.query,
+        url: item.url,
+        category: item.category,
+        baselinePeriod: item.baseline,
+        currentPeriod: item.current,
+        impressionGrowthPct: Math.round(imprGrowth),
+        positionDelta: posDelta,
+        velocity,
+        momentumScore,
+      };
+    }).sort((a, b) => b.momentumScore - a.momentumScore);
+  }
+
+  /**
+   * Detects Content Decay where impressions drop > 20% or ranking worsens by > 2 ranks
+   */
+  public static getContentDecayAlerts(): ContentDecayAlert[] {
+    const velocities = this.getTrendVelocity();
+    return velocities
+      .filter(v => v.velocity === "DECAYING" || v.positionDelta > 2.0)
+      .map(v => ({
+        query: v.query,
+        url: v.url,
+        category: v.category,
+        impressionDropPct: Math.max(0, -v.impressionGrowthPct),
+        positionLossRanks: v.positionDelta,
+        riskSeverity: v.positionDelta > 4 ? "HIGH" : "MEDIUM",
+        likelyCauses: [
+          "Recent game balance or skin release shifting search demand to newer skins",
+          "Generic category landing page without deep entity breakdown",
+          "Competitor snippet optimization capturing search impressions"
+        ],
+        recommendedFix: `Re-architect ${v.url} with structured filter hubs, price spectrum widgets, and dedicated sub-intent internal links.`
+      }));
+  }
+
+  /**
+   * Identifies 'Breakthrough Candidates' (Position 3-6 with high impressions and sub-benchmark CTR)
+   */
+  public static getBreakthroughCandidates(): BreakthroughCandidate[] {
+    return GSC_TELEMETRY_SNAPSHOT
+      .filter(m => m.position >= 3 && m.position <= 7.5 && m.impressions >= 15)
+      .map(m => {
+        const scenarios = this.calculateMultiScenarioClicks(m.impressions, m.ctr);
+        return {
+          query: m.primaryQuery || m.title,
+          url: m.url,
+          title: m.title,
+          currentPosition: m.position,
+          impressions: m.impressions,
+          ctr: m.ctr,
+          gapToTopThree: Number(Math.max(0, m.position - 3.0).toFixed(1)),
+          scenario5Pct: scenarios.scenario5Pct,
+          scenario8Pct: scenarios.scenario8Pct,
+          priorityAction: `Within striking distance of top 3 (Pos ${m.position.toFixed(1)}). Optimize SERP title tag, add Radianite upgrade matrix, and connect weapon skin hub.`,
+        };
+      })
+      .sort((a, b) => a.currentPosition - b.currentPosition);
+  }
+
+  /**
+   * Identifies 'Near Page 1 Candidates' (Position 8-12 with positive momentum)
+   */
+  public static getNearPageOneCandidates(): QueryTrendVelocity[] {
+    const velocities = this.getTrendVelocity();
+    return velocities
+      .filter(v => v.currentPeriod.position >= 8 && v.currentPeriod.position <= 13 && (v.velocity === "HIGH" || v.velocity === "VERY_HIGH"))
+      .sort((a, b) => a.currentPeriod.position - b.currentPeriod.position);
+  }
+
+  /**
+   * Diagnostic anomaly detection for Mobile vs Desktop ranking divergence
+   */
+  public static getDeviceAnomalies(): DeviceAnomalyReport {
+    const mobile = DEVICE_PERFORMANCE.find(d => d.device === "Mobile") || { avgPosition: 8.18, impressions: 261 };
+    const desktop = DEVICE_PERFORMANCE.find(d => d.device === "Desktop") || { avgPosition: 31.12, impressions: 549 };
+    const divergence = Number((desktop.avgPosition - mobile.avgPosition).toFixed(2));
+
+    return {
+      deviceDivergenceRanks: divergence,
+      desktopPosition: desktop.avgPosition,
+      mobilePosition: mobile.avgPosition,
+      mobileImpressions: mobile.impressions,
+      desktopImpressions: desktop.impressions,
+      divergenceSeverity: divergence > 15 ? "CRITICAL" : divergence > 5 ? "HIGH" : "NORMAL",
+      diagnosis: `Desktop position (${desktop.avgPosition}) is lagging Mobile (${mobile.avgPosition}) by ${divergence} ranks. Mobile indexing is performing near Page 1, but desktop viewport rendering or hydration overhead is hurting desktop crawl relevance.`,
+      actionItems: [
+        "Audit desktop CSS above-the-fold content visibility",
+        "Verify semantic SSR H1 and AnswerBox load synchronously without client-only layout shift",
+        "Ensure mobile-first responsive viewport markup is clean"
+      ]
+    };
+  }
+
+  /**
+   * Country-specific underperformance anomaly detector
+   */
+  public static getCountryAnomalies(): CountryAnomalyReport[] {
+    return COUNTRY_PERFORMANCE.map(c => {
+      const isUnderperforming = c.impressions > 50 && c.avgPosition > 20;
+      let notes = "Ranking healthy within expected global search baseline.";
+      if (c.code === "IN" && isUnderperforming) {
+        notes = "High search volume (123 impr) but depressed average position (26.97). Indicates geographic query intent divergence or localized latency.";
+      } else if (c.avgPosition < 10) {
+        notes = "Exceptional Page 1 organic visibility in this territory.";
+      }
+      return {
+        country: c.country,
+        code: c.code,
+        impressions: c.impressions,
+        position: c.avgPosition,
+        underperformanceFlag: isUnderperforming,
+        notes,
+      };
+    });
   }
 
   /**
@@ -345,4 +623,3 @@ export class SeoOpportunityEngine {
     });
   }
 }
-

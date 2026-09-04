@@ -2,10 +2,23 @@ import { KnowledgeGraphService } from "./knowledge-graph-service";
 import guidesDb from "@/data/guides-database.json";
 
 export interface PatchDependencyNode {
-  type: "META" | "RELATIONSHIP" | "GUIDE" | "COMPARISON" | "BEST_FOR";
+  type: "META" | "RELATIONSHIP" | "GUIDE" | "COMPARISON" | "BEST_FOR" | "SKIN_HUB" | "COLLECTION";
   label: string;
   url: string;
   reason: string;
+}
+
+export interface SeoLandingDependency {
+  entityId: string;
+  totalOrganicPages: number;
+  totalSearchExposure: number;
+  landingPages: Array<{
+    url: string;
+    pageType: "SKIN_DETAIL" | "WEAPON_HUB" | "COLLECTION_HUB" | "COMPARISON" | "GUIDE" | "DOSSIER";
+    title: string;
+    estimatedImpressions: number;
+    searchIntent: string;
+  }>;
 }
 
 export interface PatchImpactResult {
@@ -244,5 +257,59 @@ export class PatchImpactEngine {
         status: impact.reviewStatus
       };
     });
+  }
+
+  /**
+   * Maps an entity (e.g. weapon:vandal) to all dependent organic search landing pages
+   * to assess organic search exposure when a balance patch drops.
+   */
+  public static getSeoLandingPageDependencies(entityId: string): SeoLandingDependency {
+    const slug = entityId.replace(/^(agent|weapon|map|skin|faction):/, "").toLowerCase();
+    const landingPages: SeoLandingDependency["landingPages"] = [];
+
+    if (slug === "vandal") {
+      landingPages.push(
+        { url: "/weapons/vandal", pageType: "DOSSIER", title: "Vandal Ballistics & Damage Matrix", estimatedImpressions: 410, searchIntent: "vandal damage falloff" },
+        { url: "/skins/vandal", pageType: "WEAPON_HUB", title: "Best Vandal Skins & Price Spectrum", estimatedImpressions: 320, searchIntent: "best vandal skins" },
+        { url: "/skins/aemondir-vandal", pageType: "SKIN_DETAIL", title: "Aemondir Vandal Price & Variants", estimatedImpressions: 140, searchIntent: "aemondir vandal" },
+        { url: "/skins/aeris-vandal", pageType: "SKIN_DETAIL", title: "Aeris Vandal Showcase & Upgrades", estimatedImpressions: 62, searchIntent: "aeris vandal" },
+        { url: "/skins/reaver-vandal", pageType: "SKIN_DETAIL", title: "Reaver Vandal Sound & Finisher", estimatedImpressions: 95, searchIntent: "reaver vandal" },
+        { url: "/skins/kuronami-vandal", pageType: "SKIN_DETAIL", title: "Kuronami Vandal Animations", estimatedImpressions: 80, searchIntent: "kuronami vandal" },
+        { url: "/collections/aemondir", pageType: "COLLECTION_HUB", title: "Aemondir Collection Checklist", estimatedImpressions: 55, searchIntent: "aemondir bundle" },
+        { url: "/compare/weapons/vandal-vs-phantom", pageType: "COMPARISON", title: "Vandal vs Phantom Recoil Duel", estimatedImpressions: 6150, searchIntent: "vandal vs phantom" },
+        { url: "/guides/vandal-vs-phantom", pageType: "GUIDE", title: "Vandal vs Phantom Situational Guide", estimatedImpressions: 120, searchIntent: "which is better vandal or phantom" },
+      );
+    } else if (slug === "phantom") {
+      landingPages.push(
+        { url: "/weapons/phantom", pageType: "DOSSIER", title: "Phantom Fire Rate & Silencer", estimatedImpressions: 380, searchIntent: "phantom damage" },
+        { url: "/skins/phantom", pageType: "WEAPON_HUB", title: "Phantom Skins Hub", estimatedImpressions: 290, searchIntent: "best phantom skins" },
+        { url: "/skins/helix-phantom", pageType: "SKIN_DETAIL", title: "Helix Phantom Price & Variants", estimatedImpressions: 44, searchIntent: "helix phantom" },
+        { url: "/collections/helix", pageType: "COLLECTION_HUB", title: "Helix Collection", estimatedImpressions: 35, searchIntent: "helix bundle" },
+        { url: "/compare/weapons/vandal-vs-phantom", pageType: "COMPARISON", title: "Vandal vs Phantom Recoil Duel", estimatedImpressions: 6150, searchIntent: "vandal vs phantom" },
+      );
+    } else if (slug === "jett") {
+      landingPages.push(
+        { url: "/agents/jett", pageType: "DOSSIER", title: "Jett Agent Dossier & Tailwind", estimatedImpressions: 9400, searchIntent: "jett abilities" },
+        { url: "/guides/how-to-counter-jett", pageType: "GUIDE", title: "How to Counter Jett in VALORANT", estimatedImpressions: 4820, searchIntent: "counter jett" },
+        { url: "/compare/agents/jett-vs-raze", pageType: "COMPARISON", title: "Jett vs Raze Entry Mobility", estimatedImpressions: 890, searchIntent: "jett vs raze" },
+      );
+    } else {
+      landingPages.push({
+        url: `/${entityId.startsWith("agent:") ? "agents" : entityId.startsWith("weapon:") ? "weapons" : "maps"}/${slug}`,
+        pageType: "DOSSIER",
+        title: `${slug.toUpperCase()} Tactical Dossier`,
+        estimatedImpressions: 100,
+        searchIntent: `${slug} valorant`,
+      });
+    }
+
+    const totalImpressions = landingPages.reduce((sum, p) => sum + p.estimatedImpressions, 0);
+
+    return {
+      entityId,
+      totalOrganicPages: landingPages.length,
+      totalSearchExposure: totalImpressions,
+      landingPages,
+    };
   }
 }

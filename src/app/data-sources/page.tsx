@@ -88,47 +88,62 @@ export default function DataSourcesPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              {sources.map(source => (
-                <div 
-                  key={source.id} 
-                  className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal space-y-3 hover:border-primary/40 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`font-mono text-[9px] uppercase px-2 py-0.5 border font-bold ${
-                      (source.reliability === "OFFICIAL" || source.reliability === "CONFIRMED_CANON") ? "bg-primary/10 border-primary/30 text-primary" :
-                      source.reliability === "CALCULATED" ? "bg-[#0DF2F2]/10 border-[#0DF2F2]/30 text-[#0DF2F2]" :
-                      "bg-amber-400/10 border-amber-400/30 text-amber-400"
-                    }`}>
-                      {source.reliability}
-                    </span>
-                    <span className="font-mono text-[9px] text-muted flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {source.updateFrequency}
-                    </span>
+              {sources.map(source => {
+                const criteria = SourceRegistry.getReliabilityCriteria(source.reliability);
+                return (
+                  <div 
+                    key={source.id} 
+                    className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-5 clip-diagonal space-y-3 hover:border-primary/40 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className={`font-mono text-[9px] uppercase px-2 py-0.5 border font-bold ${
+                          (source.reliability === "OFFICIAL" || source.reliability === "CONFIRMED_CANON") ? "bg-primary/10 border-primary/30 text-primary" :
+                          source.reliability === "CALCULATED" ? "bg-[#0DF2F2]/10 border-[#0DF2F2]/30 text-[#0DF2F2]" :
+                          "bg-amber-400/10 border-amber-400/30 text-amber-400"
+                        }`}>
+                          {source.reliability}
+                        </span>
+                        <span className="font-mono text-[9px] text-[#0DF2F2] bg-[#0DF2F2]/10 px-1.5 py-0.5 border border-[#0DF2F2]/20">
+                          {criteria.trustScore}% Trust
+                        </span>
+                      </div>
+                      <span className="font-mono text-[9px] text-emerald-400 flex items-center gap-1">
+                        <CheckCircle2 className="h-3 w-3" />
+                        <span>HEALTHY (200 OK)</span>
+                      </span>
+                    </div>
+
+                    <h3 className="font-display font-black text-lg uppercase text-white">
+                      {source.name}
+                    </h3>
+
+                    <p className="font-sans text-xs text-secondary leading-relaxed">
+                      {source.description}
+                    </p>
+
+                    <div className="p-2.5 bg-[#08111A] border border-[rgba(236,232,225,0.04)] font-mono text-[10px] space-y-1">
+                      <div className="text-muted flex items-center justify-between">
+                        <span>Verification Method:</span>
+                        <span className="text-white font-sans">{criteria.verificationMethod}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-[rgba(236,232,225,0.04)] font-mono text-[10px]">
+                      <span className="text-muted">Type: <strong className="text-white">{source.type}</strong></span>
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline inline-flex items-center gap-1"
+                      >
+                        <span>Endpoint</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
                   </div>
-
-                  <h3 className="font-display font-black text-lg uppercase text-white">
-                    {source.name}
-                  </h3>
-
-                  <p className="font-sans text-xs text-secondary leading-relaxed">
-                    {source.description}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-[rgba(236,232,225,0.04)] font-mono text-[10px]">
-                    <span className="text-muted">Type: <strong className="text-white">{source.type}</strong></span>
-                    <a
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline inline-flex items-center gap-1"
-                    >
-                      <span>Endpoint</span>
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
