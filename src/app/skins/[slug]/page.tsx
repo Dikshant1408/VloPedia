@@ -164,6 +164,7 @@ export default async function SkinDetailPage({ params }: Props) {
   const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""];
   const weaponSlug = weaponFromName(skin.displayName, skin.assetPath);
   const weaponName = weaponSlug.toUpperCase();
+  const hasVideo = (skin.levels || []).some((l) => l.streamedVideo) || (skin.chromas || []).some((c) => c.streamedVideo);
 
   const breadcrumbItems = [
     { label: "Skins", href: "/skins" },
@@ -245,6 +246,15 @@ export default async function SkinDetailPage({ params }: Props) {
                     category="Skin"
                     url={`/skins/${slug}`}
                   />
+                  {hasVideo && (
+                    <Link
+                      href={`/skins/${slug}/watch`}
+                      className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center gap-1.5"
+                    >
+                      <Video className="h-3 w-3" />
+                      <span>Watch Showcase ↗</span>
+                    </Link>
+                  )}
                   <Link
                     href={`/weapons/${weaponSlug}`}
                     className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white hover:border-primary/40 transition-colors"
@@ -360,9 +370,13 @@ export default async function SkinDetailPage({ params }: Props) {
                         </div>
                       </div>
                       {lvl.streamedVideo && (
-                        <span className="font-mono text-[9px] uppercase px-2 py-0.5 border border-[#0DF2F2]/30 bg-[#0DF2F2]/10 text-[#0DF2F2]">
-                          Video Available
-                        </span>
+                        <Link
+                          href={`/skins/${slug}/watch`}
+                          className="font-mono text-[9px] uppercase px-2.5 py-1 border border-[#0DF2F2]/40 bg-[#0DF2F2]/10 text-[#0DF2F2] hover:bg-[#0DF2F2]/20 hover:border-[#0DF2F2] transition-colors flex items-center gap-1"
+                        >
+                          <span>Watch Video</span>
+                          <span>↗</span>
+                        </Link>
                       )}
                     </div>
                   ))}

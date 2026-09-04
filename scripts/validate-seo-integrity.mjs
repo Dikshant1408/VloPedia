@@ -171,11 +171,33 @@ function calculateRecScore(mapFit, playstyle, teamFit) {
 }
 assert(calculateRecScore(95, 90, 85) === 90, "Recommender Confidence score: (95*0.35)+(90*0.35)+(85*0.30) = 90%");
 
-// SEO Opportunity Score Formula
-function calculateOppScore(impr, rankPot, gap, clickPot) {
-  return Math.round((impr / 100) * rankPot * gap * clickPot * 10);
-}
-assert(calculateOppScore(4820, 1.0, 0.8, 0.971) === 374, "SEO Opportunity Score: 4820 impr, 1.0 rank, 0.8 gap = 374");
+// 9. Google Video Indexing & Watch Page Compliance Suite
+console.log("\n9. Google Video Indexing & Watch Page Compliance Suite:");
+const watchPagePath = path.join(rootDir, "src/app/skins/[slug]/watch/page.tsx");
+assert(fs.existsSync(watchPagePath), "src/app/skins/[slug]/watch/page.tsx exists");
+const watchPageContent = fs.readFileSync(watchPagePath, "utf-8");
+assert(watchPageContent.includes('"@type": "VideoObject"'), "Watch Page declares Schema.org VideoObject");
+assert(watchPageContent.includes("embedUrl") && watchPageContent.includes("contentUrl"), "VideoObject contains both embedUrl and contentUrl");
+assert(watchPageContent.includes("thumbnailUrl") && watchPageContent.includes("uploadDate"), "VideoObject contains valid thumbnailUrl and uploadDate");
+assert(watchPageContent.includes("duration") && watchPageContent.includes("publisher"), "VideoObject contains duration and publisher metadata");
+assert(watchPageContent.includes("twitter: {") && watchPageContent.includes('card: "player"'), "Watch Page defines Twitter Player Card metadata");
+assert(watchPageContent.includes('type: "video.other"'), "Watch Page defines OpenGraph video.other metadata");
+
+const watchClientPath = path.join(rootDir, "src/app/skins/[slug]/watch/watch-client.tsx");
+assert(fs.existsSync(watchClientPath), "src/app/skins/[slug]/watch/watch-client.tsx exists");
+const watchClientContent = fs.readFileSync(watchClientPath, "utf-8");
+assert(watchClientContent.includes("<video") && watchClientContent.includes("poster="), "WatchClient renders HTML5 <video> with poster attribute");
+assert(watchClientContent.includes("controls") && watchClientContent.includes("playsInline"), "WatchClient provides standard video player controls and playsInline");
+
+const inspectClientPath = path.join(rootDir, "src/components/skin-inspect-client.tsx");
+assert(fs.existsSync(inspectClientPath), "src/components/skin-inspect-client.tsx exists");
+const inspectClientContent = fs.readFileSync(inspectClientPath, "utf-8");
+assert(inspectClientContent.includes('data-nosnippet="true"'), "Dossier preview video player contains data-nosnippet to prevent indexing collisions");
+assert(inspectClientContent.includes("/watch"), "Dossier preview video links directly to dedicated /watch page");
+
+const sitemapPath = path.join(rootDir, "src/app/sitemap.ts");
+const sitemapContent = fs.readFileSync(sitemapPath, "utf-8");
+assert(sitemapContent.includes("/skins/${slug}/watch"), "Sitemap includes dedicated /skins/[slug]/watch routes");
 
 console.log("\n========================================");
 console.log(`Validation Complete: ${passed} passed, ${failed} failed`);
@@ -184,5 +206,5 @@ if (failed > 0) {
   console.error("❌ SEO / Data validation failed. Fix errors before committing.");
   process.exit(1);
 } else {
-  console.log("🎉 All SEO, data integrity, and mathematical model tests passed!\n");
+  console.log("🎉 All SEO, data integrity, video indexing, and mathematical model tests passed!\n");
 }

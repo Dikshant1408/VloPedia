@@ -11,7 +11,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
   const skins = await getAllSkins();
-  // Only statically generate watch pages for skins that contain showcase videos
+  // Statically generate watch pages for all skins containing showcase videos
   return skins
     .filter(
       (s) =>
@@ -25,11 +25,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const skins = await getAllSkins();
   const skin = skins.find((s) => s.uuid === slug);
-  if (!skin) return { title: "Showcase Not Found | ValoVault", robots: { index: false } };
+  if (!skin) return { title: "Showcase Not Found | VloPedia", robots: { index: false } };
 
-  const pageTitle = `${skin.displayName} Video Showcase: Animations & VFX | ValoVault`;
+  const defaultVideoUrl =
+    skin.levels?.find((l) => l.streamedVideo)?.streamedVideo ||
+    skin.chromas?.find((c) => c.streamedVideo)?.streamedVideo ||
+    "";
+
+  const pageTitle = `${skin.displayName} Video Showcase: Animations & VFX | VloPedia`;
   const pageDesc = `Watch the official video showcase for the ${skin.displayName} VALORANT weapon skin. Play level upgrades, finishers, reload sounds, and visual effects in theater mode.`;
   const img = skin.chromas?.[0]?.fullRender ?? skin.displayIcon;
+  const thumbnailUrl = img
+    ? (img.startsWith("http") ? img : `${siteConfig.url}${img.startsWith("/") ? "" : "/"}${img}`)
+    : `${siteConfig.url}/images/bundle-eviction.webp`;
 
   return {
     title: pageTitle,
@@ -49,7 +57,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "video.other",
       title: pageTitle,
       description: pageDesc,
-      images: img ? [{ url: img }] : [],
+      url: `${siteConfig.url}/skins/${slug}/watch`,
+      siteName: "VloPedia",
+      images: [
+        {
+          url: thumbnailUrl,
+          width: 1200,
+          height: 630,
+          alt: `${skin.displayName} Showcase Video Thumbnail`,
+        },
+      ],
+      videos: defaultVideoUrl
+        ? [
+            {
+              url: defaultVideoUrl,
+              width: 1920,
+              height: 1080,
+              type: "video/mp4",
+            },
+          ]
+        : [],
+    },
+    twitter: {
+      card: "player",
+      title: pageTitle,
+      description: pageDesc,
+      images: [thumbnailUrl],
+      players: defaultVideoUrl
+        ? [
+            {
+              playerUrl: `${siteConfig.url}/skins/${slug}/watch`,
+              streamUrl: defaultVideoUrl,
+              width: 1920,
+              height: 1080,
+            },
+          ]
+        : [],
     },
     alternates: {
       canonical: `${siteConfig.url}/skins/${slug}/watch`,
@@ -64,7 +107,7 @@ export default async function SkinWatchPage({ params }: Props) {
   if (!skin) notFound();
 
   // Collate video assets from levels and chromas
-  const videoAssets: { uuid: string; name: string; videoUrl: string }[] = [];
+  const videoAssets: { uuid: string; name: string; videoUrl: string; isChroma?: boolean }[] = [];
 
   // Add level videos
   (skin.levels || []).forEach((lvl, idx) => {
@@ -76,6 +119,7 @@ export default async function SkinWatchPage({ params }: Props) {
         uuid: lvl.uuid,
         name: cleanName || `Level ${idx + 1}`,
         videoUrl: lvl.streamedVideo,
+        isChroma: false,
       });
     }
   });
@@ -90,6 +134,7 @@ export default async function SkinWatchPage({ params }: Props) {
         uuid: chr.uuid,
         name: cleanName || `Variant ${idx + 1}`,
         videoUrl: chr.streamedVideo,
+        isChroma: true,
       });
     }
   });
@@ -108,13 +153,63 @@ export default async function SkinWatchPage({ params }: Props) {
 
   const videoSchema = {
     "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "name": `${skin.displayName} Skin Showcase Video`,
-    "description": `Watch the official showcase video for the ${skin.displayName} weapon skin in VALORANT. Play level upgrades, finishers, reload sounds, and visual effects in theater mode.`,
-    "thumbnailUrl": [thumbnailUrl],
-    "uploadDate": "2026-05-23T00:00:00Z",
-    "contentUrl": defaultVideo.videoUrl,
-    "duration": "PT15S",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": siteConfig.url,
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Skins",
+            "item": `${siteConfig.url}/skins`,
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": skin.displayName,
+            "item": `${siteConfig.url}/skins/${slug}`,
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": `${skin.displayName} Video Showcase`,
+            "item": `${siteConfig.url}/skins/${slug}/watch`,
+          },
+        ],
+      },
+      {
+        "@type": "VideoObject",
+        "name": `${skin.displayName} - VALORANT Skin Video Showcase`,
+        "description": `Watch the official showcase video for the ${skin.displayName} weapon skin in VALORANT. Inspect animations, reload sound effects, pull-out motions, and finisher VFX in theater mode.`,
+        "thumbnailUrl": [thumbnailUrl],
+        "uploadDate": "2024-01-01T00:00:00Z",
+        "contentUrl": defaultVideo.videoUrl,
+        "embedUrl": `${siteConfig.url}/skins/${slug}/watch`,
+        "duration": "PT15S",
+        "inLanguage": "en-US",
+        "isFamilyFriendly": true,
+        "mainEntityOfPage": `${siteConfig.url}/skins/${slug}/watch`,
+        "publisher": {
+          "@type": "Organization",
+          "name": "VloPedia",
+          "url": siteConfig.url,
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${siteConfig.url}/favicon.ico`,
+          },
+        },
+        "potentialAction": {
+          "@type": "WatchAction",
+          "target": `${siteConfig.url}/skins/${slug}/watch`,
+        },
+      },
+    ],
   };
 
   const clientSkin = {
@@ -123,16 +218,17 @@ export default async function SkinWatchPage({ params }: Props) {
     weaponSlug: "",
     contentTierUuid: skin.contentTierUuid,
     displayIcon: skin.displayIcon,
+    thumbnailUrl,
   };
 
   return (
     <PageTransition>
-      {/* Google SEO VideoObject Structured Data */}
+      {/* Google SEO VideoObject & Breadcrumbs Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
       />
-      <div className="min-h-screen bg-[#070C12] text-foreground py-16">
+      <div className="min-h-screen bg-[#070C12] text-foreground pt-4 sm:pt-6 pb-16">
         <Container>
           <WatchClient skin={clientSkin} videoAssets={videoAssets} />
         </Container>

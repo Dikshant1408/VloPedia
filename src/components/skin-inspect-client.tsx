@@ -213,7 +213,10 @@ export function SkinInspectClient({ skin }: Props) {
               )}
 
               {/* Loop Video Frame / Fallback */}
-              <div className="relative aspect-[16/9] border border-[rgba(236,232,225,0.08)] bg-[#08111A] overflow-hidden flex items-center justify-center">
+              <div
+                className="relative aspect-[16/9] border border-[rgba(236,232,225,0.08)] bg-[#08111A] overflow-hidden flex items-center justify-center"
+                data-nosnippet="true"
+              >
                 {currentVideoUrl ? (
                   <>
                     <video
@@ -223,14 +226,16 @@ export function SkinInspectClient({ skin }: Props) {
                       loop
                       muted
                       playsInline
+                      data-nosnippet="true"
                       className="w-full h-full object-contain opacity-95"
                     />
-                    <div className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 text-[8px] text-muted font-mono">
-                      STREAMING MODEL // MP4_LOOP
+                    <div className="absolute top-2 left-2 bg-black/85 border border-border/40 px-2 py-0.5 text-[8px] text-muted font-mono flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                      <span>PREVIEW MODE // MP4_LOOP</span>
                     </div>
                     <Link
                       href={`/skins/${skin.slug}/watch`}
-                      className="absolute top-2 right-2 bg-black/85 hover:bg-primary/20 hover:text-primary border border-[rgba(236,232,225,0.15)] px-2.5 py-1 text-[8px] text-muted hover:text-white font-mono transition-all flex items-center gap-1 z-10 uppercase tracking-wider"
+                      className="absolute top-2 right-2 bg-primary hover:bg-primary-soft text-black font-mono font-bold px-2.5 py-1 text-[9px] transition-all flex items-center gap-1 z-10 uppercase tracking-wider shadow-md"
                     >
                       Theater Mode ↗
                     </Link>
