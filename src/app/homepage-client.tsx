@@ -199,22 +199,22 @@ export function HomepageClient() {
             <Reveal className="space-y-6">
               {/* Eyebrow */}
               <div className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-primary animate-pulse" aria-hidden="true" />
-                <span className="font-mono text-xs text-primary tracking-[0.25em] uppercase font-bold">
-                  VLOPEDIA KNOWLEDGE & TOOLS ENGINE // v2.0
+                <span className="w-1.5 h-1.5 bg-primary animate-pulse" aria-hidden="true" />
+                <span className="font-mono text-xs text-primary tracking-[0.2em] uppercase font-bold">
+                  VLOPEDIA TACTICAL INTELLIGENCE TERMINAL
                 </span>
               </div>
 
               {/* Main title */}
               <h1 className="font-display font-black text-5xl uppercase leading-none tracking-tighter text-foreground sm:text-7xl lg:text-8xl">
                 <span className="text-primary text-glow-red">VALO</span>RANT
-                <span className="mt-3 block font-display text-3xl font-black tracking-tight text-foreground/80 sm:text-4xl lg:text-5xl">
+                <span className="mt-3 block font-display text-2xl font-black tracking-tight text-foreground/80 sm:text-3xl lg:text-4xl">
                   Knowledge + Tools Engine
                 </span>
               </h1>
 
               <p className="max-w-xl font-sans text-base leading-relaxed text-secondary">
-                Everything you need to master VALORANT. In-depth operative guides, weapon damage tables, tactical map executes, and pro sensitivity calculators.
+                Authoritative tactical intelligence for competitive play. Operative dossiers, weapon damage falloffs, tactical map executes, and pro sensitivity calculators.
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2">
@@ -239,28 +239,36 @@ export function HomepageClient() {
 
             {/* Live Tactical Pulse Deck */}
             <Reveal className="mt-10 hidden lg:flex lg:mt-0">
-              <div className="relative w-full border border-[rgba(236,232,225,0.1)] bg-[rgba(11,20,26,0.92)] backdrop-blur-xl p-6 clip-diagonal space-y-4 shadow-2xl">
-                <div className="absolute right-0 top-0 bg-[#0DF2F2] px-3 py-1 font-mono text-[9px] font-black tracking-wider text-[#0B141A]">
-                  LIVE PULSE
-                </div>
-                <div className="border-b border-[rgba(236,232,225,0.08)] pb-3">
-                  <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-muted">TACTICAL INTEL TICKER</span>
-                  <p className="mt-1 font-display font-black text-sm uppercase text-foreground">
-                    What&apos;s happening today
-                  </p>
+              <div className="relative w-full border border-border bg-[#080F14]/90 backdrop-blur-xl p-6 clip-diagonal space-y-4 shadow-2xl">
+                <div className="flex items-center justify-between border-b border-border pb-3">
+                  <div>
+                    <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-cyan">TELEMETRY DECK</span>
+                    <p className="mt-0.5 font-display font-black text-sm uppercase text-foreground">
+                      Live Tactical Briefing
+                    </p>
+                  </div>
+                  <span className="font-mono text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5">
+                    ● ACTIVE
+                  </span>
                 </div>
                 <div className="space-y-2.5 py-1 text-xs font-mono">
-                  <div className="flex items-center justify-between border border-[rgba(236,232,225,0.06)] bg-surface p-2">
+                  <div className="flex items-center justify-between border border-border bg-surface/60 p-2.5">
                     <span className="text-muted uppercase text-[10px]">LATEST PATCH</span>
-                    <Link href="/patch-notes/9-04" className="font-bold text-primary hover:underline">Patch 9.04 Live →</Link>
+                    <Link href="/patch-notes/9-04" className="font-bold text-primary hover:underline flex items-center gap-1">
+                      Patch 9.04 Live →
+                    </Link>
                   </div>
-                  <div className="flex items-center justify-between border border-[rgba(236,232,225,0.06)] bg-surface p-2">
+                  <div className="flex items-center justify-between border border-border bg-surface/60 p-2.5">
                     <span className="text-muted uppercase text-[10px]">NEW SKINS</span>
-                    <Link href="/skins" className="font-bold text-[#0DF2F2] hover:underline">Kuronami & Reaver →</Link>
+                    <Link href="/skins" className="font-bold text-cyan hover:underline flex items-center gap-1">
+                      Kuronami & Reaver →
+                    </Link>
                   </div>
-                  <div className="flex items-center justify-between border border-[rgba(236,232,225,0.06)] bg-surface p-2">
+                  <div className="flex items-center justify-between border border-border bg-surface/60 p-2.5">
                     <span className="text-muted uppercase text-[10px]">META COMP</span>
-                    <Link href="/comp-builder?map=ascent&agents=jett,omen,sova,killjoy,kayo" className="font-bold text-success hover:underline">Ascent S-Tier 88/100 →</Link>
+                    <Link href="/comp-builder?map=ascent&agents=jett,omen,sova,killjoy,kayo" className="font-bold text-emerald-400 hover:underline flex items-center gap-1">
+                      Ascent S-Tier (88/100) →
+                    </Link>
                   </div>
                 </div>
                 <Link href="/setup" className="w-full block pt-1">
@@ -308,14 +316,15 @@ export function HomepageClient() {
         <section className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] py-16">
           <Container>
             <Reveal className="mb-8">
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-primary" aria-hidden="true" />
-                <span className="font-mono text-xs text-primary tracking-[0.25em] uppercase font-bold">
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[10px] font-bold text-muted/60 tracking-widest">01 //</span>
+                <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
+                <span className="font-mono text-xs text-primary tracking-[0.2em] uppercase font-bold">
                   DATABASE_REGISTRY
                 </span>
               </div>
-              <h2 className="font-display font-black text-4xl uppercase text-foreground mt-2">
-                Quick Access
+              <h2 className="font-display font-black text-3xl sm:text-4xl uppercase text-foreground mt-1">
+                Tactical Directory
               </h2>
             </Reveal>
 
@@ -341,7 +350,7 @@ export function HomepageClient() {
         <section className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] py-24">
           <Container>
             <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-              <SectionLabel eyebrow="META OPERATIVES" title="Featured Operatives" />
+              <SectionLabel index="02" eyebrow="OPERATIVE DOSSIER" title="Featured Operatives" />
               {/* Carousel Indicators / Nav */}
               <div className="flex items-center gap-2">
                 <button
@@ -413,7 +422,7 @@ export function HomepageClient() {
           <section className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] py-24">
             <Container>
               <Reveal className="mb-10">
-                <SectionLabel eyebrow="COSMETIC SPOTLIGHT" title="Skin of the Day" />
+                <SectionLabel index="03" eyebrow="ARSENAL BLUEPRINTS" title="Skin of the Day" />
               </Reveal>
               <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
                 {/* Details */}
@@ -487,7 +496,7 @@ export function HomepageClient() {
           <section className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] py-24">
             <Container>
               <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
-                <SectionLabel eyebrow="LATEST DEPLOYMENT" title={`Patch ${latestPatch.version}`} />
+                <SectionLabel index="04" eyebrow="BALANCE TELEMETRY" title={`Patch ${latestPatch.version}`} />
                 <div className="flex items-center gap-1.5 border border-success/30 bg-success/5 px-2.5 py-1 font-mono text-[9px] font-black uppercase tracking-wider text-success">
                   <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                   DATABASE SYNCED: {latestPatch.date}
@@ -535,7 +544,7 @@ export function HomepageClient() {
         <section className="border-b border-[rgba(236,232,225,0.08)] bg-[#0F1C24] py-24">
           <Container>
             <Reveal className="mb-10 flex items-end justify-between gap-4">
-              <SectionLabel eyebrow="TACTICAL BLUEPRINTS" title="The Maps" />
+              <SectionLabel index="05" eyebrow="TACTICAL GEOGRAPHY" title="The Maps" />
               <Link href="/maps" className="hidden sm:block font-mono text-xs font-bold uppercase tracking-wider text-primary hover:text-foreground transition-colors">
                 All maps →
               </Link>
@@ -598,16 +607,23 @@ export function HomepageClient() {
 }
 
 /* ── Local helper ── */
-function SectionLabel({ eyebrow, title }: { eyebrow: string; title: string }) {
+function SectionLabel({ eyebrow, title, index }: { eyebrow: string; title: string; index?: string }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <div className="flex items-center gap-2">
-        <span className="w-2 h-2 bg-[#0DF2F2]" aria-hidden="true" />
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#0DF2F2]">
+        {index && (
+          <span className="font-mono text-[10px] font-bold text-muted/60 tracking-widest">
+            {`${index} //`}
+          </span>
+        )}
+        <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
+        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-cyan">
           {eyebrow}
         </span>
       </div>
-      <h2 className="font-display font-black text-4xl uppercase tracking-tighter text-foreground">{title}</h2>
+      <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground">
+        {title}
+      </h2>
     </div>
   );
 }

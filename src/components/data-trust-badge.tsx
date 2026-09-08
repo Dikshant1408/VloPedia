@@ -1,6 +1,7 @@
 import React from "react";
 import { ShieldCheck, Info, Database, Scale, Cpu, BookOpen } from "lucide-react";
 import Link from "next/link";
+import { TacticalStatus } from "@/components/tactical-status";
 
 export type ProvenanceType = "API_TELEMETRY" | "VCT_SNAPSHOT" | "EDITORIAL_ANALYSIS" | "CONFIRMED_CANON" | "COMMUNITY";
 
@@ -62,38 +63,42 @@ export function DataTrustBadge({
   const config = TYPE_CONFIG[sourceType] || TYPE_CONFIG.EDITORIAL_ANALYSIS;
   const Icon = config.icon;
 
+  const statusType = confidence === "CONFIRMED" ? "CONFIRMED" : confidence === "COMMUNITY" ? "THEORY" : "SYNCED";
+
   return (
-    <div className={`border ${config.border} ${config.bg} p-3 sm:p-4 clip-diagonal text-left ${className}`}>
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[rgba(236,232,225,0.06)] pb-2 mb-2">
+    <div className={`border ${config.border} bg-surface/80 p-3 sm:p-4 clip-diagonal-sm text-left ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-2 mb-2.5">
         <div className="flex items-center gap-2">
           <Icon className={`h-3.5 w-3.5 ${config.color}`} />
-          <span className={`font-mono text-[10px] uppercase font-bold tracking-wider ${config.color}`}>
-            DATA TRUST // {config.label}
+          <span className={`font-mono text-[9px] uppercase font-bold tracking-wider ${config.color}`}>
+            DATA PROVENANCE // {config.label}
           </span>
         </div>
         <Link
           href="/methodology"
-          className="font-mono text-[9px] uppercase text-muted hover:text-white transition-colors underline"
+          className="font-mono text-[9px] uppercase text-muted hover:text-foreground transition-colors hover:underline"
         >
           Methodology →
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[10px]">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-[10px]">
         <div>
-          <span className="text-muted block text-[8px] uppercase">Source:</span>
-          <span className="text-white font-bold truncate block">{sourceName}</span>
+          <span className="text-muted/70 block text-[8px] uppercase tracking-wider">Source Registry</span>
+          <span className="text-foreground font-bold truncate block">{sourceName}</span>
         </div>
         <div>
-          <span className="text-muted block text-[8px] uppercase">Patch Baseline:</span>
-          <span className="text-white font-bold block">Patch {patchVersion}</span>
+          <span className="text-muted/70 block text-[8px] uppercase tracking-wider">Patch Baseline</span>
+          <span className="text-foreground font-bold block">Patch {patchVersion}</span>
         </div>
         <div>
-          <span className="text-muted block text-[8px] uppercase">Confidence:</span>
-          <span className={`${config.color} font-bold block`}>{confidence}</span>
+          <span className="text-muted/70 block text-[8px] uppercase tracking-wider">Trust Assessment</span>
+          <span className="block mt-0.5">
+            <TacticalStatus status={statusType} label={confidence} size="sm" className="!py-0 !px-1 text-[8px]" />
+          </span>
         </div>
         <div>
-          <span className="text-muted block text-[8px] uppercase">Last Verified:</span>
+          <span className="text-muted/70 block text-[8px] uppercase tracking-wider">Telemetry Verification</span>
           <span className="text-muted block truncate">{lastVerified}</span>
         </div>
       </div>

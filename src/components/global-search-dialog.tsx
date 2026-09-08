@@ -242,16 +242,31 @@ export function GlobalSearchDialog() {
 
   return (
     <div 
-      className="fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/80 backdrop-blur-md animate-fade-in"
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-14 sm:pt-20 px-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150"
       onClick={() => setOpen(false)}
     >
       <div 
-        className="w-full max-w-2xl border border-border bg-background shadow-2xl shadow-black/90 overflow-hidden flex flex-col max-h-[80vh]"
+        className="w-full max-w-2xl border border-border bg-[#080F14] shadow-2xl shadow-black overflow-hidden flex flex-col max-h-[82vh] relative"
         onClick={e => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
-        {/* Search header */}
-        <div className="relative flex items-center border-b border-border px-4 py-3.5 bg-surface-elevated">
+        {/* Top corner technical brackets */}
+        <div className="absolute top-0 left-0 w-3 h-[2px] bg-primary" />
+        <div className="absolute top-0 left-0 w-[2px] h-3 bg-primary" />
+        <div className="absolute top-0 right-0 w-3 h-[2px] bg-cyan" />
+        <div className="absolute top-0 right-0 w-[2px] h-3 bg-cyan" />
+
+        {/* Terminal Header Bar */}
+        <div className="border-b border-border/70 bg-[#060B0F] px-4 py-1.5 flex items-center justify-between font-mono text-[9px] text-muted tracking-wider select-none">
+          <span className="text-cyan font-bold tracking-widest flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan/80" />
+            VLOPEDIA // TERMINAL QUERY ENGINE
+          </span>
+          <span className="text-muted/60">INDEX: 1,400+ TACTICAL NODES</span>
+        </div>
+
+        {/* Search input line */}
+        <div className="relative flex items-center border-b border-border px-4 py-3.5 bg-surface/60">
           <Search className="h-4 w-4 text-primary shrink-0 mr-3" />
           <input
             ref={inputRef}
@@ -261,8 +276,8 @@ export function GlobalSearchDialog() {
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            placeholder="Search agents, weapons, maps, skins, tools, or guides... (Ctrl+K)"
-            className="flex-1 bg-transparent font-mono text-sm text-foreground placeholder:text-muted focus:outline-none"
+            placeholder="Ask the database: agents, damage falloff, executes, skins, lore... (Ctrl+K)"
+            className="flex-1 bg-transparent font-mono text-sm text-foreground placeholder:text-muted/60 focus:outline-none"
           />
           {query && (
             <button 
@@ -273,58 +288,66 @@ export function GlobalSearchDialog() {
               <X className="h-4 w-4" />
             </button>
           )}
-          <span className="font-mono text-[10px] px-2 py-0.5 border border-border bg-surface text-muted uppercase">
-            ESC to close
+          <span className="font-mono text-[9px] px-1.5 py-0.5 border border-border/80 bg-background text-muted uppercase">
+            ESC
           </span>
         </div>
 
         {/* Results list */}
-        <div ref={listRef} className="overflow-y-auto p-2 space-y-1 divide-y divide-border/40">
+        <div ref={listRef} className="overflow-y-auto p-2 space-y-1 divide-y divide-border/20">
           {results.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="font-mono text-sm text-muted">No tactical intel found for &quot;{query}&quot;</p>
-              <p className="font-sans text-xs text-muted/70 mt-1">Try searching for Jett, Vandal, Ascent, Sensitivity, or Comp Builder</p>
+              <p className="font-mono text-xs text-muted">NO TACTICAL INTEL FOUND FOR &quot;{query}&quot;</p>
+              <p className="font-sans text-xs text-muted/70 mt-1">Try querying Jett, Vandal, Ascent, Sensitivity, or Comp Builder</p>
             </div>
           ) : (
             results.map((item, idx) => {
               const isSelected = idx === selectedIndex;
+              const indexStr = (idx + 1).toString().padStart(2, "0");
               return (
                 <button
                   key={item.id}
                   onClick={() => selectItem(item)}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`w-full text-left flex items-center justify-between px-3.5 py-3 transition-colors cursor-pointer ${
+                  className={`w-full text-left flex items-center justify-between px-3 py-2.5 transition-colors cursor-pointer ${
                     isSelected 
-                      ? "bg-primary/10 border-l-2 border-primary text-foreground" 
-                      : "text-secondary hover:bg-surface border-l-2 border-transparent"
+                      ? "bg-primary/[0.06] border-l-2 border-primary text-foreground" 
+                      : "text-secondary hover:bg-surface/50 border-l-2 border-transparent"
                   }`}
                 >
-                  <div className="min-w-0 flex-1 pr-4">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className={`font-mono text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 border ${
-                        item.category === "Agents" ? "border-role-duelist/40 bg-role-duelist/10 text-role-duelist" :
-                        item.category === "Weapons" ? "border-primary/40 bg-primary/10 text-primary" :
-                        item.category === "Maps" ? "border-role-initiator/40 bg-role-initiator/10 text-role-initiator" :
-                        item.category === "Tools" ? "border-cyan/40 bg-cyan/10 text-cyan" :
-                        item.category === "Compare" ? "border-[#C084FC]/40 bg-[#C084FC]/10 text-[#C084FC]" :
-                        item.category === "Lore" ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400" :
-                        item.category === "Guides" ? "border-role-sentinel/40 bg-role-sentinel/10 text-role-sentinel" :
-                        "border-muted/40 bg-surface text-muted"
-                      }`}>
-                        {item.category}
-                      </span>
-                      <span className="font-display uppercase tracking-wide font-bold text-sm text-foreground truncate">
-                        {item.title}
-                      </span>
-                      {item.badge && (
-                        <span className="font-mono text-[9px] text-muted hidden sm:inline">
-                          ({item.badge})
+                  <div className="min-w-0 flex-1 pr-4 flex items-start gap-3">
+                    {/* Index number */}
+                    <span className={`font-mono text-[10px] mt-0.5 ${isSelected ? "text-primary font-bold" : "text-muted/60"}`}>
+                      {indexStr}
+                    </span>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className={`font-mono text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.2 border ${
+                          item.category === "Agents" ? "border-role-duelist/40 bg-role-duelist/10 text-role-duelist" :
+                          item.category === "Weapons" ? "border-primary/40 bg-primary/10 text-primary" :
+                          item.category === "Maps" ? "border-role-initiator/40 bg-role-initiator/10 text-role-initiator" :
+                          item.category === "Tools" ? "border-cyan/40 bg-cyan/10 text-cyan" :
+                          item.category === "Compare" ? "border-[#C084FC]/40 bg-[#C084FC]/10 text-[#C084FC]" :
+                          item.category === "Lore" ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400" :
+                          item.category === "Guides" ? "border-role-sentinel/40 bg-role-sentinel/10 text-role-sentinel" :
+                          "border-muted/40 bg-surface text-muted"
+                        }`}>
+                          {item.category}
                         </span>
-                      )}
+                        <span className="font-display uppercase tracking-wide font-bold text-sm text-foreground truncate">
+                          {item.title}
+                        </span>
+                        {item.badge && (
+                          <span className="font-mono text-[9px] text-muted/70 hidden sm:inline">
+                            [{item.badge}]
+                          </span>
+                        )}
+                      </div>
+                      <p className="font-sans text-xs text-muted truncate">
+                        {item.subtitle}
+                      </p>
                     </div>
-                    <p className="font-sans text-xs text-muted truncate">
-                      {item.subtitle}
-                    </p>
                   </div>
                   <div className="shrink-0 flex items-center text-muted">
                     {isSelected ? (
@@ -340,13 +363,13 @@ export function GlobalSearchDialog() {
         </div>
 
         {/* Footer shortcuts */}
-        <div className="border-t border-border bg-surface-elevated px-4 py-2 flex items-center justify-between text-[10px] font-mono text-muted">
-          <div className="flex items-center gap-3">
-            <span><strong className="text-foreground">↑↓</strong> Navigate</span>
-            <span><strong className="text-foreground">↵</strong> Open</span>
-            <span><strong className="text-foreground">ESC</strong> Exit</span>
+        <div className="border-t border-border bg-[#060B0F] px-4 py-2 flex items-center justify-between text-[9px] font-mono text-muted tracking-wider">
+          <div className="flex items-center gap-4">
+            <span><strong className="text-foreground">[↑↓]</strong> NAVIGATE</span>
+            <span><strong className="text-foreground">[↵]</strong> QUERY</span>
+            <span><strong className="text-foreground">[ESC]</strong> TERMINATE</span>
           </div>
-          <span className="text-cyan">VloPedia Tactical Engine</span>
+          <span className="text-cyan font-bold tracking-widest">TACTICAL TERMINAL</span>
         </div>
       </div>
     </div>

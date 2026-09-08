@@ -1,0 +1,14 @@
+.git
+node_modules
+.next
+new
+.vscode
+.firebase
+.agents
+.claude
+.codex
+.jules
+.kilo
+.kiro
+*.vsix
+tsconfig.tsbuildinfo

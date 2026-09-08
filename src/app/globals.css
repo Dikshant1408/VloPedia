@@ -289,15 +289,72 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
   clip-path: polygon(0 10px, 10px 0, 100% 0, 100% 100%, 0 100%);
 }
 
-/* ── Glow utilities ── */
+/* ── Tactical Terminal: Restrained Active Signal (Quiet, Precise) ── */
+.nav-active-signal {
+  position: relative;
+  color: var(--foreground) !important;
+}
+.nav-active-signal::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+/* ── Tactical Briefing Panel (Hard edges + soft depth) ── */
+.tactical-panel {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+.tactical-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 2px;
+  background: var(--primary);
+  pointer-events: none;
+}
+
+/* ── Tactical Data Strip ── */
+.tactical-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  background: rgba(236, 232, 225, 0.02);
+  border: 1px solid var(--border);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.75rem;
+}
+
+/* ── Tactical Marker Tag ── */
+.tactical-marker {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ── Glow utilities (Calibrated & Restrained) ── */
 .glow-primary {
-  box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.30), 0 0 50px rgba(var(--primary-rgb), 0.12);
+  box-shadow: 0 0 12px rgba(var(--primary-rgb), 0.20);
 }
 .glow-cyan {
-  box-shadow: 0 0 20px rgba(var(--cyan-rgb), 0.30), 0 0 50px rgba(var(--cyan-rgb), 0.12);
+  box-shadow: 0 0 12px rgba(var(--cyan-rgb), 0.20);
 }
-.text-glow-red  { text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.7); }
-.text-glow-cyan { text-shadow: 0 0 10px rgba(var(--cyan-rgb), 0.7); }
+.text-glow-red  { text-shadow: 0 0 8px rgba(var(--primary-rgb), 0.5); }
+.text-glow-cyan { text-shadow: 0 0 8px rgba(var(--cyan-rgb), 0.5); }
 
 /* ── Glass surface ── */
 .surface-glass {
@@ -307,7 +364,7 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
   border: 1px solid var(--border);
 }
 
-/* ── Gradient text ── */
+/* ── Gradient text (Hero and special states only) ── */
 .text-gradient-primary {
   background: linear-gradient(135deg, #FA4454 0%, #FF8C96 100%);
   -webkit-background-clip: text;
@@ -321,13 +378,13 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
   background-clip: text;
 }
 
-/* ── Border glow hover ── */
+/* ── Border glow hover (Subtle, not neon) ── */
 .border-glow {
-  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 .border-glow:hover {
   border-color: var(--primary);
-  box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.25), inset 0 0 20px rgba(var(--primary-rgb), 0.05);
+  box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.20);
 }
 
 /* ── Page hero ── */
@@ -340,12 +397,11 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
 
 /* ── Tactical card hover ── */
 .tactical-card-hover {
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .tactical-card-hover:hover {
-  border-color: rgba(var(--primary-rgb), 0.5);
-  box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.15);
-  transform: translateY(-3px);
+  border-color: rgba(var(--primary-rgb), 0.4);
+  transform: translateY(-2px);
 }
 
 /* ── Left accent bar (ValoVault card signature) ── */
