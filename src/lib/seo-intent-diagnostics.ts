@@ -7,6 +7,8 @@
  */
 
 import { slugify } from "./utils";
+import { GscStorageService } from "./gsc/storage";
+import { DailySearchSnapshot, SearchSnapshotRow } from "./gsc/types";
 
 export type LowCtrDiagnosisType = 
   | "TITLE_MISMATCH"
@@ -16,6 +18,8 @@ export type LowCtrDiagnosisType =
   | "COMPETITIVE_SERP"
   | "ZERO_CLICK_SERP"
   | "HEALTHY_CTR";
+
+export type IntentVerdict = "GOOD" | "WRONG_LANDING" | "INTENT_MISMATCH" | "TITLE_MISMATCH" | "ZERO_CLICK_SERP" | "WEAK_SNIPPET";
 
 export interface QueryPageMatchResult {
   query: string;
@@ -34,6 +38,7 @@ export interface QueryDiagnosisReport {
   ctr: number;
   position: number;
   diagnosis: LowCtrDiagnosisType;
+  verdict: IntentVerdict;
   severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
   matchResult: QueryPageMatchResult;
   diagnosticExplanation: string;
@@ -52,7 +57,6 @@ export class SeoIntentDiagnosticsEngine {
     const skinKeywords = ["vandal", "phantom", "karambit", "axe", "operator", "sheriff", "knife", "marshal", "ghost", "classic", "odin", "ares", "spectre"];
     const subIntentKeywords = ["price", "vp", "cost", "how much", "variants", "chroma", "showcase", "sound", "upgrade", "finisher", "animation"];
     
-    const querySlug = slugify(qLower.replace(/valorant/g, "").trim());
     let recommendedUrl = url;
     let matchScore = 80;
     let isIdealLandingPage = true;
@@ -64,26 +68,24 @@ export class SeoIntentDiagnosticsEngine {
 
     if (isSkinSpecific) {
       // Find candidate slug
-      const candidateSlug = slugify(qLower
-        .replace(/valorant/g, "")
-        .replace(/price/g, "")
-        .replace(/variants/g, "")
-        .replace(/showcase/g, "")
-        .replace(/how much is/g, "")
-        .trim());
+      let cleanSlug = qLower;
+      for (const kw of subIntentKeywords) {
+        cleanSlug = cleanSlug.replace(kw, "");
+      }
+      cleanSlug = slugify(cleanSlug.replace(/valorant/g, "").trim());
 
-      recommendedUrl = `/skins/${candidateSlug}`;
+      recommendedUrl = `/skins/${cleanSlug}`;
 
       if (urlLower === "/skins" || urlLower === `/skins/${matchedWeapons[0]}`) {
         // Query is specific but landing on generic catalog or weapon category
         matchScore = 41;
         isIdealLandingPage = false;
-        mismatchReason = `Searcher requested specific item '${query}' but was routed to generic page '${url}'.`;
-      } else if (urlLower.includes(candidateSlug)) {
-        matchScore = 94;
+        mismatchReason = `Searcher requested specific item '${query}' but was routed to generic category page '${url}'.`;
+      } else if (urlLower.includes(cleanSlug)) {
+        matchScore = 96;
         isIdealLandingPage = true;
       } else {
-        matchScore = 65;
+        matchScore = 42;
         isIdealLandingPage = false;
         mismatchReason = `Searcher requested '${query}' but arrived on different entity '${url}'.`;
       }
@@ -93,6 +95,9 @@ export class SeoIntentDiagnosticsEngine {
         matchScore = 95;
         isIdealLandingPage = true;
       }
+    } else if (urlLower === "/") {
+      matchScore = 92;
+      isIdealLandingPage = true;
     }
 
     return {
@@ -120,25 +125,15 @@ export class SeoIntentDiagnosticsEngine {
     const qLower = query.toLowerCase();
 
     let diagnosis: LowCtrDiagnosisType = "HEALTHY_CTR";
+    let verdict: IntentVerdict = "GOOD";
     let severity: QueryDiagnosisReport["severity"] = "LOW";
-    let diagnosticExplanation = "CTR is within expected parameters for this position.";
+    let diagnosticExplanation = "CTR and landing page match are within healthy expected parameters.";
     const actionChecklist: string[] = [];
 
-    // 1. Check for Zero-Click SERP intent
-    const isBrandOrNav = qLower === "valovault" || qLower === "vlopedia" || qLower === "valorant";
-    if (isBrandOrNav && position <= 7 && ctr < 0.02) {
-      diagnosis = "ZERO_CLICK_SERP";
-      severity = "MEDIUM";
-      diagnosticExplanation = "Brand or navigational query where searchers frequently view the Knowledge Panel without clicking.";
-      actionChecklist.push(
-        "Refine homepage SERP title to: 'VloPedia — VALORANT Database, Skins, Lore & Tools'",
-        "Include rich site links and clear value proposition in meta description",
-        "Add WebSite structured data with SearchAction schema"
-      );
-    } 
-    // 2. Check for Wrong Landing Page mismatch
-    else if (!matchResult.isIdealLandingPage) {
+    // 1. Check for Wrong Landing Page mismatch
+    if (!matchResult.isIdealLandingPage) {
       diagnosis = "WRONG_LANDING_PAGE";
+      verdict = "WRONG_LANDING";
       severity = "CRITICAL";
       diagnosticExplanation = `Google is associating query '${query}' with '${url}' (Match score: ${matchResult.matchScore}%) rather than '${matchResult.recommendedUrl}'.`;
       actionChecklist.push(
@@ -147,10 +142,23 @@ export class SeoIntentDiagnosticsEngine {
         `Add 301 redirect if old URL was a legacy path`
       );
     }
+    // 2. Check for Zero-Click SERP intent
+    else if ((qLower === "valovault" || qLower === "vlopedia" || qLower === "valorant") && position <= 7 && ctr < 0.02) {
+      diagnosis = "ZERO_CLICK_SERP";
+      verdict = "ZERO_CLICK_SERP";
+      severity = "MEDIUM";
+      diagnosticExplanation = "Brand or navigational query where searchers frequently view the Knowledge Panel without clicking.";
+      actionChecklist.push(
+        "Refine homepage SERP title to: 'VloPedia — VALORANT Database, Skins, Lore & Tools'",
+        "Include rich site links and clear value proposition in meta description",
+        "Add WebSite structured data with SearchAction schema"
+      );
+    } 
     // 3. Check for Intent Mismatch (e.g. price/variants intent)
     else if (qLower.includes("price") || qLower.includes("vp") || qLower.includes("how much") || qLower.includes("variants") || qLower.includes("showcase")) {
       if (ctr < 0.02 && position <= 15) {
         diagnosis = "INTENT_MISMATCH";
+        verdict = "INTENT_MISMATCH";
         severity = "HIGH";
         diagnosticExplanation = "Searcher intent is explicitly seeking pricing, variants, or animations. If the SERP snippet doesn't highlight these answers, searchers bounce to competitors.";
         actionChecklist.push(
@@ -163,6 +171,7 @@ export class SeoIntentDiagnosticsEngine {
     // 4. Check for Title Mismatch on high-impression striking distance queries
     else if (position <= 10 && ctr < 0.01 && impressions >= 20) {
       diagnosis = "TITLE_MISMATCH";
+      verdict = "TITLE_MISMATCH";
       severity = "HIGH";
       diagnosticExplanation = `Ranking on Page 1 (Position ${position.toFixed(1)}) with ${impressions} impressions but 0 clicks. Title is too generic to attract clicks.`;
       actionChecklist.push(
@@ -174,6 +183,7 @@ export class SeoIntentDiagnosticsEngine {
     // 5. Weak Snippet
     else if (ctr < 0.015 && position <= 15) {
       diagnosis = "WEAK_SNIPPET";
+      verdict = "WEAK_SNIPPET";
       severity = "MEDIUM";
       diagnosticExplanation = "Snippet is not differentiating VloPedia from generic wiki pages.";
       actionChecklist.push(
@@ -190,6 +200,7 @@ export class SeoIntentDiagnosticsEngine {
       ctr,
       position,
       diagnosis,
+      verdict,
       severity,
       matchResult,
       diagnosticExplanation,
@@ -198,10 +209,18 @@ export class SeoIntentDiagnosticsEngine {
   }
 
   /**
-   * Runs diagnostic audit across all high-impression GSC queries
+   * Runs diagnostic audit across all high-impression GSC queries dynamically
    */
-  public static runGscDiagnostics(): QueryDiagnosisReport[] {
-    const highImpressionQueries = [
+  public static runGscDiagnostics(snapshot?: DailySearchSnapshot): QueryDiagnosisReport[] {
+    const currentSnapshot = snapshot || GscStorageService.getLatestSnapshot();
+    const rows = currentSnapshot.rows;
+
+    if (rows && rows.length > 0) {
+      return rows.map(r => this.diagnoseQuery(r.query, r.url, r.impressions, r.clicks, r.position));
+    }
+
+    // Fallback baseline records
+    const fallbackQueries = [
       { query: "aemondir vandal", url: "/skins/aemondir-vandal", impressions: 104, clicks: 0, position: 8.93 },
       { query: "aeris vandal", url: "/skins/aeris-vandal", impressions: 46, clicks: 0, position: 8.87 },
       { query: "minima karambit", url: "/skins/minima-karambit", impressions: 23, clicks: 0, position: 10.13 },
@@ -215,7 +234,7 @@ export class SeoIntentDiagnosticsEngine {
       { query: "valorant skins catalog", url: "/skins", impressions: 28, clicks: 0, position: 65.07 },
     ];
 
-    return highImpressionQueries.map(q => 
+    return fallbackQueries.map(q => 
       this.diagnoseQuery(q.query, q.url, q.impressions, q.clicks, q.position)
     );
   }

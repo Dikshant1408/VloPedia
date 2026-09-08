@@ -57,6 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/terms`,              lastModified: now, changeFrequency: "monthly", priority: 0.3 },
     { url: `${base}/privacy`,            lastModified: now, changeFrequency: "monthly", priority: 0.3 },
     { url: `${base}/about`,              lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/contact`,            lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/guides`,             lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/setup`,              lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${base}/match-prep`,         lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
@@ -228,16 +229,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.8,
   }));
 
-  // 12. Dynamic bundle pages
-  const bundleSlugs = await fetchSlugs<{ uuid: string }>(
+  // 12. Dynamic bundle pages (only valid named bundles)
+  const bundleSlugs = await fetchSlugs<{ uuid: string; displayName?: string }>(
     "https://valorant-api.com/v1/bundles",
-    b => b.uuid
+    b => (b.displayName && b.displayName.trim().toLowerCase() !== "null" ? b.uuid : "")
   );
   const bundleRoutes: MetadataRoute.Sitemap = bundleSlugs.map(slug => ({
     url:             `${base}/bundles/${slug}`,
     lastModified:    now,
     changeFrequency: "weekly",
-    priority:        0.6,
+    priority:        0.7,
   }));
 
   // 13. Dynamic flex pages (excluding 'none' expression)

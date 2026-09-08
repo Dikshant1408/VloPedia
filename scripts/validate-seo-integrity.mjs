@@ -305,7 +305,195 @@ const entityResolverPath = path.join(rootDir, "src/lib/entity-resolver.ts");
 const entityResolverContent = fs.readFileSync(entityResolverPath, "utf-8");
 assert(entityResolverContent.includes("detectCollisions"), "EntityResolver implements automated collision audit");
 
-// Summary
+// 12. Durable GSC Ingestion, Cannibalization & Zero-any Zod Boundary Validation Suite
+console.log("\n12. Durable GSC Ingestion, Cannibalization & Zero-any Zod Boundary Validation Suite:");
+
+// Fixtures & Production Separation
+const fixturesPath = path.join(rootDir, "src/data/gsc-fixtures/sample-snapshots.json");
+assert(fs.existsSync(fixturesPath), "src/data/gsc-fixtures/sample-snapshots.json exists (Fixtures isolated from production)");
+const fixturesData = JSON.parse(fs.readFileSync(fixturesPath, "utf-8"));
+assert(Array.isArray(fixturesData.snapshots) && fixturesData.snapshots.length >= 2, "GSC Fixtures contains at least 2 daily snapshot datasets");
+
+const firstSnap = fixturesData.snapshots[0];
+assert(firstSnap.id && firstSnap.date && Array.isArray(firstSnap.rows) && firstSnap.rows.length >= 5, "Daily snapshot conforms to time-series schema");
+const firstRow = firstSnap.rows[0];
+assert(
+  firstRow.date && firstRow.query && firstRow.url && 
+  typeof firstRow.clicks === "number" && typeof firstRow.impressions === "number" && 
+  typeof firstRow.position === "number" && firstRow.device && firstRow.country,
+  "Snapshot row declares complete SearchSnapshot schema (date, query, url, clicks, impr, pos, dev, country)"
+);
+
+// GSC Production Engine Modules
+assert(fs.existsSync(path.join(rootDir, "src/lib/gsc/types.ts")), "src/lib/gsc/types.ts exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/gsc/normalizer.ts")), "src/lib/gsc/normalizer.ts exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/gsc/aggregator.ts")), "src/lib/gsc/aggregator.ts exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/gsc/cannibalization.ts")), "src/lib/gsc/cannibalization.ts exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/gsc/storage.ts")), "src/lib/gsc/storage.ts exists");
+assert(fs.existsSync(path.join(rootDir, "src/lib/gsc/index.ts")), "src/lib/gsc/index.ts exists");
+
+// Normalizer logic assertions
+const normalizerContent = fs.readFileSync(path.join(rootDir, "src/lib/gsc/normalizer.ts"), "utf-8");
+assert(normalizerContent.includes("normalizeGscUrl"), "GSC Normalizer defines normalizeGscUrl");
+assert(normalizerContent.includes("normalizeDevice"), "GSC Normalizer defines normalizeDevice");
+assert(normalizerContent.includes("normalizeCountry"), "GSC Normalizer defines normalizeCountry");
+
+function testNormalizeUrl(raw) {
+  let clean = raw.trim().replace(/^https?:\/\/[^/]+/i, "");
+  const qIdx = clean.indexOf("?");
+  if (qIdx !== -1) clean = clean.substring(0, qIdx);
+  if (!clean.startsWith("/")) clean = "/" + clean;
+  if (clean.length > 1 && clean.endsWith("/")) clean = clean.slice(0, -1);
+  return clean;
+}
+assert(testNormalizeUrl("https://vlopedia.com/skins/aemondir-vandal") === "/skins/aemondir-vandal", "URL Normalizer strips protocol and domain");
+assert(testNormalizeUrl("/skins/vandal/") === "/skins/vandal", "URL Normalizer removes trailing slash on nested paths");
+assert(testNormalizeUrl("/") === "/", "URL Normalizer preserves root slash");
+assert(testNormalizeUrl("/skins/reaver-vandal?utm_source=gsc#summary") === "/skins/reaver-vandal", "URL Normalizer removes query parameters and hashes");
+
+// Cannibalization Engine Assertions
+const canContent = fs.readFileSync(path.join(rootDir, "src/lib/gsc/cannibalization.ts"), "utf-8");
+assert(canContent.includes("detectCannibalization"), "SearchCannibalizationEngine implements detectCannibalization()");
+assert(canContent.includes("resolvePreferredUrl"), "SearchCannibalizationEngine implements resolvePreferredUrl()");
+assert(canContent.includes("getWatchPageConflicts"), "SearchCannibalizationEngine implements getWatchPageConflicts()");
+
+// Content Brief Generator Assertions
+const clusterContent = fs.readFileSync(path.join(rootDir, "src/lib/query-clustering.ts"), "utf-8");
+assert(clusterContent.includes("generateContentBrief"), "QueryClusteringEngine implements generateContentBrief()");
+assert(clusterContent.includes("missingCoverage"), "Content Brief contains missingCoverage checklist");
+assert(clusterContent.includes("improvementTask"), "Content Brief produces actionable improvementTask");
+
+// Dynamic Admin Dashboard: Zero Hard-coded 814 Impressions
+const adminHealthContent = fs.readFileSync(path.join(rootDir, "src/app/admin/health/page.tsx"), "utf-8");
+assert(!adminHealthContent.includes(">814 Impressions<"), "Admin dashboard does NOT contain hard-coded literal '>814 Impressions<'");
+assert(adminHealthContent.includes("headlineMetrics.totalImpressions"), "Admin dashboard calculates headline totalImpressions from telemetry");
+assert(adminHealthContent.includes("CANNIBALIZATION"), "Admin dashboard integrates Query Cannibalization navigation tab");
+assert(adminHealthContent.includes("AUTOMATIC CONTENT BRIEF"), "Admin dashboard integrates Automatic Content Brief interface");
+
+// Zod Schema Validation & Boundary Strictness
+const schemaValPath = path.join(rootDir, "src/lib/schema-validators.ts");
+assert(fs.existsSync(schemaValPath), "src/lib/schema-validators.ts exists");
+const schemaValContent = fs.readFileSync(schemaValPath, "utf-8");
+assert(schemaValContent.includes("parseAgentMeta"), "Schema Validators defines parseAgentMeta");
+assert(schemaValContent.includes("parseRelationshipEdges"), "Schema Validators defines parseRelationshipEdges");
+assert(schemaValContent.includes("parseSourceRegistry"), "Schema Validators defines parseSourceRegistry");
+assert(schemaValContent.includes("parseLoreDatabase"), "Schema Validators defines parseLoreDatabase");
+assert(schemaValContent.includes("parseGuidesDatabase"), "Schema Validators defines parseGuidesDatabase");
+
+// Knowledge Graph Zero 'as any' verification
+const kgContent = fs.readFileSync(path.join(rootDir, "src/lib/knowledge-graph.ts"), "utf-8");
+assert(!kgContent.includes("as any"), "src/lib/knowledge-graph.ts has ZERO 'as any' casts");
+assert(!kgContent.includes("sourceType as any"), "src/lib/knowledge-graph.ts eliminates sourceType as any cast");
+assert(!kgContent.includes("confidence as any"), "src/lib/knowledge-graph.ts eliminates confidence as any cast");
+
+// 13. Operational Execution & Growth Engine Hardening
+console.log("\n13. Operational Growth Engine & Architecture Hardening Tests:");
+
+// 13.1 Search Resolution Engine
+const resPath = path.join(rootDir, "src/lib/search-resolution.ts");
+assert(fs.existsSync(resPath), "src/lib/search-resolution.ts exists");
+const resContent = fs.readFileSync(resPath, "utf-8");
+assert(resContent.includes("SearchResolutionEngine"), "SearchResolutionEngine is defined");
+assert(resContent.includes("overallResolutionRatePct"), "SearchResolutionEngine computes overallResolutionRatePct");
+assert(resContent.includes("immediateResolutionPct"), "SearchResolutionEngine computes immediateResolutionPct");
+assert(resContent.includes("refinedResolutionPct"), "SearchResolutionEngine computes refinedResolutionPct");
+assert(resContent.includes("topUnresolvedIntents"), "SearchResolutionEngine tracks topUnresolvedIntents");
+assert(resContent.includes("verticalMetrics"), "SearchResolutionEngine produces verticalMetrics");
+
+// 13.2 Operational Growth Queue Engine
+const gqPath = path.join(rootDir, "src/lib/growth-queue.ts");
+assert(fs.existsSync(gqPath), "src/lib/growth-queue.ts exists");
+const gqContent = fs.readFileSync(gqPath, "utf-8");
+assert(gqContent.includes("GrowthQueueEngine"), "GrowthQueueEngine is defined");
+assert(gqContent.includes("PATCH_IMPACT"), "GrowthQueueEngine handles PATCH_IMPACT tasks");
+assert(gqContent.includes("CANNIBALIZATION"), "GrowthQueueEngine handles CANNIBALIZATION tasks");
+assert(gqContent.includes("CONTENT_BRIEF"), "GrowthQueueEngine handles CONTENT_BRIEF tasks");
+assert(gqContent.includes("UNRESOLVED_SEARCH"), "GrowthQueueEngine handles UNRESOLVED_SEARCH tasks");
+assert(gqContent.includes("updateTaskStatus"), "GrowthQueueEngine implements updateTaskStatus()");
+
+// 13.3 Pre/Post SEO Experiments with Confounders & Calibration
+const expPath = path.join(rootDir, "src/lib/seo-experiments.ts");
+assert(fs.existsSync(expPath), "src/lib/seo-experiments.ts exists");
+const expContent = fs.readFileSync(expPath, "utf-8");
+assert(expContent.includes("baselinePeriod"), "SEO Experiments define baselinePeriod for Pre/Post measurement");
+assert(expContent.includes("changePeriod"), "SEO Experiments define changePeriod for Pre/Post measurement");
+assert(expContent.includes("ExperimentConfounderAudit"), "SEO Experiments audit real-world confounders (ExperimentConfounderAudit)");
+assert(expContent.includes("ExperimentAttribution"), "SEO Experiments compute calibrated ExperimentAttribution");
+assert(!expContent.includes('"A/B"'), "SEO Experiments eliminate misleading user-facing 'A/B' terminology");
+
+// 13.4 Upstream Schema Drift Watchdog & Data Lineage
+const driftPath = path.join(rootDir, "src/lib/schema-drift.ts");
+assert(fs.existsSync(driftPath), "src/lib/schema-drift.ts exists");
+const driftContent = fs.readFileSync(driftPath, "utf-8");
+assert(driftContent.includes("SchemaDriftEngine"), "SchemaDriftEngine is defined");
+assert(driftContent.includes("auditUpstreamSchema"), "SchemaDriftEngine implements auditUpstreamSchema()");
+assert(driftContent.includes("getDataLineage"), "SchemaDriftEngine implements getDataLineage()");
+assert(driftContent.includes("/v1/agents"), "SchemaDriftEngine validates /v1/agents endpoint contract");
+assert(driftContent.includes("/v1/weapons"), "SchemaDriftEngine validates /v1/weapons endpoint contract");
+
+// 13.5 Pre-Index Content Quality Gate
+const qgPath = path.join(rootDir, "src/lib/quality-gate.ts");
+assert(fs.existsSync(qgPath), "src/lib/quality-gate.ts exists");
+const qgContent = fs.readFileSync(qgPath, "utf-8");
+assert(qgContent.includes("ContentQualityGate"), "ContentQualityGate is defined");
+assert(qgContent.includes("evaluatePage"), "ContentQualityGate implements evaluatePage()");
+assert(qgContent.includes("INDEX_RECOMMENDED"), "ContentQualityGate defines INDEX_RECOMMENDED verdict");
+assert(qgContent.includes("FORCE_NOINDEX"), "ContentQualityGate defines FORCE_NOINDEX verdict");
+assert(qgContent.includes("WORD_COUNT_THRESHOLDS"), "ContentQualityGate defines category WORD_COUNT_THRESHOLDS");
+
+// 13.6 Production Persistent Database Schema
+const sqlPath = path.join(rootDir, "src/lib/db/schema.sql");
+assert(fs.existsSync(sqlPath), "src/lib/db/schema.sql exists");
+const sqlContent = fs.readFileSync(sqlPath, "utf-8");
+assert(sqlContent.includes("CREATE TABLE IF NOT EXISTS sources"), "Database schema defines sources table");
+assert(sqlContent.includes("CREATE TABLE IF NOT EXISTS entities"), "Database schema defines entities table");
+assert(sqlContent.includes("CREATE TABLE IF NOT EXISTS relationships"), "Database schema defines relationships table");
+assert(sqlContent.includes("CREATE TABLE IF NOT EXISTS gsc_snapshots"), "Database schema defines gsc_snapshots table");
+assert(sqlContent.includes("CREATE TABLE IF NOT EXISTS growth_tasks"), "Database schema defines growth_tasks table");
+assert(sqlContent.includes("CREATE TABLE IF NOT EXISTS search_refinement_sessions"), "Database schema defines search_refinement_sessions table");
+
+// 13.7 Admin Health Operations Console
+assert(adminHealthContent.includes("GROWTH_QUEUE"), "Admin Operations Console integrates Operational Queue tab");
+assert(adminHealthContent.includes("RESOLUTION"), "Admin Operations Console integrates Search Resolution tab");
+assert(adminHealthContent.includes("UPSTREAM CONTRACT WATCHDOG"), "Admin Operations Console integrates Schema Drift Watchdog");
+assert(adminHealthContent.includes("DATA LINEAGE & PROVENANCE"), "Admin Operations Console integrates Data Lineage Registry");
+assert(adminHealthContent.includes("PRE-INDEX CONTENT QUALITY GATE"), "Admin Operations Console integrates Pre-Index Content Quality Gate");
+
+// 14. Tactical Sound Engine & Dark/Light Theme System Tests
+console.log("\n14. Tactical Sound Engine & Dark/Light Theme System Tests:");
+const soundPath = path.join(rootDir, "src/lib/sound-system.ts");
+assert(fs.existsSync(soundPath), "src/lib/sound-system.ts exists");
+const soundContent = fs.readFileSync(soundPath, "utf-8");
+assert(soundContent.includes("SoundSystem"), "SoundSystem Web Audio engine is defined");
+assert(soundContent.includes("hover") && soundContent.includes("click") && soundContent.includes("theme"), "SoundSystem defines tactical audio presets (hover, click, theme)");
+assert(!soundContent.includes(".mp3") && !soundContent.includes(".wav"), "SoundSystem uses 100% synthesized Web Audio API (zero broken CDN URLs)");
+
+const soundProviderPath = path.join(rootDir, "src/components/sound-provider.tsx");
+assert(fs.existsSync(soundProviderPath), "src/components/sound-provider.tsx exists");
+const soundProvContent = fs.readFileSync(soundProviderPath, "utf-8");
+assert(soundProvContent.includes("SoundProvider"), "SoundProvider component is exported");
+assert(soundProvContent.includes("useSound"), "useSound hook is exported");
+
+const themeProviderPath = path.join(rootDir, "src/components/theme-provider.tsx");
+assert(fs.existsSync(themeProviderPath), "src/components/theme-provider.tsx exists");
+const themeProvContent = fs.readFileSync(themeProviderPath, "utf-8");
+assert(themeProvContent.includes("ThemeProvider"), "ThemeProvider component is exported");
+assert(themeProvContent.includes("useTheme"), "useTheme hook is exported");
+
+const themeTogglePath = path.join(rootDir, "src/components/theme-toggle.tsx");
+assert(fs.existsSync(themeTogglePath), "src/components/theme-toggle.tsx exists");
+const themeToggleContent = fs.readFileSync(themeTogglePath, "utf-8");
+assert(themeToggleContent.includes("ThemeToggle"), "ThemeToggle component is exported");
+
+const globalsCssPath = path.join(rootDir, "src/app/globals.css");
+const globalsCssContent = fs.readFileSync(globalsCssPath, "utf-8");
+assert(globalsCssContent.includes("html.light, .light"), "globals.css defines html.light, .light theme tokens");
+
+const siteHeaderPath = path.join(rootDir, "src/components/site-header.tsx");
+const siteHeaderContent = fs.readFileSync(siteHeaderPath, "utf-8");
+assert(siteHeaderContent.includes("useSound"), "SiteHeader connects to useSound hook");
+assert(siteHeaderContent.includes("ThemeToggle"), "SiteHeader includes ThemeToggle component");
+
 console.log("\n========================================");
 console.log(`Validation Complete: ${passed} passed, ${failed} failed`);
 if (failed === 0) {

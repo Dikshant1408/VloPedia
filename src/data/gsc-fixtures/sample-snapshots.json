@@ -1,0 +1,62 @@
+{
+  "fixturesVersion": "1.0.0",
+  "generatedFor": "unit-tests-and-fallback",
+  "snapshots": [
+    {
+      "id": "snapshot-2026-08-30",
+      "date": "2026-08-30",
+      "importedAt": "2026-08-30T23:59:59Z",
+      "correlationId": "corr-fix-20260830",
+      "source": "FIXTURE_FALLBACK",
+      "totalImpressions": 273,
+      "totalClicks": 1,
+      "avgCtr": 0.0036,
+      "avgPosition": 14.8,
+      "rows": [
+        { "date": "2026-08-30", "query": "aemondir vandal", "url": "/skins/aemondir-vandal", "clicks": 0, "impressions": 42, "ctr": 0.0, "position": 12.4, "device": "MOBILE", "country": "US" },
+        { "date": "2026-08-30", "query": "aeris vandal", "url": "/skins/aeris-vandal", "clicks": 0, "impressions": 18, "ctr": 0.0, "position": 11.2, "device": "MOBILE", "country": "US" },
+        { "date": "2026-08-30", "query": "minima karambit", "url": "/skins/minima-karambit", "clicks": 0, "impressions": 9, "ctr": 0.0, "position": 14.5, "device": "DESKTOP", "country": "IN" },
+        { "date": "2026-08-30", "query": "montage axe", "url": "/skins/montage-axe", "clicks": 0, "impressions": 8, "ctr": 0.0, "position": 9.8, "device": "MOBILE", "country": "PH" },
+        { "date": "2026-08-30", "query": "helix phantom", "url": "/skins/helix-phantom", "clicks": 0, "impressions": 7, "ctr": 0.0, "position": 12.8, "device": "DESKTOP", "country": "US" },
+        { "date": "2026-08-30", "query": "reaver vandal", "url": "/skins/reaver-vandal", "clicks": 1, "impressions": 35, "ctr": 0.028, "position": 10.4, "device": "MOBILE", "country": "US" },
+        { "date": "2026-08-30", "query": "reaver vandal", "url": "/skins/vandal", "clicks": 0, "impressions": 20, "ctr": 0.0, "position": 14.1, "device": "DESKTOP", "country": "IN" },
+        { "date": "2026-08-30", "query": "valovault", "url": "/", "clicks": 0, "impressions": 22, "ctr": 0.0, "position": 11.5, "device": "DESKTOP", "country": "CA" },
+        { "date": "2026-08-30", "query": "how to counter jett", "url": "/guides/how-to-counter-jett", "clicks": 0, "impressions": 48, "ctr": 0.0, "position": 14.2, "device": "MOBILE", "country": "GB" },
+        { "date": "2026-08-30", "query": "vandal vs phantom", "url": "/compare/weapons/vandal-vs-phantom", "clicks": 0, "impressions": 64, "ctr": 0.0, "position": 12.1, "device": "DESKTOP", "country": "US" }
+      ]
+    },
+    {
+      "id": "snapshot-2026-09-04",
+      "date": "2026-09-04",
+      "importedAt": "2026-09-04T23:59:59Z",
+      "correlationId": "corr-fix-20260904",
+      "source": "FIXTURE_FALLBACK",
+      "totalImpressions": 814,
+      "totalClicks": 2,
+      "avgCtr": 0.0025,
+      "avgPosition": 11.2,
+      "rows": [
+        { "date": "2026-09-04", "query": "aemondir vandal", "url": "/skins/aemondir-vandal", "clicks": 0, "impressions": 104, "ctr": 0.0, "position": 8.93, "device": "MOBILE", "country": "US" },
+        { "date": "2026-09-04", "query": "aeris vandal", "url": "/skins/aeris-vandal", "clicks": 0, "impressions": 46, "ctr": 0.0, "position": 8.87, "device": "MOBILE", "country": "US" },
+        { "date": "2026-09-04", "query": "aeris vandal showcase", "url": "/skins/aeris-vandal", "clicks": 0, "impressions": 10, "ctr": 0.0, "position": 8.40, "device": "DESKTOP", "country": "US" },
+        { "date": "2026-09-04", "query": "aeris vandal showcase", "url": "/skins/aeris-vandal/watch", "clicks": 0, "impressions": 6, "ctr": 0.0, "position": 9.10, "device": "MOBILE", "country": "US" },
+        { "date": "2026-09-04", "query": "minima karambit", "url": "/skins/minima-karambit", "clicks": 0, "impressions": 23, "ctr": 0.0, "position": 10.13, "device": "MOBILE", "country": "IN" },
+        { "date": "2026-09-04", "query": "how much is minima karambit", "url": "/skins/minima-karambit", "clicks": 0, "impressions": 11, "ctr": 0.0, "position": 10.40, "device": "DESKTOP", "country": "IN" },
+        { "date": "2026-09-04", "query": "montage axe", "url": "/skins/montage-axe", "clicks": 0, "impressions": 20, "ctr": 0.0, "position": 6.45, "device": "MOBILE", "country": "PH" },
+        { "date": "2026-09-04", "query": "helix phantom", "url": "/skins/helix-phantom", "clicks": 0, "impressions": 18, "ctr": 0.0, "position": 9.50, "device": "DESKTOP", "country": "US" },
+        { "date": "2026-09-04", "query": "helix phantom variants", "url": "/skins/helix-phantom", "clicks": 0, "impressions": 14, "ctr": 0.0, "position": 9.20, "device": "MOBILE", "country": "US" },
+        { "date": "2026-09-04", "query": "helix phantom valorant price", "url": "/skins/helix-phantom", "clicks": 0, "impressions": 12, "ctr": 0.0, "position": 8.90, "device": "DESKTOP", "country": "US" },
+        { "date": "2026-09-04", "query": "reaver vandal", "url": "/skins/reaver-vandal", "clicks": 1, "impressions": 71, "ctr": 0.014, "position": 9.28, "device": "MOBILE", "country": "US" },
+        { "date": "2026-09-04", "query": "reaver vandal", "url": "/skins/vandal", "clicks": 0, "impressions": 28, "ctr": 0.0, "position": 13.80, "device": "DESKTOP", "country": "IN" },
+        { "date": "2026-09-04", "query": "reaver vandal", "url": "/collections/reaver", "clicks": 0, "impressions": 15, "ctr": 0.0, "position": 15.20, "device": "DESKTOP", "country": "US" },
+        { "date": "2026-09-04", "query": "kuronami vandal", "url": "/skins/kuronami-vandal", "clicks": 0, "impressions": 38, "ctr": 0.0, "position": 9.10, "device": "MOBILE", "country": "US" },
+        { "date": "2026-09-04", "query": "valovault", "url": "/", "clicks": 0, "impressions": 54, "ctr": 0.0, "position": 6.28, "device": "DESKTOP", "country": "CA" },
+        { "date": "2026-09-04", "query": "valorant skins catalog", "url": "/skins", "clicks": 0, "impressions": 28, "ctr": 0.0, "position": 65.07, "device": "DESKTOP", "country": "US" },
+        { "date": "2026-09-04", "query": "how to counter jett", "url": "/guides/how-to-counter-jett", "clicks": 0, "impressions": 142, "ctr": 0.0, "position": 13.8, "device": "MOBILE", "country": "GB" },
+        { "date": "2026-09-04", "query": "vandal vs phantom", "url": "/compare/weapons/vandal-vs-phantom", "clicks": 1, "impressions": 180, "ctr": 0.0055, "position": 11.2, "device": "DESKTOP", "country": "US" },
+        { "date": "2026-09-04", "query": "jett abilities guide", "url": "/agents/jett", "clicks": 0, "impressions": 24, "ctr": 0.0, "position": 9.6, "device": "MOBILE", "country": "US" },
+        { "date": "2026-09-04", "query": "omen smokes guide", "url": "/agents/omen", "clicks": 0, "impressions": 15, "ctr": 0.0, "position": 10.1, "device": "MOBILE", "country": "DE" }
+      ]
+    }
+  ]
+}

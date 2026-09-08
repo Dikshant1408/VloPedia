@@ -1,6 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Sparkles, FolderKanban, Layers, Tag, ShieldCheck } from "lucide-react";
@@ -96,10 +96,29 @@ export async function generateStaticParams() {
   return params;
 }
 
+const ALIAS_MAP: Record<string, string> = {
+  "kuronami-vandal": "kuronami",
+  "reaver-vandal": "reaver",
+  "oni-phantom": "oni",
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const lowerSlug = slug.toLowerCase().trim();
+
+  // If accessed via legacy alias, noindex and point canonical to primary collection
+  if (ALIAS_MAP[lowerSlug]) {
+    const target = ALIAS_MAP[lowerSlug];
+    return {
+      title: `${target.toUpperCase()} Collection | VloPedia`,
+      description: `Redirecting to official ${target} collection page.`,
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/collections/${target}` },
+    };
+  }
+
   const map = await getCollectionsMap();
-  const col = map.get(slug.toLowerCase());
+  const col = map.get(lowerSlug);
 
   if (!col) {
     return { title: "Collection Not Found | VloPedia", robots: { index: false } };
@@ -111,22 +130,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: pageTitle,
     description: pageDesc,
-    robots: { index: true, follow: true },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
     openGraph: {
       title: pageTitle,
       description: pageDesc,
-      url: `${siteConfig.url}/collections/${slug}`,
+      url: `${siteConfig.url}/collections/${lowerSlug}`,
     },
     alternates: {
-      canonical: `${siteConfig.url}/collections/${slug}`,
+      canonical: `${siteConfig.url}/collections/${lowerSlug}`,
     },
   };
 }
 
 export default async function CollectionDetailPage({ params }: Props) {
   const { slug } = await params;
+  const lowerSlug = slug.toLowerCase().trim();
+
+  // Redirect legacy collection aliases
+  if (ALIAS_MAP[lowerSlug]) {
+    permanentRedirect(`/collections/${ALIAS_MAP[lowerSlug]}`);
+  }
+
   const map = await getCollectionsMap();
-  const col = map.get(slug.toLowerCase());
+  const col = map.get(lowerSlug);
 
   if (!col) {
     notFound();

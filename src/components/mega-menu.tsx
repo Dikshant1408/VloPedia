@@ -154,7 +154,7 @@ export function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
                             onClick={onClose}
                             className="group flex flex-col rounded-none border border-transparent px-3 py-2 transition-colors hover:border-border hover:bg-surface focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
                           >
-                            <span className="font-sans text-sm font-bold text-white group-hover:text-primary transition-colors">
+                            <span className="font-sans text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                               {item.label}
                             </span>
                             <span className="font-sans text-[11px] text-muted">
@@ -173,7 +173,7 @@ export function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-muted hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                  className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-muted hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary cursor-pointer"
                 >
                   <X className="h-3.5 w-3.5" aria-hidden="true" />
                   Close

@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { valorantDb } from "@/lib/valorant-db";
 import { slugify } from "@/lib/utils";
+import { soundSystem } from "@/lib/sound-system";
 import loreData from "@/data/lore-database.json";
 
 interface SearchItem {
@@ -172,6 +173,7 @@ export function GlobalSearchDialog() {
   // Focus input when opened
   useEffect(() => {
     if (open) {
+      soundSystem.play("search");
       setTimeout(() => inputRef.current?.focus(), 50);
       setSelectedIndex(0);
     }
@@ -216,6 +218,7 @@ export function GlobalSearchDialog() {
   }, [query, allSearchable]);
 
   const selectItem = useCallback((item: SearchItem) => {
+    soundSystem.play("click");
     setOpen(false);
     setQuery("");
     router.push(item.href);
@@ -243,12 +246,12 @@ export function GlobalSearchDialog() {
       onClick={() => setOpen(false)}
     >
       <div 
-        className="w-full max-w-2xl border border-[rgba(236,232,225,0.15)] bg-[#0B141A] shadow-2xl shadow-black/90 overflow-hidden flex flex-col max-h-[80vh]"
+        className="w-full max-w-2xl border border-border bg-background shadow-2xl shadow-black/90 overflow-hidden flex flex-col max-h-[80vh]"
         onClick={e => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
         {/* Search header */}
-        <div className="relative flex items-center border-b border-[rgba(236,232,225,0.10)] px-4 py-3.5 bg-[#0D1820]">
+        <div className="relative flex items-center border-b border-border px-4 py-3.5 bg-surface-elevated">
           <Search className="h-4 w-4 text-primary shrink-0 mr-3" />
           <input
             ref={inputRef}
@@ -259,12 +262,12 @@ export function GlobalSearchDialog() {
               setSelectedIndex(0);
             }}
             placeholder="Search agents, weapons, maps, skins, tools, or guides... (Ctrl+K)"
-            className="flex-1 bg-transparent font-mono text-sm text-white placeholder:text-muted focus:outline-none"
+            className="flex-1 bg-transparent font-mono text-sm text-foreground placeholder:text-muted focus:outline-none"
           />
           {query && (
             <button 
               onClick={() => setQuery("")}
-              className="text-muted hover:text-white p-1 mr-2"
+              className="text-muted hover:text-foreground p-1 mr-2 cursor-pointer"
               title="Clear search"
             >
               <X className="h-4 w-4" />
@@ -276,7 +279,7 @@ export function GlobalSearchDialog() {
         </div>
 
         {/* Results list */}
-        <div ref={listRef} className="overflow-y-auto p-2 space-y-1 divide-y divide-[rgba(236,232,225,0.04)]">
+        <div ref={listRef} className="overflow-y-auto p-2 space-y-1 divide-y divide-border/40">
           {results.length === 0 ? (
             <div className="py-12 text-center">
               <p className="font-mono text-sm text-muted">No tactical intel found for &quot;{query}&quot;</p>
@@ -290,10 +293,10 @@ export function GlobalSearchDialog() {
                   key={item.id}
                   onClick={() => selectItem(item)}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`w-full text-left flex items-center justify-between px-3.5 py-3 transition-colors ${
+                  className={`w-full text-left flex items-center justify-between px-3.5 py-3 transition-colors cursor-pointer ${
                     isSelected 
-                      ? "bg-primary/10 border-l-2 border-primary text-white" 
-                      : "text-secondary hover:bg-white/5 border-l-2 border-transparent"
+                      ? "bg-primary/10 border-l-2 border-primary text-foreground" 
+                      : "text-secondary hover:bg-surface border-l-2 border-transparent"
                   }`}
                 >
                   <div className="min-w-0 flex-1 pr-4">
@@ -302,7 +305,7 @@ export function GlobalSearchDialog() {
                         item.category === "Agents" ? "border-role-duelist/40 bg-role-duelist/10 text-role-duelist" :
                         item.category === "Weapons" ? "border-primary/40 bg-primary/10 text-primary" :
                         item.category === "Maps" ? "border-role-initiator/40 bg-role-initiator/10 text-role-initiator" :
-                        item.category === "Tools" ? "border-[#0DF2F2]/40 bg-[#0DF2F2]/10 text-[#0DF2F2]" :
+                        item.category === "Tools" ? "border-cyan/40 bg-cyan/10 text-cyan" :
                         item.category === "Compare" ? "border-[#C084FC]/40 bg-[#C084FC]/10 text-[#C084FC]" :
                         item.category === "Lore" ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400" :
                         item.category === "Guides" ? "border-role-sentinel/40 bg-role-sentinel/10 text-role-sentinel" :
@@ -310,7 +313,7 @@ export function GlobalSearchDialog() {
                       }`}>
                         {item.category}
                       </span>
-                      <span className="font-display uppercase tracking-wide font-bold text-sm text-white truncate">
+                      <span className="font-display uppercase tracking-wide font-bold text-sm text-foreground truncate">
                         {item.title}
                       </span>
                       {item.badge && (
@@ -337,13 +340,13 @@ export function GlobalSearchDialog() {
         </div>
 
         {/* Footer shortcuts */}
-        <div className="border-t border-[rgba(236,232,225,0.08)] bg-[#0D1820] px-4 py-2 flex items-center justify-between text-[10px] font-mono text-muted">
+        <div className="border-t border-border bg-surface-elevated px-4 py-2 flex items-center justify-between text-[10px] font-mono text-muted">
           <div className="flex items-center gap-3">
-            <span><strong className="text-white">↑↓</strong> Navigate</span>
-            <span><strong className="text-white">↵</strong> Open</span>
-            <span><strong className="text-white">ESC</strong> Exit</span>
+            <span><strong className="text-foreground">↑↓</strong> Navigate</span>
+            <span><strong className="text-foreground">↵</strong> Open</span>
+            <span><strong className="text-foreground">ESC</strong> Exit</span>
           </div>
-          <span className="text-[#0DF2F2]">VloPedia Tactical Engine</span>
+          <span className="text-cyan">VloPedia Tactical Engine</span>
         </div>
       </div>
     </div>

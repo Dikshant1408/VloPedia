@@ -1,4 +1,7 @@
-import sourcesData from "@/data/sources/registry.json";
+import rawSourcesData from "@/data/sources/registry.json";
+import { parseSourceRegistry } from "./schema-validators";
+
+const sourcesData = parseSourceRegistry(rawSourcesData);
 
 export type SourceType = 
   | "GAME_API" 
@@ -79,8 +82,8 @@ export class SourceRegistry {
 
   private static init() {
     if (this.sourceMap.size === 0) {
-      for (const s of sourcesData.sources as DataSourceRecord[]) {
-        this.sourceMap.set(s.id, s);
+      for (const s of sourcesData.sources) {
+        this.sourceMap.set(s.id, s as DataSourceRecord);
       }
     }
   }

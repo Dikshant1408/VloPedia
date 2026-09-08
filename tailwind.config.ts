@@ -8,31 +8,31 @@ const config: Config = {
     extend: {
       colors: {
         /* Core palette */
-        background:          "#0B141A",
-        surface:             "#0F1C24",
-        "surface-elevated":  "#132028",
-        "surface-card":      "#0D1A22",
-        "surface-glass":     "rgba(11,20,26,0.80)",
-        "surface-overlay":   "rgba(11,20,26,0.96)",
+        background:          "var(--background)",
+        surface:             "var(--surface)",
+        "surface-elevated":  "var(--surface-elevated)",
+        "surface-card":      "var(--surface-card)",
+        "surface-glass":     "var(--surface-glass)",
+        "surface-overlay":   "var(--surface-overlay)",
 
         /* Borders */
-        border:              "rgba(236,232,225,0.10)",
-        "border-light":      "rgba(236,232,225,0.18)",
+        border:              "var(--border)",
+        "border-light":      "var(--border-light)",
 
         /* Primary (Radianite Red) */
-        primary:             "#FA4454",
-        "primary-soft":      "rgba(250,68,84,0.12)",
-        "primary-softer":    "rgba(250,68,84,0.06)",
+        primary:             "var(--primary)",
+        "primary-soft":      "var(--primary-soft)",
+        "primary-softer":    "var(--primary-softer)",
 
         /* Cyan accent */
-        cyan:                "#0DF2F2",
-        "cyan-soft":         "rgba(13,242,242,0.10)",
+        cyan:                "var(--cyan)",
+        "cyan-soft":         "var(--cyan-soft)",
 
         /* Text */
-        foreground:          "#ECE8E1",
-        secondary:           "rgba(236,232,225,0.70)",
-        muted:               "rgba(236,232,225,0.55)",
-        "muted-dark":        "rgba(236,232,225,0.20)",
+        foreground:          "var(--foreground)",
+        secondary:           "var(--secondary)",
+        muted:               "var(--muted)",
+        "muted-dark":        "var(--muted-dark)",
 
         /* Semantic */
         success:             "#22c55e",

@@ -40,25 +40,26 @@ export function AuthActions({ className, stacked = false }: AuthActionsProps) {
   }
 
   return (
-    <div className={cn("flex items-center gap-3", stacked && "flex-col items-stretch", className)}>
+    <div className={cn("flex items-center gap-2 sm:gap-3", stacked && "flex-col items-stretch", className)}>
       {user ? (
         <>
-          <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] px-3 py-2 text-sm text-foreground">
-            <CircleUserRound className="h-4 w-4 text-primary" />
-            <span className="max-w-[12rem] truncate">{user.displayName ?? user.email ?? "Signed in"}</span>
+          <div className="inline-flex items-center gap-2 border border-border bg-surface px-2.5 py-1 text-xs text-foreground">
+            <CircleUserRound className="h-3.5 w-3.5 text-primary" />
+            <span className="max-w-[10rem] truncate font-mono text-[10px]">{user.displayName ?? user.email ?? "Signed in"}</span>
           </div>
-          <Button variant="secondary" onClick={handleSignOut} className={stacked ? "w-full" : undefined}>
-            <LogOut className="h-4 w-4" />
+          <Button variant="secondary" size="sm" onClick={handleSignOut} className={stacked ? "w-full" : undefined}>
+            <LogOut className="h-3.5 w-3.5" />
             Sign out
           </Button>
         </>
       ) : (
         <div className={cn("relative group/tooltip", stacked && "w-full")}>
-          <Button variant="primary" onClick={handleSignIn} className={stacked ? "w-full" : undefined}>
-            <LogIn className="h-4 w-4" />
-            Sign in with Discord
+          <Button variant="primary" size="sm" onClick={handleSignIn} className={cn("whitespace-nowrap", stacked && "w-full")}>
+            <LogIn className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Sign in with Discord</span>
+            <span className="sm:hidden">Sign in</span>
           </Button>
-          <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 scale-95 opacity-0 transition-all duration-200 group-hover/tooltip:scale-100 group-hover/tooltip:opacity-100 bg-[#0D1A22] border border-[rgba(236,232,225,0.15)] px-3 py-2 text-[10px] font-mono text-muted uppercase tracking-wider text-center w-64 clip-diagonal-sm shadow-xl">
+          <div className="pointer-events-none absolute bottom-full right-0 z-50 mb-2 scale-95 opacity-0 transition-all duration-200 group-hover/tooltip:scale-100 group-hover/tooltip:opacity-100 bg-surface-card border border-border px-3 py-2 text-[10px] font-mono text-muted uppercase tracking-wider text-center w-64 clip-diagonal-sm shadow-xl">
             <span className="text-primary font-bold block mb-1">[ SECURE SYNC BENEFITS ]</span>
             Save your mains, customize queue prep plans, and track your skins wishlist.
           </div>

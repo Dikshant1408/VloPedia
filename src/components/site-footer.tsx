@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Shield, Cpu } from "lucide-react";
 import { ReportIssueModal } from "@/components/report-issue-modal";
+import { formatPatchVersion } from "@/lib/utils";
 
 interface SiteFooterProps {
   version?: string | null;
@@ -25,10 +26,11 @@ const PRIMARY_NAV = [
 
 export function SiteFooter({ version }: SiteFooterProps) {
   const year = new Date().getFullYear();
+  const patchVersion = formatPatchVersion(version);
 
   return (
     <footer
-      className="border-t border-[rgba(236,232,225,0.08)] bg-[#0B141A]/98 py-8 z-10"
+      className="border-t border-border bg-background/98 py-8 z-10"
       role="contentinfo"
     >
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
@@ -45,8 +47,8 @@ export function SiteFooter({ version }: SiteFooterProps) {
                 VloPedia
               </span>
               {version && (
-                <span className="border border-[rgba(13,242,242,0.25)] bg-[rgba(13,242,242,0.05)] px-2 py-0.5 font-mono text-[9px] text-[#0DF2F2] tracking-wider">
-                  CORE: {version.split("-")[0]}
+                <span className="border border-cyan/30 bg-cyan/5 px-2 py-0.5 font-mono text-[9px] text-cyan tracking-wider">
+                  CORE: {patchVersion}
                 </span>
               )}
             </div>
@@ -82,11 +84,11 @@ export function SiteFooter({ version }: SiteFooterProps) {
             </nav>
 
             {/* Engine status */}
-            <div className="flex items-center gap-2 border border-[rgba(236,232,225,0.06)] bg-[rgba(11,20,26,0.4)] px-3 py-2">
-              <Cpu className="h-3.5 w-3.5 text-[#0DF2F2]" aria-hidden="true" />
+            <div className="flex items-center gap-2 border border-border bg-surface/50 px-3 py-2">
+              <Cpu className="h-3.5 w-3.5 text-cyan" aria-hidden="true" />
               <div>
-                <span className="block font-mono text-[8px] font-bold uppercase tracking-widest text-[#0DF2F2]">DB SYNCED: SEP 4, 2026</span>
-                <span className="font-mono text-[9px] text-muted">PATCH 9.04 // RELATIONAL GRAPH // ACTIVE</span>
+                <span className="block font-mono text-[8px] font-bold uppercase tracking-widest text-cyan">DB SYNCED: SEP 4, 2026</span>
+                <span className="font-mono text-[9px] text-muted">PATCH {patchVersion} {"//"} RELATIONAL GRAPH {"//"} ACTIVE</span>
               </div>
             </div>
 

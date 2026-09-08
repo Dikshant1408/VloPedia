@@ -32,7 +32,7 @@ export interface ButtonProps
 export function Button({ className, variant, size, type = "button", ...props }: ButtonProps) {
   return (
     <button
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size }), className)}
       type={type}
       {...props}
     />

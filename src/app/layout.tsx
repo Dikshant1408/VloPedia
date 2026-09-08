@@ -80,12 +80,33 @@ export default async function RootLayout({
     <html
       lang="en"
       className={`${displayFont.variable} ${monoFont.variable} ${bodyFont.variable} dark`}
+      suppressHydrationWarning
     >
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var storedTheme = localStorage.getItem("valovault_theme");
+                if (storedTheme === "light") {
+                  document.documentElement.classList.remove("dark");
+                  document.documentElement.classList.add("light");
+                  document.documentElement.style.colorScheme = "light";
+                } else {
+                  document.documentElement.classList.remove("light");
+                  document.documentElement.classList.add("dark");
+                  document.documentElement.style.colorScheme = "dark";
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
         <meta name="google-site-verification" content="VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw" />
         <meta name="google-adsense-account" content="ca-pub-5851997796287592" />
         <link rel="dns-prefetch" href="https://wsrv.nl" />
         <link rel="dns-prefetch" href="https://valorant-api.com" />
+        <link rel="dns-prefetch" href="https://pl30712689.profitableratecpmnetwork.com" />
+        <link rel="dns-prefetch" href="https://pl30712688.profitableratecpmnetwork.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -115,7 +136,7 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[#0B141A] text-foreground antialiased font-sans">
+      <body className="min-h-screen bg-background text-foreground antialiased font-sans">
         <Providers>
           <div className="relative isolate min-h-screen overflow-x-hidden">
             {/* Skip to content */}
@@ -146,6 +167,14 @@ export default async function RootLayout({
           </div>
         </Providers>
         <AdSenseLoader />
+        <Script
+          src="https://pl30712689.profitableratecpmnetwork.com/41/39/b0/4139b03b71bd333ff596418dde78d57c.js"
+          strategy="afterInteractive"
+        />
+        <Script
+          src="https://pl30712688.profitableratecpmnetwork.com/08/9e/b4/089eb435e7d1e894c66eb7e6b9e589d4.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

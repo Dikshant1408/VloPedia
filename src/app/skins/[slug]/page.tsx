@@ -177,6 +177,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!skin) return { title: "Skin Not Found | VloPedia", robots: { index: false } };
 
   const canonicalSlug = slugify(skin.displayName) || skin.uuid;
+
+  // If accessed via legacy UUID alias, instruct search engines not to index this URL and point canonical to clean slug
+  const isLegacyUuid = lowerSlug === skin.uuid.toLowerCase() && canonicalSlug && lowerSlug !== canonicalSlug.toLowerCase();
+  if (isLegacyUuid) {
+    return {
+      title: `${skin.displayName} VALORANT Skin | VloPedia`,
+      description: `Official details and video showcase for ${skin.displayName} in VALORANT.`,
+      robots: {
+        index: false,
+        follow: true,
+      },
+      alternates: {
+        canonical: `${siteConfig.url}/skins/${canonicalSlug}`,
+      },
+    };
+  }
+
   const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""];
   const img  = skin.chromas?.[0]?.fullRender ?? skin.displayIcon;
   const weaponName = weaponFromName(skin.displayName, skin.assetPath).toUpperCase();

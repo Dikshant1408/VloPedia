@@ -52,13 +52,13 @@ export function BookmarksDrawer() {
       <button
         onClick={() => setIsOpen(true)}
         type="button"
-        className="relative inline-flex items-center gap-1.5 font-mono text-xs uppercase px-2.5 py-1 border border-[rgba(236,232,225,0.15)] bg-surface text-secondary hover:border-primary/50 hover:text-white transition-colors"
+        className="relative inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase px-2 sm:px-2.5 py-1.5 border border-border bg-surface text-secondary hover:border-primary/50 hover:text-foreground transition-colors cursor-pointer"
         title="Saved Bookmarks"
       >
         <Bookmark className="h-3.5 w-3.5 text-primary" />
         <span className="hidden sm:inline">Saved</span>
         {bookmarks.length > 0 && (
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-black">
+          <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-black">
             {bookmarks.length}
           </span>
         )}
@@ -66,18 +66,18 @@ export function BookmarksDrawer() {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="relative w-full max-w-md bg-[#0D1820] border-l border-[rgba(236,232,225,0.1)] p-6 flex flex-col h-full shadow-2xl">
+          <div className="relative w-full max-w-md bg-background border-l border-border p-6 flex flex-col h-full shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-[rgba(236,232,225,0.08)]">
+            <div className="flex items-center justify-between pb-4 border-b border-border">
               <div className="flex items-center gap-2">
                 <Bookmark className="h-4 w-4 text-primary" />
-                <h2 className="font-display font-black text-lg uppercase text-white tracking-wide">
+                <h2 className="font-display font-black text-lg uppercase text-foreground tracking-wide">
                   Saved Bookmarks ({bookmarks.length})
                 </h2>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 text-muted hover:text-white transition-colors"
+                className="p-1 text-muted hover:text-foreground transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -97,7 +97,7 @@ export function BookmarksDrawer() {
                 bookmarks.map(item => (
                   <div
                     key={item.id}
-                    className="group border border-[rgba(236,232,225,0.06)] bg-[#08111A] p-3 flex items-center justify-between gap-3 hover:border-primary/40 transition-colors"
+                    className="group border border-border bg-surface p-3 flex items-center justify-between gap-3 hover:border-primary/40 transition-colors"
                   >
                     <Link
                       href={item.url}
@@ -108,7 +108,7 @@ export function BookmarksDrawer() {
                         <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 border border-primary/30 bg-primary/10 text-primary">
                           {item.category}
                         </span>
-                        <h4 className="font-sans text-xs font-bold text-white truncate group-hover:text-primary transition-colors">
+                        <h4 className="font-sans text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">
                           {item.title}
                         </h4>
                       </div>
@@ -119,7 +119,7 @@ export function BookmarksDrawer() {
 
                     <button
                       onClick={() => removeBookmark(item.id)}
-                      className="text-muted hover:text-red-400 p-1 transition-colors"
+                      className="text-muted hover:text-red-400 p-1 transition-colors cursor-pointer"
                       title="Remove"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -131,7 +131,7 @@ export function BookmarksDrawer() {
 
             {/* Footer */}
             {bookmarks.length > 0 && (
-              <div className="pt-4 border-t border-[rgba(236,232,225,0.08)] flex justify-between items-center">
+              <div className="pt-4 border-t border-border flex justify-between items-center">
                 <button
                   onClick={clearAll}
                   className="font-mono text-[10px] uppercase text-muted hover:text-red-400 transition-colors"

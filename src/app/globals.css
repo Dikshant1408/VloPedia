@@ -73,6 +73,117 @@
   --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ── Light Mode System ── */
+html.light, .light {
+  color-scheme: light;
+
+  /* Core palette — tactical light aesthetic */
+  --background:       #F5F6F8;
+  --surface:          #FFFFFF;
+  --surface-elevated: #EAEFF4;
+  --border:           rgba(15, 25, 35, 0.12);
+  --border-light:     rgba(15, 25, 35, 0.20);
+
+  /* Accent colors */
+  --primary:          #FA4454;
+  --primary-rgb:      250, 68, 84;
+  --primary-soft:     rgba(250, 68, 84, 0.10);
+  --primary-softer:   rgba(250, 68, 84, 0.05);
+  --cyan:             #008489;
+  --cyan-rgb:         0, 132, 137;
+  --cyan-soft:        rgba(0, 132, 137, 0.10);
+
+  /* Text */
+  --foreground:       #0F1923;
+  --secondary:        rgba(15, 25, 35, 0.72);
+  --muted:            rgba(15, 25, 35, 0.55);
+  --muted-dark:       rgba(15, 25, 35, 0.18);
+
+  /* V2 surface tokens */
+  --surface-glass:    rgba(255, 255, 255, 0.88);
+  --surface-card:     #FFFFFF;
+  --surface-overlay:  rgba(245, 246, 248, 0.96);
+  --gradient-hero:    linear-gradient(to bottom, transparent 0%, #F5F6F8 100%);
+
+  /* Shadows */
+  --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md:        0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg:        0 12px 36px rgba(0, 0, 0, 0.10);
+  --shadow-primary:   0 0 20px rgba(var(--primary-rgb), 0.18);
+  --shadow-cyan:      0 0 20px rgba(var(--cyan-rgb), 0.18);
+}
+
+/* ── Light Mode UI Element Adaptations ── */
+html.light body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+html.light [class*="bg-[#0B141A]"] {
+  background-color: var(--background) !important;
+}
+
+html.light header[class*="bg-[#0B141A]"] {
+  background-color: rgba(245, 246, 248, 0.92) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+html.light [class*="bg-[#0D1A22]"] {
+  background-color: var(--surface-card) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+html.light [class*="bg-[#08111A]"] {
+  background-color: var(--surface-elevated) !important;
+}
+
+html.light [class*="bg-[#0F1C24]"] {
+  background-color: var(--surface) !important;
+}
+
+html.light [class*="bg-[rgba(11,20,26"] {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+}
+
+html.light [class*="border-[rgba(236,232,225"] {
+  border-color: var(--border) !important;
+}
+
+html.light [class*="border-white/"] {
+  border-color: var(--border) !important;
+}
+
+html.light [class*="text-white"] {
+  color: var(--foreground) !important;
+}
+
+html.light [class*="text-[#ECE8E1]"] {
+  color: var(--foreground) !important;
+}
+
+html.light [class*="hover:text-white"]:hover {
+  color: var(--foreground) !important;
+}
+
+html.light [class*="bg-white/5"] {
+  background-color: rgba(15, 25, 35, 0.04) !important;
+}
+
+html.light [class*="bg-white/10"] {
+  background-color: rgba(15, 25, 35, 0.08) !important;
+}
+
+html.light .bg-tactical-grid {
+  background-image:
+    linear-gradient(to right,  rgba(15, 25, 35, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 25, 35, 0.04) 1px, transparent 1px);
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 1px solid rgba(15, 25, 35, 0.08);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -82,6 +193,7 @@ html {
   background-color: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 body {

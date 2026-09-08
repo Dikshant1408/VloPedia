@@ -1,5 +1,8 @@
 import { KnowledgeGraphService } from "./knowledge-graph-service";
-import guidesDb from "@/data/guides-database.json";
+import rawGuidesDb from "@/data/guides-database.json";
+import { parseGuidesDatabase } from "./schema-validators";
+
+const guidesDb = parseGuidesDatabase(rawGuidesDb);
 
 export interface PatchDependencyNode {
   type: "META" | "RELATIONSHIP" | "GUIDE" | "COMPARISON" | "BEST_FOR" | "SKIN_HUB" | "COLLECTION";
@@ -104,7 +107,7 @@ export class PatchImpactEngine {
     const affectedGuides: Array<{ slug: string; title: string; reason: string }> = [];
     for (const guide of guidesDb) {
       const mentionsAgent = guide.relatedAgents?.some(a => a.toLowerCase() === slug.toLowerCase());
-      const mentionsWeapon = (guide as any).relatedWeapons?.some((w: string) => w.toLowerCase() === slug.toLowerCase());
+      const mentionsWeapon = guide.relatedWeapons?.some((w: string) => w.toLowerCase() === slug.toLowerCase());
       const mentionsInContent = guide.content.toLowerCase().includes(slug.toLowerCase());
 
       if (mentionsAgent || mentionsWeapon || mentionsInContent) {

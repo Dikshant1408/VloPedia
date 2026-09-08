@@ -5,29 +5,46 @@
  * Agents <-> Weapons <-> Maps <-> Synergies <-> Counters <-> Lore <-> Guides <-> Comparisons
  * 
  * Enforces field-specific data provenance, canonical EntityResolver lookups,
- * explicit relationship directionality, and strict null-state comparison handling.
+ * explicit relationship directionality, strict Zod boundary parsing, and null-state comparison handling.
  */
 
-import agentMeta from "@/data/agent-meta.json";
-import guidesData from "@/data/guides-database.json";
-import loreData from "@/data/lore-database.json";
+import rawAgentMeta from "@/data/agent-meta.json";
+import rawGuidesData from "@/data/guides-database.json";
+import rawLoreData from "@/data/lore-database.json";
+import rawSynergiesData from "@/data/relationships/agent-synergies.json";
+import rawCountersData from "@/data/relationships/agent-counters.json";
+import rawMapFitData from "@/data/relationships/agent-map-fit.json";
+import rawWeaponsData from "@/data/relationships/agent-weapons.json";
 import { slugify } from "@/lib/utils";
 import { EntityResolver } from "./entity-resolver";
 import { SourceRegistry } from "./sources";
+import {
+  parseAgentMeta,
+  parseGuidesDatabase,
+  parseLoreDatabase,
+  parseRelationshipEdges,
+  SourceType,
+  ConfidenceLevel,
+  DangerLevel,
+} from "./schema-validators";
 
-import synergiesData from "@/data/relationships/agent-synergies.json";
-import countersData from "@/data/relationships/agent-counters.json";
-import mapFitData from "@/data/relationships/agent-map-fit.json";
-import weaponsData from "@/data/relationships/agent-weapons.json";
+// Strictly parse and validate all JSON datasets at boundary
+const agentMeta = parseAgentMeta(rawAgentMeta);
+const guidesData = parseGuidesDatabase(rawGuidesData);
+const loreData = parseLoreDatabase(rawLoreData);
+const synergiesData = parseRelationshipEdges(rawSynergiesData);
+const countersData = parseRelationshipEdges(rawCountersData);
+const mapFitData = parseRelationshipEdges(rawMapFitData);
+const weaponsData = parseRelationshipEdges(rawWeaponsData);
 
 export interface FieldProvenance {
   field: string;
   sourceId: string;
-  sourceType: "GAME_API" | "VCT_SNAPSHOT" | "EDITORIAL_ANALYSIS" | "CONFIRMED_CANON";
+  sourceType: SourceType;
   sourceName: string;
   patchVersion: string | null;
   lastVerified: string | null;
-  confidence: "CONFIRMED" | "HIGH" | "EDITORIAL" | "PENDING_REVIEW";
+  confidence: ConfidenceLevel;
 }
 
 export interface AgentSynergy {
@@ -42,7 +59,7 @@ export interface AgentCounter {
   agentName: string;
   agentSlug: string;
   counterReason: string;
-  dangerLevel: "HIGH" | "MEDIUM" | "SITUATIONAL";
+  dangerLevel: DangerLevel;
   provenance: FieldProvenance;
 }
 
@@ -79,12 +96,11 @@ export function getAgentKnowledgeNode(agentNameOrSlug: string): AgentKnowledgeNo
   const norm = slugify(agentNameOrSlug);
   const resolved = EntityResolver.resolve(norm, "AGENT");
 
-  const metaObj = agentMeta as any;
-  const tiers = metaObj.tiers || {};
-  const pickRates = metaObj.pickRates || {};
-  const difficulty = metaObj.difficulty || {};
-  const patchVersion = metaObj.metadata?.patchVersion || null;
-  const lastVerified = metaObj.metadata?.lastVerified || null;
+  const tiers = agentMeta.tiers;
+  const pickRates = agentMeta.pickRates;
+  const difficulty = agentMeta.difficulty;
+  const patchVersion = agentMeta.metadata?.patchVersion || null;
+  const lastVerified = agentMeta.metadata?.lastVerified || null;
 
   const matchKey = Object.keys(tiers).find(k => slugify(k) === norm || k.toLowerCase() === norm) || resolved?.displayName || agentNameOrSlug;
 
@@ -111,11 +127,11 @@ export function getAgentKnowledgeNode(agentNameOrSlug: string): AgentKnowledgeNo
       provenance: {
         field: "signatureWeapons",
         sourceId: w.sourceId,
-        sourceType: (sourceRec?.type || w.sourceType) as any,
+        sourceType: (sourceRec?.type || w.sourceType || "EDITORIAL_ANALYSIS") as SourceType,
         sourceName: sourceRec?.name || w.source,
         patchVersion: w.patchVersion || patchVersion,
         lastVerified: w.lastVerified || lastVerified,
-        confidence: w.confidence as any,
+        confidence: w.confidence,
       }
     };
   });
@@ -134,11 +150,11 @@ export function getAgentKnowledgeNode(agentNameOrSlug: string): AgentKnowledgeNo
       provenance: {
         field: "bestMaps",
         sourceId: m.sourceId,
-        sourceType: (sourceRec?.type || m.sourceType) as any,
+        sourceType: (sourceRec?.type || m.sourceType || "EDITORIAL_ANALYSIS") as SourceType,
         sourceName: sourceRec?.name || m.source,
         patchVersion: m.patchVersion || patchVersion,
         lastVerified: m.lastVerified || lastVerified,
-        confidence: m.confidence as any,
+        confidence: m.confidence,
       }
     };
   });
@@ -159,11 +175,11 @@ export function getAgentKnowledgeNode(agentNameOrSlug: string): AgentKnowledgeNo
       provenance: {
         field: "synergies",
         sourceId: s.sourceId,
-        sourceType: (sourceRec?.type || s.sourceType) as any,
+        sourceType: (sourceRec?.type || s.sourceType || "EDITORIAL_ANALYSIS") as SourceType,
         sourceName: sourceRec?.name || s.source,
         patchVersion: s.patchVersion || patchVersion,
         lastVerified: s.lastVerified || lastVerified,
-        confidence: s.confidence as any,
+        confidence: s.confidence,
       }
     };
   });
@@ -180,15 +196,15 @@ export function getAgentKnowledgeNode(agentNameOrSlug: string): AgentKnowledgeNo
       agentName: counterDisplayName,
       agentSlug: counterSlug,
       counterReason: c.explanation,
-      dangerLevel: (c.dangerLevel || "HIGH") as any,
+      dangerLevel: c.dangerLevel || "HIGH",
       provenance: {
         field: "counters",
         sourceId: c.sourceId,
-        sourceType: (sourceRec?.type || c.sourceType) as any,
+        sourceType: (sourceRec?.type || c.sourceType || "EDITORIAL_ANALYSIS") as SourceType,
         sourceName: sourceRec?.name || c.source,
         patchVersion: c.patchVersion || patchVersion,
         lastVerified: c.lastVerified || lastVerified,
-        confidence: c.confidence as any,
+        confidence: c.confidence,
       }
     };
   });
