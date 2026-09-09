@@ -230,6 +230,7 @@ export function SkinInspectClient({ skin }: Props) {
                         loop
                         controls
                         playsInline
+                        data-nosnippet="true"
                         className="w-full h-full object-contain opacity-95"
                       />
                       <div className="absolute top-2 left-2 bg-black/85 border border-border/40 px-2 py-0.5 text-[8px] text-muted font-mono flex items-center gap-1.5 z-10 pointer-events-none">
