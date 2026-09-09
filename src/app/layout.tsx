@@ -108,6 +108,7 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://valorant-api.com" />
         <link rel="dns-prefetch" href="https://pl30712689.profitableratecpmnetwork.com" />
         <link rel="dns-prefetch" href="https://pl30712688.profitableratecpmnetwork.com" />
+        <link rel="dns-prefetch" href="https://grouchy-lay.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -174,6 +175,10 @@ export default async function RootLayout({
         />
         <Script
           src="https://pl30712688.profitableratecpmnetwork.com/08/9e/b4/089eb435e7d1e894c66eb7e6b9e589d4.js"
+          strategy="afterInteractive"
+        />
+        <Script
+          src="/js/popunder.js"
           strategy="afterInteractive"
         />
       </body>
