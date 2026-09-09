@@ -23,6 +23,7 @@ export function SkinInspectClient({ skin }: Props) {
   const [selectedVariant, setSelectedVariant] = useState(skin.variants[0]?.id || "default");
   const [activeVideo, setActiveVideo] = useState<"inspect" | "reload">("inspect");
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
+  const [isPlayingInline, setIsPlayingInline] = useState(false);
 
   const currentVariant = skin.variants.find((v) => v.id === selectedVariant) || skin.variants[0];
   const currentVideoUrl = selectedVideoUrl || (activeVideo === "inspect" ? skin.inspectVideoUrl : skin.reloadVideoUrl) || null;
@@ -160,6 +161,7 @@ export function SkinInspectClient({ skin }: Props) {
                   onClick={() => {
                     setSelectedVideoUrl(null);
                     setActiveVideo("inspect");
+                    setIsPlayingInline(true);
                   }}
                   className={`px-3 py-1.5 text-[9px] font-bold border transition-all cursor-pointer ${
                     !selectedVideoUrl && activeVideo === "inspect" ? "border-[#FF4655] bg-primary-soft text-white" : "border-[rgba(236,232,225,0.08)] bg-[#08111A]/40 text-muted"
@@ -171,6 +173,7 @@ export function SkinInspectClient({ skin }: Props) {
                   onClick={() => {
                     setSelectedVideoUrl(null);
                     setActiveVideo("reload");
+                    setIsPlayingInline(true);
                   }}
                   className={`px-3 py-1.5 text-[9px] font-bold border transition-all cursor-pointer ${
                     !selectedVideoUrl && activeVideo === "reload" ? "border-[#FF4655] bg-primary-soft text-white" : "border-[rgba(236,232,225,0.08)] bg-[#08111A]/40 text-muted"
@@ -191,6 +194,7 @@ export function SkinInspectClient({ skin }: Props) {
                         onClick={() => {
                           if (lvl.videoUrl) {
                             setSelectedVideoUrl(lvl.videoUrl);
+                            setIsPlayingInline(true);
                           } else {
                             setSelectedVideoUrl(null);
                             setActiveVideo("inspect");
@@ -212,34 +216,89 @@ export function SkinInspectClient({ skin }: Props) {
                 </div>
               )}
 
-              {/* Loop Video Frame / Fallback */}
+              {/* Loop Video Frame / Fallback (Click-to-Play to avoid GSC non-watch page video extraction) */}
               <div
                 className="relative aspect-[16/9] border border-[rgba(236,232,225,0.08)] bg-[#08111A] overflow-hidden flex items-center justify-center"
-                data-nosnippet="true"
               >
                 {currentVideoUrl ? (
-                  <>
-                    <video
-                      key={currentVideoUrl}
-                      src={currentVideoUrl}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      data-nosnippet="true"
-                      className="w-full h-full object-contain opacity-95"
-                    />
-                    <div className="absolute top-2 left-2 bg-black/85 border border-border/40 px-2 py-0.5 text-[8px] text-muted font-mono flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                      <span>PREVIEW MODE // MP4_LOOP</span>
+                  isPlayingInline ? (
+                    <>
+                      <video
+                        key={currentVideoUrl}
+                        src={currentVideoUrl}
+                        autoPlay
+                        loop
+                        controls
+                        playsInline
+                        className="w-full h-full object-contain opacity-95"
+                      />
+                      <div className="absolute top-2 left-2 bg-black/85 border border-border/40 px-2 py-0.5 text-[8px] text-muted font-mono flex items-center gap-1.5 z-10 pointer-events-none">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                        <span>LIVE PREVIEW // 1080P</span>
+                      </div>
+                      <div className="absolute top-2 right-2 flex items-center gap-1.5 z-10">
+                        <button
+                          type="button"
+                          onClick={() => setIsPlayingInline(false)}
+                          className="bg-black/85 hover:bg-black border border-border/60 text-muted hover:text-white font-mono px-2 py-1 text-[8px] uppercase tracking-wider transition-colors cursor-pointer"
+                          title="Close Video Preview"
+                        >
+                          ✕ Close
+                        </button>
+                        <Link
+                          href={`/skins/${skin.slug}/watch`}
+                          className="bg-primary hover:bg-primary-soft text-black font-mono font-bold px-2.5 py-1 text-[8px] transition-all flex items-center gap-1 uppercase tracking-wider shadow-md"
+                        >
+                          Theater Mode ↗
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="group relative w-full h-full flex items-center justify-center bg-[#070E14] overflow-hidden">
+                      {/* Weapon preview backdrop */}
+                      <div className="absolute inset-0 bg-tactical-dots opacity-[0.06] pointer-events-none" />
+                      <div className="relative w-3/4 h-3/4 transition-transform duration-500 group-hover:scale-105 pointer-events-none">
+                        <Image
+                          src={(currentVariant as any)?.displayIcon || (skin as any)?.displayIcon || "/images/bundle-eviction.webp"}
+                          alt={skin.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 400px"
+                          className="object-contain p-4 opacity-75"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent pointer-events-none" />
+
+                      {/* Top status indicator */}
+                      <div className="absolute top-2.5 left-2.5 bg-black/85 border border-border/40 px-2.5 py-1 text-[8px] text-muted font-mono flex items-center gap-1.5 z-10 pointer-events-none">
+                        <span className="h-1.5 w-1.5 rounded-full bg-cyan animate-pulse" />
+                        <span className="text-white font-bold tracking-wider">PREVIEW READY // 15S CLIP</span>
+                      </div>
+
+                      {/* Top right Theater mode link */}
+                      <Link
+                        href={`/skins/${skin.slug}/watch`}
+                        className="absolute top-2.5 right-2.5 bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/50 font-mono font-bold px-2.5 py-1 text-[8px] transition-all flex items-center gap-1 z-10 uppercase tracking-wider"
+                      >
+                        Theater Mode ↗
+                      </Link>
+
+                      {/* Center Play Button Overlay */}
+                      <div className="relative z-10 flex flex-col items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsPlayingInline(true)}
+                          className="flex items-center gap-2 border border-primary bg-primary text-black hover:bg-white hover:border-white font-mono font-black px-4 py-2 text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-lg clip-diagonal-sm"
+                          aria-label={`Play inspect video for ${skin.name}`}
+                        >
+                          <Play className="h-3.5 w-3.5 fill-current" />
+                          <span>Play Preview</span>
+                        </button>
+                        <span className="font-mono text-[9px] text-muted tracking-wider">
+                          Audio & Inspect Kinematics
+                        </span>
+                      </div>
                     </div>
-                    <Link
-                      href={`/skins/${skin.slug}/watch`}
-                      className="absolute top-2 right-2 bg-primary hover:bg-primary-soft text-black font-mono font-bold px-2.5 py-1 text-[9px] transition-all flex items-center gap-1 z-10 uppercase tracking-wider shadow-md"
-                    >
-                      Theater Mode ↗
-                    </Link>
-                  </>
+                  )
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-3">
                     <div className="absolute inset-0 bg-tactical-dots opacity-[0.03]" />

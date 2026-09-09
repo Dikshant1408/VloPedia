@@ -163,7 +163,7 @@ export function WatchClient({ skin, videoAssets }: WatchClientProps) {
               </span>
             </div>
             <h1 className="font-display text-2xl sm:text-3xl uppercase tracking-tight text-white font-black">
-              {skin.displayName}
+              {skin.displayName} Video Showcase
             </h1>
           </div>
           <div className="flex items-center gap-3">
