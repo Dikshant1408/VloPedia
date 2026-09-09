@@ -24,11 +24,14 @@
   --cyan-rgb:     13, 242, 242;
   --cyan-soft:    rgba(13, 242, 242, 0.10);
 
-  /* Text */
-  --foreground:   #ECE8E1;
-  --secondary:    rgba(236, 232, 225, 0.70);
-  --muted:        rgba(236, 232, 225, 0.55);
-  --muted-dark:   rgba(236, 232, 225, 0.20);
+  /* Text — Three safe contrast tiers */
+  --foreground:       #ECE8E1;
+  --text-primary:     #ECE8E1;
+  --text-secondary:   #AAB3BA;
+  --text-muted:       #7D8890;
+  --secondary:        #AAB3BA;
+  --muted:            #7D8890;
+  --muted-dark:       rgba(236, 232, 225, 0.20);
 
   /* Semantic */
   --success: #22c55e;
@@ -93,10 +96,13 @@ html.light, .light {
   --cyan-rgb:         0, 132, 137;
   --cyan-soft:        rgba(0, 132, 137, 0.10);
 
-  /* Text */
+  /* Text — Three safe contrast tiers */
   --foreground:       #0F1923;
-  --secondary:        rgba(15, 25, 35, 0.72);
-  --muted:            rgba(15, 25, 35, 0.55);
+  --text-primary:     #0F1923;
+  --text-secondary:   #4B5863;
+  --text-muted:       #6E7A85;
+  --secondary:        #4B5863;
+  --muted:            #6E7A85;
   --muted-dark:       rgba(15, 25, 35, 0.18);
 
   /* V2 surface tokens */
@@ -213,10 +219,11 @@ body::selection, ::selection {
 
 a { text-decoration: none; color: inherit; }
 
-/* Focus ring */
+/* Focus ring — High-contrast tactical outline */
 :focus-visible {
   outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.12);
 }
 
 /* Scrollbar */
@@ -264,18 +271,22 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
   pointer-events: none;
 }
 
-/* ── Diagonal clip-path cards (ValoVault signature) ── */
-.clip-diagonal {
-  clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
-}
-.clip-diagonal-sm {
-  clip-path: polygon(0 0, 100% 0, 100% 88%, 88% 100%, 0 100%);
-}
-.clip-diagonal-lg {
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 78% 100%, 0 100%);
-}
+/* ── Tactical Diagonal Geometry (ValoVault Signature Hierarchy) ── */
+/* Level 1: Hero / major system cards */
 .clip-double-diagonal {
-  clip-path: polygon(12% 0, 100% 0, 100% 88%, 88% 100%, 0 100%, 0 12%);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+/* Level 2: Normal content cards */
+.clip-diagonal {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+/* Level 3: Small cards / controls / buttons */
+.clip-diagonal-sm {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+}
+/* Level 4: Prominent featured banners */
+.clip-diagonal-lg {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
 }
 
 /* Keep cut-corner aliases for backwards compat */
@@ -289,10 +300,10 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
   clip-path: polygon(0 10px, 10px 0, 100% 0, 100% 100%, 0 100%);
 }
 
-/* ── Tactical Terminal: Restrained Active Signal (Quiet, Precise) ── */
+/* ── Tactical Terminal: Restrained Active Signal (Red text + 2px red bottom rule, no glow/bg) ── */
 .nav-active-signal {
   position: relative;
-  color: var(--foreground) !important;
+  color: var(--primary) !important;
 }
 .nav-active-signal::after {
   content: '';
@@ -476,13 +487,25 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration:       0.01ms !important;
-    animation-iteration-count: 1    !important;
-    transition-duration:      0.01ms !important;
+  html {
+    scroll-behavior: auto !important;
   }
-  .glitch-text::before, .glitch-text::after { animation: none; display: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration:       0.01ms !important;
+    animation-iteration-count: 1     !important;
+    transition-duration:      0.01ms !important;
+    scroll-behavior:          auto   !important;
+  }
+  .glitch-text::before,
+  .glitch-text::after {
+    animation: none !important;
+    display: none !important;
+  }
+  .tactical-scanner {
+    display: none !important;
+  }
 }
 
 /* ── Elite Custom Animations & Tactical Scanners ── */

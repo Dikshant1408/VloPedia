@@ -20,7 +20,7 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
     return (
       <Link
         href={`/weapons/${slug}`}
-        className="group flex items-center gap-4 border border-border bg-[#0D1A22] p-3 transition-colors duration-200 hover:border-primary/40 hover:bg-surface"
+        className="group flex items-center gap-4 border border-border bg-[#0D1A22] clip-diagonal-sm p-3 transition-colors duration-200 hover:border-primary/40 hover:bg-surface"
       >
         <div className="relative h-10 w-20 shrink-0">
           <Image
@@ -48,7 +48,7 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
   return (
     <Link
       href={`/weapons/${slug}`}
-      className="group relative block overflow-hidden border border-border bg-[#0D1A22] transition-all duration-300 hover:border-primary/50 border-glow"
+      className="group relative block overflow-hidden border border-border bg-[#0D1A22] clip-diagonal transition-all duration-300 hover:border-primary/50"
     >
       {/* Weapon image — 3:1 ratio */}
       <div className="relative w-full bg-black/40" style={{ aspectRatio: "3/1" }}>
