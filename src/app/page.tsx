@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   verification: {
     google: "VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw",
   },
+  other: {
+    "c5e365bb4ddff86b4d42f01bc4bd01051bc9845a": "c5e365bb4ddff86b4d42f01bc4bd01051bc9845a",
+  },
 };
 
 export default function HomePage() {

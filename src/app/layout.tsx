@@ -102,6 +102,7 @@ export default async function RootLayout({
           }}
         />
         <meta name="google-site-verification" content="VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw" />
+        <meta name="c5e365bb4ddff86b4d42f01bc4bd01051bc9845a" content="c5e365bb4ddff86b4d42f01bc4bd01051bc9845a" />
         <meta name="google-adsense-account" content="ca-pub-5851997796287592" />
         <link rel="dns-prefetch" href="https://wsrv.nl" />
         <link rel="dns-prefetch" href="https://valorant-api.com" />
