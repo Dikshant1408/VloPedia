@@ -12,3 +12,5 @@ new
 .kiro
 *.vsix
 tsconfig.tsbuildinfo
+out
+.turbo
