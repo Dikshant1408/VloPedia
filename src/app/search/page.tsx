@@ -12,6 +12,7 @@ import { slugify } from "@/lib/utils";
 import loreData from "@/data/lore-database.json";
 import guidesData from "@/data/guides-database.json";
 import { AnswerBox } from "@/components/answer-box";
+import { TacticalEmptyState } from "@/components/tactical-empty-state";
 import { logSearchEvent } from "@/lib/search-analytics";
 
 type ResultType = "AGENT" | "WEAPON" | "MAP" | "SKIN" | "BUNDLE" | "PATCH" | "LORE" | "GUIDE" | "TOOL" | "COMPARE";
@@ -349,7 +350,7 @@ function SearchInner() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#0B141A] text-foreground py-12">
+      <div className="min-h-screen bg-background text-foreground py-12">
         <Container className="space-y-8 max-w-5xl">
           
           {/* Header */}
@@ -360,7 +361,7 @@ function SearchInner() {
                 KNOWLEDGE ENGINE SEARCH
               </span>
             </div>
-            <h1 className="font-display font-black text-4xl uppercase tracking-tight text-white sm:text-5xl">
+            <h1 className="font-display font-black text-4xl uppercase tracking-tight text-foreground sm:text-5xl">
               SEARCH VLOPEDIA
             </h1>
             <p className="font-sans text-sm text-secondary">
@@ -376,7 +377,7 @@ function SearchInner() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search e.g. 'best controller on ascent', 'vandal vs phantom', '800 dpi 0.3'..."
-              className="w-full bg-[#0D1820] border border-[rgba(236,232,225,0.15)] pl-12 pr-4 py-4 font-sans text-sm text-white placeholder:text-muted focus:border-primary focus:outline-none shadow-xl"
+              className="w-full bg-surface-card border border-border pl-12 pr-4 py-4 font-sans text-sm text-foreground placeholder:text-muted focus:border-primary focus:outline-none shadow-xl"
               autoFocus
             />
           </div>
@@ -434,25 +435,25 @@ function SearchInner() {
             </div>
 
             {filtered.length === 0 ? (
-              <div className="py-20 text-center text-muted font-mono text-xs space-y-3 border border-[rgba(236,232,225,0.06)] bg-[#0D1820]">
-                <Compass className="h-8 w-8 mx-auto opacity-30 text-primary" />
-                <p>No matching tactical intelligence found for &quot;{debouncedQ}&quot;.</p>
-                <p className="text-[10px] text-muted/60">Try searching for an agent name (Jett), weapon (Vandal), map (Ascent), or sensitivity conversion.</p>
-              </div>
+              <TacticalEmptyState
+                query={debouncedQ}
+                onSelectSuggestion={(term) => setQuery(term)}
+                onReset={() => setQuery("")}
+              />
             ) : (
               <div className="grid gap-3">
                 {filtered.map((item, idx) => (
                   <Link
                     key={`${item.href}-${idx}`}
                     href={item.href}
-                    className="group border border-[rgba(236,232,225,0.08)] bg-[#0D1820] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/50 transition-all shadow-md"
+                    className="group border border-border bg-surface-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-primary/50 transition-all shadow-md"
                   >
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2.5">
                         <span className={`font-mono text-[9px] uppercase px-2 py-0.5 border font-bold ${TYPE_COLOR[item.type]}`}>
                           {item.type}
                         </span>
-                        <h3 className="font-display font-black text-lg uppercase text-white group-hover:text-primary transition-colors truncate">
+                        <h3 className="font-display font-black text-lg uppercase text-foreground group-hover:text-primary transition-colors truncate">
                           {item.title}
                         </h3>
                         {item.meta && (

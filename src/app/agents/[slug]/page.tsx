@@ -16,6 +16,8 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AnswerBox } from "@/components/answer-box";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { KnowledgeGraphView } from "@/components/knowledge-graph-view";
+import { StickySectionNav } from "@/components/sticky-section-nav";
+import { RecordRecentView } from "@/components/record-recent-view";
 import { getAgentKnowledgeNode } from "@/lib/knowledge-graph";
 import agentMetaData from "@/data/agent-meta.json";
 
@@ -191,9 +193,16 @@ export default async function AgentDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="min-h-screen bg-background text-foreground">
+        <RecordRecentView
+          id={agent.uuid}
+          title={agent.displayName}
+          subtitle={`${agent.role?.displayName || "Agent"} Operative`}
+          category="Agent"
+          href={`/agents/${slug}`}
+        />
 
         {/* Top Breadcrumbs Strip */}
-        <div className="border-b border-border bg-[#0B141A] pt-6 pb-4">
+        <div className="border-b border-border bg-background pt-6 pb-4">
           <Container>
             <Breadcrumbs items={breadcrumbItems} />
           </Container>
@@ -230,8 +239,22 @@ export default async function AgentDetailPage({ params }: Props) {
           </div>
         </PageHero>
 
+        {/* Sticky Section Navigator */}
+        <StickySectionNav
+          title={`${agent.displayName.toUpperCase()} // DOSSIER`}
+          sections={[
+            { id: "overview", label: "Overview" },
+            { id: "abilities", label: "Abilities", badge: `${agent.abilities?.length || 4}` },
+            { id: "synergies", label: "Synergies" },
+            { id: "counters", label: "Counters" },
+            { id: "maps", label: "Maps" },
+            { id: "weapons", label: "Weapons" },
+            { id: "graph", label: "Graph" },
+          ]}
+        />
+
         {/* Main content */}
-        <Container className="py-16">
+        <Container id="overview" className="py-16">
           <div className="grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-start">
 
             {/* Left — portrait + operative meta stats */}
@@ -276,7 +299,7 @@ export default async function AgentDetailPage({ params }: Props) {
                 </div>
 
                 {/* Tactical Meta Stats Grid */}
-                <div className="border border-border bg-[#0D1820] p-4 space-y-3">
+                <div className="border border-border bg-surface-card p-4 space-y-3">
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div>
                       <span className="font-mono-tactical text-[9px] uppercase tracking-widest text-muted block mb-1">
@@ -352,7 +375,7 @@ export default async function AgentDetailPage({ params }: Props) {
 
               {/* Abilities */}
               <Reveal>
-                <div className="space-y-4">
+                <div id="abilities" className="space-y-4 scroll-mt-28">
                   <div className="border-b border-border pb-4">
                     <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
                       TACTICAL ABILITY ARSENAL
@@ -362,9 +385,9 @@ export default async function AgentDetailPage({ params }: Props) {
                 </div>
               </Reveal>
 
-              {/* Strengths & Weaknesses */}
+              {/* Strengths & Weaknesses / Tactics */}
               <Reveal>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div id="tactics" className="grid gap-4 sm:grid-cols-2 scroll-mt-28">
                   <div className="border border-success/25 bg-success/5 p-5 space-y-3">
                     <h3 className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.3em] text-success">Strengths</h3>
                     <ul className="space-y-2">
@@ -390,7 +413,7 @@ export default async function AgentDetailPage({ params }: Props) {
 
               {/* Synergies & Teammates */}
               <Reveal>
-                <div className="space-y-4">
+                <div id="synergies" className="space-y-4 scroll-mt-28">
                   <div className="border-b border-border pb-3">
                     <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
                       BEST TEAMMATES & SYNERGY
@@ -417,7 +440,7 @@ export default async function AgentDetailPage({ params }: Props) {
 
               {/* Counters */}
               <Reveal>
-                <div className="space-y-4">
+                <div id="counters" className="space-y-4 scroll-mt-28">
                   <div className="border-b border-border pb-3">
                     <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-error">
                       DIRECT COUNTERS
@@ -444,7 +467,7 @@ export default async function AgentDetailPage({ params }: Props) {
 
               {/* Best Maps */}
               <Reveal>
-                <div className="space-y-3">
+                <div id="maps" className="space-y-3 scroll-mt-28">
                   <div className="border-b border-border pb-3">
                     <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
                       BEST MAPS & WIN CONDITIONS
@@ -505,7 +528,7 @@ export default async function AgentDetailPage({ params }: Props) {
           </div>
 
           {/* ── Relational Knowledge Graph Section ── */}
-          <div className="mt-16">
+          <div id="graph" className="mt-16 scroll-mt-28">
             <Reveal>
               <KnowledgeGraphView node={getAgentKnowledgeNode(agent.displayName)} />
             </Reveal>
@@ -513,7 +536,9 @@ export default async function AgentDetailPage({ params }: Props) {
         </Container>
 
         {/* Related weapons */}
-        <AgentRelatedWeapons roleName={agent.role?.displayName ?? ""} agentName={agent.displayName} />
+        <div id="weapons" className="scroll-mt-28">
+          <AgentRelatedWeapons roleName={agent.role?.displayName ?? ""} agentName={agent.displayName} />
+        </div>
 
         {/* More agents from same role */}
         <MoreAgents currentUuid={agent.uuid} roleName={agent.role?.displayName ?? ""} allAgents={allAgents} />

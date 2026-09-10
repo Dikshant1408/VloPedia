@@ -218,7 +218,7 @@ export function SkinInspectClient({ skin }: Props) {
 
               {/* Loop Video Frame / Fallback (Click-to-Play to avoid GSC non-watch page video extraction) */}
               <div
-                className="relative aspect-[16/9] border border-[rgba(236,232,225,0.08)] bg-[#08111A] overflow-hidden flex items-center justify-center"
+                className="relative aspect-[16/9] border border-border bg-surface-elevated overflow-hidden flex items-center justify-center"
               >
                 {currentVideoUrl ? (
                   isPlayingInline ? (
@@ -232,26 +232,26 @@ export function SkinInspectClient({ skin }: Props) {
                         playsInline
                         className="w-full h-full object-contain opacity-95"
                       />
-                      <div className="absolute top-2 left-2 bg-black/85 border border-border/40 px-2 py-0.5 text-[8px] text-muted font-mono flex items-center gap-1.5 z-10 pointer-events-none">
-                        <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                        <span>LIVE PREVIEW // 1080P</span>
+                      <div className="absolute top-2.5 left-2.5 bg-background/85 border border-border/60 px-2.5 py-1 text-[8px] text-muted font-mono flex items-center gap-1.5 z-10 pointer-events-none">
+                        <span className="h-1.5 w-1.5 rounded-full bg-cyan" />
+                        <span className="text-foreground font-bold tracking-wider">VIDEO PREVIEW // 1080P</span>
                       </div>
-                      <div className="absolute top-2 right-2 flex items-center gap-1.5 z-10">
-                        <button
-                          type="button"
-                          onClick={() => setIsPlayingInline(false)}
-                          className="bg-black/85 hover:bg-black border border-border/60 text-muted hover:text-white font-mono px-2 py-1 text-[8px] uppercase tracking-wider transition-colors cursor-pointer"
-                          title="Close Video Preview"
-                        >
-                          ✕ Close
-                        </button>
+                      <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
                         <Link
                           href={`/skins/${skin.slug}/watch`}
-                          className="bg-primary hover:bg-primary-soft text-black font-mono font-bold px-2.5 py-1 text-[8px] transition-all flex items-center gap-1 uppercase tracking-wider shadow-md"
+                          className="bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/40 font-mono font-bold px-2.5 py-1 text-[8px] transition-all flex items-center gap-1 uppercase tracking-wider"
                         >
                           Theater Mode ↗
                         </Link>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsPlayingInline(false)}
+                        className="absolute bottom-2.5 right-2.5 bg-background/85 hover:bg-background border border-border/80 text-muted hover:text-foreground font-mono px-2 py-1 text-[8px] uppercase tracking-wider transition-colors cursor-pointer z-10"
+                        title="Close Video Preview"
+                      >
+                        ✕ Close
+                      </button>
                     </>
                   ) : (
                     <div className="group relative w-full h-full flex items-center justify-center bg-[#070E14] overflow-hidden">

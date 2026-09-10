@@ -37,7 +37,7 @@ export function SkinCard({ skin, onWishlist, className }: SkinCardProps) {
   return (
     <div
       className={[
-        "group relative flex flex-col border border-border bg-[#0D1A22] transition-all duration-300 hover:border-primary/40",
+        "group relative flex flex-col border border-border bg-surface-card tactical-flat transition-all duration-300 hover:border-primary/40",
         className ?? "",
       ]
         .filter(Boolean)
@@ -69,7 +69,7 @@ export function SkinCard({ skin, onWishlist, className }: SkinCardProps) {
         <div className="flex items-start justify-between gap-2">
           <Link
             href={`/skins/${slug}`}
-            className="flex-1 font-display text-sm uppercase leading-tight tracking-wide text-white hover:text-primary transition-colors"
+            className="flex-1 font-display text-sm uppercase leading-tight tracking-wide text-foreground hover:text-primary transition-colors"
           >
             {skin.displayName}
           </Link>
@@ -85,7 +85,7 @@ export function SkinCard({ skin, onWishlist, className }: SkinCardProps) {
               type="button"
               onClick={() => onWishlist(skin)}
               aria-label={`Add ${skin.displayName} to wishlist`}
-              className="flex h-7 w-7 items-center justify-center border border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] opacity-0 transition-all duration-200 hover:border-primary hover:text-primary group-hover:opacity-100 focus-visible:opacity-100"
+              className="flex h-7 w-7 items-center justify-center border border-border bg-surface-glass text-muted opacity-0 transition-all duration-200 hover:border-primary hover:text-primary group-hover:opacity-100 focus-visible:opacity-100"
             >
               <Heart className="h-3.5 w-3.5" aria-hidden="true" />
             </button>

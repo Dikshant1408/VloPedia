@@ -24,13 +24,13 @@
   --cyan-rgb:     13, 242, 242;
   --cyan-soft:    rgba(13, 242, 242, 0.10);
 
-  /* Text — Three safe contrast tiers */
+  /* Text — Three safe contrast tiers (Formalized contrast contract) */
   --foreground:       #ECE8E1;
   --text-primary:     #ECE8E1;
-  --text-secondary:   #AAB3BA;
-  --text-muted:       #7D8890;
-  --secondary:        #AAB3BA;
-  --muted:            #7D8890;
+  --text-secondary:   #A7B0B7;
+  --text-muted:       #8E9BA4;
+  --secondary:        #A7B0B7;
+  --muted:            #8E9BA4;
   --muted-dark:       rgba(236, 232, 225, 0.20);
 
   /* Semantic */
@@ -271,22 +271,35 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
   pointer-events: none;
 }
 
-/* ── Tactical Diagonal Geometry (ValoVault Signature Hierarchy) ── */
-/* Level 1: Hero / major system cards */
+/* ── Tactical Geometry Hierarchy (ValoVault Semantic Hierarchy) ── */
+/* 1. TacticalHero: Flagship system cards & marquee hero modules (14px double cut) */
+.tactical-hero,
+.clip-tactical-hero,
 .clip-double-diagonal {
   clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
 }
-/* Level 2: Normal content cards */
+/* 2. TacticalBanner: Wide prominent banners & feature spotlights (20px cut) */
+.tactical-banner,
+.clip-tactical-banner,
+.clip-diagonal-lg {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+}
+/* 3. TacticalPanel / TacticalCard: Primary content cards (Agents, Maps, Weapons) (12px cut) */
+.tactical-panel-card,
+.clip-tactical-panel,
 .clip-diagonal {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
 }
-/* Level 3: Small cards / controls / buttons */
+/* 4. TacticalControl: Small interactive controls, buttons, chips, horizontal cards (6px cut) */
+.tactical-control,
+.clip-tactical-control,
 .clip-diagonal-sm {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
 }
-/* Level 4: Prominent featured banners */
-.clip-diagonal-lg {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+/* 5. Normal Unclipped Content: Articles, tables, long-form guides, FAQ, forms */
+.tactical-flat,
+.no-clip {
+  clip-path: none !important;
 }
 
 /* Keep cut-corner aliases for backwards compat */
@@ -531,5 +544,37 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
     linear-gradient(to right,  rgba(13, 242, 242, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(13, 242, 242, 0.03) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+/* ── Content Readability Mode (Distraction-Free Long Form) ── */
+html.read-mode .bg-tactical-grid,
+html.read-mode .crt-scanlines,
+html.read-mode .bg-tactical-dots,
+html.read-mode .tactical-scanner,
+.read-mode .bg-tactical-grid,
+.read-mode .crt-scanlines,
+.read-mode .bg-tactical-dots,
+.read-mode .tactical-scanner {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+html.read-mode .prose,
+html.read-mode article,
+html.read-mode .reading-flow {
+  max-width: 52rem !important;
+  line-height: 1.85 !important;
+  font-size: 1.0625rem !important;
+}
+
+html.read-mode .reading-flow p {
+  margin-bottom: 1.5rem !important;
+  color: var(--text-primary) !important;
+}
+
+html.read-mode .reading-flow h2,
+html.read-mode .reading-flow h3 {
+  margin-top: 2.5rem !important;
+  margin-bottom: 1rem !important;
 }
 

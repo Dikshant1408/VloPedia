@@ -3,11 +3,12 @@ import { cn } from "@/lib/utils";
 interface ContainerProps {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }
 
-export function Container({ children, className }: ContainerProps) {
+export function Container({ children, className, id }: ContainerProps) {
   return (
-    <div className={cn("mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8", className)}>
+    <div id={id} className={cn("mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8", className)}>
       {children}
     </div>
   );

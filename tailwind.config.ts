@@ -33,6 +33,9 @@ const config: Config = {
         secondary:           "var(--secondary)",
         muted:               "var(--muted)",
         "muted-dark":        "var(--muted-dark)",
+        "text-primary":      "var(--text-primary)",
+        "text-secondary":    "var(--text-secondary)",
+        "text-muted":        "var(--text-muted)",
 
         /* Semantic */
         success:             "#22c55e",

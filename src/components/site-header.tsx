@@ -13,6 +13,7 @@ import { Menu, X, Search, ChevronDown, Volume2, VolumeX } from "lucide-react";
 
 import { useSound } from "@/components/sound-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { TacticalSettingsPopover } from "@/components/tactical-settings-popover";
 import { formatPatchVersion } from "@/lib/utils";
 import { TacticalStatus } from "@/components/tactical-status";
 
@@ -78,7 +79,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
   return (
     <>
       <GlobalSearchDialog />
-      <header className="sticky top-0 z-50 border-b border-border bg-[#080F14]/95 backdrop-blur-xl shadow-md">
+      <header className="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-xl shadow-md">
         {/* Route progress bar */}
         <Suspense fallback={null}>
           <ProgressBar />
@@ -96,7 +97,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             >
               {/* Tactical Diamond Icon */}
               <div className="relative h-7 w-7 bg-primary flex items-center justify-center rotate-45 shrink-0 transition-transform group-hover:scale-105">
-                <span className="font-display font-black text-sm text-[#080F14] -rotate-45">V</span>
+                <span className="font-display font-black text-sm text-background -rotate-45">V</span>
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-display font-black text-lg tracking-tight text-foreground uppercase group-hover:text-primary transition-colors">
@@ -138,7 +139,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
                 onMouseEnter={() => setMegaOpen(true)}
                 aria-expanded={megaOpen}
                 aria-haspopup="true"
-                aria-label="All hubs and sections"
+                aria-label="More sections and tools"
                 className={`flex items-center gap-1 px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
                   megaOpen
                     ? "text-primary"
@@ -156,19 +157,19 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             </nav>
           </div>
 
-          {/* ── Right: Search + Bookmarks + Auth + Mobile ── */}
+          {/* ── Right: Search + Bookmarks + Settings + Auth + Mobile ── */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Ask the Database Search Box Trigger */}
+            {/* Ask the Database Search Box Trigger — ~2x Wider, high contrast */}
             <button
               type="button"
               onClick={triggerSearch}
               aria-label="Search database"
               title="Search VloPedia (Ctrl+K)"
-              className="group hidden sm:flex items-center justify-between h-9 w-[190px] md:w-[220px] xl:w-[260px] border border-border/80 bg-surface/80 px-2.5 py-1.5 font-mono text-[11px] text-muted transition-colors hover:border-primary/50 hover:bg-surface-elevated hover:text-foreground cursor-pointer"
+              className="group hidden sm:flex items-center justify-between h-9 w-[260px] md:w-[320px] xl:w-[380px] border border-border/80 bg-surface/90 px-3 py-1.5 font-mono text-[11px] text-muted transition-colors hover:border-primary/50 hover:bg-surface-elevated hover:text-foreground cursor-pointer"
             >
               <div className="flex items-center gap-2 min-w-0">
                 <Search className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0" aria-hidden="true" />
-                <span className="truncate text-[11px] text-muted group-hover:text-secondary">Search VloPedia...</span>
+                <span className="truncate text-[11px] text-secondary group-hover:text-foreground">Search VloPedia...</span>
               </div>
               <kbd className="hidden md:inline-flex items-center rounded-none border border-border/60 bg-background/80 px-1 py-0.5 font-mono text-[9px] text-muted shrink-0">
                 Ctrl K
@@ -180,13 +181,16 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               type="button"
               onClick={triggerSearch}
               aria-label="Search database"
-              className="sm:hidden flex h-9 w-9 items-center justify-center border border-border bg-surface text-muted hover:text-primary"
+              className="sm:hidden flex h-10 w-10 items-center justify-center border border-border bg-surface text-muted hover:text-primary transition-colors cursor-pointer"
             >
               <Search className="h-4 w-4" />
             </button>
 
             {/* Saved Bookmarks */}
             <BookmarksDrawer />
+
+            {/* Settings Popover (Theme + SFX + Telemetry Status) */}
+            <TacticalSettingsPopover patchVersion={patchVersion} />
 
             {/* User Auth */}
             <div className="border-l border-border/70 pl-2 sm:pl-3">
@@ -197,7 +201,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             <Button
               variant="secondary"
               size="sm"
-              className="lg:hidden h-9 w-9 p-0 border-border bg-surface/80"
+              className="lg:hidden h-10 w-10 p-0 border-border bg-surface/80"
               onClick={() => setDrawerOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={drawerOpen}
@@ -207,15 +211,15 @@ export function SiteHeader({ version }: SiteHeaderProps) {
           </div>
         </div>
 
-        {/* ── System Line (Diagnostic Sub-Bar & Utility Area) ── */}
-        <div className="border-t border-border/50 bg-[#060B0F]/90 px-3 sm:px-6 lg:px-8 py-1 hidden md:flex items-center justify-between font-mono text-[9px] text-muted tracking-wider select-none">
+        {/* ── System Line (Quiet Diagnostic Sub-Bar) ── */}
+        <div className="border-t border-border/50 bg-surface-elevated/90 px-3 sm:px-6 lg:px-8 py-1 hidden md:flex items-center justify-between font-mono text-[9px] text-muted tracking-wider select-none">
           <div className="flex items-center gap-3">
             <span className="text-cyan font-bold tracking-widest flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-cyan/80" />
               VLOPEDIA // KNOWLEDGE ENGINE
             </span>
             <span className="text-border">|</span>
-            <span className="text-muted/80">PROVENANCE: RIOT CLIENT API TELEMETRY</span>
+            <span className="text-secondary/80">PROVENANCE: RIOT CLIENT API TELEMETRY</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -225,24 +229,6 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               <span className="text-border">·</span>
               <TacticalStatus status="SYNCED" size="sm" className="!py-0 !px-1.5" />
             </div>
-
-            <span className="text-border">|</span>
-
-            {/* Tactical Audio SFX Toggle */}
-            <button
-              type="button"
-              onClick={toggleMute}
-              title={sfxEnabled ? "Tactical Audio: Active" : "Tactical Audio: Muted"}
-              className="flex items-center gap-1 text-muted hover:text-foreground transition-colors cursor-pointer"
-            >
-              {sfxEnabled ? <Volume2 className="h-3 w-3 text-primary" /> : <VolumeX className="h-3 w-3" />}
-              <span>{sfxEnabled ? "SFX: ON" : "SFX: OFF"}</span>
-            </button>
-
-            <span className="text-border">|</span>
-
-            {/* Tactical Theme Toggle */}
-            <ThemeToggle className="!border-0 !bg-transparent !p-0 hover:!text-primary" />
           </div>
         </div>
 

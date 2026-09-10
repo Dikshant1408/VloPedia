@@ -34,6 +34,19 @@ export function BookmarksDrawer() {
     return () => window.removeEventListener("vlopedia_bookmarks_updated", handleUpdate);
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
   const removeBookmark = (id: string) => {
     const updated = bookmarks.filter(b => b.id !== id);
     setBookmarks(updated);
@@ -52,10 +65,13 @@ export function BookmarksDrawer() {
       <button
         onClick={() => setIsOpen(true)}
         type="button"
+        aria-label="Saved Bookmarks"
+        aria-expanded={isOpen}
+        aria-controls="bookmarks-drawer"
         className="relative inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase px-2 sm:px-2.5 py-1.5 border border-border bg-surface text-secondary hover:border-primary/50 hover:text-foreground transition-colors cursor-pointer"
         title="Saved Bookmarks"
       >
-        <Bookmark className="h-3.5 w-3.5 text-primary" />
+        <Bookmark className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
         <span className="hidden sm:inline">Saved</span>
         {bookmarks.length > 0 && (
           <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-black">
@@ -65,33 +81,51 @@ export function BookmarksDrawer() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="relative w-full max-w-md bg-background border-l border-border p-6 flex flex-col h-full shadow-2xl">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Saved Bookmarks"
+          id="bookmarks-drawer"
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md bg-background border-l border-border p-6 flex flex-col h-full shadow-2xl"
+          >
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-border">
               <div className="flex items-center gap-2">
-                <Bookmark className="h-4 w-4 text-primary" />
+                <Bookmark className="h-4 w-4 text-primary" aria-hidden="true" />
                 <h2 className="font-display font-black text-lg uppercase text-foreground tracking-wide">
                   Saved Bookmarks ({bookmarks.length})
                 </h2>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
+                aria-label="Close saved bookmarks"
                 className="p-1 text-muted hover:text-foreground transition-colors cursor-pointer"
               >
-                <X className="h-5 w-5" />
+                <X className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
 
             {/* List */}
             <div className="flex-1 overflow-y-auto py-4 space-y-3">
               {bookmarks.length === 0 ? (
-                <div className="py-16 text-center text-muted font-mono text-xs space-y-2">
-                  <Bookmark className="h-8 w-8 mx-auto opacity-30 text-primary" />
+                <div className="py-16 text-center text-muted font-mono text-xs space-y-3">
+                  <Bookmark className="h-8 w-8 mx-auto opacity-30 text-primary" aria-hidden="true" />
                   <p>No saved bookmarks yet.</p>
-                  <p className="text-[10px] text-muted/60">
+                  <p className="text-[10px] text-muted/60 max-w-xs mx-auto">
                     Click &quot;Bookmark&quot; on any agent, weapon, guide or comparison to save it for quick access.
                   </p>
+                  <Link
+                    href="/agents"
+                    onClick={() => setIsOpen(false)}
+                    className="inline-block mt-2 px-3 py-1.5 border border-border bg-surface text-secondary hover:border-primary/60 hover:text-foreground font-mono text-[10px] uppercase transition-colors"
+                  >
+                    Browse Operatives →
+                  </Link>
                 </div>
               ) : (
                 bookmarks.map(item => (
@@ -119,10 +153,11 @@ export function BookmarksDrawer() {
 
                     <button
                       onClick={() => removeBookmark(item.id)}
+                      aria-label={`Remove ${item.title} from saved bookmarks`}
                       className="text-muted hover:text-red-400 p-1 transition-colors cursor-pointer"
-                      title="Remove"
+                      title="Remove bookmark"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
                 ))

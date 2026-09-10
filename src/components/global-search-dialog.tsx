@@ -1,38 +1,51 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { 
   Search, 
   X, 
-  Sparkles, 
-  Crosshair, 
-  Sliders, 
-  Users, 
-  Layers, 
-  Shield, 
-  Flame, 
-  Eye, 
-  Swords, 
-  BookOpen, 
-  FileText, 
   Compass, 
   ArrowRight, 
-  CornerDownLeft 
+  CornerDownLeft,
+  Clock,
+  Compass as NavIcon,
+  Zap,
+  Layers,
+  Swords,
+  Crosshair
 } from "lucide-react";
 import { valorantDb } from "@/lib/valorant-db";
 import { slugify } from "@/lib/utils";
 import { soundSystem } from "@/lib/sound-system";
 import loreData from "@/data/lore-database.json";
+import { getRecentViews, RecentViewItem } from "@/lib/recently-viewed";
+import { TacticalEmptyState } from "@/components/tactical-empty-state";
 
 interface SearchItem {
   id: string;
-  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Tools" | "Guides" | "Lore" | "Compare" | "Patches";
+  category: "Agents" | "Weapons" | "Maps" | "Skins" | "Tools" | "Guides" | "Lore" | "Compare" | "Patches" | "RECENT" | "GO TO" | "ACTIONS" | "CONTEXTUAL";
   title: string;
   subtitle: string;
   href: string;
   badge?: string;
 }
+
+const GO_TO_ITEMS: SearchItem[] = [
+  { id: "goto-agents", category: "GO TO", title: "Agents", subtitle: "Complete operative roster, abilities, and counter-picks", href: "/agents", badge: "26 Agents" },
+  { id: "goto-weapons", category: "GO TO", title: "Weapons", subtitle: "Damage falloffs, fire rates, recoil, and buy costs", href: "/weapons", badge: "19 Arsenal" },
+  { id: "goto-maps", category: "GO TO", title: "Maps", subtitle: "Callouts, layouts, active pool, and team comp fit", href: "/maps", badge: "Tactical Maps" },
+  { id: "goto-skins", category: "GO TO", title: "Skins & Bundles", subtitle: "Skin database, finishers, chromas, and VP store prices", href: "/skins", badge: "1,400+ Skins" },
+  { id: "goto-tools", category: "GO TO", title: "Tactical Tools", subtitle: "Comp builder, sensitivity converter, tier lists", href: "/tools", badge: "7 Tools" },
+  { id: "goto-guides", category: "GO TO", title: "Guides & Masterclasses", subtitle: "Ranked climb strategies, role guides, and site executes", href: "/guides", badge: "Guides" },
+];
+
+const ACTION_ITEMS: SearchItem[] = [
+  { id: "action-comp-builder", category: "ACTIONS", title: "Build Team Comp", subtitle: "Analyze team composition synergy and map compatibility", href: "/comp-builder", badge: "Synergy Engine" },
+  { id: "action-compare", category: "ACTIONS", title: "Compare Entities", subtitle: "Head-to-head weapon and operative comparison matrices", href: "/compare", badge: "Matrix Duel" },
+  { id: "action-match-prep", category: "ACTIONS", title: "Match Prep Briefing", subtitle: "Round-by-round strategy planner and map tactics", href: "/match-prep", badge: "Planner" },
+  { id: "action-sensitivity", category: "ACTIONS", title: "Convert Sensitivity", subtitle: "Convert sens between CS2, Apex, Overwatch & calculate eDPI", href: "/sensitivity", badge: "Converter" },
+];
 
 const STATIC_TOOLS: SearchItem[] = [
   { id: "tool-comp-builder", category: "Tools", title: "Tactical Comp Builder", subtitle: "Analyze team composition synergy, roles, and map compatibility", href: "/comp-builder", badge: "Engine" },
@@ -62,12 +75,26 @@ const STATIC_GUIDES: SearchItem[] = [
 
 export function GlobalSearchDialog() {
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [liveItems, setLiveItems] = useState<SearchItem[]>([]);
+  const [recentItems, setRecentItems] = useState<RecentViewItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  // Refresh recent views on open or custom event
+  const refreshRecent = useCallback(() => {
+    setRecentItems(getRecentViews());
+  }, []);
+
+  useEffect(() => {
+    refreshRecent();
+    const handleRecentUpdate = () => refreshRecent();
+    window.addEventListener("valovault_recent_update", handleRecentUpdate);
+    return () => window.removeEventListener("valovault_recent_update", handleRecentUpdate);
+  }, [refreshRecent]);
 
   // Fetch agents, weapons, maps from API on mount
   useEffect(() => {
@@ -105,12 +132,12 @@ export function GlobalSearchDialog() {
           for (const w of j.data) {
             for (const s of (w.skins || [])) {
               if (s.displayName.toLowerCase().includes("standard")) continue;
-              if (skinItems.length < 40) {
+              if (skinItems.length < 50) {
                 skinItems.push({
                   id: `skin-${s.uuid}`,
                   category: "Skins",
                   title: s.displayName,
-                  subtitle: `${w.displayName} Skin with custom chromas & finisher`,
+                  subtitle: `${w.displayName} skin with custom chromas & finisher`,
                   href: `/skins/${slugify(s.displayName)}`,
                   badge: "Skin",
                 });
@@ -170,16 +197,98 @@ export function GlobalSearchDialog() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open]);
 
-  // Focus input when opened
+  // Focus input & refresh recent when opened
   useEffect(() => {
     if (open) {
       soundSystem.play("search");
+      refreshRecent();
       setTimeout(() => inputRef.current?.focus(), 50);
       setSelectedIndex(0);
     }
-  }, [open]);
+  }, [open, refreshRecent]);
 
-  // Build combined items
+  // Contextual command suggestions based on current pathname
+  const contextualItems: SearchItem[] = useMemo(() => {
+    if (!pathname) return [];
+    const items: SearchItem[] = [];
+
+    if (pathname.startsWith("/skins/")) {
+      const segments = pathname.split("/").filter(Boolean);
+      const skinSlug = segments[1];
+      if (skinSlug && skinSlug !== "watch") {
+        items.push({
+          id: "ctx-compare-skin",
+          category: "CONTEXTUAL",
+          title: "Compare Similar Skins",
+          subtitle: "Evaluate skin pricing, chromas & finisher VFX head-to-head",
+          href: "/compare",
+          badge: "Context Action",
+        });
+        items.push({
+          id: "ctx-all-skins",
+          category: "CONTEXTUAL",
+          title: "View Weapon Skin Hub",
+          subtitle: "Browse all weapon catalog skins and chromas",
+          href: "/skins",
+          badge: "Collection",
+        });
+        items.push({
+          id: "ctx-watch-showcase",
+          category: "CONTEXTUAL",
+          title: "Watch 1080P Showcase",
+          subtitle: "Full cinematic audio & inspect showcase for this skin",
+          href: `/skins/${skinSlug}/watch`,
+          badge: "Showcase",
+        });
+      }
+    } else if (pathname.startsWith("/agents/")) {
+      const segments = pathname.split("/").filter(Boolean);
+      const agentSlug = segments[1];
+      if (agentSlug) {
+        items.push({
+          id: "ctx-build-comp",
+          category: "CONTEXTUAL",
+          title: `Build Comp with ${agentSlug.toUpperCase()}`,
+          subtitle: `Analyze 5-stack synergy and utility compatibility for ${agentSlug}`,
+          href: `/comp-builder?agents=${agentSlug}`,
+          badge: "Comp Engine",
+        });
+        items.push({
+          id: "ctx-agent-counters",
+          category: "CONTEXTUAL",
+          title: `Explore ${agentSlug.toUpperCase()} Counters`,
+          subtitle: `View tactical counter-picks and suppression strategies`,
+          href: `/agents/${agentSlug}#counters`,
+          badge: "Counters",
+        });
+      }
+    } else if (pathname.startsWith("/weapons/")) {
+      const segments = pathname.split("/").filter(Boolean);
+      const weaponSlug = segments[1];
+      if (weaponSlug) {
+        items.push({
+          id: "ctx-compare-weapon",
+          category: "CONTEXTUAL",
+          title: `Compare ${weaponSlug.toUpperCase()} Lethality`,
+          subtitle: `Head-to-head damage falloff and TTK comparison`,
+          href: "/compare/weapons/vandal-vs-phantom",
+          badge: "Duel",
+        });
+        items.push({
+          id: "ctx-weapon-skins",
+          category: "CONTEXTUAL",
+          title: `View ${weaponSlug.toUpperCase()} Skins`,
+          subtitle: `Browse all cosmetic editions and upgraded variants`,
+          href: `/skins/${weaponSlug}`,
+          badge: "Skins Hub",
+        });
+      }
+    }
+
+    return items;
+  }, [pathname]);
+
+  // Build combined searchable items
   const allSearchable = useMemo(() => {
     const patchItems: SearchItem[] = valorantDb.patches.map(p => ({
       id: `patch-${p.slug}`,
@@ -202,11 +311,26 @@ export function GlobalSearchDialog() {
     return [...STATIC_TOOLS, ...STATIC_COMPARES, ...STATIC_GUIDES, ...loreItems, ...liveItems, ...patchItems];
   }, [liveItems]);
 
-  // Filter items
+  // Computed results: Recent + Context + Go-To + Actions when query is empty, else filtered results
   const results = useMemo(() => {
     if (!query.trim()) {
-      return [...STATIC_TOOLS, ...STATIC_GUIDES].slice(0, 10);
+      const recentConverted: SearchItem[] = recentItems.slice(0, 4).map((r) => ({
+        id: `recent-${r.id}`,
+        category: "RECENT",
+        title: r.title,
+        subtitle: r.subtitle || `Recently viewed ${r.category.toLowerCase()}`,
+        href: r.href,
+        badge: r.category,
+      }));
+
+      return [
+        ...recentConverted,
+        ...contextualItems,
+        ...GO_TO_ITEMS.slice(0, 4),
+        ...ACTION_ITEMS.slice(0, 3),
+      ];
     }
+
     const q = query.toLowerCase().trim();
     return allSearchable
       .filter(item => 
@@ -215,7 +339,7 @@ export function GlobalSearchDialog() {
         item.category.toLowerCase().includes(q)
       )
       .slice(0, 14);
-  }, [query, allSearchable]);
+  }, [query, recentItems, contextualItems, allSearchable]);
 
   const selectItem = useCallback((item: SearchItem) => {
     soundSystem.play("click");
@@ -246,7 +370,7 @@ export function GlobalSearchDialog() {
       onClick={() => setOpen(false)}
     >
       <div 
-        className="w-full max-w-2xl border border-border bg-[#080F14] shadow-2xl shadow-black overflow-hidden flex flex-col max-h-[82vh] relative"
+        className="w-full max-w-2xl border border-border bg-surface-card shadow-2xl shadow-black overflow-hidden flex flex-col max-h-[82vh] relative"
         onClick={e => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
@@ -257,10 +381,10 @@ export function GlobalSearchDialog() {
         <div className="absolute top-0 right-0 w-[2px] h-3 bg-cyan" />
 
         {/* Terminal Header Bar */}
-        <div className="border-b border-border/70 bg-[#060B0F] px-4 py-1.5 flex items-center justify-between font-mono text-[9px] text-muted tracking-wider select-none">
+        <div className="border-b border-border bg-surface-elevated px-4 py-2 flex items-center justify-between font-mono text-[9px] text-muted tracking-wider select-none">
           <span className="text-cyan font-bold tracking-widest flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan/80" />
-            VLOPEDIA // TERMINAL QUERY ENGINE
+            VLOPEDIA // COMMAND PALETTE & SEARCH
           </span>
           <span className="text-muted/60">INDEX: 1,400+ TACTICAL NODES</span>
         </div>
@@ -276,11 +400,13 @@ export function GlobalSearchDialog() {
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            placeholder="Ask the database: agents, damage falloff, executes, skins, lore... (Ctrl+K)"
+            placeholder="Search database or type command... (e.g. Jett, Vandal, Ascent)"
+            aria-label="Command search query"
             className="flex-1 bg-transparent font-mono text-sm text-foreground placeholder:text-muted/60 focus:outline-none"
           />
           {query && (
             <button 
+              type="button"
               onClick={() => setQuery("")}
               className="text-muted hover:text-foreground p-1 mr-2 cursor-pointer"
               title="Clear search"
@@ -288,50 +414,77 @@ export function GlobalSearchDialog() {
               <X className="h-4 w-4" />
             </button>
           )}
-          <span className="font-mono text-[9px] px-1.5 py-0.5 border border-border/80 bg-background text-muted uppercase">
+          <span className="font-mono text-[9px] px-1.5 py-0.5 border border-border bg-surface-elevated text-muted uppercase">
             ESC
           </span>
         </div>
 
-        {/* Results list */}
-        <div ref={listRef} className="overflow-y-auto p-2 space-y-1 divide-y divide-border/20">
+        {/* Results list or Empty state */}
+        <div ref={listRef} className="overflow-y-auto p-2 space-y-1">
           {results.length === 0 ? (
-            <div className="py-12 text-center">
-              <p className="font-mono text-xs text-muted">NO TACTICAL INTEL FOUND FOR &quot;{query}&quot;</p>
-              <p className="font-sans text-xs text-muted/70 mt-1">Try querying Jett, Vandal, Ascent, Sensitivity, or Comp Builder</p>
+            <div className="p-3">
+              <TacticalEmptyState
+                query={query}
+                onSelectSuggestion={(term) => {
+                  setQuery(term);
+                  setSelectedIndex(0);
+                }}
+                onReset={() => {
+                  setQuery("");
+                  setSelectedIndex(0);
+                }}
+              />
             </div>
           ) : (
             results.map((item, idx) => {
               const isSelected = idx === selectedIndex;
-              const indexStr = (idx + 1).toString().padStart(2, "0");
+              const isRecent = item.category === "RECENT";
+              const isContext = item.category === "CONTEXTUAL";
+              const isGoTo = item.category === "GO TO";
+              const isAction = item.category === "ACTIONS";
+
               return (
                 <button
                   key={item.id}
+                  type="button"
                   onClick={() => selectItem(item)}
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`w-full text-left flex items-center justify-between px-3 py-2.5 transition-colors cursor-pointer ${
                     isSelected 
-                      ? "bg-primary/[0.06] border-l-2 border-primary text-foreground" 
+                      ? "bg-primary/[0.08] border-l-2 border-primary text-foreground" 
                       : "text-secondary hover:bg-surface/50 border-l-2 border-transparent"
                   }`}
                 >
                   <div className="min-w-0 flex-1 pr-4 flex items-start gap-3">
-                    {/* Index number */}
-                    <span className={`font-mono text-[10px] mt-0.5 ${isSelected ? "text-primary font-bold" : "text-muted/60"}`}>
-                      {indexStr}
-                    </span>
+                    {/* Icon or Index */}
+                    <div className="mt-0.5 shrink-0">
+                      {isRecent ? (
+                        <Clock className="h-3.5 w-3.5 text-muted" />
+                      ) : isContext ? (
+                        <Zap className="h-3.5 w-3.5 text-cyan" />
+                      ) : isGoTo ? (
+                        <NavIcon className="h-3.5 w-3.5 text-primary" />
+                      ) : isAction ? (
+                        <Swords className="h-3.5 w-3.5 text-warning" />
+                      ) : (
+                        <span className={`font-mono text-[10px] ${isSelected ? "text-primary font-bold" : "text-muted/60"}`}>
+                          {(idx + 1).toString().padStart(2, "0")}
+                        </span>
+                      )}
+                    </div>
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className={`font-mono text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.2 border ${
+                          isRecent ? "border-border/80 bg-surface text-muted" :
+                          isContext ? "border-cyan/40 bg-cyan/10 text-cyan" :
+                          isGoTo ? "border-primary/40 bg-primary/10 text-primary" :
+                          isAction ? "border-warning/40 bg-warning/10 text-warning" :
                           item.category === "Agents" ? "border-role-duelist/40 bg-role-duelist/10 text-role-duelist" :
                           item.category === "Weapons" ? "border-primary/40 bg-primary/10 text-primary" :
                           item.category === "Maps" ? "border-role-initiator/40 bg-role-initiator/10 text-role-initiator" :
                           item.category === "Tools" ? "border-cyan/40 bg-cyan/10 text-cyan" :
-                          item.category === "Compare" ? "border-[#C084FC]/40 bg-[#C084FC]/10 text-[#C084FC]" :
-                          item.category === "Lore" ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400" :
-                          item.category === "Guides" ? "border-role-sentinel/40 bg-role-sentinel/10 text-role-sentinel" :
-                          "border-muted/40 bg-surface text-muted"
+                          "border-border bg-surface text-muted"
                         }`}>
                           {item.category}
                         </span>
@@ -363,13 +516,13 @@ export function GlobalSearchDialog() {
         </div>
 
         {/* Footer shortcuts */}
-        <div className="border-t border-border bg-[#060B0F] px-4 py-2 flex items-center justify-between text-[9px] font-mono text-muted tracking-wider">
+        <div className="border-t border-border bg-surface-elevated px-4 py-2 flex items-center justify-between text-[9px] font-mono text-muted tracking-wider">
           <div className="flex items-center gap-4">
             <span><strong className="text-foreground">[↑↓]</strong> NAVIGATE</span>
-            <span><strong className="text-foreground">[↵]</strong> QUERY</span>
+            <span><strong className="text-foreground">[↵]</strong> EXECUTE</span>
             <span><strong className="text-foreground">[ESC]</strong> TERMINATE</span>
           </div>
-          <span className="text-cyan font-bold tracking-widest">TACTICAL TERMINAL</span>
+          <span className="text-cyan font-bold tracking-widest hidden sm:inline">TACTICAL PALETTE</span>
         </div>
       </div>
     </div>

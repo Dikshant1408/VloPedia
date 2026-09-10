@@ -32,7 +32,7 @@ export function AnswerBox({
   };
 
   return (
-    <div className="border border-primary/30 bg-gradient-to-r from-primary/10 via-[#0D1A22] to-[#0D1A22] p-6 clip-diagonal space-y-4 shadow-lg">
+    <div className="border border-primary/30 bg-surface-card p-6 tactical-panel-card clip-diagonal space-y-4 shadow-lg">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2 text-primary">
           <HelpCircle className="h-4 w-4" />
@@ -46,7 +46,7 @@ export function AnswerBox({
       </div>
 
       <div className="space-y-2">
-        <h3 className="font-display font-black text-lg sm:text-xl uppercase text-white tracking-wide">
+        <h3 className="font-display font-black text-lg sm:text-xl uppercase text-foreground tracking-wide">
           {question}
         </h3>
         <p className="font-sans text-xs sm:text-sm text-secondary leading-relaxed">
@@ -55,10 +55,10 @@ export function AnswerBox({
       </div>
 
       {keyTakeaways && keyTakeaways.length > 0 && (
-        <div className="grid gap-2 sm:grid-cols-2 pt-2 border-t border-[rgba(236,232,225,0.06)]">
+        <div className="grid gap-2 sm:grid-cols-2 pt-2 border-t border-border/60">
           {keyTakeaways.map((takeaway, idx) => (
             <div key={idx} className="flex items-start gap-2 text-xs font-mono text-muted">
-              <CheckCircle className="h-3.5 w-3.5 text-[#0DF2F2] shrink-0 mt-0.5" />
+              <CheckCircle className="h-3.5 w-3.5 text-cyan shrink-0 mt-0.5" />
               <span>{takeaway}</span>
             </div>
           ))}
@@ -66,7 +66,7 @@ export function AnswerBox({
       )}
 
       {/* Footer: Feedback Satisfaction & CTA Link */}
-      <div className="pt-3 border-t border-[rgba(236,232,225,0.06)] flex items-center justify-between flex-wrap gap-3 font-mono text-xs">
+      <div className="pt-3 border-t border-border/60 flex items-center justify-between flex-wrap gap-3 font-mono text-xs">
         {/* Feedback Section */}
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-muted uppercase">Did this answer help?</span>

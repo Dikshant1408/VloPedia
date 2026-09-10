@@ -14,6 +14,7 @@ import { siteConfig } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AnswerBox } from "@/components/answer-box";
 import { BookmarkButton } from "@/components/bookmark-button";
+import { RecordRecentView } from "@/components/record-recent-view";
 
 export const dynamic = "force-static";
 
@@ -349,10 +350,17 @@ export default async function SkinDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <PageTransition>
-        <div className="min-h-screen bg-[#0B141A] text-foreground">
+        <div className="min-h-screen bg-background text-foreground">
+          <RecordRecentView
+            id={skin.uuid}
+            title={skin.displayName}
+            subtitle={`${weaponName} Skin · ${tier?.price ? `${tier.price} VP` : "Store Skin"}`}
+            category="Skin"
+            href={`/skins/${canonicalSlug}`}
+          />
 
           {/* Header strip */}
-          <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-10 pb-10">
+          <div className="border-b border-border bg-background pt-10 pb-10">
             <Container>
               <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
                 <Breadcrumbs items={breadcrumbItems} />
@@ -374,7 +382,7 @@ export default async function SkinDetailPage({ params }: Props) {
                   )}
                   <Link
                     href={`/skins/${weaponSlug}`}
-                    className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white hover:border-primary/40 transition-colors"
+                    className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-border bg-surface-card text-muted hover:text-foreground hover:border-primary/40 transition-colors"
                   >
                     All {weaponName} Skins →
                   </Link>

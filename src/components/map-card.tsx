@@ -26,7 +26,7 @@ export function MapCard({ map, size = "small" }: MapCardProps) {
     <Link
       href={`/maps/${map.slug}`}
       className={[
-        "group relative block overflow-hidden border border-[rgba(236,232,225,0.08)] bg-[#08111A] clip-diagonal transition-all duration-500",
+        "group relative block overflow-hidden border border-border bg-surface-elevated tactical-panel-card clip-diagonal transition-all duration-500",
         "hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         size === "large" ? "col-span-2" : "",
       ]

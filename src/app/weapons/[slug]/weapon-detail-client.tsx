@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AnswerBox } from "@/components/answer-box";
 import { BookmarkButton } from "@/components/bookmark-button";
+import { RecordRecentView } from "@/components/record-recent-view";
 
 // Clean category label
 function categoryLabel(cat: string) {
@@ -48,6 +49,7 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
   const [compareOpen, setCompareOpen] = useState(false);
   const [skinsExpanded, setSkinsExpanded] = useState(false);
 
+  const slug = weapon.displayName.toLowerCase().replace(/\s+/g, "-");
   const stats = weapon.weaponStats;
   const cost  = weapon.shopData?.cost;
 
@@ -76,6 +78,14 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
   return (
     <PageTransition>
       <div className="min-h-screen bg-background text-foreground">
+        <RecordRecentView
+          id={weapon.uuid}
+          title={weapon.displayName}
+          subtitle={`${categoryLabel(weapon.category)} · ${cost ? `${cost.toLocaleString()} VP` : "Free"}`}
+          category="Weapon"
+          href={`/weapons/${slug}`}
+        />
+
         {/* Back nav + title strip */}
         <div className="border-b border-border bg-background pt-10 pb-10">
           <Container>
@@ -94,7 +104,7 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
                     navigator.clipboard.writeText(window.location.href);
                     toast.success("Weapon guide link copied to clipboard!");
                   }}
-                  className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-[rgba(236,232,225,0.12)] bg-[#0D1820] text-muted hover:text-white hover:border-primary/40 transition-colors"
+                  className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-border bg-surface-card text-muted hover:text-foreground hover:border-primary/40 transition-colors"
                 >
                   Share Weapon
                 </button>
@@ -109,14 +119,14 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
                     {categoryLabel(weapon.category)}
                   </span>
                 </div>
-                <h1 className="font-display text-5xl uppercase tracking-tight text-white sm:text-6xl lg:text-7xl">
+                <h1 className="font-display text-5xl uppercase tracking-tight text-foreground sm:text-6xl lg:text-7xl">
                   {weapon.displayName}
                 </h1>
               </div>
               {cost && (
                 <div className="mb-1 border border-border bg-surface px-5 py-3">
                   <span className="block font-mono-tactical text-[10px] font-bold uppercase tracking-widest text-muted">BUY COST</span>
-                  <span className="font-mono-tactical text-2xl font-black text-white">
+                  <span className="font-mono-tactical text-2xl font-black text-foreground">
                     {cost.toLocaleString()} <span className="text-sm text-primary">VP</span>
                   </span>
                 </div>

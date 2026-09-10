@@ -71,6 +71,8 @@ export function BookmarkButton({ id, title, category, url, className = "" }: Boo
     <button
       onClick={toggleBookmark}
       type="button"
+      aria-label={isSaved ? `Remove ${title} from bookmarks` : `Save ${title} to bookmarks`}
+      aria-pressed={isSaved}
       title={isSaved ? "Saved in Bookmarks" : "Save Bookmark"}
       className={`inline-flex items-center gap-1.5 font-mono text-xs uppercase px-3 py-1.5 border transition-all ${
         isSaved

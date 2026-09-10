@@ -28,13 +28,13 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
           <div key={index} className="flex items-center gap-1.5">
             <ChevronRight className="h-3 w-3 text-muted/50 shrink-0" />
             {isLast || !item.href ? (
-              <span className="text-white font-bold truncate max-w-[200px]" aria-current="page">
+              <span className="text-foreground font-bold truncate max-w-[240px]" aria-current="page">
                 {item.label}
               </span>
             ) : (
               <Link
                 href={item.href}
-                className="hover:text-primary transition-colors truncate max-w-[160px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                className="text-secondary hover:text-primary transition-colors truncate max-w-[180px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
               >
                 {item.label}
               </Link>
