@@ -19,6 +19,8 @@ import { valorantDb } from "@/lib/valorant-db";
 import { CONTENT_TIER_MAP, DEFAULT_TIER } from "@/lib/valorant-types";
 import type { ValorantAgent, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
 
+import { HomeWorld, type HomeWorldCategory } from "@/components/3d/home-world";
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -89,6 +91,8 @@ export function HomepageClient() {
   const [randomSkin, setRandomSkin]   = useState<ValorantSkin | null>(null);
   const [maps, setMaps]               = useState<any[]>([]);
   const [selectedMetaAgent, setSelectedMetaAgent] = useState(META_AGENTS[0]);
+  const [activeCategory, setActiveCategory] = useState<HomeWorldCategory>("idle");
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     fetch("https://valorant-api.com/v1/maps")
@@ -149,9 +153,10 @@ export function HomepageClient() {
       <div className="min-h-screen bg-background text-foreground">
 
         {/* ═══════════════════════════════════════════
-            1. EDITORIAL HERO (CLEAN WEBSITE HIERARCHY)
+            1. EDITORIAL HERO: "THE VALORANT WORLD IS ALIVE"
+               (55% Authority Content / 45% Atmospheric Diorama)
         ═══════════════════════════════════════════ */}
-        <section ref={heroRef} className="relative min-h-[72vh] w-full overflow-hidden border-b border-border bg-background flex items-center">
+        <section ref={heroRef} className="relative min-h-[78vh] w-full overflow-hidden border-b border-border bg-background flex items-center py-12 lg:py-16">
           {/* Subtle Agent Backdrop with smooth vignette */}
           <motion.div style={{ y: heroY }} className="absolute inset-0 z-0 pointer-events-none">
             <Image
@@ -161,81 +166,116 @@ export function HomepageClient() {
               priority
               fetchPriority="high"
               sizes="(max-width: 1024px) 100vw, 1200px"
-              className="object-cover object-top opacity-20 dark:opacity-25 transition-opacity duration-700"
+              className="object-cover object-top opacity-15 dark:opacity-20 transition-opacity duration-700"
             />
             <motion.div
               style={{ opacity: overlay }}
-              className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40"
+              className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/50"
             />
           </motion.div>
 
-          <Container className="relative z-10 py-16 sm:py-24 max-w-4xl text-center flex flex-col items-center">
-            <Reveal className="space-y-6 w-full">
-              {/* Editorial Eyebrow */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-card/80 px-3.5 py-1 text-xs font-sans font-medium text-secondary shadow-xs backdrop-blur-xs">
-                <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
-                <span>VALORANT Community Wiki & Database</span>
-              </div>
+          <Container className="relative z-10 max-w-[1500px] w-full">
+            <div className="grid gap-10 lg:grid-cols-[1.25fr_1fr] xl:grid-cols-[1.3fr_1fr] items-center">
+              
+              {/* ── Left Column: 55-58% Content / Typography / Search ── */}
+              <div className="space-y-6 text-left">
+                <Reveal className="space-y-6">
+                  {/* Editorial Eyebrow */}
+                  <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-card/80 px-3.5 py-1 text-xs font-sans font-medium text-secondary shadow-xs backdrop-blur-xs">
+                    <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
+                    <span>VALORANT Community Wiki & Database</span>
+                  </div>
 
-              {/* Main Headline */}
-              <div className="space-y-2">
-                <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-8xl tracking-tight text-foreground">
-                  VloPedia
-                </h1>
-                <p className="font-sans text-xl sm:text-2xl text-secondary max-w-2xl mx-auto font-normal">
-                  Everything you need to know about VALORANT.
-                </p>
-              </div>
+                  {/* Main Headline */}
+                  <div className="space-y-3">
+                    <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight text-foreground leading-[1.04]">
+                      EVERYTHING VALORANT<br />
+                      <span className="text-primary">IN ONE PLACE.</span>
+                    </h1>
+                    <p className="font-sans text-base sm:text-lg text-secondary max-w-xl font-normal leading-relaxed">
+                      Search agents, maps, skins, weapons, and competitive tools across the authoritative VALORANT knowledge engine.
+                    </p>
+                  </div>
 
-              {/* Search Bar */}
-              <div className="pt-2 max-w-2xl mx-auto w-full">
-                <form
-                  onSubmit={goSearch}
-                  role="search"
-                  className="relative flex items-center rounded-lg border border-border bg-surface-card shadow-sm transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
-                >
-                  <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search agents, weapons, skins, maps..."
-                    aria-label="Search VloPedia"
-                    className="w-full bg-transparent px-3.5 py-3.5 font-sans text-sm sm:text-base text-foreground placeholder:text-muted focus:outline-none"
-                  />
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="sm"
-                    className="shrink-0 mr-2 rounded-md font-sans text-sm font-medium"
-                  >
-                    Search
-                  </Button>
-                </form>
-
-                {/* Direct Category Chips */}
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-4 font-sans text-xs">
-                  {[
-                    { label: "Agents", href: "/agents" },
-                    { label: "Weapons", href: "/weapons" },
-                    { label: "Maps", href: "/maps" },
-                    { label: "Skins", href: "/skins" },
-                    { label: "Bundles", href: "/bundles" },
-                    { label: "Comp Builder", href: "/comp-builder" },
-                    { label: "Guides", href: "/guides" },
-                    { label: "Lore", href: "/lore" },
-                  ].map((cat) => (
-                    <Link
-                      key={cat.href}
-                      href={cat.href}
-                      className="rounded-md border border-border bg-surface-card/60 px-3 py-1 text-secondary hover:text-foreground hover:border-border-light hover:bg-surface-elevated transition-colors shadow-2xs font-medium"
+                  {/* Search Bar with Focus Reactivity */}
+                  <div className="pt-1 max-w-xl w-full">
+                    <form
+                      onSubmit={goSearch}
+                      role="search"
+                      className={`relative flex items-center rounded-lg border bg-surface-card shadow-sm transition-all duration-200 ${
+                        isSearching
+                          ? "border-primary ring-2 ring-primary/20"
+                          : "border-border hover:border-border-light focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                      }`}
                     >
-                      {cat.label}
-                    </Link>
-                  ))}
-                </div>
+                      <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
+                      <input
+                        type="search"
+                        value={query}
+                        onChange={(e) => {
+                          setQuery(e.target.value);
+                          setIsSearching(e.target.value.length > 0);
+                        }}
+                        onFocus={() => setIsSearching(true)}
+                        onBlur={() => setIsSearching(query.length > 0)}
+                        placeholder="Search agents, weapons, skins, maps..."
+                        aria-label="Search VloPedia"
+                        className="w-full bg-transparent px-3.5 py-3.5 font-sans text-sm sm:text-base text-foreground placeholder:text-muted focus:outline-none"
+                      />
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        size="sm"
+                        className="shrink-0 mr-2 rounded-md font-sans text-sm font-medium"
+                      >
+                        Search
+                      </Button>
+                    </form>
+
+                    {/* Category Chips with Hover Interactivity to 3D World */}
+                    <div className="flex flex-wrap items-center gap-2 pt-4 font-sans text-xs">
+                      {[
+                        { label: "Agents", href: "/agents", cat: "agents" as const },
+                        { label: "Maps", href: "/maps", cat: "maps" as const },
+                        { label: "Weapons", href: "/weapons", cat: "weapons" as const },
+                        { label: "Skins", href: "/skins", cat: "skins" as const },
+                        { label: "Bundles", href: "/bundles", cat: "idle" as const },
+                        { label: "Comp Builder", href: "/comp-builder", cat: "idle" as const },
+                        { label: "Guides", href: "/guides", cat: "idle" as const },
+                        { label: "Lore", href: "/lore", cat: "idle" as const },
+                      ].map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onMouseEnter={() => setActiveCategory(item.cat)}
+                          onMouseLeave={() => setActiveCategory("idle")}
+                          onFocus={() => setActiveCategory(item.cat)}
+                          onBlur={() => setActiveCategory("idle")}
+                          className={`rounded-md border px-3 py-1 text-secondary transition-all shadow-2xs font-medium ${
+                            activeCategory === item.cat
+                              ? "border-primary bg-primary/10 text-foreground font-semibold"
+                              : "border-border bg-surface-card/60 hover:text-foreground hover:border-border-light hover:bg-surface-elevated"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </Reveal>
               </div>
-            </Reveal>
+
+              {/* ── Right Column: 42-45% Atmospheric 3D Diorama ── */}
+              <div className="w-full flex items-center justify-center">
+                <Reveal delay={0.15} className="w-full">
+                  <HomeWorld
+                    activeCategory={activeCategory}
+                    isSearching={isSearching}
+                  />
+                </Reveal>
+              </div>
+
+            </div>
           </Container>
         </section>
 

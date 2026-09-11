@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserWishlist } from "@/hooks/use-user-wishlist";
 import { Skin } from "@/lib/valorant-db";
-import { WeaponInspectionViewer } from "@/components/3d/weapon-inspection-viewer";
 
 type Props = {
   skin: Skin;
@@ -98,18 +97,30 @@ export function SkinInspectClient({ skin }: Props) {
               </div>
             </div>
 
-            {/* Weapon Display Container rendering live chroma in interactive 3D/2.5D */}
-            <div className="w-full">
-              <WeaponInspectionViewer
-                weaponImageUrl={(currentVariant as any)?.displayIcon || (skin as any)?.displayIcon || "/images/bundle-eviction.webp"}
-                weaponName={`${skin.name} (${currentVariant?.name || "Standard"})`}
-                subtitle={`${skin.rarity} · ${skin.weaponSlug || "Weapon"}`}
-                rarity={skin.rarity}
-                cost={`${skin.price} VP`}
-                badgeLabel="3D Interactive"
-                aspectRatio="16/9"
-                className="w-full"
-              />
+            {/* Editorial 2D Weapon Showcase */}
+            <div className="relative w-full aspect-[16/9] rounded-lg border border-border/80 bg-gradient-to-b from-surface-elevated/40 to-surface-card flex items-center justify-center p-6 sm:p-10 overflow-hidden group shadow-xs">
+              {/* Studio Radial Backdrop */}
+              <div className="absolute inset-0 bg-radial from-white/[0.04] to-transparent pointer-events-none" />
+              
+              {/* Pedestal Shadow */}
+              <div className="absolute bottom-8 w-3/4 h-6 bg-black/40 blur-md rounded-full pointer-events-none" />
+
+              {/* High-Resolution Weapon Image */}
+              <div className="relative w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.02]">
+                <Image
+                  src={(currentVariant as any)?.displayIcon || (skin as any)?.displayIcon || "/images/bundle-eviction.webp"}
+                  alt={`${skin.name} - ${currentVariant?.name || "Standard"}`}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 800px"
+                  className="object-contain drop-shadow-md select-none"
+                />
+              </div>
+
+              {/* Subtle Edition / Price Watermark */}
+              <div className="absolute bottom-3 right-4 font-mono text-[11px] text-muted tracking-tight pointer-events-none">
+                {skin.rarity} · {skin.price} VP
+              </div>
             </div>
           </div>
 
