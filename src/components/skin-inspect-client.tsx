@@ -79,33 +79,42 @@ export function SkinInspectClient({ skin }: Props) {
       </Link>
 
       {/* Main Split inspector */}
-      <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr] items-stretch">
+      <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr] items-stretch">
         
-        {/* Color Inspector Canvas */}
-        <div className="rounded-lg border border-border bg-surface-card p-6 sm:p-8 relative flex flex-col justify-between space-y-6 shadow-xs">
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <span className="font-mono text-xs font-semibold text-primary block">Skin Showcase</span>
-              <h1 className="text-3xl sm:text-4xl font-black text-foreground font-sans tracking-tight">{skin.name}</h1>
-              <div className="flex flex-wrap items-center gap-2 mt-2">
+        {/* Cinematic Weapon Showcase Container */}
+        <div className="rounded-xl border border-border bg-surface-card p-6 sm:p-8 relative flex flex-col justify-between space-y-6 shadow-xs">
+          <div className="space-y-6">
+            
+            {/* Header Identity */}
+            <div className="space-y-1.5 text-center sm:text-left">
+              <span className="font-mono text-xs font-semibold text-primary block uppercase tracking-wider">
+                Weapon Showcase
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-black text-foreground font-display tracking-tight uppercase">
+                {skin.name}
+              </h1>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
                 <Badge className="border-primary/30 bg-primary/10 text-primary font-medium">
                   {skin.rarity}
                 </Badge>
-                <span className="text-xs text-secondary border border-border rounded px-2 py-0.5">
+                <span className="text-xs text-secondary border border-border rounded px-2.5 py-0.5">
                   {currentVariant?.name || "Standard"}
+                </span>
+                <span className="text-xs font-mono text-muted">
+                  {skin.weaponSlug ? skin.weaponSlug.toUpperCase() : "WEAPON"}
                 </span>
               </div>
             </div>
 
-            {/* Editorial 2D Weapon Showcase */}
-            <div className="relative w-full aspect-[16/9] rounded-lg border border-border/80 bg-gradient-to-b from-surface-elevated/40 to-surface-card flex items-center justify-center p-6 sm:p-10 overflow-hidden group shadow-xs">
-              {/* Studio Radial Backdrop */}
-              <div className="absolute inset-0 bg-radial from-white/[0.04] to-transparent pointer-events-none" />
+            {/* ── Cinematic Showcase Stage ── */}
+            <div className="relative w-full aspect-[16/9] rounded-xl border border-border/70 bg-gradient-to-b from-surface-elevated/50 via-surface-card to-surface-card flex items-center justify-center p-6 sm:p-10 overflow-hidden group shadow-sm">
+              {/* Studio Radial Ambient Backdrop */}
+              <div className="absolute inset-0 bg-radial from-white/[0.05] via-transparent to-transparent pointer-events-none" />
               
-              {/* Pedestal Shadow */}
-              <div className="absolute bottom-8 w-3/4 h-6 bg-black/40 blur-md rounded-full pointer-events-none" />
+              {/* Pedestal Ground Shadow */}
+              <div className="absolute bottom-6 sm:bottom-8 w-3/4 h-6 bg-black/45 blur-md rounded-full pointer-events-none" />
 
-              {/* High-Resolution Weapon Image */}
+              {/* High-Resolution Weapon Artwork */}
               <div className="relative w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.02]">
                 <Image
                   src={(currentVariant as any)?.displayIcon || (skin as any)?.displayIcon || "/images/bundle-eviction.webp"}
@@ -113,43 +122,140 @@ export function SkinInspectClient({ skin }: Props) {
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 800px"
-                  className="object-contain drop-shadow-md select-none"
+                  className="object-contain drop-shadow-lg select-none"
                 />
               </div>
 
-              {/* Subtle Edition / Price Watermark */}
+              {/* Subtle VP Watermark */}
               <div className="absolute bottom-3 right-4 font-mono text-[11px] text-muted tracking-tight pointer-events-none">
-                {skin.rarity} · {skin.price} VP
+                {skin.price ? `${skin.price.toLocaleString()} VP` : "EXCLUSIVE"}
               </div>
             </div>
-          </div>
 
-          {/* Variant swatches list */}
-          <div className="space-y-3 pt-2">
-            <span className="text-xs font-semibold text-foreground uppercase tracking-wider block">Chroma Variants</span>
-            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-              {skin.variants.map((v) => (
-                <button
-                  key={v.id}
-                  onClick={() => {
+            {/* ── Variant Carousel Slider (◀ ● ▶) ── */}
+            <div className="flex items-center justify-between px-2 pt-1 border-b border-border/60 pb-4">
+              <button
+                type="button"
+                onClick={() => {
+                  const idx = skin.variants.findIndex((v) => v.id === selectedVariant);
+                  const prevIdx = (idx - 1 + skin.variants.length) % skin.variants.length;
+                  const v = skin.variants[prevIdx];
+                  if (v) {
                     setSelectedVariant(v.id);
-                    if ((v as any).videoUrl) {
-                      setSelectedVideoUrl((v as any).videoUrl);
-                    } else {
-                      setSelectedVideoUrl(null);
-                    }
-                  }}
-                  className={`flex items-center gap-2 rounded-md border p-2.5 text-left transition-all cursor-pointer ${
-                    selectedVariant === v.id
-                      ? "border-primary bg-primary/10 text-foreground font-semibold"
-                      : "border-border bg-surface-muted text-secondary hover:border-border-light hover:text-foreground"
-                  }`}
-                >
-                  <span className="h-3 w-3 rounded-full shrink-0 border border-border" style={{ backgroundColor: v.hex }} />
-                  <span className="text-xs truncate">{v.name}</span>
-                </button>
-              ))}
+                    setSelectedVideoUrl((v as any).videoUrl || null);
+                  }
+                }}
+                className="h-8 w-8 rounded-md border border-border hover:border-primary text-secondary hover:text-foreground transition-all flex items-center justify-center cursor-pointer"
+                title="Previous Variant"
+                aria-label="Previous Variant"
+              >
+                ◀
+              </button>
+
+              {/* Variant Swatches Dots */}
+              <div className="flex items-center gap-2">
+                {skin.variants.map((v) => (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedVariant(v.id);
+                      setSelectedVideoUrl((v as any).videoUrl || null);
+                    }}
+                    className={`h-6 px-2.5 rounded-full border text-[11px] font-sans flex items-center gap-1.5 transition-all cursor-pointer ${
+                      selectedVariant === v.id
+                        ? "border-primary bg-primary/15 text-foreground font-semibold"
+                        : "border-border/80 bg-surface-muted text-secondary hover:border-border-light"
+                    }`}
+                  >
+                    <span className="h-2.5 w-2.5 rounded-full shrink-0 border border-black/20" style={{ backgroundColor: v.hex }} />
+                    <span className="hidden sm:inline truncate max-w-[90px]">{v.name}</span>
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const idx = skin.variants.findIndex((v) => v.id === selectedVariant);
+                  const nextIdx = (idx + 1) % skin.variants.length;
+                  const v = skin.variants[nextIdx];
+                  if (v) {
+                    setSelectedVariant(v.id);
+                    setSelectedVideoUrl((v as any).videoUrl || null);
+                  }
+                }}
+                className="h-8 w-8 rounded-md border border-border hover:border-primary text-secondary hover:text-foreground transition-all flex items-center justify-center cursor-pointer"
+                title="Next Variant"
+                aria-label="Next Variant"
+              >
+                ▶
+              </button>
             </div>
+
+            {/* ── Progression Level Track (BASE · VFX · FINISHER · VARIANT) ── */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-secondary uppercase tracking-wider block font-sans">
+                  Upgrade Progression
+                </span>
+                <span className="text-[11px] font-mono text-muted">Tier Upgrades</span>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { label: "BASE", sub: "Lvl 1", type: "inspect" as const },
+                  { label: "VFX", sub: "Lvl 2", type: "inspect" as const },
+                  { label: "ANIMATION", sub: "Lvl 3", type: "inspect" as const },
+                  { label: "FINISHER", sub: "Lvl 4", type: "inspect" as const },
+                ].map((item, i) => {
+                  const levelData = (skin as any).levels ? (skin as any).levels[i] : null;
+                  const hasVideo = levelData?.videoUrl;
+
+                  return (
+                    <button
+                      key={item.label}
+                      type="button"
+                      onClick={() => {
+                        if (hasVideo) {
+                          setSelectedVideoUrl(levelData.videoUrl);
+                          setIsPlayingInline(true);
+                        } else {
+                          setSelectedVideoUrl(null);
+                          setActiveVideo("inspect");
+                        }
+                      }}
+                      className={`p-2 rounded-lg border text-center transition-all cursor-pointer ${
+                        selectedVideoUrl === levelData?.videoUrl && hasVideo
+                          ? "border-primary bg-primary/10 text-primary font-bold shadow-2xs"
+                          : "border-border bg-surface-muted/60 text-secondary hover:border-border-light hover:text-foreground"
+                      }`}
+                    >
+                      <span className="block text-xs font-bold uppercase">{item.label}</span>
+                      <span className="block text-[10px] font-mono text-muted">{item.sub}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Primary Watch Showcase Button */}
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPlayingInline(true);
+                  if (!currentVideoUrl && skin.inspectVideoUrl) {
+                    setSelectedVideoUrl(skin.inspectVideoUrl);
+                  }
+                }}
+                className="w-full flex items-center justify-center gap-2 rounded-lg border border-transparent bg-primary text-white hover:bg-primary/90 font-sans font-semibold py-3 px-4 text-sm transition-all shadow-sm cursor-pointer active:translate-y-[1px]"
+              >
+                <Play className="h-4 w-4 fill-current" />
+                <span>Watch Showcase Video</span>
+              </button>
+            </div>
+
           </div>
         </div>
 
