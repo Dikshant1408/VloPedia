@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserWishlist } from "@/hooks/use-user-wishlist";
 import { Skin } from "@/lib/valorant-db";
+import { WeaponInspectionViewer } from "@/components/3d/weapon-inspection-viewer";
 
 type Props = {
   skin: Skin;
@@ -102,18 +103,18 @@ export function SkinInspectClient({ skin }: Props) {
               </div>
             </div>
 
-            {/* Weapon Display Container rendering live chroma portrait */}
-            <div className="h-56 relative border border-[rgba(236,232,225,0.08)] bg-[#08111A]/40 flex items-center justify-center p-4 overflow-hidden">
-              <div className="absolute inset-0 bg-tactical-dots opacity-[0.05]" />
-              <div className="relative w-[90%] h-[90%] transition-all duration-300">
-                <Image
-                  src={(currentVariant as any)?.displayIcon || "/images/bundle-eviction.webp"}
-                  alt={skin.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-                  className="object-contain p-2"
-                />
-              </div>
+            {/* Weapon Display Container rendering live chroma in interactive 3D/2.5D */}
+            <div className="w-full">
+              <WeaponInspectionViewer
+                weaponImageUrl={(currentVariant as any)?.displayIcon || (skin as any)?.displayIcon || "/images/bundle-eviction.webp"}
+                weaponName={`${skin.name} (${currentVariant?.name || "Standard"})`}
+                subtitle={`RARITY: ${skin.rarity} // ${skin.weaponSlug?.toUpperCase() || "WEAPON"}`}
+                rarity={skin.rarity}
+                cost={`${skin.price} VP`}
+                badgeLabel="INSPECT VIEW"
+                aspectRatio="16/9"
+                className="w-full shadow-lg"
+              />
             </div>
           </div>
 
@@ -218,6 +219,7 @@ export function SkinInspectClient({ skin }: Props) {
 
               {/* Loop Video Frame / Fallback (Click-to-Play to avoid GSC non-watch page video extraction) */}
               <div
+                data-nosnippet="true"
                 className="relative aspect-[16/9] border border-border bg-surface-elevated overflow-hidden flex items-center justify-center"
               >
                 {currentVideoUrl ? (

@@ -73,6 +73,8 @@ export default function WeaponDisplay({ weapon, weaponSkins }: WeaponDisplayProp
                   weaponImageUrl={weapon.displayIcon || "/images/skin-operator.webp"} 
                   weaponName={weapon.name}
                   containerRef={weaponImageRef}
+                  aspectRatio="auto"
+                  className="h-full w-full border-0"
                 />
               </div>
             </div>

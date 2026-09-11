@@ -9,6 +9,7 @@ import { Reveal, PageTransition } from "@/components/motion-system";
 import { PageHero } from "@/components/page-hero";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { MapGalleryClient } from "@/components/map-gallery-client";
+import { TacticalMapViewer } from "@/components/3d/tactical-map-viewer";
 import type { ValorantMap } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
 
@@ -257,24 +258,50 @@ export default async function MapDetailPage({ params }: Props) {
           <Container className="py-16">
             <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start">
 
-              {/* Left — gallery */}
+              {/* Left — 3D Tactical Sandtable & Gallery */}
               <Reveal>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
-                    <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
-                      MINIMAP & CARTOGRAPHY
-                    </span>
+                <div className="space-y-8">
+                  {map.displayIcon && (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
+                        <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
+                          TACTICAL 3D SANDTABLE // RADAR PROJECTION
+                        </span>
+                      </div>
+                      <TacticalMapViewer
+                        mapName={map.displayName}
+                        minimapUrl={map.displayIcon}
+                        fallbackSplashUrl={map.splash}
+                        callouts={map.callouts}
+                        xMultiplier={map.xMultiplier}
+                        yMultiplier={map.yMultiplier}
+                        xScalarToAdd={map.xScalarToAdd}
+                        yScalarToAdd={map.yScalarToAdd}
+                        coordinates={map.coordinates}
+                        aspectRatio="16/10"
+                        className="w-full shadow-xl"
+                      />
+                    </div>
+                  )}
+
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <span className="h-[2px] w-8 bg-muted-dark" aria-hidden="true" />
+                      <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-muted">
+                        SECTOR MEDIA ARCHIVE
+                      </span>
+                    </div>
+                    <MapGalleryClient map={{
+                      name:                    map.displayName,
+                      minimapUrl:              map.displayIcon ?? "",
+                      splashUrl:               map.splash,
+                      listViewIcon:            map.listViewIcon ?? undefined,
+                      listViewIconTall:        map.listViewIconTall ?? undefined,
+                      stylizedBackgroundImage: map.stylizedBackgroundImage ?? undefined,
+                      premierBackgroundImage:  map.premierBackgroundImage ?? undefined,
+                    }} />
                   </div>
-                  <MapGalleryClient map={{
-                    name:                    map.displayName,
-                    minimapUrl:              map.displayIcon ?? "",
-                    splashUrl:               map.splash,
-                    listViewIcon:            map.listViewIcon ?? undefined,
-                    listViewIconTall:        map.listViewIconTall ?? undefined,
-                    stylizedBackgroundImage: map.stylizedBackgroundImage ?? undefined,
-                    premierBackgroundImage:  map.premierBackgroundImage ?? undefined,
-                  }} />
                 </div>
               </Reveal>
 

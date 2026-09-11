@@ -9,7 +9,7 @@ import { Container } from "@/components/container";
 import { Reveal, PageTransition } from "@/components/motion-system";
 import { ContentTierBadge } from "@/components/content-tier-badge";
 import { SkinCard } from "@/components/skin-card";
-import WeaponViewer3D from "@/components/WeaponViewer3D";
+import { WeaponInspectionViewer } from "@/components/3d/weapon-inspection-viewer";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 import type { ValorantWeapon, ValorantSkin } from "@/lib/valorant-types";
 import { toast } from "sonner";
@@ -156,32 +156,16 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
           {/* ── Main grid ── */}
           <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
 
-            {/* Left — 3D viewer */}
+            {/* Left — Tactical Inspection Stage */}
             <Reveal>
-              <div className="space-y-4">
-                <div className="relative border border-border bg-black overflow-hidden" style={{ aspectRatio: "4/3" }}>
-                  <div aria-hidden="true" className="absolute left-0 top-0 h-[2px] w-12 bg-primary z-10" />
-                  <div aria-hidden="true" className="absolute right-0 top-0 bg-primary px-3 py-1 font-mono-tactical text-[10px] font-black tracking-wider text-black z-10">
-                    3D MODEL
-                  </div>
-                  <WeaponViewer3D
-                    weaponImageUrl={weapon.displayIcon}
-                    weaponName={weapon.displayName}
-                    containerRef={{ current: null }}
-                  />
-                </div>
-
-                {/* 2D fallback image strip */}
-                <div className="relative h-20 border border-border bg-surface-card overflow-hidden">
-                  <Image
-                    src={weapon.displayIcon}
-                    alt={weapon.displayName}
-                    fill
-                    sizes="(max-width:1024px) 100vw, 50vw"
-                    className="object-contain px-8 py-2"
-                    unoptimized
-                  />
-                </div>
+              <div className="space-y-3">
+                <WeaponInspectionViewer
+                  weaponImageUrl={weapon.displayIcon}
+                  weaponName={weapon.displayName}
+                  subtitle={`${categoryLabel(weapon.category)} · ${cost ? `${cost.toLocaleString()} VP` : "Free"}`}
+                  badgeLabel="INSPECT VIEW"
+                  aspectRatio="4/3"
+                />
               </div>
             </Reveal>
 

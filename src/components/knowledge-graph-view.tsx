@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { AgentKnowledgeNode } from "@/lib/knowledge-graph";
 import { DataTrustBadge } from "./data-trust-badge";
+import { KnowledgeGraph3DModal } from "@/components/3d/knowledge-graph-3d-modal";
 
 interface Props {
   node: AgentKnowledgeNode;
@@ -15,6 +16,7 @@ interface Props {
 
 export function KnowledgeGraphView({ node }: Props) {
   const [showDrawer, setShowDrawer] = useState(false);
+  const [show3DModal, setShow3DModal] = useState(false);
 
   return (
     <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 sm:p-8 clip-diagonal space-y-8 shadow-2xl">
@@ -35,6 +37,15 @@ export function KnowledgeGraphView({ node }: Props) {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShow3DModal(true)}
+            className="font-mono text-xs uppercase px-3.5 py-2 border border-primary bg-primary/10 text-primary hover:bg-primary hover:text-black font-bold flex items-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+          >
+            <Network className="h-3.5 w-3.5" />
+            <span>Spatial 3D Web</span>
+          </button>
+
           <button
             onClick={() => setShowDrawer(!showDrawer)}
             className="font-mono text-xs uppercase px-3 py-2 border border-[rgba(236,232,225,0.15)] bg-[#08111A] text-secondary hover:text-white flex items-center gap-1.5"
@@ -247,6 +258,13 @@ export function KnowledgeGraphView({ node }: Props) {
         patchVersion={node.fieldAttributions.tier?.patchVersion || "9.04"}
         lastVerified={node.fieldAttributions.tier?.lastVerified || "September 3, 2026"}
         confidence="HIGH"
+      />
+
+      {/* ── Interactive 3D Spatial Knowledge Web Modal ── */}
+      <KnowledgeGraph3DModal
+        isOpen={show3DModal}
+        onClose={() => setShow3DModal(false)}
+        node={node}
       />
 
     </div>
