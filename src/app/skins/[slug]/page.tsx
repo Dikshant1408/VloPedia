@@ -391,13 +391,13 @@ export default async function SkinDetailPage({ params }: Props) {
 
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
-                    <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
-                      {weaponName} COSMETIC DOSSIER
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
+                    <span className="font-mono text-xs font-semibold uppercase tracking-wider text-secondary">
+                      {weaponName} Skin
                     </span>
                   </div>
-                  <h1 className="font-display font-black text-4xl uppercase tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  <h1 className="font-display font-black text-4xl uppercase tracking-tight text-foreground sm:text-5xl lg:text-6xl">
                     {skin.displayName}
                   </h1>
                 </div>
@@ -405,9 +405,9 @@ export default async function SkinDetailPage({ params }: Props) {
                 {tier && (
                   <div className="mb-1 flex items-center gap-3">
                     <ContentTierBadge rarity={tier.rarity} showIcon />
-                    <span className="font-mono-tactical text-xl font-black text-primary">
+                    <span className="font-mono text-xl font-bold text-primary">
                       {tier.price.toLocaleString()}{" "}
-                      <span className="text-sm text-white">VP</span>
+                      <span className="text-sm text-foreground">VP</span>
                     </span>
                   </div>
                 )}
@@ -415,7 +415,7 @@ export default async function SkinDetailPage({ params }: Props) {
             </Container>
           </div>
 
-          <Container className="py-12 space-y-12">
+          <Container className="py-12 space-y-10">
             
             {/* Quick Answer Box - Instant Search Intent Satisfaction */}
             <Reveal>
@@ -438,7 +438,7 @@ export default async function SkinDetailPage({ params }: Props) {
 
             {/* Inspect Client with 3D/Video Renderers */}
             <Reveal>
-              <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal shadow-xl">
+              <div className="rounded-lg border border-border bg-surface-card p-6 shadow-xs">
                 <SkinInspectClient skin={inspectSkin as any} />
               </div>
             </Reveal>
@@ -447,38 +447,38 @@ export default async function SkinDetailPage({ params }: Props) {
             <div className="grid gap-6 sm:grid-cols-2">
               <Link
                 href={`/collections/${collectionSlug}`}
-                className="group border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-2 hover:border-primary/50 transition-all"
+                className="group rounded-lg border border-border bg-surface-card p-6 space-y-2 hover:border-primary/50 hover:shadow-md transition-all"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-primary font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="font-sans text-xs text-primary font-semibold uppercase tracking-wider flex items-center gap-1.5">
                     <FolderKanban className="h-3.5 w-3.5" />
-                    COLLECTION DIRECTORY
+                    Collection
                   </span>
                   <ArrowRight className="h-4 w-4 text-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
                 </div>
-                <h4 className="font-display font-black text-lg text-white uppercase group-hover:text-primary transition-colors">
+                <h4 className="font-display font-bold text-lg text-foreground uppercase group-hover:text-primary transition-colors">
                   {collectionName} Collection Hub
                 </h4>
-                <p className="text-xs text-muted leading-relaxed font-sans">
+                <p className="text-xs text-secondary leading-relaxed font-sans">
                   Browse all weapon skins, bundle pricing, and complete set valuations for the {collectionName} collection.
                 </p>
               </Link>
 
               <Link
                 href={`/skins/${weaponSlug}`}
-                className="group border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-2 hover:border-primary/50 transition-all"
+                className="group rounded-lg border border-border bg-surface-card p-6 space-y-2 hover:border-primary/50 hover:shadow-md transition-all"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-[#0DF2F2] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="font-sans text-xs text-primary font-semibold uppercase tracking-wider flex items-center gap-1.5">
                     <Crosshair className="h-3.5 w-3.5" />
-                    WEAPON SKIN HUB
+                    Weapon Skins
                   </span>
-                  <ArrowRight className="h-4 w-4 text-muted group-hover:text-[#0DF2F2] group-hover:translate-x-1 transition-all" />
+                  <ArrowRight className="h-4 w-4 text-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
                 </div>
-                <h4 className="font-display font-black text-lg text-white uppercase group-hover:text-[#0DF2F2] transition-colors">
+                <h4 className="font-display font-bold text-lg text-foreground uppercase group-hover:text-primary transition-colors">
                   Best {weaponName} Skins
                 </h4>
-                <p className="text-xs text-muted leading-relaxed font-sans">
+                <p className="text-xs text-secondary leading-relaxed font-sans">
                   Compare all {weaponName} skins by price, tier list rank, finisher animations, and community popularity.
                 </p>
               </Link>
@@ -488,55 +488,55 @@ export default async function SkinDetailPage({ params }: Props) {
             <div className="grid gap-6 md:grid-cols-2">
               
               {/* Specification Table */}
-              <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
-                <h3 className="font-display font-black text-xl uppercase text-white border-b border-[rgba(236,232,225,0.08)] pb-3 flex items-center gap-2">
+              <div className="rounded-lg border border-border bg-surface-card p-6 space-y-4 shadow-xs">
+                <h3 className="font-display font-bold text-lg uppercase text-foreground border-b border-border pb-3 flex items-center gap-2">
                   <Tag className="h-4 w-4 text-primary" />
                   <span>Skin Specifications</span>
                 </h3>
                 <div className="space-y-3 font-mono text-xs">
-                  <div className="flex justify-between py-1.5 border-b border-[rgba(236,232,225,0.04)]">
+                  <div className="flex justify-between py-1.5 border-b border-border/40">
                     <span className="text-muted">Weapon Platform</span>
-                    <span className="text-white font-bold">{weaponName}</span>
+                    <span className="text-foreground font-semibold">{weaponName}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-[rgba(236,232,225,0.04)]">
+                  <div className="flex justify-between py-1.5 border-b border-border/40">
                     <span className="text-muted">Collection Line</span>
-                    <span className="text-white font-bold">{collectionName}</span>
+                    <span className="text-foreground font-semibold">{collectionName}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-[rgba(236,232,225,0.04)]">
+                  <div className="flex justify-between py-1.5 border-b border-border/40">
                     <span className="text-muted">Content Tier</span>
-                    <span className="text-[#0DF2F2] font-bold">{tier?.rarity || "PREMIUM"}</span>
+                    <span className="text-foreground font-semibold">{tier?.rarity || "PREMIUM"}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-[rgba(236,232,225,0.04)]">
+                  <div className="flex justify-between py-1.5 border-b border-border/40">
                     <span className="text-muted">Base Store Price</span>
                     <span className="text-primary font-bold">{tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-[rgba(236,232,225,0.04)]">
+                  <div className="flex justify-between py-1.5 border-b border-border/40">
                     <span className="text-muted">Total Chromas</span>
-                    <span className="text-white font-bold">{skin.chromas?.length || 1} Colorways</span>
+                    <span className="text-foreground font-semibold">{skin.chromas?.length || 1} Colorways</span>
                   </div>
                   <div className="flex justify-between py-1.5">
                     <span className="text-muted">Upgrade Levels</span>
-                    <span className="text-white font-bold">{skin.levels?.length || 1} Levels</span>
+                    <span className="text-foreground font-semibold">{skin.levels?.length || 1} Levels</span>
                   </div>
                 </div>
               </div>
 
               {/* Radianite & Upgrade Levels */}
-              <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-4">
-                <h3 className="font-display font-black text-xl uppercase text-white border-b border-[rgba(236,232,225,0.08)] pb-3 flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-[#0DF2F2]" />
+              <div className="rounded-lg border border-border bg-surface-card p-6 space-y-4 shadow-xs">
+                <h3 className="font-display font-bold text-lg uppercase text-foreground border-b border-border pb-3 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" />
                   <span>Upgrade Progression</span>
                 </h3>
                 <div className="space-y-3">
                   {(skin.levels || []).map((lvl, idx) => (
-                    <div key={lvl.uuid} className="flex items-center justify-between p-3 border border-[rgba(236,232,225,0.04)] bg-[#08111A]">
-                      <div className="flex items-center gap-2">
+                    <div key={lvl.uuid} className="flex items-center justify-between p-3 rounded-md border border-border/60 bg-surface-muted">
+                      <div className="flex items-center gap-2.5">
                         <CheckCircle className="h-4 w-4 text-primary shrink-0" />
                         <div>
-                          <span className="font-sans text-xs font-bold text-white block">
+                          <span className="font-sans text-xs font-semibold text-foreground block">
                             Level {idx + 1}: {(lvl.displayName || "").replace(skin.displayName, "").trim() || "Base Model"}
                           </span>
-                          <span className="font-mono text-[9px] text-muted">
+                          <span className="font-mono text-[10px] text-muted">
                             {idx === 0 ? "Default Purchase" : `${idx * 10} Radianite Points (RP)`}
                           </span>
                         </div>
@@ -544,7 +544,7 @@ export default async function SkinDetailPage({ params }: Props) {
                       {lvl.streamedVideo && (
                         <Link
                           href={`/skins/${canonicalSlug}/watch`}
-                          className="font-mono text-[9px] uppercase px-2.5 py-1 border border-[#0DF2F2]/40 bg-[#0DF2F2]/10 text-[#0DF2F2] hover:bg-[#0DF2F2]/20 hover:border-[#0DF2F2] transition-colors flex items-center gap-1"
+                          className="rounded px-2.5 py-1 font-sans text-xs font-medium border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center gap-1"
                         >
                           <span>Watch Video</span>
                           <span>↗</span>
@@ -559,16 +559,16 @@ export default async function SkinDetailPage({ params }: Props) {
 
             {/* Chroma Colorways Grid */}
             {skin.chromas && skin.chromas.length > 1 && (
-              <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 clip-diagonal space-y-6">
-                <h3 className="font-display font-black text-xl uppercase text-white border-b border-[rgba(236,232,225,0.08)] pb-3 flex items-center gap-2">
+              <div className="rounded-lg border border-border bg-surface-card p-6 space-y-6 shadow-xs">
+                <h3 className="font-display font-bold text-lg uppercase text-foreground border-b border-border pb-3 flex items-center gap-2">
                   <Layers className="h-4 w-4 text-primary" />
                   <span>Available Chroma Variants ({skin.chromas.length})</span>
                 </h3>
 
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   {skin.chromas.map((chroma, idx) => (
-                    <div key={chroma.uuid} className="border border-[rgba(236,232,225,0.06)] bg-[#08111A] p-4 space-y-3">
-                      <div className="relative h-24 w-full bg-black/40">
+                    <div key={chroma.uuid} className="rounded-md border border-border/60 bg-surface-muted p-4 space-y-3">
+                      <div className="relative h-24 w-full rounded bg-surface">
                         {(chroma.fullRender || chroma.displayIcon || skin.displayIcon) && (
                           <Image
                             src={chroma.fullRender || chroma.displayIcon || skin.displayIcon || ""}
@@ -580,10 +580,10 @@ export default async function SkinDetailPage({ params }: Props) {
                         )}
                       </div>
                       <div className="space-y-1">
-                        <span className="font-mono text-[9px] uppercase text-primary font-bold block">
+                        <span className="font-mono text-[10px] uppercase text-primary font-semibold block">
                           Variant {idx + 1}
                         </span>
-                        <h4 className="font-sans text-xs font-bold text-white line-clamp-1">
+                        <h4 className="font-sans text-xs font-medium text-foreground line-clamp-1">
                           {(chroma.displayName || "").replace(skin.displayName, "").trim() || `Variant ${idx + 1}`}
                         </h4>
                       </div>

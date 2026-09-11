@@ -162,14 +162,14 @@ export const TacticalSceneStage = forwardRef<TacticalStageHandle, TacticalSceneS
           onTouchStart={() => onUserInteract?.()}
           style={{ width: "100%", height: "100%", background: "transparent" }}
         >
-          {/* Tactical Studio Lighting */}
+          {/* Studio Lighting */}
           <ambientLight intensity={1.4} />
           {/* Key light for metallic sheen */}
           <directionalLight position={[4, 5, 4]} intensity={1.8} color="#ffffff" />
-          {/* Cyan/Blue rim fill light from opposite corner */}
-          <directionalLight position={[-4, -2, -2]} intensity={0.9} color="#0DF2F2" />
-          {/* Primary red accent spotlight from top */}
-          <pointLight position={[0, 4, 2]} intensity={1.2} color="#FA4454" distance={8} />
+          {/* Soft neutral fill light from opposite corner */}
+          <directionalLight position={[-4, -2, -2]} intensity={0.7} color="#e2e8f0" />
+          {/* Subtle warm accent spotlight from top */}
+          <pointLight position={[0, 4, 2]} intensity={0.8} color="#ffffff" distance={8} />
 
           <Suspense fallback={null}>
             <WeaponMesh

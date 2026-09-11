@@ -19,20 +19,20 @@ export function KnowledgeGraphView({ node }: Props) {
   const [show3DModal, setShow3DModal] = useState(false);
 
   return (
-    <div className="border border-[rgba(236,232,225,0.08)] bg-[#0D1A22] p-6 sm:p-8 clip-diagonal space-y-8 shadow-2xl">
+    <div className="rounded-lg border border-border bg-surface-card p-6 sm:p-8 space-y-8 shadow-xs">
       
       {/* Knowledge Graph Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(236,232,225,0.08)] pb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-widest font-bold">
+          <div className="flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-wider font-semibold">
             <Network className="h-4 w-4" />
-            <span>KNOWLEDGE GRAPH // CANONICAL ENTITY RELATIONS</span>
+            <span>Agent Strategy & Synergies</span>
           </div>
-          <h2 className="font-display font-black text-2xl sm:text-3xl uppercase text-white">
-            RELATIONAL TACTICAL WEB · {node.name.toUpperCase()}
+          <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-foreground">
+            Entity Connections · {node.name}
           </h2>
           <p className="font-sans text-xs text-secondary">
-            Cross-entity intelligence connecting operative synergies, hard counter matchups, weapon ballistics, map geography, and lore dossiers.
+            Cross-entity database connecting agent synergies, counter matchups, weapon pairings, and map strategies.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ export function KnowledgeGraphView({ node }: Props) {
           <button
             type="button"
             onClick={() => setShow3DModal(true)}
-            className="font-mono text-xs uppercase px-3.5 py-2 border border-primary bg-primary/10 text-primary hover:bg-primary hover:text-black font-bold flex items-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+            className="font-sans text-xs font-medium rounded-md px-3.5 py-2 border border-primary bg-primary/10 text-primary hover:bg-primary hover:text-white flex items-center gap-1.5 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
           >
             <Network className="h-3.5 w-3.5" />
             <span>Spatial 3D Web</span>
@@ -48,46 +48,46 @@ export function KnowledgeGraphView({ node }: Props) {
 
           <button
             onClick={() => setShowDrawer(!showDrawer)}
-            className="font-mono text-xs uppercase px-3 py-2 border border-[rgba(236,232,225,0.15)] bg-[#08111A] text-secondary hover:text-white flex items-center gap-1.5"
+            className="font-sans text-xs font-medium rounded-md px-3 py-2 border border-border bg-surface-muted text-secondary hover:text-foreground flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-            <span>How We Know This</span>
+            <span>Data Sources</span>
           </button>
 
           <Link
             href={node.crossLinks.compBuilderUrl}
-            className="font-mono text-xs uppercase px-4 py-2 border border-primary/40 bg-primary/10 text-primary font-bold hover:bg-primary/20 transition-colors flex items-center gap-2 shrink-0"
+            className="font-sans text-xs font-medium rounded-md px-4 py-2 border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center gap-2 shrink-0"
           >
             <Sparkles className="h-4 w-4" />
-            <span>Launch Comp Builder with {node.name}</span>
+            <span>Build Comp with {node.name}</span>
           </Link>
         </div>
       </div>
 
-      {/* Expandable "How We Know This" Drawer */}
+      {/* Expandable "Data Sources" Drawer */}
       {showDrawer && (
-        <div className="border border-primary/30 bg-[#08111A] p-5 clip-diagonal space-y-4 animate-in fade-in">
-          <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.06)] pb-3">
-            <span className="font-mono text-xs uppercase text-primary font-bold">
-              {"// FIELD-SPECIFIC PROVENANCE AUDIT"}
+        <div className="rounded-lg border border-border bg-surface-muted p-5 space-y-4 animate-in fade-in">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <span className="font-sans text-xs uppercase text-primary font-semibold">
+              Data Provenance Audit
             </span>
-            <span className="font-mono text-[10px] text-muted">Patch 9.04 Baseline</span>
+            <span className="font-mono text-xs text-muted">Patch 9.04 Baseline</span>
           </div>
           <div className="grid gap-3 sm:grid-cols-3 font-mono text-xs">
-            <div className="p-3 bg-[#0B141A] border border-[rgba(236,232,225,0.04)]">
+            <div className="p-3 bg-surface rounded-md border border-border">
               <span className="text-[10px] text-muted block uppercase">Role Classification:</span>
-              <strong className="text-white block mt-0.5">{node.role}</strong>
-              <span className="text-[9px] text-[#0DF2F2] block mt-1">Source: Riot Character API</span>
+              <strong className="text-foreground block mt-0.5">{node.role}</strong>
+              <span className="text-[10px] text-secondary block mt-1">Source: Official Game Data</span>
             </div>
-            <div className="p-3 bg-[#0B141A] border border-[rgba(236,232,225,0.04)]">
+            <div className="p-3 bg-surface rounded-md border border-border">
               <span className="text-[10px] text-muted block uppercase">Meta Tier Rating:</span>
-              <strong className="text-white block mt-0.5">{node.meta.tier}</strong>
-              <span className="text-[9px] text-primary block mt-1">Source: Editorial Analysis</span>
+              <strong className="text-foreground block mt-0.5">{node.meta.tier}</strong>
+              <span className="text-[10px] text-primary block mt-1">Source: Editorial Analysis</span>
             </div>
-            <div className="p-3 bg-[#0B141A] border border-[rgba(236,232,225,0.04)]">
+            <div className="p-3 bg-surface rounded-md border border-border">
               <span className="text-[10px] text-muted block uppercase">Pro Match Presence:</span>
-              <strong className="text-white block mt-0.5">{node.meta.pickRate}</strong>
-              <span className="text-[9px] text-amber-400 block mt-1">Source: VCT Tournament Dataset</span>
+              <strong className="text-foreground block mt-0.5">{node.meta.pickRate}</strong>
+              <span className="text-[10px] text-amber-400 block mt-1">Source: VCT Tournament Dataset</span>
             </div>
           </div>
         </div>
@@ -97,30 +97,30 @@ export function KnowledgeGraphView({ node }: Props) {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         
         {/* Hub 1: Synergies */}
-        <div className="border border-[rgba(236,232,225,0.06)] bg-[#08111A] p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.06)] pb-3">
-            <div className="flex items-center gap-2 text-[#0DF2F2]">
+        <div className="rounded-lg border border-border bg-surface-muted p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center gap-2 text-primary">
               <Users className="h-4 w-4" />
-              <h3 className="font-mono text-xs uppercase font-bold text-white">High-Synergy Partners</h3>
+              <h3 className="font-sans text-xs uppercase font-semibold text-foreground">High-Synergy Partners</h3>
             </div>
-            <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 bg-[#0DF2F2]/10 text-[#0DF2F2]">
+            <span className="font-sans text-[10px] rounded px-1.5 py-0.5 bg-primary/10 text-primary font-medium">
               Co-Op Utility
             </span>
           </div>
 
           <div className="space-y-3">
             {node.tactical.synergies.map(syn => (
-              <div key={syn.agentSlug} className="p-3 border border-[rgba(236,232,225,0.04)] bg-[#0B141A] space-y-1.5">
+              <div key={syn.agentSlug} className="p-3 rounded-md border border-border bg-surface space-y-1.5">
                 <div className="flex items-center justify-between">
                   <Link 
                     href={`/agents/${syn.agentSlug}`}
-                    className="font-display font-black text-sm uppercase text-white hover:text-[#0DF2F2] transition-colors"
+                    className="font-display font-bold text-sm uppercase text-foreground hover:text-primary transition-colors"
                   >
                     + {syn.agentName}
                   </Link>
-                  <span className="font-mono text-[9px] text-[#0DF2F2]">{syn.comboAbility}</span>
+                  <span className="font-mono text-[10px] text-secondary">{syn.comboAbility}</span>
                 </div>
-                <p className="font-sans text-[11px] text-secondary leading-relaxed">
+                <p className="font-sans text-xs text-secondary leading-relaxed">
                   {syn.synergyReason}
                 </p>
               </div>
@@ -129,30 +129,30 @@ export function KnowledgeGraphView({ node }: Props) {
         </div>
 
         {/* Hub 2: Direct Hard Counters */}
-        <div className="border border-error/20 bg-[#08111A] p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.06)] pb-3">
+        <div className="rounded-lg border border-border bg-surface-muted p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2 text-error">
               <ShieldAlert className="h-4 w-4" />
-              <h3 className="font-mono text-xs uppercase font-bold text-white">Hard Matchup Counters</h3>
+              <h3 className="font-sans text-xs uppercase font-semibold text-foreground">Counter Matchups</h3>
             </div>
-            <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 bg-error/10 text-error font-bold">
-              Neutralization Alert
+            <span className="font-sans text-[10px] rounded px-1.5 py-0.5 bg-error/10 text-error font-medium">
+              Matchup Warning
             </span>
           </div>
 
           <div className="space-y-3">
             {node.tactical.counters.map(cnt => (
-              <div key={cnt.agentSlug} className="p-3 border border-error/10 bg-[#0B141A] space-y-1.5">
+              <div key={cnt.agentSlug} className="p-3 rounded-md border border-border bg-surface space-y-1.5">
                 <div className="flex items-center justify-between">
                   <Link 
                     href={`/agents/${cnt.agentSlug}`}
-                    className="font-display font-black text-sm uppercase text-white hover:text-error transition-colors"
+                    className="font-display font-bold text-sm uppercase text-foreground hover:text-error transition-colors"
                   >
                     ⚠️ {cnt.agentName}
                   </Link>
-                  <span className="font-mono text-[9px] text-error font-bold">{cnt.dangerLevel} THREAT</span>
+                  <span className="font-mono text-[10px] text-error font-semibold">{cnt.dangerLevel} Threat</span>
                 </div>
-                <p className="font-sans text-[11px] text-secondary leading-relaxed">
+                <p className="font-sans text-xs text-secondary leading-relaxed">
                   {cnt.counterReason}
                 </p>
               </div>
@@ -160,27 +160,27 @@ export function KnowledgeGraphView({ node }: Props) {
           </div>
         </div>
 
-        {/* Hub 3: Loadout & S-Tier Battlegrounds */}
-        <div className="border border-[rgba(236,232,225,0.06)] bg-[#08111A] p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[rgba(236,232,225,0.06)] pb-3">
+        {/* Hub 3: Loadout & Maps */}
+        <div className="rounded-lg border border-border bg-surface-muted p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2 text-amber-400">
               <Crosshair className="h-4 w-4" />
-              <h3 className="font-mono text-xs uppercase font-bold text-white">Signature Weapon & Maps</h3>
+              <h3 className="font-sans text-xs uppercase font-semibold text-foreground">Weapon & Map Pairings</h3>
             </div>
-            <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 bg-amber-400/10 text-amber-400">
-              Optimal Loadout
+            <span className="font-sans text-[10px] rounded px-1.5 py-0.5 bg-amber-400/10 text-amber-400 font-medium">
+              Loadout
             </span>
           </div>
 
           <div className="space-y-3">
             {/* Signature weapons */}
             <div className="space-y-1.5">
-              <span className="font-mono text-[9px] uppercase text-muted block">Signature Weapons:</span>
+              <span className="font-sans text-xs text-muted block font-medium">Preferred Weapons:</span>
               {node.tactical.signatureWeapons.map(w => (
-                <div key={w.slug} className="p-2.5 border border-[rgba(236,232,225,0.04)] bg-[#0B141A] flex items-center justify-between">
-                  <span className="font-display font-black text-xs uppercase text-white">{w.name}</span>
-                  <Link href={`/weapons/${w.slug}`} className="font-mono text-[9px] text-primary hover:underline">
-                    Ballistics →
+                <div key={w.slug} className="p-2.5 rounded-md border border-border bg-surface flex items-center justify-between">
+                  <span className="font-display font-bold text-xs uppercase text-foreground">{w.name}</span>
+                  <Link href={`/weapons/${w.slug}`} className="font-sans text-xs text-primary hover:underline">
+                    View weapon →
                   </Link>
                 </div>
               ))}
@@ -188,12 +188,12 @@ export function KnowledgeGraphView({ node }: Props) {
 
             {/* Best maps */}
             <div className="space-y-1.5 pt-2">
-              <span className="font-mono text-[9px] uppercase text-muted block">High Win-Rate Maps:</span>
+              <span className="font-sans text-xs text-muted block font-medium">High Win-Rate Maps:</span>
               {node.tactical.bestMaps.map(m => (
-                <div key={m.slug} className="p-2.5 border border-[rgba(236,232,225,0.04)] bg-[#0B141A] flex items-center justify-between">
-                  <span className="font-display font-black text-xs uppercase text-white">{m.name}</span>
-                  <Link href={`/maps/${m.slug}`} className="font-mono text-[9px] text-primary hover:underline">
-                    Map Meta →
+                <div key={m.slug} className="p-2.5 rounded-md border border-border bg-surface flex items-center justify-between">
+                  <span className="font-display font-bold text-xs uppercase text-foreground">{m.name}</span>
+                  <Link href={`/maps/${m.slug}`} className="font-sans text-xs text-primary hover:underline">
+                    View map →
                   </Link>
                 </div>
               ))}
@@ -208,45 +208,45 @@ export function KnowledgeGraphView({ node }: Props) {
         {node.crossLinks.loreSlug && (
           <Link
             href={`/lore/${node.crossLinks.loreSlug}`}
-            className="p-4 border border-purple-400/30 bg-purple-400/5 hover:bg-purple-400/10 transition-colors flex items-center justify-between group"
+            className="p-4 rounded-lg border border-border bg-surface-card hover:border-border-light hover:shadow-xs transition-all flex items-center justify-between group"
           >
             <div className="space-y-0.5">
-              <span className="font-mono text-[9px] uppercase text-purple-400 block">Canon Lore Archive</span>
-              <span className="font-sans text-xs font-bold text-white group-hover:text-purple-400 transition-colors truncate">
-                {node.crossLinks.loreTitle || `${node.name} Dossier`}
+              <span className="font-sans text-[10px] uppercase text-muted block font-medium">Canon Lore</span>
+              <span className="font-sans text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                {node.crossLinks.loreTitle || `${node.name} Story`}
               </span>
             </div>
-            <BookOpen className="h-4 w-4 text-purple-400 shrink-0" />
+            <BookOpen className="h-4 w-4 text-muted group-hover:text-primary transition-colors shrink-0" />
           </Link>
         )}
 
         {node.crossLinks.compareSlug && (
           <Link
             href={`/compare/agents/${node.crossLinks.compareSlug}`}
-            className="p-4 border border-purple-400/30 bg-purple-400/5 hover:bg-purple-400/10 transition-colors flex items-center justify-between group"
+            className="p-4 rounded-lg border border-border bg-surface-card hover:border-border-light hover:shadow-xs transition-all flex items-center justify-between group"
           >
             <div className="space-y-0.5">
-              <span className="font-mono text-[9px] uppercase text-purple-400 block">Head-to-Head Duel</span>
-              <span className="font-sans text-xs font-bold text-white group-hover:text-purple-400 transition-colors">
+              <span className="font-sans text-[10px] uppercase text-muted block font-medium">Head-to-Head</span>
+              <span className="font-sans text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
                 {node.crossLinks.compareName}
               </span>
             </div>
-            <GitCompare className="h-4 w-4 text-purple-400 shrink-0" />
+            <GitCompare className="h-4 w-4 text-muted group-hover:text-primary transition-colors shrink-0" />
           </Link>
         )}
 
         {node.crossLinks.bestForUrl && (
           <Link
             href={node.crossLinks.bestForUrl}
-            className="p-4 border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors flex items-center justify-between group"
+            className="p-4 rounded-lg border border-border bg-surface-card hover:border-border-light hover:shadow-xs transition-all flex items-center justify-between group"
           >
             <div className="space-y-0.5">
-              <span className="font-mono text-[9px] uppercase text-primary block">Tactical Ranking</span>
-              <span className="font-sans text-xs font-bold text-white group-hover:text-primary transition-colors">
-                {node.crossLinks.bestForTitle || "Tactical Tier List"}
+              <span className="font-sans text-[10px] uppercase text-muted block font-medium">Tier Ranking</span>
+              <span className="font-sans text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                {node.crossLinks.bestForTitle || "Tier List Rank"}
               </span>
             </div>
-            <ArrowRight className="h-4 w-4 text-primary shrink-0" />
+            <ArrowRight className="h-4 w-4 text-muted group-hover:text-primary transition-colors shrink-0" />
           </Link>
         )}
       </div>
@@ -254,7 +254,7 @@ export function KnowledgeGraphView({ node }: Props) {
       {/* ── Transparent Data Attribution Bar ── */}
       <DataTrustBadge
         sourceType="EDITORIAL_ANALYSIS"
-        sourceName="VloPedia Radiant Desk + VCT Pro Dataset"
+        sourceName="VloPedia Editorial Desk + VCT Pro Dataset"
         patchVersion={node.fieldAttributions.tier?.patchVersion || "9.04"}
         lastVerified={node.fieldAttributions.tier?.lastVerified || "September 3, 2026"}
         confidence="HIGH"

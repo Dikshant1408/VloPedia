@@ -68,14 +68,14 @@ const config: Config = {
       },
 
       boxShadow: {
-        glow:      "0 0 20px rgba(250,68,84,0.30), 0 0 50px rgba(250,68,84,0.12)",
-        "glow-cyan":"0 0 20px rgba(13,242,242,0.30), 0 0 50px rgba(13,242,242,0.12)",
-        soft:      "0 18px 50px rgba(0,0,0,0.55)",
+        glow:      "0 4px 20px rgba(255,70,85,0.15)",
+        "glow-cyan":"0 4px 20px rgba(0,0,0,0.25)",
+        soft:      "0 10px 30px rgba(0,0,0,0.35)",
       },
 
       backgroundImage: {
-        "hero-grid":   "linear-gradient(rgba(236,232,225,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(236,232,225,0.025) 1px, transparent 1px)",
-        "hero-radial": "radial-gradient(circle at top, rgba(250,68,84,0.12), transparent 45%), radial-gradient(circle at 80% 20%, rgba(13,242,242,0.08), transparent 30%)",
+        "hero-grid":   "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+        "hero-radial": "radial-gradient(circle at top, rgba(255,70,85,0.08), transparent 50%)",
       },
 
       maxWidth: { "8xl": "88rem", "9xl": "100rem" },

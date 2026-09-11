@@ -26,8 +26,8 @@ export function MapCard({ map, size = "small" }: MapCardProps) {
     <Link
       href={`/maps/${map.slug}`}
       className={[
-        "group relative block overflow-hidden border border-border bg-surface-elevated tactical-panel-card clip-diagonal transition-all duration-500",
-        "hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+        "group relative block overflow-hidden rounded-lg border border-border bg-surface-card transition-all duration-300",
+        "hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         size === "large" ? "col-span-2" : "",
       ]
         .filter(Boolean)
@@ -47,27 +47,27 @@ export function MapCard({ map, size = "small" }: MapCardProps) {
         className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
       />
 
-      {/* Gradient overlay — deepens on hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
 
       {/* Info */}
       <div className="absolute bottom-0 left-0 right-0 p-5">
         {map.location && (
-          <div className="mb-1 flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
+          <div className="mb-1 flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary">
             <MapPin className="h-3 w-3" aria-hidden="true" />
             {map.location}
           </div>
         )}
-        <h3 className="font-display text-2xl uppercase tracking-wide text-white transition-colors duration-200 group-hover:text-white">
+        <h3 className="font-display text-2xl uppercase tracking-wide text-white transition-colors duration-200">
           {map.name}
         </h3>
         {map.lore && (
-          <p className="mt-1 line-clamp-1 text-[11px] leading-relaxed text-secondary opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <p className="mt-1 line-clamp-1 text-xs leading-relaxed text-secondary opacity-0 transition-all duration-300 group-hover:opacity-100">
             {map.lore}
           </p>
         )}
-        <span className="mt-2 inline-flex items-center gap-1 font-mono text-[9px] font-bold uppercase tracking-wider text-primary opacity-0 transition-all duration-300 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0">
-          View Intel & Callouts →
+        <span className="mt-2 inline-flex items-center gap-1 font-sans text-xs font-medium text-primary opacity-0 transition-all duration-300 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0">
+          View map & callouts →
         </span>
       </div>
 

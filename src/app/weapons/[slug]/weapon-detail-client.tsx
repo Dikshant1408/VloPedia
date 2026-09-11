@@ -113,9 +113,9 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
 
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
-                  <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
+                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-secondary">
                     {categoryLabel(weapon.category)}
                   </span>
                 </div>
@@ -124,9 +124,9 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
                 </h1>
               </div>
               {cost && (
-                <div className="mb-1 border border-border bg-surface px-5 py-3">
-                  <span className="block font-mono-tactical text-[10px] font-bold uppercase tracking-widest text-muted">BUY COST</span>
-                  <span className="font-mono-tactical text-2xl font-black text-foreground">
+                <div className="mb-1 rounded-md border border-border bg-surface-card px-5 py-3 shadow-xs">
+                  <span className="block font-sans text-xs font-medium text-muted">Price</span>
+                  <span className="font-mono text-2xl font-bold text-foreground">
                     {cost.toLocaleString()} <span className="text-sm text-primary">VP</span>
                   </span>
                 </div>
@@ -156,14 +156,14 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
           {/* ── Main grid ── */}
           <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
 
-            {/* Left — Tactical Inspection Stage */}
+            {/* Left — 3D Inspection Stage */}
             <Reveal>
               <div className="space-y-3">
                 <WeaponInspectionViewer
                   weaponImageUrl={weapon.displayIcon}
                   weaponName={weapon.displayName}
                   subtitle={`${categoryLabel(weapon.category)} · ${cost ? `${cost.toLocaleString()} VP` : "Free"}`}
-                  badgeLabel="INSPECT VIEW"
+                  badgeLabel="3D Interactive"
                   aspectRatio="4/3"
                 />
               </div>
@@ -176,8 +176,8 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
                   <>
                     {/* Core stats */}
                     <div className="space-y-5">
-                      <h2 className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary border-b border-border pb-3">
-                        WEAPON STATS
+                      <h2 className="font-sans text-xs font-semibold uppercase tracking-wider text-primary border-b border-border pb-3">
+                        Weapon Statistics
                       </h2>
                       <StatBar label="Fire Rate"         value={stats.fireRate}             display={`${stats.fireRate} rds/s`}  max={16} />
                       <StatBar label="Magazine"          value={stats.magazineSize}          display={`${stats.magazineSize} rds`} max={50} />
@@ -191,16 +191,16 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
 
                     {/* Wall penetration + fire mode */}
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="border border-border bg-surface-card p-4">
-                        <span className="block font-mono-tactical text-[9px] font-bold uppercase tracking-widest text-muted mb-1">Wall Pen.</span>
-                        <span className="font-mono-tactical text-sm font-bold text-white capitalize">
+                      <div className="rounded-md border border-border bg-surface-card p-4 shadow-xs">
+                        <span className="block font-sans text-xs text-muted mb-1 font-medium">Wall Penetration</span>
+                        <span className="font-sans text-sm font-semibold text-foreground capitalize">
                           {stats.wallPenetration.replace(/EWallPenetrationDisplayType::/i, "").toLowerCase()}
                         </span>
                       </div>
                       {stats.fireMode && (
-                        <div className="border border-border bg-surface-card p-4">
-                          <span className="block font-mono-tactical text-[9px] font-bold uppercase tracking-widest text-muted mb-1">Fire Mode</span>
-                          <span className="font-mono-tactical text-sm font-bold text-white capitalize">
+                        <div className="rounded-md border border-border bg-surface-card p-4 shadow-xs">
+                          <span className="block font-sans text-xs text-muted mb-1 font-medium">Firing Mode</span>
+                          <span className="font-sans text-sm font-semibold text-foreground capitalize">
                             {stats.fireMode.replace(/EWeaponFireMode::/i, "").replace(/([A-Z])/g, " $1").trim().toLowerCase()}
                           </span>
                         </div>
@@ -210,8 +210,8 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
                     {/* Damage ranges table */}
                     {stats.damageRanges.length > 0 && (
                       <div className="space-y-3">
-                        <h3 className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary border-b border-border pb-3">
-                          DAMAGE RANGES
+                        <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-primary border-b border-border pb-3">
+                          Damage by Distance
                         </h3>
                         <div className="overflow-x-auto">
                           <table className="w-full font-mono-tactical text-[11px]" aria-label="Damage ranges">

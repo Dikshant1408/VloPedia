@@ -99,20 +99,20 @@ export function PageHero({
         <div className="mx-auto w-full max-w-8xl px-4 pb-16 pt-28 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-4">
             {eyebrow && (
-              <div className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-[#0DF2F2] animate-pulse" aria-hidden="true" />
-                <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
+                <span className="font-mono text-xs text-secondary tracking-widest uppercase font-semibold">
                   {eyebrow}
                 </span>
               </div>
             )}
 
-            <h1 className="font-display text-5xl uppercase leading-none tracking-tight text-white sm:text-7xl lg:text-8xl">
+            <h1 className="font-display text-5xl uppercase leading-none tracking-tight text-foreground sm:text-7xl lg:text-8xl">
               {title}
             </h1>
 
             {subtitle && (
-              <p className="max-w-xl text-base leading-relaxed text-muted font-sans">
+              <p className="max-w-xl text-base leading-relaxed text-secondary font-sans">
                 {subtitle}
               </p>
             )}

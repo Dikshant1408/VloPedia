@@ -25,7 +25,7 @@ export function AgentCard({ agent, featured = false }: AgentCardProps) {
     <motion.div layout className={featured ? "col-span-2" : ""}>
       <Link
         href={`/agents/${slug}`}
-        className="group relative block overflow-hidden border border-border bg-surface-card tactical-panel-card clip-diagonal transition-colors duration-300 hover:border-primary/50"
+        className="group relative block overflow-hidden rounded-lg border border-border bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-border-light hover:shadow-lg"
         style={{ aspectRatio: "4/5" }}
       >
         {/* Background gradient from agent colors */}

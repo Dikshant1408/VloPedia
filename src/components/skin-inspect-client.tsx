@@ -69,13 +69,13 @@ export function SkinInspectClient({ skin }: Props) {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       
       {/* Navigation Back */}
       <Link href="/skins">
-        <Button variant="secondary" size="sm" className="inline-flex items-center gap-2">
+        <Button variant="secondary" size="sm" className="inline-flex items-center gap-2 rounded-md font-sans text-xs">
           <ArrowLeft className="h-4 w-4" />
-          BACK TO SKINS
+          Back to skins
         </Button>
       </Link>
 
@@ -83,22 +83,17 @@ export function SkinInspectClient({ skin }: Props) {
       <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr] items-stretch">
         
         {/* Color Inspector Canvas */}
-        <div className="border border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] p-8 relative flex flex-col justify-between space-y-6">
-          <div className="absolute left-0 top-0 h-[2px] w-12 bg-primary" />
-          <div className="absolute right-0 top-0 bg-primary-soft border-l border-b border-primary/20 px-3 py-1 text-[9px] text-primary font-black">
-            VARIANT CANVAS
-          </div>
-
+        <div className="rounded-lg border border-border bg-surface-card p-6 sm:p-8 relative flex flex-col justify-between space-y-6 shadow-xs">
           <div className="space-y-4">
-            <div className="space-y-1">
-              <span className="text-[10px] text-primary font-bold block">{"// MODEL INSPECT"}</span>
-              <h1 className="text-4xl font-black text-foreground font-sans uppercase tracking-wider">{skin.name}</h1>
-              <div className="flex gap-2 mt-2">
-                <Badge className="border-primary/30 bg-primary-soft text-primary">
-                  RARITY: {skin.rarity}
+            <div className="space-y-1.5">
+              <span className="font-mono text-xs font-semibold text-primary block">Skin Showcase</span>
+              <h1 className="text-3xl sm:text-4xl font-black text-foreground font-sans tracking-tight">{skin.name}</h1>
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <Badge className="border-primary/30 bg-primary/10 text-primary font-medium">
+                  {skin.rarity}
                 </Badge>
-                <span className="text-[10px] text-muted border border-border px-2 py-0.5 uppercase">
-                  ACTIVE VARIANT // {currentVariant?.name}
+                <span className="text-xs text-secondary border border-border rounded px-2 py-0.5">
+                  {currentVariant?.name || "Standard"}
                 </span>
               </div>
             </div>
@@ -108,20 +103,20 @@ export function SkinInspectClient({ skin }: Props) {
               <WeaponInspectionViewer
                 weaponImageUrl={(currentVariant as any)?.displayIcon || (skin as any)?.displayIcon || "/images/bundle-eviction.webp"}
                 weaponName={`${skin.name} (${currentVariant?.name || "Standard"})`}
-                subtitle={`RARITY: ${skin.rarity} // ${skin.weaponSlug?.toUpperCase() || "WEAPON"}`}
+                subtitle={`${skin.rarity} · ${skin.weaponSlug || "Weapon"}`}
                 rarity={skin.rarity}
                 cost={`${skin.price} VP`}
-                badgeLabel="INSPECT VIEW"
+                badgeLabel="3D Interactive"
                 aspectRatio="16/9"
-                className="w-full shadow-lg"
+                className="w-full"
               />
             </div>
           </div>
 
           {/* Variant swatches list */}
-          <div className="space-y-3">
-            <span className="text-[10px] text-primary font-bold uppercase block">{"// CHANGE CHUE VARIANT"}</span>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="space-y-3 pt-2">
+            <span className="text-xs font-semibold text-foreground uppercase tracking-wider block">Chroma Variants</span>
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
               {skin.variants.map((v) => (
                 <button
                   key={v.id}
@@ -133,14 +128,14 @@ export function SkinInspectClient({ skin }: Props) {
                       setSelectedVideoUrl(null);
                     }
                   }}
-                  className={`flex items-center gap-2 border p-3 text-left transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 rounded-md border p-2.5 text-left transition-all cursor-pointer ${
                     selectedVariant === v.id
-                      ? "border-[#FF4655] bg-primary-soft text-white"
-                      : "border-[rgba(236,232,225,0.08)] bg-[#08111A]/40 text-muted hover:border-white/25"
+                      ? "border-primary bg-primary/10 text-foreground font-semibold"
+                      : "border-border bg-surface-muted text-secondary hover:border-border-light hover:text-foreground"
                   }`}
                 >
-                  <span className="h-3 w-3 shrink-0 animate-pulse" style={{ backgroundColor: v.hex }} />
-                  <span className="text-[9px] font-bold tracking-wider leading-none">{v.name}</span>
+                  <span className="h-3 w-3 rounded-full shrink-0 border border-border" style={{ backgroundColor: v.hex }} />
+                  <span className="text-xs truncate">{v.name}</span>
                 </button>
               ))}
             </div>
@@ -148,10 +143,10 @@ export function SkinInspectClient({ skin }: Props) {
         </div>
 
         {/* Inspections Video Feed & Details */}
-        <div className="border border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] p-8 space-y-6 relative flex flex-col justify-between">
+        <div className="rounded-lg border border-border bg-surface-card p-6 sm:p-8 space-y-6 relative flex flex-col justify-between shadow-xs">
           <div className="space-y-6">
-            <span className="font-mono text-xs text-primary font-bold block pb-2 border-b border-border">
-              {"// AUDIO VISUAL METRICS"}
+            <span className="font-sans text-xs font-semibold text-secondary uppercase tracking-wider block pb-2 border-b border-border">
+              Video & Audio Showcase
             </span>
 
             {/* Video preview selectors */}
@@ -164,11 +159,11 @@ export function SkinInspectClient({ skin }: Props) {
                     setActiveVideo("inspect");
                     setIsPlayingInline(true);
                   }}
-                  className={`px-3 py-1.5 text-[9px] font-bold border transition-all cursor-pointer ${
-                    !selectedVideoUrl && activeVideo === "inspect" ? "border-[#FF4655] bg-primary-soft text-white" : "border-[rgba(236,232,225,0.08)] bg-[#08111A]/40 text-muted"
+                  className={`px-3 py-1.5 text-xs rounded-md font-medium border transition-all cursor-pointer ${
+                    !selectedVideoUrl && activeVideo === "inspect" ? "border-primary bg-primary/10 text-primary font-semibold" : "border-border bg-surface-muted text-secondary hover:text-foreground"
                   }`}
                 >
-                  INSPECT ANIMATION
+                  Inspect Animation
                 </button>
                 <button
                   onClick={() => {
@@ -176,18 +171,18 @@ export function SkinInspectClient({ skin }: Props) {
                     setActiveVideo("reload");
                     setIsPlayingInline(true);
                   }}
-                  className={`px-3 py-1.5 text-[9px] font-bold border transition-all cursor-pointer ${
-                    !selectedVideoUrl && activeVideo === "reload" ? "border-[#FF4655] bg-primary-soft text-white" : "border-[rgba(236,232,225,0.08)] bg-[#08111A]/40 text-muted"
+                  className={`px-3 py-1.5 text-xs rounded-md font-medium border transition-all cursor-pointer ${
+                    !selectedVideoUrl && activeVideo === "reload" ? "border-primary bg-primary/10 text-primary font-semibold" : "border-border bg-surface-muted text-secondary hover:text-foreground"
                   }`}
                 >
-                  RELOAD SOUNDS
+                  Reload Audio
                 </button>
               </div>
 
               {/* Level Upgrades / VFX Selector */}
               {(skin as any).levels && (skin as any).levels.length > 0 && (
-                <div className="space-y-2 border-t border-border/60 pt-3">
-                  <span className="text-[8px] text-muted uppercase block tracking-wider font-mono">{"// LEVEL UPGRADES"}</span>
+                <div className="space-y-2 border-t border-border pt-3">
+                  <span className="text-[11px] text-muted uppercase block tracking-wider font-mono">Upgrade Levels</span>
                   <div className="flex flex-wrap gap-1.5">
                     {(skin as any).levels.map((lvl: any) => (
                       <button
@@ -202,25 +197,25 @@ export function SkinInspectClient({ skin }: Props) {
                           }
                         }}
                         disabled={!lvl.videoUrl}
-                        className={`px-2 py-1 text-[8px] font-bold border transition-all cursor-pointer ${
+                        className={`px-2 py-1 text-xs rounded font-medium border transition-all cursor-pointer ${
                           selectedVideoUrl === lvl.videoUrl
-                            ? "border-[#FF4655] bg-primary/15 text-primary"
+                            ? "border-primary bg-primary/15 text-primary"
                             : lvl.videoUrl
-                            ? "border-[rgba(236,232,225,0.08)] bg-[#08111A]/40 text-muted hover:border-white/20"
-                            : "border-[rgba(236,232,225,0.08)] bg-black/10 text-muted/40 cursor-not-allowed"
+                            ? "border-border bg-surface-muted text-secondary hover:text-foreground"
+                            : "border-border/40 bg-surface-muted/40 text-muted/50 cursor-not-allowed"
                         }`}
                       >
-                        {lvl.name.toUpperCase()}
+                        {lvl.name}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Loop Video Frame / Fallback (Click-to-Play to avoid GSC non-watch page video extraction) */}
+              {/* Loop Video Frame */}
               <div
                 data-nosnippet="true"
-                className="relative aspect-[16/9] border border-border bg-surface-elevated overflow-hidden flex items-center justify-center"
+                className="relative aspect-[16/9] rounded-md border border-border bg-surface-muted overflow-hidden flex items-center justify-center"
               >
                 {currentVideoUrl ? (
                   isPlayingInline ? (
@@ -232,16 +227,12 @@ export function SkinInspectClient({ skin }: Props) {
                         loop
                         controls
                         playsInline
-                        className="w-full h-full object-contain opacity-95"
+                        className="w-full h-full object-contain"
                       />
-                      <div className="absolute top-2.5 left-2.5 bg-background/85 border border-border/60 px-2.5 py-1 text-[8px] text-muted font-mono flex items-center gap-1.5 z-10 pointer-events-none">
-                        <span className="h-1.5 w-1.5 rounded-full bg-cyan" />
-                        <span className="text-foreground font-bold tracking-wider">VIDEO PREVIEW // 1080P</span>
-                      </div>
                       <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
                         <Link
                           href={`/skins/${skin.slug}/watch`}
-                          className="bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/40 font-mono font-bold px-2.5 py-1 text-[8px] transition-all flex items-center gap-1 uppercase tracking-wider"
+                          className="rounded bg-background/90 hover:bg-background border border-border text-foreground font-sans font-medium px-2.5 py-1 text-xs transition-all flex items-center gap-1"
                         >
                           Theater Mode ↗
                         </Link>
@@ -249,16 +240,14 @@ export function SkinInspectClient({ skin }: Props) {
                       <button
                         type="button"
                         onClick={() => setIsPlayingInline(false)}
-                        className="absolute bottom-2.5 right-2.5 bg-background/85 hover:bg-background border border-border/80 text-muted hover:text-foreground font-mono px-2 py-1 text-[8px] uppercase tracking-wider transition-colors cursor-pointer z-10"
+                        className="absolute bottom-2.5 right-2.5 rounded bg-background/90 hover:bg-background border border-border text-secondary hover:text-foreground px-2 py-1 text-xs transition-colors cursor-pointer z-10"
                         title="Close Video Preview"
                       >
                         ✕ Close
                       </button>
                     </>
                   ) : (
-                    <div className="group relative w-full h-full flex items-center justify-center bg-[#070E14] overflow-hidden">
-                      {/* Weapon preview backdrop */}
-                      <div className="absolute inset-0 bg-tactical-dots opacity-[0.06] pointer-events-none" />
+                    <div className="group relative w-full h-full flex items-center justify-center bg-surface overflow-hidden">
                       <div className="relative w-3/4 h-3/4 transition-transform duration-500 group-hover:scale-105 pointer-events-none">
                         <Image
                           src={(currentVariant as any)?.displayIcon || (skin as any)?.displayIcon || "/images/bundle-eviction.webp"}
@@ -270,16 +259,9 @@ export function SkinInspectClient({ skin }: Props) {
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent pointer-events-none" />
 
-                      {/* Top status indicator */}
-                      <div className="absolute top-2.5 left-2.5 bg-black/85 border border-border/40 px-2.5 py-1 text-[8px] text-muted font-mono flex items-center gap-1.5 z-10 pointer-events-none">
-                        <span className="h-1.5 w-1.5 rounded-full bg-cyan animate-pulse" />
-                        <span className="text-white font-bold tracking-wider">PREVIEW READY // 15S CLIP</span>
-                      </div>
-
-                      {/* Top right Theater mode link */}
                       <Link
                         href={`/skins/${skin.slug}/watch`}
-                        className="absolute top-2.5 right-2.5 bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/50 font-mono font-bold px-2.5 py-1 text-[8px] transition-all flex items-center gap-1 z-10 uppercase tracking-wider"
+                        className="absolute top-2.5 right-2.5 rounded bg-background/80 hover:bg-background border border-border text-foreground font-medium px-2.5 py-1 text-xs transition-all flex items-center gap-1 z-10"
                       >
                         Theater Mode ↗
                       </Link>
@@ -289,21 +271,20 @@ export function SkinInspectClient({ skin }: Props) {
                         <button
                           type="button"
                           onClick={() => setIsPlayingInline(true)}
-                          className="flex items-center gap-2 border border-primary bg-primary text-black hover:bg-white hover:border-white font-mono font-black px-4 py-2 text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-lg clip-diagonal-sm"
+                          className="flex items-center gap-2 rounded-md border border-primary bg-primary text-white hover:bg-primary/90 font-sans font-semibold px-4 py-2 text-xs transition-all duration-200 cursor-pointer shadow-md"
                           aria-label={`Play inspect video for ${skin.name}`}
                         >
                           <Play className="h-3.5 w-3.5 fill-current" />
-                          <span>Play Preview</span>
+                          <span>Play Video Preview</span>
                         </button>
-                        <span className="font-mono text-[9px] text-muted tracking-wider">
-                          Audio & Inspect Kinematics
+                        <span className="text-xs text-white/80">
+                          Audio & Animation
                         </span>
                       </div>
                     </div>
                   )
                 ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-3">
-                    <div className="absolute inset-0 bg-tactical-dots opacity-[0.03]" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-2">
                     {(currentVariant as any)?.displayIcon && (
                       <div className="relative w-24 h-12 opacity-30 transition-all duration-300">
                         <Image
@@ -316,11 +297,11 @@ export function SkinInspectClient({ skin }: Props) {
                       </div>
                     )}
                     <div className="space-y-1 relative z-10">
-                      <span className="font-mono-tactical text-[10px] font-bold tracking-[0.2em] text-[#FF4655]">
-                        NO PREVIEW AVAILABLE
+                      <span className="font-sans text-xs font-semibold text-secondary">
+                        No video preview available
                       </span>
-                      <p className="text-[10px] text-muted max-w-[280px] leading-relaxed">
-                        This base skin does not include custom animations, sound effects, or visual upgrade components.
+                      <p className="text-xs text-muted max-w-[280px] leading-relaxed">
+                        This skin uses the base weapon animations and sound effects.
                       </p>
                     </div>
                   </div>
@@ -331,13 +312,13 @@ export function SkinInspectClient({ skin }: Props) {
             {/* General metrics */}
             <div className="grid grid-cols-2 gap-4 text-xs font-mono border-t border-border pt-4">
               <div>
-                <span className="text-[10px] text-muted-dark block font-bold">VALORANT POPULARITY</span>
-                <span className="text-white font-bold text-lg mt-1 block">{skin.popularity}% POPULAR</span>
+                <span className="text-xs text-muted block font-medium">Popularity</span>
+                <span className="text-foreground font-bold text-base mt-0.5 block">{skin.popularity}%</span>
               </div>
               <div>
-                <span className="text-[10px] text-muted-dark block font-bold">COMMUNITY RATINGS</span>
-                <span className="text-primary font-bold text-lg mt-1 flex items-center gap-1">
-                  <Star className="h-4 w-4 fill-current text-warning" /> {skin.communityRating} / 5.0
+                <span className="text-xs text-muted block font-medium">Community Rating</span>
+                <span className="text-foreground font-bold text-base mt-0.5 flex items-center gap-1">
+                  <Star className="h-4 w-4 fill-current text-amber-400" /> {skin.communityRating} / 5.0
                 </span>
               </div>
             </div>
@@ -346,21 +327,21 @@ export function SkinInspectClient({ skin }: Props) {
           {/* Action triggers */}
           <div className="border-t border-border pt-4 flex justify-between items-center">
             <div>
-              <span className="text-[9px] text-muted block">SINGLE SKIN VP</span>
-              <span className="text-xl font-bold text-white tracking-widest">{skin.price} VP</span>
+              <span className="text-xs text-muted block">Store Price</span>
+              <span className="text-lg font-bold text-foreground">{skin.price} VP</span>
             </div>
             
             <div className="flex gap-2">
               <button
                 onClick={handleAddToWishlist}
-                className="h-10 w-10 border border-border hover:border-[#FF4655] hover:text-primary transition-all flex items-center justify-center cursor-pointer"
+                className="h-9 w-9 rounded-md border border-border hover:border-primary hover:text-primary transition-all flex items-center justify-center cursor-pointer"
                 title="Add to Wishlist"
               >
                 <Heart className="h-4 w-4" />
               </button>
               <Link href={`/weapons/${skin.weaponSlug}`}>
-                <Button variant="secondary" className="cut-corner-br">
-                  DIAGNOSTIC FRAME
+                <Button variant="secondary" size="sm" className="rounded-md text-xs font-sans">
+                  Weapon Specs
                 </Button>
               </Link>
             </div>

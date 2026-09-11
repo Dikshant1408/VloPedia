@@ -2,48 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── ValoVault V2 Design System ── */
-/* Inspired by VALORANT // PROTOCOL — Outfit + JetBrains Mono + Inter */
+/* ── VloPedia Editorial Design System ── */
+/* VALORANT Community Wiki & Editorial Database */
 
 :root {
   color-scheme: dark;
 
-  /* Core palette */
-  --background:   #0B141A;
-  --surface:      #0F1C24;
-  --surface-elevated: #132028;
-  --border:       rgba(236, 232, 225, 0.1);
-  --border-light: rgba(236, 232, 225, 0.18);
+  /* Core palette — Rich neutral dark */
+  --background:       #0F1012;
+  --surface:          #17181C;
+  --surface-elevated: #1F2126;
+  --surface-card:     #17181C;
+  --border:           rgba(255, 255, 255, 0.08);
+  --border-light:     rgba(255, 255, 255, 0.14);
 
-  /* Accent colors */
-  --primary:      #FA4454;
-  --primary-rgb:  250, 68, 84;
-  --primary-soft: rgba(250, 68, 84, 0.12);
-  --primary-softer: rgba(250, 68, 84, 0.06);
-  --cyan:         #0DF2F2;
-  --cyan-rgb:     13, 242, 242;
-  --cyan-soft:    rgba(13, 242, 242, 0.10);
+  /* Primary Accent — Pure VALORANT Red */
+  --primary:          #FF4655;
+  --primary-rgb:      255, 70, 85;
+  --primary-soft:     rgba(255, 70, 85, 0.12);
+  --primary-softer:   rgba(255, 70, 85, 0.05);
 
-  /* Text — Three safe contrast tiers (Formalized contrast contract) */
-  --foreground:       #ECE8E1;
-  --text-primary:     #ECE8E1;
-  --text-secondary:   #A7B0B7;
-  --text-muted:       #8E9BA4;
-  --secondary:        #A7B0B7;
-  --muted:            #8E9BA4;
-  --muted-dark:       rgba(236, 232, 225, 0.20);
+  /* Secondary Accent — Neutral Slate Gray (Demoted from neon cyan) */
+  --cyan:             #94A3B8;
+  --cyan-rgb:         148, 163, 184;
+  --cyan-soft:        rgba(148, 163, 184, 0.10);
+
+  /* Text — Clean editorial hierarchy */
+  --foreground:       #F4F4F5;
+  --text-primary:     #F4F4F5;
+  --text-secondary:   #A1A1AA;
+  --text-muted:       #71717A;
+  --secondary:        #A1A1AA;
+  --muted:            #71717A;
+  --muted-dark:       rgba(255, 255, 255, 0.18);
 
   /* Semantic */
   --success: #22c55e;
-  --warning: #eab308;
-  --error:   #FA4454;
-  --danger:  #FA4454;
+  --warning: #f59e0b;
+  --error:   #FF4655;
+  --danger:  #FF4655;
 
-  /* V2 surface tokens */
-  --surface-glass:   rgba(11, 20, 26, 0.80);
-  --surface-card:    #0D1A22;
-  --surface-overlay: rgba(11, 20, 26, 0.96);
-  --gradient-hero:   linear-gradient(to bottom, transparent 0%, #0B141A 100%);
+  /* Surface tokens */
+  --surface-glass:   rgba(15, 16, 18, 0.85);
+  --surface-overlay: rgba(15, 16, 18, 0.96);
+  --gradient-hero:   linear-gradient(to bottom, transparent 0%, #0F1012 100%);
 
   /* Role accent colors */
   --role-duelist:    #F87171;
@@ -63,12 +65,12 @@
   --font-body:    var(--font-inter);
   --font-mono:    var(--font-jetbrains);
 
-  /* Shadows */
-  --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md:      0 4px 12px rgba(0, 0, 0, 0.5);
-  --shadow-lg:      0 12px 40px rgba(0, 0, 0, 0.6);
-  --shadow-primary: 0 0 20px rgba(var(--primary-rgb), 0.25);
-  --shadow-cyan:    0 0 20px rgba(var(--cyan-rgb), 0.25);
+  /* Clean elevation shadows (No neon glows) */
+  --shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-md:      0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg:      0 12px 32px rgba(0, 0, 0, 0.4);
+  --shadow-primary: 0 4px 16px rgba(255, 70, 85, 0.12);
+  --shadow-cyan:    0 4px 16px rgba(0, 0, 0, 0.2);
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -76,47 +78,47 @@
   --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Light Mode System ── */
+/* ── Light Mode System — Warm Off-White / Paper Aesthetic ── */
 html.light, .light {
   color-scheme: light;
 
-  /* Core palette — tactical light aesthetic */
-  --background:       #F5F6F8;
+  /* Core palette — Warm paper editorial */
+  --background:       #FAF9F6;
   --surface:          #FFFFFF;
-  --surface-elevated: #EAEFF4;
-  --border:           rgba(15, 25, 35, 0.12);
-  --border-light:     rgba(15, 25, 35, 0.20);
+  --surface-elevated: #F4F4F5;
+  --surface-card:     #FFFFFF;
+  --border:           rgba(0, 0, 0, 0.08);
+  --border-light:     rgba(0, 0, 0, 0.14);
 
   /* Accent colors */
-  --primary:          #FA4454;
-  --primary-rgb:      250, 68, 84;
-  --primary-soft:     rgba(250, 68, 84, 0.10);
-  --primary-softer:   rgba(250, 68, 84, 0.05);
-  --cyan:             #008489;
-  --cyan-rgb:         0, 132, 137;
-  --cyan-soft:        rgba(0, 132, 137, 0.10);
+  --primary:          #FF4655;
+  --primary-rgb:      255, 70, 85;
+  --primary-soft:     rgba(255, 70, 85, 0.08);
+  --primary-softer:   rgba(255, 70, 85, 0.04);
+  --cyan:             #64748B;
+  --cyan-rgb:         100, 116, 139;
+  --cyan-soft:        rgba(100, 116, 139, 0.08);
 
-  /* Text — Three safe contrast tiers */
-  --foreground:       #0F1923;
-  --text-primary:     #0F1923;
-  --text-secondary:   #4B5863;
-  --text-muted:       #6E7A85;
-  --secondary:        #4B5863;
-  --muted:            #6E7A85;
-  --muted-dark:       rgba(15, 25, 35, 0.18);
+  /* Text */
+  --foreground:       #18181B;
+  --text-primary:     #18181B;
+  --text-secondary:   #52525B;
+  --text-muted:       #71717A;
+  --secondary:        #52525B;
+  --muted:            #71717A;
+  --muted-dark:       rgba(0, 0, 0, 0.16);
 
-  /* V2 surface tokens */
-  --surface-glass:    rgba(255, 255, 255, 0.88);
-  --surface-card:     #FFFFFF;
-  --surface-overlay:  rgba(245, 246, 248, 0.96);
-  --gradient-hero:    linear-gradient(to bottom, transparent 0%, #F5F6F8 100%);
+  /* Surface tokens */
+  --surface-glass:    rgba(255, 255, 255, 0.90);
+  --surface-overlay:  rgba(250, 249, 246, 0.98);
+  --gradient-hero:    linear-gradient(to bottom, transparent 0%, #FAF9F6 100%);
 
   /* Shadows */
-  --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md:        0 4px 16px rgba(0, 0, 0, 0.08);
-  --shadow-lg:        0 12px 36px rgba(0, 0, 0, 0.10);
-  --shadow-primary:   0 0 20px rgba(var(--primary-rgb), 0.18);
-  --shadow-cyan:      0 0 20px rgba(var(--cyan-rgb), 0.18);
+  --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md:        0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg:        0 12px 28px rgba(0, 0, 0, 0.08);
+  --shadow-primary:   0 4px 14px rgba(255, 70, 85, 0.10);
+  --shadow-cyan:      0 4px 14px rgba(0, 0, 0, 0.05);
 }
 
 /* ── Light Mode UI Element Adaptations ── */
@@ -275,42 +277,45 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
 /* 1. TacticalHero: Flagship system cards & marquee hero modules (14px double cut) */
 .tactical-hero,
 .clip-tactical-hero,
-.clip-double-diagonal {
-  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-}
-/* 2. TacticalBanner: Wide prominent banners & feature spotlights (20px cut) */
+/* ── Modern Editorial Card Shapes (De-clipped) ── */
+/* Replaced aggressive angular cuts with clean, human rounded cards */
 .tactical-banner,
 .clip-tactical-banner,
 .clip-diagonal-lg {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+  clip-path: none !important;
+  border-radius: 0.75rem;
 }
-/* 3. TacticalPanel / TacticalCard: Primary content cards (Agents, Maps, Weapons) (12px cut) */
+
 .tactical-panel-card,
 .clip-tactical-panel,
 .clip-diagonal {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  clip-path: none !important;
+  border-radius: 0.5rem;
 }
-/* 4. TacticalControl: Small interactive controls, buttons, chips, horizontal cards (6px cut) */
+
 .tactical-control,
 .clip-tactical-control,
 .clip-diagonal-sm {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+  clip-path: none !important;
+  border-radius: 0.375rem;
 }
-/* 5. Normal Unclipped Content: Articles, tables, long-form guides, FAQ, forms */
+
+.clip-double-diagonal,
+.cut-corner-br,
+.cut-corner-tl-br,
+.cut-corner-bl-tr {
+  clip-path: none !important;
+  border-radius: 0.5rem;
+}
+
 .tactical-flat,
 .no-clip {
   clip-path: none !important;
 }
 
-/* Keep cut-corner aliases for backwards compat */
-.cut-corner-br {
+/* Single signature brand notch (opt-in for logo / header badge) */
+.brand-notch {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
-}
-.cut-corner-tl-br {
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-}
-.cut-corner-bl-tr {
-  clip-path: polygon(0 10px, 10px 0, 100% 0, 100% 100%, 0 100%);
 }
 
 /* ── Tactical Terminal: Restrained Active Signal (Red text + 2px red bottom rule, no glow/bg) ── */

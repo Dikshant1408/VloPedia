@@ -7,19 +7,17 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { toast } from "sonner";
 import {
   ArrowRight, Search as SearchIcon,
-  ShieldAlert, BookOpen, Heart, ChevronRight,
-  Crosshair, Zap, Activity, Flame
+  Heart, Crosshair
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserWishlist } from "@/hooks/use-user-wishlist";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
 import { Reveal, StaggerContainer, PageTransition } from "@/components/motion-system";
-import { RoleBadge } from "@/components/role-badge";
 import { MapCard } from "@/components/map-card";
 import { valorantDb } from "@/lib/valorant-db";
 import { CONTENT_TIER_MAP, DEFAULT_TIER } from "@/lib/valorant-types";
-import type { ValorantAgent, ValorantBundle, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
+import type { ValorantAgent, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
 
 function slugify(text: string): string {
   return text
@@ -39,7 +37,6 @@ const META_AGENTS = [
     info: 44,
     bestMaps: ["Ascent", "Haven", "Breeze"],
     portrait: "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/fullportrait.png",
-    accent: "FA4454",
   },
   {
     name: "Omen",
@@ -50,7 +47,6 @@ const META_AGENTS = [
     info: 74,
     bestMaps: ["Ascent", "Lotus", "Sunset"],
     portrait: "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b1c-7add8277706a/fullportrait.png",
-    accent: "A78BFA",
   },
   {
     name: "Sova",
@@ -61,7 +57,6 @@ const META_AGENTS = [
     info: 98,
     bestMaps: ["Ascent", "Haven", "Breeze"],
     portrait: "https://media.valorant-api.com/agents/3207dd43-4636-1679-b5ce-f3880977e8fb/fullportrait.png",
-    accent: "FBBF24",
   },
   {
     name: "Killjoy",
@@ -72,18 +67,18 @@ const META_AGENTS = [
     info: 94,
     bestMaps: ["Ascent", "Lotus", "Icebox"],
     portrait: "https://media.valorant-api.com/agents/1e58d929-473b-fb37-02d9-5fbe4144646f/fullportrait.png",
-    accent: "34D399",
   },
 ];
 
-const TAXONOMY_LINKS = [
-  { label: "Agents", href: "/agents", desc: "Operatives & abilities" },
-  { label: "Weapons", href: "/weapons", desc: "Specs & falloff charts" },
-  { label: "Maps", href: "/maps", desc: "Callouts & executes" },
-  { label: "Skins", href: "/skins", desc: "1,400+ skins & chromas" },
-  { label: "Tools", href: "/tools", desc: "Comps & calculators" },
-  { label: "Guides", href: "/guides", desc: "Strategy masterclasses" },
-  { label: "Lore", href: "/lore", desc: "Timeline & canon records" },
+const DIRECTORY_ITEMS = [
+  { title: "Agents", href: "/agents", desc: "Abilities, stats, role synergies & counters", count: "26 Agents" },
+  { title: "Weapons", href: "/weapons", desc: "Ballistics, spray patterns & damage charts", count: "18 Weapons" },
+  { title: "Maps", href: "/maps", desc: "Interactive 3D radar, callouts & plant executes", count: "11 Maps" },
+  { title: "Skins", href: "/skins", desc: "1,400+ skins, chromas, tiers & audio clips", count: "1,400+ Skins" },
+  { title: "Bundles", href: "/bundles", desc: "Complete skin sets and store history", count: "Bundle Archive" },
+  { title: "Comp Builder", href: "/comp-builder", desc: "Simulate and optimize team agent synergies", count: "Interactive Tool" },
+  { title: "Guides", href: "/guides", desc: "Agent masterclasses and crosshair placement", count: "Tutorials" },
+  { title: "Lore", href: "/lore", desc: "First Light canon, Kingdom Corp & Earth-Omega", count: "Story Timeline" },
 ];
 
 export function HomepageClient() {
@@ -91,24 +86,17 @@ export function HomepageClient() {
   const { addWishlistItem, items: wishlistItems } = useUserWishlist();
   const reduce = useReducedMotion();
 
-  const [agentsList, setAgentsList]   = useState<ValorantAgent[]>([]);
   const [randomSkin, setRandomSkin]   = useState<ValorantSkin | null>(null);
   const [maps, setMaps]               = useState<any[]>([]);
   const [selectedMetaAgent, setSelectedMetaAgent] = useState(META_AGENTS[0]);
 
   useEffect(() => {
-    fetch("https://valorant-api.com/v1/agents?isPlayableCharacter=true")
-      .then(r => r.json()).then(j => {
-        const agents: ValorantAgent[] = j.data ?? [];
-        setAgentsList(agents);
-      }).catch(() => {});
-
     fetch("https://valorant-api.com/v1/maps")
       .then(r => r.json()).then(j => {
         const raw: ValorantMap[] = j.data ?? [];
         setMaps(raw.filter(m => m.splash && m.displayIcon).slice(0, 6).map(m => ({
           slug: m.displayName.toLowerCase().replace(/\s+/g, "-"),
-          name: m.displayName.toUpperCase(),
+          name: m.displayName,
           location: m.coordinates ?? undefined,
           splashUrl: m.splash || m.listViewIcon,
           lore: m.narrativeDescription ?? undefined,
@@ -140,14 +128,14 @@ export function HomepageClient() {
 
   const handleWishlist = async (title: string, type: "skin"|"bundle") => {
     if (!user) {
-      toast.info("Sign in to save items", { action: { label: "Sign In", onClick: signInWithDiscord }, className: "font-mono rounded-none" });
+      toast.info("Sign in to save items", { action: { label: "Sign In", onClick: signInWithDiscord } });
       return;
     }
-    if (wishlistItems.some(w => w.title === title)) { toast.info(`Already wishlisted`, { className: "font-mono rounded-none" }); return; }
+    if (wishlistItems.some(w => w.title === title)) { toast.info(`Already saved to wishlist`); return; }
     try {
       await addWishlistItem({ title, category: type });
-      toast.success(`Added "${title}" to wishlist`, { className: "font-mono rounded-none border-primary/40" });
-    } catch { toast.error("Could not add", { className: "font-mono rounded-none" }); }
+      toast.success(`Added "${title}" to your wishlist`);
+    } catch { toast.error("Could not save item"); }
   };
 
   const mapCards = maps.length > 0 ? maps : valorantDb.maps.slice(0, 6).map(m => ({
@@ -161,9 +149,9 @@ export function HomepageClient() {
       <div className="min-h-screen bg-background text-foreground">
 
         {/* ═══════════════════════════════════════════
-            1. STREAMLINED HERO (3-SECOND HIERARCHY)
+            1. EDITORIAL HERO (CLEAN WEBSITE HIERARCHY)
         ═══════════════════════════════════════════ */}
-        <section ref={heroRef} className="relative min-h-[86vh] w-full overflow-hidden border-b border-border bg-background">
+        <section ref={heroRef} className="relative min-h-[72vh] w-full overflow-hidden border-b border-border bg-background flex items-center">
           {/* Subtle Agent Backdrop with smooth vignette */}
           <motion.div style={{ y: heroY }} className="absolute inset-0 z-0 pointer-events-none">
             <Image
@@ -173,203 +161,78 @@ export function HomepageClient() {
               priority
               fetchPriority="high"
               sizes="(max-width: 1024px) 100vw, 1200px"
-              className="object-cover object-top opacity-35 transition-opacity duration-700"
+              className="object-cover object-top opacity-20 dark:opacity-25 transition-opacity duration-700"
             />
             <motion.div
               style={{ opacity: overlay }}
-              className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30"
+              className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
           </motion.div>
 
-          {/* Tactical grid background only — removed moving laser & duplicate grids */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[1] bg-tactical-grid opacity-25" />
-
-          {/* Faint technical schematic — desktop only, restrained 5% watermark */}
-          <div aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 z-[1] hidden xl:flex opacity-[0.05]">
-            <svg width="420" height="500" viewBox="0 0 420 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M40 0 L420 0 L420 460 L380 500 L40 500 L0 460 L0 40 Z" stroke="var(--cyan)" strokeWidth="1.5" strokeDasharray="6 6" />
-              <rect x="60" y="60" width="300" height="380" stroke="var(--cyan)" strokeWidth="1" />
-              <line x1="0" y1="160" x2="420" y2="160" stroke="var(--cyan)" strokeWidth="0.75" />
-              <line x1="0" y1="340" x2="420" y2="340" stroke="var(--cyan)" strokeWidth="0.75" />
-              <circle cx="210" cy="250" r="100" stroke="var(--cyan)" strokeWidth="1" strokeDasharray="4 4" />
-            </svg>
-          </div>
-
-          <Container className="relative z-10 flex min-h-[86vh] flex-col justify-center py-16 lg:grid lg:grid-cols-[1.6fr_1fr] lg:items-center lg:gap-14">
-            {/* Left: Core Value Proposition & Search First */}
-            <Reveal className="space-y-6">
-              {/* Tactical Eyebrow */}
-              <div className="flex items-center gap-2.5">
-                <span className="w-2 h-2 bg-primary" aria-hidden="true" />
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan">
-                  VLOPEDIA // TACTICAL ARCHIVE & UTILITY
-                </span>
+          <Container className="relative z-10 py-16 sm:py-24 max-w-4xl text-center flex flex-col items-center">
+            <Reveal className="space-y-6 w-full">
+              {/* Editorial Eyebrow */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-card/80 px-3.5 py-1 text-xs font-sans font-medium text-secondary shadow-xs backdrop-blur-xs">
+                <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
+                <span>VALORANT Community Wiki & Database</span>
               </div>
 
-              {/* Authoritative Title: What is VloPedia? */}
-              <div className="space-y-1">
-                <h1 className="font-display font-black text-5xl uppercase leading-none tracking-tighter text-foreground sm:text-6xl lg:text-7xl">
-                  VLOPEDIA
+              {/* Main Headline */}
+              <div className="space-y-2">
+                <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-8xl tracking-tight text-foreground">
+                  VloPedia
                 </h1>
-                <p className="font-display font-bold text-lg sm:text-xl lg:text-2xl tracking-tight text-secondary uppercase">
-                  VALORANT Database + Tools + Lore
+                <p className="font-sans text-xl sm:text-2xl text-secondary max-w-2xl mx-auto font-normal">
+                  Everything you need to know about VALORANT.
                 </p>
               </div>
 
-              {/* Prominent Search Interface: What are you looking for? */}
-              <div className="space-y-3 pt-2 max-w-2xl">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs uppercase tracking-wider text-secondary font-bold flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-cyan animate-pulse" />
-                    What are you looking for?
-                  </span>
-                  <span className="font-mono text-[10px] text-muted hidden sm:inline">
-                    PRESS <strong className="text-foreground">[CTRL+K]</strong> ANYWHERE
-                  </span>
-                </div>
-
+              {/* Search Bar */}
+              <div className="pt-2 max-w-2xl mx-auto w-full">
                 <form
                   onSubmit={goSearch}
                   role="search"
-                  className="relative flex items-center border border-border/90 bg-surface/95 transition-all focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/40 shadow-lg"
+                  className="relative flex items-center rounded-lg border border-border bg-surface-card shadow-sm transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
                 >
-                  <SearchIcon className="ml-3.5 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
+                  <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
                   <input
                     type="search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search agents, weapons, skins, maps, lore (e.g. Jett, Vandal, Ascent)..."
+                    placeholder="Search agents, weapons, skins, maps..."
                     aria-label="Search VloPedia"
-                    className="w-full bg-transparent px-3 py-3 font-sans text-sm text-foreground placeholder:text-muted focus:outline-none"
+                    className="w-full bg-transparent px-3.5 py-3.5 font-sans text-sm sm:text-base text-foreground placeholder:text-muted focus:outline-none"
                   />
                   <Button
                     type="submit"
                     variant="primary"
                     size="sm"
-                    className="tactical-control clip-diagonal-sm shrink-0 mr-1.5 font-mono text-xs uppercase"
+                    className="shrink-0 mr-2 rounded-md font-sans text-sm font-medium"
                   >
                     Search
                   </Button>
                 </form>
 
-                {/* Tactical Search Suggestion Pills */}
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs text-secondary" aria-label="Suggested search queries">
-                  <span className="text-[10px] uppercase text-muted tracking-wider mr-1">Suggestions:</span>
+                {/* Direct Category Chips */}
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-4 font-sans text-xs">
                   {[
-                    { label: "Aemondir Vandal", href: "/skins/aemondir-vandal" },
-                    { label: "Jett", href: "/agents/jett" },
-                    { label: "Omen lore", href: "/lore/the-first-radiants" },
-                    { label: "Best agent on Ascent", href: "/guides/best-agents-for-ascent" },
-                    { label: "Vandal vs Phantom", href: "/compare/weapons/vandal-vs-phantom" },
-                  ].map((sug) => (
+                    { label: "Agents", href: "/agents" },
+                    { label: "Weapons", href: "/weapons" },
+                    { label: "Maps", href: "/maps" },
+                    { label: "Skins", href: "/skins" },
+                    { label: "Bundles", href: "/bundles" },
+                    { label: "Comp Builder", href: "/comp-builder" },
+                    { label: "Guides", href: "/guides" },
+                    { label: "Lore", href: "/lore" },
+                  ].map((cat) => (
                     <Link
-                      key={sug.label}
-                      href={sug.href}
-                      className="border border-border/70 bg-surface/60 px-2.5 py-0.5 text-[11px] text-secondary transition-colors hover:border-primary/50 hover:text-foreground hover:bg-surface"
+                      key={cat.href}
+                      href={cat.href}
+                      className="rounded-md border border-border bg-surface-card/60 px-3 py-1 text-secondary hover:text-foreground hover:border-border-light hover:bg-surface-elevated transition-colors shadow-2xs font-medium"
                     >
-                      {sug.label}
+                      {cat.label}
                     </Link>
                   ))}
-                </div>
-
-                {/* Direct Taxonomy Chips */}
-                <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs text-secondary pt-0.5" aria-label="Quick directory links">
-                  <span className="text-[10px] uppercase text-muted tracking-wider mr-1">Direct:</span>
-                  {TAXONOMY_LINKS.map((chip) => (
-                    <Link
-                      key={chip.href}
-                      href={chip.href}
-                      className="border border-border/50 bg-surface/40 px-2 py-0.5 text-[10px] text-muted transition-colors hover:border-border hover:text-foreground hover:bg-surface"
-                    >
-                      {chip.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* Clear Action Hierarchy: Primary vs Secondary */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link href="/agents">
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    className="clip-diagonal-sm group gap-2 font-mono text-xs uppercase font-bold"
-                  >
-                    Explore Database
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                  </Button>
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const e = new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true });
-                    window.dispatchEvent(e);
-                  }}
-                  className="h-11 border border-border/80 bg-surface/60 px-5 font-mono text-xs uppercase text-secondary hover:border-border hover:bg-surface hover:text-foreground transition-colors cursor-pointer"
-                >
-                  Quick Search [Ctrl+K]
-                </button>
-              </div>
-            </Reveal>
-
-            {/* Right: Secondary Tactical Telemetry Deck (Flat Rows, No Box-in-Box) */}
-            <Reveal className="mt-8 hidden lg:flex lg:mt-0">
-              <div className="relative w-full border border-border/80 bg-[#080F14]/90 backdrop-blur-md p-5 space-y-4 shadow-xl">
-                <div className="flex items-center justify-between border-b border-border/70 pb-3">
-                  <div>
-                    <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-cyan">
-                      TELEMETRY DECK
-                    </span>
-                    <p className="font-display font-black text-xs uppercase text-foreground">
-                      Live Tactical Briefing
-                    </p>
-                  </div>
-                  <span className="font-mono text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5">
-                    ● SYNCED
-                  </span>
-                </div>
-
-                {/* Flat information blocks */}
-                <div className="space-y-2.5 text-xs font-mono">
-                  <div className="flex items-center justify-between border-b border-border/40 pb-2">
-                    <span className="text-muted text-[10px] uppercase">LATEST PATCH</span>
-                    <Link href="/patch-notes" className="font-bold text-primary hover:underline flex items-center gap-1">
-                      Patch 9.04 Live →
-                    </Link>
-                  </div>
-                  <div className="flex items-center justify-between border-b border-border/40 pb-2">
-                    <span className="text-muted text-[10px] uppercase">ACTIVE META COMP</span>
-                    <Link href="/comp-builder?map=ascent&agents=jett,omen,sova,killjoy,kayo" className="font-bold text-emerald-400 hover:underline flex items-center gap-1">
-                      Ascent S-Tier (88/100) →
-                    </Link>
-                  </div>
-                  <div className="flex items-center justify-between border-b border-border/40 pb-2">
-                    <span className="text-muted text-[10px] uppercase">SKIN CATALOG</span>
-                    <Link href="/skins" className="font-bold text-cyan hover:underline flex items-center gap-1">
-                      1,400+ Skins & Chromas →
-                    </Link>
-                  </div>
-                  <div className="flex items-center justify-between pt-0.5">
-                    <span className="text-muted text-[10px] uppercase">PRO CALCULATORS</span>
-                    <Link href="/sensitivity" className="text-secondary hover:text-foreground hover:underline text-[11px]">
-                      Sens Converter & eDPI →
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Contextual tool cards */}
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-border/50">
-                  <Link href="/comp-builder" className="block">
-                    <Button variant="secondary" size="sm" className="w-full font-mono text-[10px] uppercase">
-                      Comp Builder
-                    </Button>
-                  </Link>
-                  <Link href="/sensitivity" className="block">
-                    <Button variant="outline" size="sm" className="w-full border-border/80 font-mono text-[10px] uppercase text-secondary hover:text-foreground">
-                      Sens Calc
-                    </Button>
-                  </Link>
                 </div>
               </div>
             </Reveal>
@@ -377,21 +240,217 @@ export function HomepageClient() {
         </section>
 
         {/* ═══════════════════════════════════════════
-            2. EDITORIAL MOMENT 01: FIELD INTEL (HOVER TO REVEAL)
+            2. FEATURED SHOWCASE & LATEST UPDATES
         ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-[#080F14] py-20">
+        <section className="border-b border-border bg-background py-16">
+          <Container>
+            <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] items-stretch">
+              {/* Featured Item */}
+              <div className="flex flex-col justify-between rounded-lg border border-border bg-surface-card p-6 sm:p-8 shadow-xs">
+                <div>
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-border">
+                    <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
+                      Featured Skin
+                    </span>
+                    <span className="font-mono text-xs text-muted">Daily Spotlight</span>
+                  </div>
+
+                  {randomSkin ? (
+                    <div className="space-y-4">
+                      <div className="relative aspect-[16/10] w-full rounded-md border border-border/70 bg-surface-muted flex items-center justify-center overflow-hidden p-6">
+                        {randomSkin.displayIcon && (
+                          <Image
+                            src={randomSkin.displayIcon}
+                            alt={randomSkin.displayName}
+                            fill
+                            sizes="(max-width: 1024px) 100vw, 500px"
+                            className="object-contain p-4 transition-transform duration-500 hover:scale-105"
+                          />
+                        )}
+                      </div>
+                      <div className="space-y-1.5 pt-2">
+                        <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-foreground">
+                          {randomSkin.displayName}
+                        </h3>
+                        <p className="font-sans text-xs text-secondary leading-relaxed line-clamp-2">
+                          Explore full upgrade animations, custom sound effects, and chroma colorways for the {randomSkin.displayName}.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-12 text-center text-muted">Loading featured skin...</div>
+                  )}
+                </div>
+
+                {randomSkin && (
+                  <div className="pt-6 mt-6 border-t border-border flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-baseline gap-1 font-mono">
+                      <span className="text-xl font-bold text-foreground">
+                        {(CONTENT_TIER_MAP[randomSkin.contentTierUuid ?? ""] || DEFAULT_TIER).price.toLocaleString()}
+                      </span>
+                      <span className="text-xs text-primary font-semibold">VP</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleWishlist(randomSkin.displayName, "skin")}
+                        className="gap-1.5 text-xs"
+                      >
+                        <Heart className="h-3.5 w-3.5" /> Save
+                      </Button>
+                      <Link href={`/skins/${slugify(randomSkin.displayName) || randomSkin.uuid}`}>
+                        <Button variant="primary" size="sm" className="gap-1 text-xs">
+                          Inspect Skin <ArrowRight className="h-3.5 w-3.5" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Latest Updates & News List */}
+              <div className="flex flex-col justify-between rounded-lg border border-border bg-surface-card p-6 sm:p-8 shadow-xs">
+                <div>
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-border">
+                    <span className="font-sans text-xs font-semibold uppercase tracking-wider text-secondary">
+                      Latest Updates
+                    </span>
+                    <Link href="/patch-notes" className="font-sans text-xs text-primary hover:underline">
+                      All patch notes →
+                    </Link>
+                  </div>
+
+                  <div className="divide-y divide-border/60">
+                    {/* Patch Note Item */}
+                    {latestPatch && (
+                      <div className="py-3.5 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="rounded bg-primary/10 border border-primary/20 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
+                            Patch {latestPatch.version}
+                          </span>
+                          <span className="font-mono text-[10px] text-muted">{latestPatch.date}</span>
+                        </div>
+                        <Link
+                          href={`/patch-notes/${latestPatch.slug}`}
+                          className="font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors block"
+                        >
+                          Competitive Balance & Agent Adjustments
+                        </Link>
+                        <p className="font-sans text-xs text-secondary line-clamp-2">
+                          {latestPatch.buffs.length} buffs and {latestPatch.nerfs.length} nerfs active in the current tournament pool.
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Meta Update Item */}
+                    <div className="py-3.5 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="rounded bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-400">
+                          Meta
+                        </span>
+                        <span className="font-mono text-[10px] text-muted">Ascent Pool</span>
+                      </div>
+                      <Link
+                        href="/comp-builder?map=ascent&agents=jett,omen,sova,killjoy,kayo"
+                        className="font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors block"
+                      >
+                        Ascent S-Tier Standard Composition
+                      </Link>
+                      <p className="font-sans text-xs text-secondary">
+                        Jett, Omen, Sova, Killjoy, and KAY/O maintain an 88/100 team synergy index.
+                      </p>
+                    </div>
+
+                    {/* Skin Catalog Item */}
+                    <div className="py-3.5 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="rounded bg-surface-muted border border-border px-1.5 py-0.5 font-mono text-[10px] font-semibold text-secondary">
+                          Database
+                        </span>
+                        <span className="font-mono text-[10px] text-muted">Cosmetics</span>
+                      </div>
+                      <Link
+                        href="/skins"
+                        className="font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors block"
+                      >
+                        1,400+ Skins & Chroma Variants Cataloged
+                      </Link>
+                      <p className="font-sans text-xs text-secondary">
+                        Browse tier prices, in-game audio previews, and inspection videos.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-border flex items-center justify-between">
+                  <Link href="/guides" className="text-xs font-semibold text-secondary hover:text-foreground">
+                    Browse Guides & Tutorials →
+                  </Link>
+                  <Link href="/sensitivity" className="text-xs font-semibold text-secondary hover:text-foreground">
+                    Sens Converter →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            3. EXPLORE VLOPEDIA (EDITORIAL DIRECTORY)
+        ═══════════════════════════════════════════ */}
+        <section className="border-b border-border bg-background py-16">
+          <Container>
+            <div className="mb-8 flex items-end justify-between gap-4">
+              <div>
+                <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-foreground">
+                  Explore VloPedia
+                </h2>
+                <p className="font-sans text-xs sm:text-sm text-secondary mt-1">
+                  Comprehensive databases, game mechanics, and competitive tools.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {DIRECTORY_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group rounded-lg border border-border bg-surface-card p-5 hover:border-border-light hover:shadow-md transition-all flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-display font-bold text-lg text-foreground group-hover:text-primary transition-colors">
+                        {item.title}
+                      </h3>
+                      <ArrowRight className="h-4 w-4 text-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    </div>
+                    <p className="font-sans text-xs text-secondary leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <span className="font-mono text-[10px] text-muted pt-4 block font-medium">
+                    {item.count}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </Container>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            4. AGENTS DOMINATING THIS PATCH
+        ═══════════════════════════════════════════ */}
+        <section className="border-b border-border bg-background py-16">
           <Container>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] font-bold text-muted tracking-widest">01 //</span>
-                  <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan">
-                    FIELD INTEL
-                  </span>
-                </div>
+                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
+                  Agent Meta
+                </span>
                 <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground">
-                  The Agents Dominating This Patch
+                  Agents Dominating This Patch
                 </h2>
                 <p className="font-sans text-sm text-secondary max-w-xl">
                   Inspect competitive efficiency, entry aggression, and map mastery ratings before queuing.
@@ -400,13 +459,12 @@ export function HomepageClient() {
 
               <Link
                 href="/agents"
-                className="font-mono text-xs font-bold uppercase tracking-wider text-primary hover:text-foreground transition-colors flex items-center gap-1 shrink-0"
+                className="font-sans text-xs font-semibold text-primary hover:underline transition-colors flex items-center gap-1 shrink-0"
               >
-                View all 26 operatives →
+                View all agents →
               </Link>
             </div>
 
-            {/* Tactical Grid with Hover-Reveal Info Behavior */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {META_AGENTS.map((agent) => {
                 const isSelected = selectedMetaAgent.slug === agent.slug;
@@ -414,10 +472,10 @@ export function HomepageClient() {
                   <div
                     key={agent.slug}
                     onMouseEnter={() => setSelectedMetaAgent(agent)}
-                    className={`group relative border bg-[#0D1A22] p-5 transition-all duration-200 cursor-pointer ${
+                    className={`group relative rounded-lg border bg-surface-card p-5 transition-all duration-200 cursor-pointer ${
                       isSelected
-                        ? "border-primary shadow-[0_0_16px_rgba(var(--primary-rgb),0.15)]"
-                        : "border-border hover:border-border-light hover:bg-[#10202A]"
+                        ? "border-primary shadow-sm"
+                        : "border-border hover:border-border-light hover:bg-surface-elevated"
                     }`}
                   >
                     {/* Top Identity Header */}
@@ -430,20 +488,19 @@ export function HomepageClient() {
                           {agent.role}
                         </span>
                       </div>
-                      <div className="h-6 w-6 border border-border/80 bg-surface flex items-center justify-center font-mono text-[10px] font-bold text-secondary">
+                      <div className="h-6 w-6 rounded border border-border bg-surface flex items-center justify-center font-mono text-[10px] font-bold text-secondary">
                         {agent.name.slice(0, 2).toUpperCase()}
                       </div>
                     </div>
 
-                    {/* Flat Divider Line */}
                     <div className="my-3.5 h-px w-full bg-border/60" />
 
-                    {/* Hover-revealed Tactical Metrics */}
+                    {/* Stats Metrics */}
                     <div className="space-y-2 font-mono text-xs">
                       <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-muted uppercase">ENTRY</span>
+                        <span className="text-muted">Entry</span>
                         <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 bg-white/10 overflow-hidden">
+                          <div className="w-16 h-1.5 rounded-full bg-border overflow-hidden">
                             <div className="h-full bg-primary" style={{ width: `${agent.entry}%` }} />
                           </div>
                           <span className="font-bold text-foreground w-6 text-right">{agent.entry}</span>
@@ -451,19 +508,19 @@ export function HomepageClient() {
                       </div>
 
                       <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-muted uppercase">MOBILITY</span>
+                        <span className="text-muted">Mobility</span>
                         <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 bg-white/10 overflow-hidden">
-                            <div className="h-full bg-cyan" style={{ width: `${agent.mobility}%` }} />
+                          <div className="w-16 h-1.5 rounded-full bg-border overflow-hidden">
+                            <div className="h-full bg-secondary" style={{ width: `${agent.mobility}%` }} />
                           </div>
                           <span className="font-bold text-foreground w-6 text-right">{agent.mobility}</span>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-muted uppercase">INFO</span>
+                        <span className="text-muted">Info</span>
                         <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 bg-white/10 overflow-hidden">
+                          <div className="w-16 h-1.5 rounded-full bg-border overflow-hidden">
                             <div className="h-full bg-amber-400" style={{ width: `${agent.info}%` }} />
                           </div>
                           <span className="font-bold text-foreground w-6 text-right">{agent.info}</span>
@@ -473,22 +530,21 @@ export function HomepageClient() {
 
                     {/* Best Maps List */}
                     <div className="mt-4 pt-3 border-t border-border/40 font-mono text-[10px]">
-                      <span className="text-muted uppercase tracking-wider block mb-1">BEST MAPS:</span>
+                      <span className="text-muted uppercase tracking-wider block mb-1">Best Maps:</span>
                       <div className="flex flex-wrap gap-1">
                         {agent.bestMaps.map((map) => (
-                          <span key={map} className="border border-border bg-surface/80 px-1.5 py-0.5 text-secondary">
+                          <span key={map} className="rounded border border-border bg-surface px-1.5 py-0.5 text-secondary">
                             {map}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    {/* Dossier Link */}
                     <Link
                       href={`/agents/${agent.slug}`}
-                      className="mt-4 flex items-center justify-between border border-border/60 bg-surface/50 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-secondary group-hover:border-primary/60 group-hover:text-primary transition-colors"
+                      className="mt-4 flex items-center justify-between rounded border border-border bg-surface-muted px-3 py-1.5 font-sans text-xs font-medium text-secondary group-hover:border-primary/60 group-hover:text-primary transition-colors"
                     >
-                      <span>Open Dossier</span>
+                      <span>View Agent Profile</span>
                       <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </div>
@@ -499,59 +555,54 @@ export function HomepageClient() {
         </section>
 
         {/* ═══════════════════════════════════════════
-            3. EDITORIAL MOMENT 02: ARMORY (RIFLE META)
+            5. RIFLE BALLISTICS (VANDAL VS PHANTOM)
         ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-[#0B141A] py-20">
+        <section className="border-b border-border bg-background py-16">
           <Container>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] font-bold text-muted tracking-widest">02 //</span>
-                  <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan">
-                    ARMORY METRICS
-                  </span>
-                </div>
+                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
+                  Weapons
+                </span>
                 <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground">
                   The Rifles Defining The Current Meta
                 </h2>
                 <p className="font-sans text-sm text-secondary max-w-xl">
-                  Head-to-head ballistic specs for competitive decision-making. Flat telemetry without excessive decoration.
+                  Head-to-head ballistic specs for competitive decision-making.
                 </p>
               </div>
 
               <Link
                 href="/compare"
-                className="font-mono text-xs font-bold uppercase tracking-wider text-primary hover:text-foreground transition-colors flex items-center gap-1 shrink-0"
+                className="font-sans text-xs font-semibold text-primary hover:underline transition-colors flex items-center gap-1 shrink-0"
               >
-                Open Full Arsenal Compare →
+                Compare all weapons →
               </Link>
             </div>
 
-            {/* Asymmetric 70/30 Armory Peek */}
             <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
               {/* Head to Head Rifles Table */}
-              <div className="border border-border bg-[#0D1A22] p-6">
-                <div className="flex items-center justify-between border-b border-border/70 pb-3 mb-4">
-                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-secondary">
-                    Ballistic Telemetry (Patch 9.04)
+              <div className="rounded-lg border border-border bg-surface-card p-6 shadow-xs">
+                <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
+                  <span className="font-sans text-sm font-semibold text-foreground">
+                    Ballistic Comparison (Patch 9.04)
                   </span>
-                  <span className="font-mono text-[10px] text-cyan">RIFLE CLASSIFICATION</span>
+                  <span className="font-mono text-xs text-muted">Primary Rifles</span>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-left font-mono text-xs">
                     <thead>
-                      <tr className="border-b border-border/50 text-muted text-[10px] uppercase">
-                        <th className="py-2 pr-4">Specification</th>
-                        <th className="py-2 px-4 text-primary font-bold">VANDAL</th>
-                        <th className="py-2 px-4 text-cyan font-bold">PHANTOM</th>
-                        <th className="py-2 pl-4 text-right">Advantage</th>
+                      <tr className="border-b border-border text-muted text-[10px] uppercase">
+                        <th className="py-2 pr-4 font-semibold">Specification</th>
+                        <th className="py-2 px-4 text-primary font-bold">Vandal</th>
+                        <th className="py-2 px-4 text-foreground font-bold">Phantom</th>
+                        <th className="py-2 pl-4 text-right font-semibold">Advantage</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/30">
                       <tr>
-                        <td className="py-2.5 pr-4 text-secondary">Headshot Lethality</td>
+                        <td className="py-2.5 pr-4 text-secondary">Headshot Damage</td>
                         <td className="py-2.5 px-4 font-bold text-foreground">160 (All ranges)</td>
                         <td className="py-2.5 px-4 text-secondary">156 (0-15m) / 140 (15-30m)</td>
                         <td className="py-2.5 pl-4 text-right text-primary font-bold">Vandal (1-tap always)</td>
@@ -560,19 +611,19 @@ export function HomepageClient() {
                         <td className="py-2.5 pr-4 text-secondary">Fire Rate</td>
                         <td className="py-2.5 px-4 text-secondary">9.75 rds/sec</td>
                         <td className="py-2.5 px-4 font-bold text-foreground">11.0 rds/sec</td>
-                        <td className="py-2.5 pl-4 text-right text-cyan font-bold">Phantom (+12.8%)</td>
+                        <td className="py-2.5 pl-4 text-right text-foreground font-bold">Phantom (+12.8%)</td>
                       </tr>
                       <tr>
                         <td className="py-2.5 pr-4 text-secondary">Magazine Capacity</td>
                         <td className="py-2.5 px-4 text-secondary">25 rounds</td>
                         <td className="py-2.5 px-4 font-bold text-foreground">30 rounds</td>
-                        <td className="py-2.5 pl-4 text-right text-cyan font-bold">Phantom (+5 rds)</td>
+                        <td className="py-2.5 pl-4 text-right text-foreground font-bold">Phantom (+5 rds)</td>
                       </tr>
                       <tr>
                         <td className="py-2.5 pr-4 text-secondary">First-Bullet Spread</td>
                         <td className="py-2.5 px-4 text-secondary">0.25 deg</td>
                         <td className="py-2.5 px-4 font-bold text-foreground">0.20 deg</td>
-                        <td className="py-2.5 pl-4 text-right text-cyan font-bold">Phantom (Tighter)</td>
+                        <td className="py-2.5 pl-4 text-right text-foreground font-bold">Phantom (Tighter)</td>
                       </tr>
                       <tr>
                         <td className="py-2.5 pr-4 text-secondary">Tracer Suppression</td>
@@ -584,29 +635,29 @@ export function HomepageClient() {
                   </table>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-                  <span className="text-muted text-[11px]">VERDICT: Vandal dominates long duels; Phantom dominates close trades & controller smokes.</span>
+                <div className="mt-5 pt-3 border-t border-border flex flex-wrap items-center justify-between gap-3 text-xs">
+                  <span className="text-secondary text-xs">Summary: Vandal dominates long duels; Phantom dominates close trades & controller smokes.</span>
                   <Link href="/compare?w1=vandal&w2=phantom">
-                    <Button variant="outline" size="sm" className="border-border hover:border-primary">
+                    <Button variant="outline" size="sm" className="rounded-md text-xs">
                       Full Comparison Matrix →
                     </Button>
                   </Link>
                 </div>
               </div>
 
-              {/* Quick Loadout Insight Panel */}
-              <div className="border border-border bg-[#080F14] p-5 flex flex-col justify-between space-y-4">
+              {/* Economy Insight Panel */}
+              <div className="rounded-lg border border-border bg-surface-card p-6 flex flex-col justify-between space-y-4 shadow-xs">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <Crosshair className="h-4 w-4 text-primary" />
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-foreground">
-                      Pro Buy Economics
+                    <span className="font-sans text-sm font-bold text-foreground">
+                      Buy Economics
                     </span>
                   </div>
                   <p className="font-sans text-xs text-secondary leading-relaxed">
                     Both rifles cost exactly 2,900 Creds. Full buy threshold is 3,900 Creds (with Heavy Shields) or 4,300 Creds with signature utility.
                   </p>
-                  <div className="space-y-2 pt-1 font-mono text-[11px]">
+                  <div className="space-y-2 pt-1 font-mono text-xs">
                     <div className="flex justify-between border-b border-border/40 pb-1.5">
                       <span className="text-muted">Full Buy Target:</span>
                       <span className="text-foreground font-bold">3,900 Creds</span>
@@ -623,8 +674,8 @@ export function HomepageClient() {
                 </div>
 
                 <Link href="/economy" className="w-full">
-                  <Button variant="secondary" size="sm" className="w-full font-mono text-[10px] uppercase">
-                    Open Economy Playbook
+                  <Button variant="secondary" size="sm" className="w-full rounded-md font-sans text-xs">
+                    View Economy Guide
                   </Button>
                 </Link>
               </div>
@@ -633,256 +684,21 @@ export function HomepageClient() {
         </section>
 
         {/* ═══════════════════════════════════════════
-            4. EDITORIAL MOMENT 03: ARCHIVE (LORE & STORY)
+            6. MAPS OF VALORANT
         ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-[#080F14] py-20">
-          <Container>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] font-bold text-muted tracking-widest">03 //</span>
-                  <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan">
-                    PROTOCOL ARCHIVE
-                  </span>
-                </div>
-                <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground">
-                  The Story Behind The Protocol
-                </h2>
-                <p className="font-sans text-sm text-secondary max-w-xl">
-                  Chronological records, confirmed timeline milestones, and canon evidence from Earth-1 and Omega.
-                </p>
-              </div>
-
-              <Link
-                href="/lore"
-                className="font-mono text-xs font-bold uppercase tracking-wider text-primary hover:text-foreground transition-colors flex items-center gap-1 shrink-0"
-              >
-                Explore Lore Timeline →
-              </Link>
-            </div>
-
-            {/* Flat Timeline Information Blocks */}
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="border border-border bg-[#0D1A22] p-5 space-y-3">
-                <span className="font-mono text-[10px] font-black uppercase tracking-widest text-primary">
-                  ERA 01 // 2039
-                </span>
-                <h3 className="font-display font-black text-xl uppercase tracking-tight text-foreground">
-                  First Light Cataclysm
-                </h3>
-                <p className="font-sans text-xs text-secondary leading-relaxed">
-                  A mysterious global luminous phenomenon introduces Radianite to Earth. Worldwide blackout ensues; select humans develop radiant biological abilities.
-                </p>
-                <div className="pt-2 border-t border-border/40">
-                  <Link href="/lore/first-light" className="font-mono text-[10px] text-cyan hover:underline flex items-center gap-1">
-                    First Light Dossier →
-                  </Link>
-                </div>
-              </div>
-
-              <div className="border border-border bg-[#0D1A22] p-5 space-y-3">
-                <span className="font-mono text-[10px] font-black uppercase tracking-widest text-amber-400">
-                  ERA 02 // 2043
-                </span>
-                <h3 className="font-display font-black text-xl uppercase tracking-tight text-foreground">
-                  Kingdom Corporation Monopoly
-                </h3>
-                <p className="font-sans text-xs text-secondary leading-relaxed">
-                  A multi-trillion dollar mega-conglomerate seizes 75% of planetary Radianite refining rights. Secret laboratories, K-SEC private military, and extraction spikes emerge.
-                </p>
-                <div className="pt-2 border-t border-border/40">
-                  <Link href="/lore/kingdom" className="font-mono text-[10px] text-cyan hover:underline flex items-center gap-1">
-                    Kingdom Corp Dossier →
-                  </Link>
-                </div>
-              </div>
-
-              <div className="border border-border bg-[#0D1A22] p-5 space-y-3">
-                <span className="font-mono text-[10px] font-black uppercase tracking-widest text-emerald-400">
-                  ERA 03 // 2050+
-                </span>
-                <h3 className="font-display font-black text-xl uppercase tracking-tight text-foreground">
-                  Omega Earth Infiltration
-                </h3>
-                <p className="font-sans text-xs text-secondary leading-relaxed">
-                  Mirror operatives from Earth-2 invade Earth-1 to siphon Radianite reserves to save their dying atmosphere. The VALORANT Protocol is founded to defend the home world.
-                </p>
-                <div className="pt-2 border-t border-border/40">
-                  <Link href="/lore" className="font-mono text-[10px] text-cyan hover:underline flex items-center gap-1">
-                    Omega Conflict Records →
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            5. COSMETIC SPOTLIGHT (SKIN OF THE DAY)
-        ═══════════════════════════════════════════ */}
-        {randomSkin && (
-          <section className="border-b border-border bg-[#0B141A] py-20">
-            <Container>
-              <div className="mb-8">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] font-bold text-muted tracking-widest">04 //</span>
-                  <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan">
-                    ARSENAL SPOTLIGHT
-                  </span>
-                </div>
-                <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground mt-1">
-                  Skin of the Day
-                </h2>
-              </div>
-
-              <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-                {/* Details */}
-                <div className="space-y-6">
-                  <h3 className="font-display font-black text-4xl uppercase tracking-tighter text-foreground">
-                    {randomSkin.displayName}
-                  </h3>
-                  <p className="max-w-xl font-sans text-sm leading-relaxed text-secondary">
-                    Browse upgrade paths, custom variants, and inspect high-definition reloading and execution videos for this tactical cosmetic.
-                  </p>
-                  
-                  {/* Price & Rarity */}
-                  {(() => {
-                    const tier = CONTENT_TIER_MAP[randomSkin.contentTierUuid ?? ""] || DEFAULT_TIER;
-                    return (
-                      <div className="flex flex-wrap items-center gap-4">
-                        <div className="flex items-center gap-2 border border-border bg-surface px-3 py-1.5">
-                          <Image src={tier.iconUrl} alt={tier.rarity} width={16} height={16} className="object-contain" />
-                          <span className="font-mono text-xs font-black uppercase tracking-wider" style={{ color: tier.color }}>
-                            {tier.rarity} TIER
-                          </span>
-                        </div>
-                        <div className="flex items-baseline gap-1.5 font-mono">
-                          <span className="text-2xl font-black text-foreground">{tier.price.toLocaleString()}</span>
-                          <span className="text-xs text-primary font-bold">VP</span>
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  <div className="flex flex-wrap gap-3">
-                    <Button
-                      variant="primary"
-                      className="clip-diagonal-sm gap-2"
-                      onClick={() => handleWishlist(randomSkin.displayName, "skin")}
-                    >
-                      <Heart className="h-4 w-4" aria-hidden="true" /> Add to Wishlist
-                    </Button>
-                    <Link href={`/skins/${slugify(randomSkin.displayName) || randomSkin.uuid}`}>
-                      <Button variant="outline" className="clip-diagonal-sm border-border group gap-2 text-secondary hover:text-foreground">
-                        Inspect Skin <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Visual */}
-                <div className="relative overflow-hidden border border-border bg-[#0D1A22] flex items-center justify-center p-8" style={{ aspectRatio: "16/10" }}>
-                  <div aria-hidden="true" className="absolute left-0 top-0 z-10 h-[2px] w-12 bg-primary" />
-                  {randomSkin.displayIcon && (
-                    <Image
-                      src={randomSkin.displayIcon}
-                      alt={randomSkin.displayName}
-                      fill
-                      sizes="(max-width:1024px) 100vw, 45vw"
-                      className="object-contain p-8 transition-transform duration-500 hover:scale-[1.03]"
-                    />
-                  )}
-                </div>
-              </div>
-            </Container>
-          </section>
-        )}
-
-        {/* ═══════════════════════════════════════════
-            6. LATEST PATCH TELEMETRY
-        ═══════════════════════════════════════════ */}
-        {latestPatch && (
-          <section className="border-b border-border bg-[#080F14] py-20">
-            <Container>
-              <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] font-bold text-muted tracking-widest">05 //</span>
-                    <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
-                    <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan">
-                      BALANCE TELEMETRY
-                    </span>
-                  </div>
-                  <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground mt-1">
-                    Patch {latestPatch.version}
-                  </h2>
-                </div>
-
-                <div className="flex items-center gap-1.5 border border-success/30 bg-success/5 px-2.5 py-1 font-mono text-[9px] font-black uppercase tracking-wider text-success">
-                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                  DATABASE SYNCED: {latestPatch.date}
-                </div>
-              </div>
-
-              <div className="grid gap-6 lg:grid-cols-2">
-                <div className="space-y-3">
-                  <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-success flex items-center gap-2">
-                    <span>AGENT & WEAPON BUFFS</span>
-                  </h3>
-                  {latestPatch.buffs.map((b: any, i: number) => (
-                    <div key={`buff-${i}`} className="border border-success/20 bg-success/[0.03] p-4">
-                      <div className="font-mono text-[9px] font-black uppercase tracking-widest text-success">BUFF</div>
-                      <p className="mt-1 font-sans text-sm text-foreground"><span className="font-bold">{b.subject}:</span> {b.detail}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="space-y-3">
-                  <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-2">
-                    <span>AGENT & WEAPON NERFS</span>
-                  </h3>
-                  {latestPatch.nerfs.map((n: any, i: number) => (
-                    <div key={`nerf-${i}`} className="border border-primary/20 bg-primary/[0.03] p-4">
-                      <div className="font-mono text-[9px] font-black uppercase tracking-widest text-primary">NERF</div>
-                      <p className="mt-1 font-sans text-sm text-foreground"><span className="font-bold">{n.subject}:</span> {n.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-border/50">
-                <Link href={`/patch-notes/${latestPatch.slug}`}>
-                  <Button variant="secondary" size="sm" className="group gap-2 font-mono text-xs uppercase">
-                    Read Full Patch Notes <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </Link>
-              </div>
-            </Container>
-          </section>
-        )}
-
-        {/* ═══════════════════════════════════════════
-            7. TACTICAL MAPS
-        ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-[#0B141A] py-20">
+        <section className="border-b border-border bg-background py-16">
           <Container>
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] font-bold text-muted tracking-widest">06 //</span>
-                  <span className="w-1.5 h-1.5 bg-primary" aria-hidden="true" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan">
-                    TACTICAL GEOGRAPHY
-                  </span>
-                </div>
+                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
+                  Geography
+                </span>
                 <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground mt-1">
                   The Maps
                 </h2>
               </div>
-              <Link href="/maps" className="hidden sm:block font-mono text-xs font-bold uppercase tracking-wider text-primary hover:text-foreground transition-colors">
-                All maps →
+              <Link href="/maps" className="hidden sm:block font-sans text-xs font-semibold text-primary hover:underline transition-colors">
+                View all maps →
               </Link>
             </div>
             <StaggerContainer className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -894,36 +710,36 @@ export function HomepageClient() {
         </section>
 
         {/* ═══════════════════════════════════════════
-            8. CLOSING CTA
+            7. CLOSING COMMUNITY CTA
         ═══════════════════════════════════════════ */}
-        <section className="border-t border-border bg-[#080F14] py-20">
+        <section className="border-t border-border bg-surface-card py-20">
           <Container>
             <div className="mx-auto max-w-2xl text-center space-y-5">
-              <div className="flex items-center justify-center gap-2">
-                <span className="w-2 h-2 bg-primary" aria-hidden="true" />
-                <span className="font-mono text-xs text-primary tracking-[0.25em] uppercase font-bold">SYSTEM_READY</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-secondary shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
+                <span>Your VALORANT Notebook</span>
               </div>
-              <h2 className="font-display font-black text-4xl uppercase tracking-tighter text-foreground sm:text-5xl">
+              <h2 className="font-display font-black text-4xl uppercase tracking-tight text-foreground sm:text-5xl">
                 Make VloPedia Yours.
               </h2>
               <p className="font-sans text-sm leading-relaxed text-secondary">
-                Track collections, save wishlists, and plan every competitive queue. Your progress, remembered.
+                Track collections, save wishlists, and plan every competitive queue.
               </p>
               <div className="flex justify-center gap-3 pt-2">
                 {user ? (
                   <Link href="/dashboard">
-                    <Button variant="primary" size="lg" className="clip-diagonal-sm group gap-2">
-                      Open Dashboard <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                    <Button variant="primary" size="lg" className="rounded-md gap-2 font-sans font-medium text-sm">
+                      Open Dashboard <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   </Link>
                 ) : (
-                  <Button variant="primary" size="lg" className="clip-diagonal-sm" onClick={signInWithDiscord}>
+                  <Button variant="primary" size="lg" className="rounded-md font-sans font-medium text-sm" onClick={signInWithDiscord}>
                     Sign in with Discord
                   </Button>
                 )}
                 <Link href="/agents">
-                  <Button variant="outline" size="lg" className="clip-diagonal-sm border-border text-secondary hover:border-border-light hover:text-foreground">
-                    Browse Database
+                  <Button variant="outline" size="lg" className="rounded-md font-sans font-medium text-sm">
+                    Browse Agents
                   </Button>
                 </Link>
               </div>

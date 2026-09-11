@@ -20,7 +20,7 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
     return (
       <Link
         href={`/weapons/${slug}`}
-        className="group flex items-center gap-4 border border-border bg-surface-card tactical-control clip-diagonal-sm p-3 transition-colors duration-200 hover:border-primary/40 hover:bg-surface"
+        className="group flex items-center gap-4 rounded-md border border-border bg-surface-card p-3 transition-all duration-200 hover:border-primary/40 hover:bg-surface-elevated hover:shadow-xs"
       >
         <div className="relative h-10 w-20 shrink-0">
           <Image
@@ -33,11 +33,11 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
           />
         </div>
         <div className="min-w-0">
-          <p className="truncate font-display text-sm uppercase tracking-wide text-foreground">
+          <p className="truncate font-sans font-semibold text-sm text-foreground">
             {weapon.displayName}
           </p>
           {cost && (
-            <p className="font-mono text-xs text-primary">{cost.toLocaleString()} VP</p>
+            <p className="font-mono text-xs text-primary font-medium">{cost.toLocaleString()} VP</p>
           )}
         </div>
       </Link>
@@ -48,7 +48,7 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
   return (
     <Link
       href={`/weapons/${slug}`}
-      className="group relative block overflow-hidden border border-border bg-surface-card tactical-panel-card clip-diagonal transition-all duration-300 hover:border-primary/50"
+      className="group relative block overflow-hidden rounded-lg border border-border bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-light hover:shadow-md"
     >
       {/* Weapon image — 3:1 ratio */}
       <div className="relative w-full bg-black/40" style={{ aspectRatio: "3/1" }}>

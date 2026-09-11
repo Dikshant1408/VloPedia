@@ -49,10 +49,10 @@ export function WatchClient({ skin, videoAssets }: WatchClientProps) {
           <Button
             variant="secondary"
             size="sm"
-            className="inline-flex items-center gap-2 border border-border/80 hover:border-primary/50 transition-all font-mono text-xs h-8"
+            className="inline-flex items-center gap-2 rounded-md font-sans text-xs"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            BACK TO COSMETIC DOSSIER
+            Back to skin details
           </Button>
         </Link>
         <div className="flex items-center gap-2 text-xs font-mono text-muted">
@@ -219,14 +219,14 @@ export function WatchClient({ skin, videoAssets }: WatchClientProps) {
           </div>
         </div>
 
-        {/* Full Dossier Link */}
+        {/* Full Details Link */}
         <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-border/30">
-          <span className="text-[11px] font-mono text-muted">
-            Looking for complete weapon statistics, 3D model canvases, and wishlist syncing?
+          <span className="text-xs text-secondary">
+            Looking for complete weapon statistics, 3D inspection, and wishlist syncing?
           </span>
           <Link href={`/skins/${canonicalSlug}`}>
-            <Button className="bg-primary hover:bg-primary-soft text-black font-bold font-mono tracking-wider text-xs h-9">
-              OPEN FULL COSMETIC DOSSIER →
+            <Button variant="primary" size="sm" className="rounded-md font-sans text-xs">
+              View full skin details →
             </Button>
           </Link>
         </div>

@@ -37,16 +37,16 @@ export function SkinCard({ skin, onWishlist, className }: SkinCardProps) {
   return (
     <div
       className={[
-        "group relative flex flex-col border border-border bg-surface-card tactical-flat transition-all duration-300 hover:border-primary/40",
+        "group relative flex flex-col rounded-lg overflow-hidden border border-border bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-light hover:shadow-md",
         className ?? "",
       ]
         .filter(Boolean)
         .join(" ")}
-      style={{ borderLeftColor: tier.color, borderLeftWidth: "2px" }}
+      style={{ borderLeftColor: tier.color, borderLeftWidth: "3px" }}
     >
       {/* Skin image */}
       <Link href={`/skins/${slug}`} className="block" tabIndex={0}>
-        <div className="relative w-full bg-black/50" style={{ aspectRatio: "1/1" }}>
+        <div className="relative w-full bg-surface-muted" style={{ aspectRatio: "1/1" }}>
           {displayImage ? (
             <Image
               src={displayImage}
@@ -57,35 +57,35 @@ export function SkinCard({ skin, onWishlist, className }: SkinCardProps) {
               unoptimized
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-muted font-mono text-xs">
-              NO IMAGE
+            <div className="flex h-full w-full items-center justify-center text-muted font-sans text-xs">
+              No image available
             </div>
           )}
         </div>
       </Link>
 
       {/* Info */}
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col justify-between gap-2 p-4">
         <div className="flex items-start justify-between gap-2">
           <Link
             href={`/skins/${slug}`}
-            className="flex-1 font-display text-sm uppercase leading-tight tracking-wide text-foreground hover:text-primary transition-colors"
+            className="flex-1 font-sans font-semibold text-sm leading-tight text-foreground hover:text-primary transition-colors"
           >
             {skin.displayName}
           </Link>
           <ContentTierBadge rarity={tier.rarity} showIcon={false} />
         </div>
 
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-xs font-bold text-primary">
-            {tier.price.toLocaleString()} <span className="text-muted">VP</span>
+        <div className="flex items-center justify-between pt-1">
+          <span className="font-mono text-xs font-bold text-foreground">
+            {tier.price.toLocaleString()} <span className="text-primary text-[10px]">VP</span>
           </span>
           {onWishlist && (
             <button
               type="button"
               onClick={() => onWishlist(skin)}
               aria-label={`Add ${skin.displayName} to wishlist`}
-              className="flex h-7 w-7 items-center justify-center border border-border bg-surface-glass text-muted opacity-0 transition-all duration-200 hover:border-primary hover:text-primary group-hover:opacity-100 focus-visible:opacity-100"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background text-muted opacity-0 transition-all duration-200 hover:border-primary hover:text-primary group-hover:opacity-100 focus-visible:opacity-100 cursor-pointer shadow-xs"
             >
               <Heart className="h-3.5 w-3.5" aria-hidden="true" />
             </button>

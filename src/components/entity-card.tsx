@@ -15,14 +15,14 @@ interface EntityCardProps {
   accentColor?: string;
 }
 
-export function EntityCard({ title, description, href, imageUrl, badge, meta, className, square, accentColor }: EntityCardProps) {
+export function EntityCard({ title, description, href, imageUrl, badge, meta, className, square }: EntityCardProps) {
   return (
-    <Card className={cn("group flex flex-col justify-between overflow-hidden border border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] hover:border-primary/60 transition-colors relative", className)}>
+    <Card className={cn("group flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-surface-card hover:border-border-light hover:shadow-md transition-all relative", className)}>
       {imageUrl ? (
-        <div className={cn("relative w-full overflow-hidden bg-background", square ? "aspect-square" : "h-48")}>
+        <div className={cn("relative w-full overflow-hidden bg-surface-muted", square ? "aspect-square" : "h-48")}>
           <Image src={imageUrl} alt={title} fill sizes="(max-width: 768px) 100vw, 400px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
           {badge ? (
-            <span className="absolute left-3 top-3 border border-primary/30 bg-primary/5 text-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+            <span className="absolute left-3 top-3 rounded-sm border border-border bg-background/90 px-2 py-0.5 text-[10px] font-medium text-foreground tracking-wide">
               {badge}
             </span>
           ) : null}
@@ -30,26 +30,26 @@ export function EntityCard({ title, description, href, imageUrl, badge, meta, cl
       ) : (
         <div className="px-6 pt-6">
           {badge ? (
-            <span className="inline-flex items-center border border-primary/30 bg-primary/5 text-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider mb-3">
+            <span className="inline-flex items-center rounded-sm border border-border bg-background/90 px-2 py-0.5 text-[10px] font-medium text-foreground tracking-wide mb-3">
               {badge}
             </span>
           ) : null}
         </div>
       )}
 
-      <div className="flex flex-1 flex-col justify-between gap-4 p-6">
-        <div className="space-y-2">
-          <h3 className="text-xl font-black text-foreground uppercase leading-tight font-sans tracking-wide group-hover:text-white transition-colors">
+      <div className="flex flex-1 flex-col justify-between gap-4 p-5">
+        <div className="space-y-1.5">
+          <h3 className="text-lg font-bold text-foreground font-sans tracking-tight group-hover:text-primary transition-colors">
             {title}
           </h3>
           {description ? (
-            <p className="text-sm leading-6 text-muted">{description}</p>
+            <p className="text-xs leading-relaxed text-secondary line-clamp-2">{description}</p>
           ) : null}
         </div>
-        <div className="flex items-center justify-between gap-4">
-          {meta ? <span className="text-[11px] text-muted">{meta}</span> : <span />}
-          <Link href={href} className="text-sm font-semibold text-primary transition-colors">
-            Inspect →
+        <div className="flex items-center justify-between gap-4 pt-1 border-t border-border/50">
+          {meta ? <span className="text-[11px] text-muted font-mono">{meta}</span> : <span />}
+          <Link href={href} className="text-xs font-semibold text-primary hover:underline transition-colors">
+            View details →
           </Link>
         </div>
       </div>

@@ -94,7 +94,7 @@ export function WeaponInspectionViewer({
     return (
       <div
         ref={containerRef}
-        className={`relative border border-border bg-[#08111A] overflow-hidden ${className}`}
+        className={`relative rounded-lg border border-border bg-surface-card overflow-hidden ${className}`}
         style={{ aspectRatio }}
       >
         <SceneError
@@ -110,7 +110,7 @@ export function WeaponInspectionViewer({
     return (
       <div
         ref={containerRef}
-        className={`relative border border-border bg-[#08111A] overflow-hidden ${className}`}
+        className={`relative rounded-lg border border-border bg-surface-card overflow-hidden ${className}`}
         style={{ aspectRatio }}
       >
         <SceneError
@@ -127,25 +127,22 @@ export function WeaponInspectionViewer({
       <div
         ref={containerRef}
         role="region"
-        aria-label={`Interactive tactical inspection view for ${weaponName}. Double click or press R to reset view.`}
-        className={`relative border border-border bg-[#08111A] overflow-hidden group focus-within:ring-1 focus-within:ring-primary ${className}`}
+        aria-label={`Interactive 3D view for ${weaponName}. Double click or press R to reset.`}
+        className={`relative rounded-lg border border-border bg-surface-card overflow-hidden group focus-within:ring-2 focus-within:ring-primary/40 ${className}`}
         style={{ aspectRatio }}
         onDoubleClick={handleReset}
       >
-        {/* Top Tactical Corner Accent */}
-        <div aria-hidden="true" className="absolute left-0 top-0 h-[2px] w-12 bg-primary z-20" />
-
-        {/* Tactical Badge Header */}
+        {/* Badge Header */}
         <div
           aria-hidden="true"
-          className="absolute right-0 top-0 bg-primary px-3 py-1 font-mono-tactical text-[9px] font-black tracking-wider text-black z-20 select-none flex items-center gap-1.5"
+          className="absolute right-0 top-0 rounded-bl-md border-b border-l border-border/80 bg-surface-card/90 backdrop-blur-xs px-2.5 py-1 font-sans text-[11px] font-medium text-secondary z-20 select-none flex items-center gap-1.5 shadow-xs"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-black animate-pulse" />
-          <span>{badgeLabel}</span>
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+          <span>{badgeLabel === "INSPECT VIEW" ? "3D Interactive" : badgeLabel}</span>
         </div>
 
         {/* Subtle Loading overlay until Three.js texture loads */}
-        {isLoading && <SceneLoader label="INITIALIZING INSPECTION..." />}
+        {isLoading && <SceneLoader label="Loading 3D model..." />}
 
         {/* 3D Stage (only renders when visible in viewport to prevent GPU drain) */}
         {hasWebGL && isVisible && (
@@ -177,7 +174,7 @@ export function WeaponInspectionViewer({
         isOpen={isTheaterOpen}
         onClose={() => setIsTheaterOpen(false)}
         title={weaponName}
-        subtitle={subtitle || "TACTICAL 2.5D SURFACE INSPECTION // VALORANT PROTOCOL"}
+        subtitle={subtitle || "Interactive 3D Skin Inspector"}
         rarity={rarity}
         cost={cost}
       >

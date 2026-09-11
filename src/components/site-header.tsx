@@ -88,32 +88,32 @@ export function SiteHeader({ version }: SiteHeaderProps) {
         {/* ── Main Command Bar (Height: 64px physical object) ── */}
         <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-3 sm:px-6 lg:px-8">
           
-          {/* ── Left: Brand Identity ── */}
+            {/* ── Left: Brand Identity ── */}
           <div className="flex items-center gap-6 xl:gap-8">
             <Link
               href="/"
-              className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary shrink-0"
+              className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md shrink-0"
               aria-label="VloPedia Homepage"
             >
-              {/* Tactical Diamond Icon */}
-              <div className="relative h-7 w-7 bg-primary flex items-center justify-center rotate-45 shrink-0 transition-transform group-hover:scale-105">
-                <span className="font-display font-black text-sm text-background -rotate-45">V</span>
+              {/* VloPedia Red V Icon */}
+              <div className="relative h-7 w-7 bg-primary rounded-md flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 shadow-sm">
+                <span className="font-display font-black text-sm text-white">V</span>
               </div>
               <div className="flex flex-col leading-none">
-                <span className="font-display font-black text-lg tracking-tight text-foreground uppercase group-hover:text-primary transition-colors">
+                <span className="font-display font-black text-lg tracking-tight text-foreground group-hover:text-primary transition-colors">
                   VloPedia
                 </span>
-                <span className="font-mono text-[8px] text-cyan tracking-[0.2em] uppercase mt-0.5 opacity-80">
-                  Intel Terminal
+                <span className="font-sans text-[10px] text-muted tracking-normal mt-0.5">
+                  VALORANT Wiki
                 </span>
               </div>
             </Link>
 
-            {/* ── Center: Primary Navigation (Quiet, Authorial, Precise) ── */}
+            {/* ── Center: Primary Navigation (Quiet, Editorial, Clean) ── */}
             <nav
               role="navigation"
               aria-label="Main navigation"
-              className="hidden lg:flex items-center gap-1 xl:gap-1.5"
+              className="hidden lg:flex items-center gap-1 xl:gap-1.5 h-[36px] min-h-[36px]"
             >
               {PRIMARY_LINKS.map((item) => {
                 const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -121,10 +121,10 @@ export function SiteHeader({ version }: SiteHeaderProps) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`relative px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                    className={`relative px-3 py-1.5 font-sans text-sm font-medium transition-colors rounded-md ${
                       isActive
-                        ? "nav-active-signal font-extrabold"
-                        : "text-secondary hover:text-foreground hover:bg-white/[0.03]"
+                        ? "text-primary bg-primary/10 font-semibold"
+                        : "text-secondary hover:text-foreground hover:bg-white/[0.04]"
                     }`}
                   >
                     {item.label}
@@ -140,15 +140,15 @@ export function SiteHeader({ version }: SiteHeaderProps) {
                 aria-expanded={megaOpen}
                 aria-haspopup="true"
                 aria-label="More sections and tools"
-                className={`flex items-center gap-1 px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-3 py-1.5 font-sans text-sm font-medium transition-colors rounded-md cursor-pointer ${
                   megaOpen
-                    ? "text-primary"
-                    : "text-secondary hover:text-foreground hover:bg-white/[0.03]"
+                    ? "text-primary bg-primary/10"
+                    : "text-secondary hover:text-foreground hover:bg-white/[0.04]"
                 }`}
               >
                 More
                 <ChevronDown
-                  className={`h-3 w-3 transition-transform duration-200 ${
+                  className={`h-3.5 w-3.5 transition-transform duration-200 ${
                     megaOpen ? "rotate-180 text-primary" : "text-muted"
                   }`}
                   aria-hidden="true"
@@ -159,19 +159,19 @@ export function SiteHeader({ version }: SiteHeaderProps) {
 
           {/* ── Right: Search + Bookmarks + Settings + Auth + Mobile ── */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Ask the Database Search Box Trigger — ~2x Wider, high contrast */}
+            {/* Search Box Trigger — Clean rounded editorial search */}
             <button
               type="button"
               onClick={triggerSearch}
               aria-label="Search database"
               title="Search VloPedia (Ctrl+K)"
-              className="group hidden sm:flex items-center justify-between h-9 w-[260px] md:w-[320px] xl:w-[380px] border border-border/80 bg-surface/90 px-3 py-1.5 font-mono text-[11px] text-muted transition-colors hover:border-primary/50 hover:bg-surface-elevated hover:text-foreground cursor-pointer"
+              className="group hidden sm:flex items-center justify-between h-9 w-[260px] md:w-[300px] xl:w-[340px] rounded-md border border-border bg-surface-elevated/80 px-3 py-1.5 font-sans text-xs text-muted transition-colors hover:border-primary/50 hover:bg-surface-elevated hover:text-foreground cursor-pointer shadow-xs"
             >
               <div className="flex items-center gap-2 min-w-0">
                 <Search className="h-3.5 w-3.5 text-muted group-hover:text-primary transition-colors shrink-0" aria-hidden="true" />
-                <span className="truncate text-[11px] text-secondary group-hover:text-foreground">Search VloPedia...</span>
+                <span className="truncate text-xs text-secondary group-hover:text-foreground">Search agents, weapons, skins...</span>
               </div>
-              <kbd className="hidden md:inline-flex items-center rounded-none border border-border/60 bg-background/80 px-1 py-0.5 font-mono text-[9px] text-muted shrink-0">
+              <kbd className="hidden md:inline-flex items-center rounded border border-border/80 bg-background/80 px-1.5 py-0.5 font-mono text-[9px] text-muted shrink-0">
                 Ctrl K
               </kbd>
             </button>
@@ -181,7 +181,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               type="button"
               onClick={triggerSearch}
               aria-label="Search database"
-              className="sm:hidden flex h-10 w-10 items-center justify-center border border-border bg-surface text-muted hover:text-primary transition-colors cursor-pointer"
+              className="sm:hidden flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-muted hover:text-primary transition-colors cursor-pointer"
             >
               <Search className="h-4 w-4" />
             </button>
@@ -189,11 +189,11 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             {/* Saved Bookmarks */}
             <BookmarksDrawer />
 
-            {/* Settings Popover (Theme + SFX + Telemetry Status) */}
+            {/* Settings Popover (Theme + SFX) */}
             <TacticalSettingsPopover patchVersion={patchVersion} />
 
             {/* User Auth */}
-            <div className="border-l border-border/70 pl-2 sm:pl-3">
+            <div className="border-l border-border pl-2 sm:pl-3">
               <AuthActions />
             </div>
 
@@ -201,34 +201,13 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             <Button
               variant="secondary"
               size="sm"
-              className="lg:hidden h-10 w-10 p-0 border-border bg-surface/80"
+              className="lg:hidden h-9 w-9 p-0 border-border bg-surface"
               onClick={() => setDrawerOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={drawerOpen}
             >
               <Menu className="h-4 w-4" aria-hidden="true" />
             </Button>
-          </div>
-        </div>
-
-        {/* ── System Line (Quiet Diagnostic Sub-Bar) ── */}
-        <div className="border-t border-border/50 bg-surface-elevated/90 px-3 sm:px-6 lg:px-8 py-1 hidden md:flex items-center justify-between font-mono text-[9px] text-muted tracking-wider select-none">
-          <div className="flex items-center gap-3">
-            <span className="text-cyan font-bold tracking-widest flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan/80" />
-              VLOPEDIA // KNOWLEDGE ENGINE
-            </span>
-            <span className="text-border">|</span>
-            <span className="text-secondary/80">PROVENANCE: RIOT CLIENT API TELEMETRY</span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {/* Patch & Database sync */}
-            <div className="flex items-center gap-2">
-              <span className="text-foreground/90 font-bold">PATCH {patchVersion}</span>
-              <span className="text-border">·</span>
-              <TacticalStatus status="SYNCED" size="sm" className="!py-0 !px-1.5" />
-            </div>
           </div>
         </div>
 

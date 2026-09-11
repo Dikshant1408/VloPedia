@@ -164,76 +164,76 @@ export function TacticalMapViewer({
         {/* Top Tactical Corner Accent */}
         <div aria-hidden="true" className="absolute left-0 top-0 h-[2px] w-14 bg-primary z-20" />
 
-        {/* Top Left Status Badge */}
+        {/* Top Left Map Badge */}
         <div className="absolute left-3 top-3 z-20 flex items-center gap-2 pointer-events-none">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-surface-card/90 border border-border text-[9px] font-mono-tactical uppercase tracking-wider text-muted backdrop-blur-xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" aria-hidden="true" />
-            <span className="text-foreground font-bold">{mapName}</span>
-            <span className="text-muted-dark">{"// TACTICAL SANDTABLE"}</span>
+          <div className="flex items-center gap-1.5 rounded-md px-2.5 py-1 bg-surface-card/90 border border-border text-xs font-sans text-secondary backdrop-blur-xs shadow-xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+            <span className="text-foreground font-semibold">{mapName}</span>
+            <span className="text-muted">· Interactive Map</span>
           </div>
 
           {coordinates && (
-            <div className="hidden sm:flex items-center gap-1 px-2 py-1 bg-surface-card/80 border border-border text-[8px] font-mono-tactical text-muted">
-              <Compass className="h-2.5 w-2.5 text-primary" />
+            <div className="hidden sm:flex items-center gap-1 rounded-md px-2 py-1 bg-surface-card/80 border border-border text-[11px] font-mono text-muted">
+              <Compass className="h-3 w-3 text-primary" />
               <span>{coordinates}</span>
             </div>
           )}
         </div>
 
         {/* Top Right Layer Filter Badges */}
-        <div className="absolute right-3 top-3 z-20 flex items-center gap-1 bg-surface-card/90 border border-border p-1 backdrop-blur-xs pointer-events-auto">
+        <div className="absolute right-3 top-3 z-20 flex items-center gap-1 rounded-md bg-surface-card/90 border border-border p-1 backdrop-blur-xs shadow-xs pointer-events-auto">
           <button
             type="button"
             onClick={() => setActiveLayer("all")}
             aria-pressed={activeLayer === "all"}
-            className={`px-2 py-1 text-[8px] font-mono-tactical font-bold uppercase tracking-wider border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
+            className={`rounded px-2 py-1 text-xs font-sans font-medium border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
               activeLayer === "all"
-                ? "border-primary bg-primary/15 text-primary"
-                : "border-transparent text-muted hover:text-foreground"
+                ? "border-primary bg-primary/10 text-primary font-semibold"
+                : "border-transparent text-secondary hover:text-foreground"
             }`}
           >
-            ALL
+            All
           </button>
           <button
             type="button"
             onClick={() => setActiveLayer("sites")}
             aria-pressed={activeLayer === "sites"}
-            className={`px-2 py-1 text-[8px] font-mono-tactical font-bold uppercase tracking-wider border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
+            className={`rounded px-2 py-1 text-xs font-sans font-medium border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
               activeLayer === "sites"
-                ? "border-primary bg-primary/15 text-primary"
-                : "border-transparent text-muted hover:text-foreground"
+                ? "border-primary bg-primary/10 text-primary font-semibold"
+                : "border-transparent text-secondary hover:text-foreground"
             }`}
           >
-            SITES
+            Sites
           </button>
           <button
             type="button"
             onClick={() => setActiveLayer("choke")}
             aria-pressed={activeLayer === "choke"}
-            className={`px-2 py-1 text-[8px] font-mono-tactical font-bold uppercase tracking-wider border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
+            className={`rounded px-2 py-1 text-xs font-sans font-medium border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
               activeLayer === "choke"
-                ? "border-[#FBBF24] bg-[#FBBF24]/15 text-[#FBBF24]"
-                : "border-transparent text-muted hover:text-foreground"
+                ? "border-amber-500/40 bg-amber-500/10 text-amber-400 font-semibold"
+                : "border-transparent text-secondary hover:text-foreground"
             }`}
           >
-            CHOKEPOINTS
+            Chokepoints
           </button>
           <button
             type="button"
             onClick={() => setActiveLayer("spawns")}
             aria-pressed={activeLayer === "spawns"}
-            className={`px-2 py-1 text-[8px] font-mono-tactical font-bold uppercase tracking-wider border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
+            className={`rounded px-2 py-1 text-xs font-sans font-medium border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
               activeLayer === "spawns"
-                ? "border-[#0DF2F2] bg-[#0DF2F2]/15 text-[#0DF2F2]"
-                : "border-transparent text-muted hover:text-foreground"
+                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-semibold"
+                : "border-transparent text-secondary hover:text-foreground"
             }`}
           >
-            SPAWNS
+            Spawns
           </button>
         </div>
 
         {/* Loading overlay */}
-        {isLoading && <SceneLoader label="PROJECTING TACTICAL SCHEMATIC..." />}
+        {isLoading && <SceneLoader label="Loading interactive map..." />}
 
         {/* 3D Stage */}
         {hasWebGL && isVisible && (
@@ -255,25 +255,25 @@ export function TacticalMapViewer({
           {/* Selected Waypoint Telemetry */}
           <div className="pointer-events-auto">
             {selectedCallout ? (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-card/95 border border-primary/40 text-[9px] font-mono-tactical uppercase tracking-wider text-foreground backdrop-blur-xs">
-                <MapPin className="h-3 w-3 text-primary animate-bounce" />
-                <span className="font-bold text-white">
+              <div className="flex items-center gap-2 rounded-md px-3 py-1.5 bg-surface-card/95 border border-primary/40 text-xs font-sans text-foreground backdrop-blur-xs shadow-xs">
+                <MapPin className="h-3.5 w-3.5 text-primary" />
+                <span className="font-semibold text-foreground">
                   {selectedCallout.superRegionName ? `${selectedCallout.superRegionName} ` : ""}
                   {selectedCallout.regionName}
                 </span>
-                <span className="text-muted-dark">|</span>
-                <span className="text-primary font-bold">{selectedCallout.category.toUpperCase()}</span>
+                <span className="text-muted">·</span>
+                <span className="text-primary font-medium capitalize">{selectedCallout.category}</span>
               </div>
             ) : (
-              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-surface-card/80 border border-border text-[8px] font-mono-tactical uppercase tracking-wider text-muted backdrop-blur-xs">
+              <div className="hidden sm:flex items-center gap-1.5 rounded-md px-2.5 py-1 bg-surface-card/80 border border-border text-[11px] font-sans text-secondary backdrop-blur-xs shadow-xs">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>SELECT BEACON OR DRAG TO ROTATE MAP</span>
+                <span>Click a callout or drag to rotate</span>
               </div>
             )}
           </div>
 
           {/* Action Controls */}
-          <div className="flex items-center gap-1 bg-surface-card/90 border border-border p-1 backdrop-blur-xs pointer-events-auto">
+          <div className="flex items-center gap-1 rounded-md bg-surface-card/90 border border-border p-1 backdrop-blur-xs shadow-xs pointer-events-auto">
             <button
               type="button"
               onClick={toggleAutoRotate}

@@ -15,8 +15,8 @@ const ROLE_STYLES: Record<string, string> = {
 };
 
 const SIZE_STYLES: Record<RoleSize, string> = {
-  sm: "px-2 py-0.5 text-[9px]",
-  md: "px-2.5 py-1 text-[10px]",
+  sm: "px-2 py-0.5 text-[10px]",
+  md: "px-2.5 py-1 text-xs",
 };
 
 /**
@@ -25,11 +25,11 @@ const SIZE_STYLES: Record<RoleSize, string> = {
  */
 export function RoleBadge({ role, size = "md", className }: RoleBadgeProps) {
   const key = role.toLowerCase();
-  const colorClass = ROLE_STYLES[key] ?? "border-border text-muted bg-surface";
+  const colorClass = ROLE_STYLES[key] ?? "border-border text-muted bg-surface-card";
   return (
     <span
       className={[
-        "inline-block border font-mono font-black uppercase tracking-widest",
+        "inline-flex items-center rounded border font-sans font-medium",
         SIZE_STYLES[size],
         colorClass,
         className ?? "",
