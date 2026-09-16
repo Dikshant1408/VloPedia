@@ -127,7 +127,7 @@ export function WeaponInspectionViewer({
       <div
         ref={containerRef}
         role="region"
-        aria-label={`Interactive 3D view for ${weaponName}. Double click or press R to reset.`}
+        aria-label={`Showcase view for ${weaponName}. Double click to reset.`}
         className={`relative rounded-lg border border-border bg-surface-card overflow-hidden group focus-within:ring-2 focus-within:ring-primary/40 ${className}`}
         style={{ aspectRatio }}
         onDoubleClick={handleReset}
@@ -141,8 +141,8 @@ export function WeaponInspectionViewer({
           <span>{badgeLabel}</span>
         </div>
 
-        {/* Subtle Loading overlay until Three.js texture loads */}
-        {isLoading && <SceneLoader label="Loading 3D model..." />}
+        {/* Subtle Loading overlay until preview loads */}
+        {isLoading && <SceneLoader label="Loading showcase..." />}
 
         {/* 3D Stage (only renders when visible in viewport to prevent GPU drain) */}
         {hasWebGL && isVisible && (
@@ -174,7 +174,7 @@ export function WeaponInspectionViewer({
         isOpen={isTheaterOpen}
         onClose={() => setIsTheaterOpen(false)}
         title={weaponName}
-        subtitle={subtitle || "Interactive 3D Skin Inspector"}
+        subtitle={subtitle || "Weapon Skin Showcase"}
         rarity={rarity}
         cost={cost}
       >

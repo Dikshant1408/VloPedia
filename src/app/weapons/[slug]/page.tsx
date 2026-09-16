@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!weapon) return { title: "Weapon Not Found | VloPedia", robots: { index: false } };
 
   const pageTitle = `${weapon.displayName} VALORANT Guide: Stats, Damage & Skins | VloPedia`;
-  const pageDesc = `Master the ${weapon.displayName} in VALORANT. View full damage profiles, fire rate stats, reload times, active weapon skins, and 3D models.`;
+  const pageDesc = `Master the ${weapon.displayName} in VALORANT. View full damage profiles, fire rate stats, reload times, active weapon skins, and weapon showcase.`;
 
   return {
     title: pageTitle,

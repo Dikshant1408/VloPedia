@@ -8,6 +8,7 @@ import type { ValorantChroma, ValorantSkinLevel } from "@/lib/valorant-types";
 export interface SkinShowcaseProps {
   weaponImageUrl: string;
   weaponName: string;
+  modelUrl?: string; // Optional true 3D asset (GLTF/GLB) — if absent, seamlessly renders high-end 2.5D artwork
   subtitle?: string;
   rarity?: string;
   cost?: string | number;
@@ -23,6 +24,7 @@ export interface SkinShowcaseProps {
 export function SkinShowcase({
   weaponImageUrl,
   weaponName,
+  modelUrl,
   subtitle,
   rarity,
   cost,

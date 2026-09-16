@@ -67,50 +67,77 @@ export function AscentSceneObjects({ prefersReducedMotion = false }: AscentScene
     return { dustPos: pos, dustPhase: phase, dustSpeed: speed };
   }, []);
 
-  // ── Coordinated 12-Second Cinematic Loop ──
+  // ── Coordinated 18-Second Cinematic Sequence Loop ──
+  // 0–3s: Camera settles
+  // 3–6s: Sunlight slowly moves across architecture
+  // 6–8s: Agent subtly shifts posture and coat catches breeze
+  // 8–11s: Dust motes catch sunlight beams and illuminate
+  // 11–14s: Camera smoothly eases slightly forward
+  // 14–18s: Seamless return to resting composition
   useFrame((state) => {
     if (prefersReducedMotion) return;
 
     const t = state.clock.getElapsedTime();
-    const cycle = (t % 12) / 12; // Normalized 0..1 over 12s
-    const angle = cycle * Math.PI * 2;
+    const cycle = (t % 18) / 18; // 18-second continuous sequence
 
-    // 1. Agent subtle breathing & weight shift (harmonic sine loop)
-    if (agentGroupRef.current) {
-      // Natural respiratory rise and slight lateral weight shift
-      const breath = Math.sin(angle);
-      const sway   = Math.cos(angle * 0.5);
-      agentGroupRef.current.position.y = 0.58 + breath * 0.012;
-      agentGroupRef.current.rotation.y = 0.32 + sway * 0.015;
+    // Continuous baseline breathing (calm, natural)
+    const baseBreath = Math.sin(t * 1.05) * 0.008;
+
+    // Phase 2 (3–6s, 0.167–0.333): Sunlight slowly moves across masonry
+    let sunOffset = 0;
+    if (cycle >= 0.167 && cycle < 0.333) {
+      const p = (cycle - 0.167) / 0.166;
+      sunOffset = Math.sin(p * Math.PI) * 0.035;
     }
-
-    // 2. Tactical coat cloth gentle drape motion in the sea breeze
-    if (coatRef.current) {
-      const wind = Math.sin(angle * 1.5 + 0.4);
-      coatRef.current.rotation.z = wind * 0.02;
-      coatRef.current.rotation.x = Math.cos(angle * 1.2) * 0.015;
-    }
-
-    // 3. Subtle daylight sunbeam shimmer / atmospheric refraction
     if (sunbeamRef.current) {
-      sunbeamRef.current.rotation.y = Math.sin(angle * 0.8) * 0.02;
+      sunbeamRef.current.rotation.y = sunOffset;
     }
 
-    // 4. Rim light pulse — sunbeam grazing agent's silhouette
+    // Phase 3 (6–8s, 0.333–0.444): Agent subtly shifts posture
+    let agentShiftY = 0;
+    let agentShiftRot = 0;
+    let coatBreeze = 0;
+    if (cycle >= 0.333 && cycle < 0.444) {
+      const p = (cycle - 0.333) / 0.111;
+      const ease = Math.sin(p * Math.PI);
+      agentShiftY = ease * 0.014;
+      agentShiftRot = ease * 0.022;
+      coatBreeze = ease * 0.04;
+    }
+
+    if (agentGroupRef.current) {
+      agentGroupRef.current.position.y = 0.58 + baseBreath + agentShiftY;
+      agentGroupRef.current.rotation.y = 0.32 + agentShiftRot;
+    }
+
+    if (coatRef.current) {
+      const windAmbient = Math.sin(t * 1.8) * 0.01;
+      coatRef.current.rotation.z = windAmbient + coatBreeze;
+      coatRef.current.rotation.x = Math.cos(t * 1.2) * 0.008;
+    }
+
+    // Phase 4 (8–11s, 0.444–0.611): Dust motes catch sunlight
+    let dustSparkle = 0;
+    if (cycle >= 0.444 && cycle < 0.611) {
+      const p = (cycle - 0.444) / 0.167;
+      dustSparkle = Math.sin(p * Math.PI) * 0.28;
+    }
+
+    // Subtle rim light pulse as sunbeam moves
     if (rimLightRef.current) {
-      rimLightRef.current.intensity = 0.85 + Math.sin(angle * 2.0) * 0.08;
+      rimLightRef.current.intensity = 0.85 + Math.sin(cycle * Math.PI * 2) * 0.06;
     }
 
-    // 5. Dust motes drifting gently through the sunlit air
+    // Dust motes drifting gently through courtyard air
     if (dustRef.current) {
       const arr = dustRef.current.geometry.attributes.position.array as Float32Array;
       for (let i = 0; i < dustPhase.length; i++) {
         const i3 = i * 3;
-        // Harmonic vertical and lateral drift
-        arr[i3 + 1] = dustPos[i3 + 1] + Math.sin(t * 0.4 * dustSpeed[i] + dustPhase[i]) * 0.22;
-        arr[i3]     = dustPos[i3]     + Math.cos(t * 0.25 * dustSpeed[i] + dustPhase[i]) * 0.12;
+        arr[i3 + 1] = dustPos[i3 + 1] + Math.sin(t * 0.35 * dustSpeed[i] + dustPhase[i]) * 0.2;
+        arr[i3]     = dustPos[i3]     + Math.cos(t * 0.22 * dustSpeed[i] + dustPhase[i]) * 0.1;
       }
       dustRef.current.geometry.attributes.position.needsUpdate = true;
+      (dustRef.current.material as THREE.PointsMaterial).opacity = 0.55 + dustSparkle;
     }
   });
 
