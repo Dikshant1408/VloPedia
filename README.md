@@ -56,7 +56,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/Dikshant1408/VloPedia.git
+git clone https://github.com/AxrydeStudio/VloPedia.git
 cd VloPedia
 
 # Install dependencies
@@ -76,6 +76,14 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ```bash
 npm run build
 ```
+
+---
+
+## 👥 Credits & Organization
+
+- **Organization:** [AxrydeStudio](https://github.com/AxrydeStudio)
+- **Developer & Creator:** [Godrikt](https://github.com/Godrikt)
+- **Project Repository:** [VloPedia](https://github.com/AxrydeStudio/VloPedia)
 
 ---
 
