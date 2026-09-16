@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AuthActions } from "@/components/auth-actions";
@@ -98,13 +97,13 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             >
               {/* VloPedia Logo Icon */}
               <div className="relative h-8 w-8 shrink-0 transition-transform group-hover:scale-105">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src="/images/vlopedia-icon.png"
                   alt="VloPedia"
                   width={32}
                   height={32}
-                  className="rounded-md object-cover"
-                  priority
+                  className="rounded-md object-cover w-8 h-8"
                 />
               </div>
               <div className="flex flex-col leading-none">
@@ -241,12 +240,13 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             <div className="relative z-10 flex items-center justify-between border-b border-border px-5 py-4 bg-surface/50">
               <div className="flex items-center gap-3">
                 <div className="relative h-7 w-7 shrink-0">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src="/images/vlopedia-icon.png"
                     alt="VloPedia"
                     width={28}
                     height={28}
-                    className="rounded object-cover"
+                    className="rounded object-cover w-7 h-7"
                   />
                 </div>
                 <div>
