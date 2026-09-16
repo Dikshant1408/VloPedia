@@ -1,13 +1,14 @@
 # VloPedia — VALORANT Database, Tools & Lore Encyclopedia
 
-[![Organization](https://img.shields.io/badge/Organization-AxrydeStudio-red?style=flat)](https://github.com/AxrydeStudio)
+[![Company](https://img.shields.io/badge/Company-AxrydeStudio-red?style=flat)](https://github.com/AxrydeStudio)
+[![Developer](https://img.shields.io/badge/Developer-Godrikt-blue?style=flat)](https://github.com/Godrikt)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19-blue?style=flat&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Deployment Status](https://img.shields.io/badge/Vercel-Live-brightgreen?style=flat&logo=vercel)](https://valovault-ivory.vercel.app)
 
-**VloPedia** by **AxrydeStudio** is an open-source, search-driven VALORANT knowledge graph, tactical utility engine, and lore encyclopedia. Built for competitive players, theorycrafters, and lore enthusiasts.
+**VloPedia** is developed by **Godrikt** under **AxrydeStudio**. An open-source, search-driven VALORANT knowledge graph, tactical utility engine, and lore encyclopedia built for competitive players, theorycrafters, and lore enthusiasts.
 
 🌐 **Live Production App:** [https://valovault-ivory.vercel.app](https://valovault-ivory.vercel.app)
 

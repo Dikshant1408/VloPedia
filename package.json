@@ -2,7 +2,8 @@
   "name": "@axrydestudio/vlopedia",
   "version": "0.1.0",
   "private": true,
-  "author": "AxrydeStudio",
+  "author": "Godrikt",
+  "company": "AxrydeStudio",
   "organization": "AxrydeStudio",
   "scripts": {
     "dev": "next dev",

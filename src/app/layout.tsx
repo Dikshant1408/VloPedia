@@ -39,8 +39,12 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   applicationName: siteConfig.name,
   keywords: ["VALORANT", "VloPedia", "VALORANT Database", "Agents", "Weapons", "Maps", "Skins", "Companion", "Encyclopedia", "Lore", "Comp Builder", "Sensitivity"],
-  authors: [{ name: "AxrydeStudio", url: "https://github.com/AxrydeStudio" }, { name: siteConfig.name }],
-  creator: "AxrydeStudio",
+  authors: [
+    { name: "Godrikt", url: "https://github.com/Godrikt" },
+    { name: "AxrydeStudio", url: "https://github.com/AxrydeStudio" },
+    { name: siteConfig.name },
+  ],
+  creator: "Godrikt",
   publisher: "AxrydeStudio",
   robots: {
     index: true,

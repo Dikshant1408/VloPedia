@@ -100,9 +100,14 @@ export function SiteFooter({ version }: SiteFooterProps) {
               </div>
             </div>
 
-            <span className="font-mono text-[10px] text-muted tracking-wider">
-              © {year} VLOPEDIA · AN AXRYDESTUDIO PROJECT
-            </span>
+            <div className="flex flex-col sm:items-end gap-1">
+              <span className="font-mono text-[10px] text-muted tracking-wider">
+                © {year} VLOPEDIA · AXRYDESTUDIO
+              </span>
+              <span className="font-mono text-[9px] text-muted/80 tracking-wider">
+                DEVELOPED BY <a href="https://github.com/Godrikt" target="_blank" rel="noopener noreferrer" className="text-secondary hover:text-primary transition-colors">GODRIKT</a>
+              </span>
+            </div>
           </div>
         </div>
       </div>
