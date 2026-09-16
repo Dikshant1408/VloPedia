@@ -124,7 +124,7 @@ export function HomeWorldScene({
         alpha: true,
         powerPreference: "high-performance",
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.05,
+        toneMappingExposure: 1.15,
       }}
       camera={{
         fov: sceneDef.camera.fov,

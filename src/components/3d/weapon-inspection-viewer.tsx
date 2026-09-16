@@ -51,7 +51,7 @@ export function WeaponInspectionViewer({
     hasInteracted,
     handleUserInteract,
     toggleAutoRotate,
-  } = useSceneLifecycle({ threshold: 0.1, initialAutoRotate: true });
+  } = useSceneLifecycle({ threshold: 0.1, initialAutoRotate: false });
 
   const [isLoading, setIsLoading] = useState(true);
   const [isTheaterOpen, setIsTheaterOpen] = useState(false);

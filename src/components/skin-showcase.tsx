@@ -26,7 +26,7 @@ export function SkinShowcase({
   subtitle,
   rarity,
   cost,
-  badgeLabel = "Inspect",
+  badgeLabel = "Showcase",
   className = "",
   aspectRatio = "16/9",
   chromas = [],
@@ -42,7 +42,7 @@ export function SkinShowcase({
   const [isTheaterOpen, setIsTheaterOpen] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
-  // Parallax tilt & lighting states
+  // Micro-parallax tilt & lighting states (calm, subtle, zero auto-rotation)
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
   const [isHovered, setIsHovered] = useState(false);
@@ -84,7 +84,8 @@ export function SkinShowcase({
     const normX = (x - centerX) / centerX;
     const normY = (y - centerY) / centerY;
 
-    const maxTilt = 11;
+    // Micro-parallax max tilt angle: ±5.2 degrees (deliberate, restrained)
+    const maxTilt = 5.2;
     setTilt({
       x: -normY * maxTilt,
       y: normX * maxTilt,
@@ -93,7 +94,7 @@ export function SkinShowcase({
     setGlare({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
-      opacity: 0.16,
+      opacity: 0.14,
     });
     setIsHovered(true);
   }, []);
@@ -129,18 +130,18 @@ export function SkinShowcase({
           className="absolute inset-0 pointer-events-none transition-opacity duration-300"
           style={{
             opacity: glare.opacity,
-            background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 30%, transparent 65%)`,
+            background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.04) 30%, transparent 65%)`,
           }}
         />
 
-        {/* Subtle VALORANT red accent glow in the background */}
+        {/* Subtle VALORANT red ambient aura in background */}
         <div className="absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
 
-        {/* Header HUD / Badges */}
+        {/* Header HUD / Identity */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10 pointer-events-none">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-primary/30 bg-primary/10 font-mono text-[10px] font-semibold text-primary uppercase tracking-wider backdrop-blur-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               {badgeLabel}
             </span>
             {rarity && (
@@ -163,8 +164,8 @@ export function SkinShowcase({
             <button
               type="button"
               onClick={() => setIsTheaterOpen(true)}
-              title="Fullscreen Inspect"
-              aria-label="Fullscreen Inspect"
+              title="Expanded Showcase"
+              aria-label="Expanded Showcase"
               className="h-7 w-7 rounded-md border border-border/70 bg-surface-card/80 text-secondary hover:text-foreground hover:border-primary/40 transition-colors flex items-center justify-center cursor-pointer backdrop-blur-xs text-xs"
             >
               <Maximize2 className="h-3.5 w-3.5" />
@@ -176,9 +177,9 @@ export function SkinShowcase({
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Ground Pedestal Drop Shadow */}
           <div
-            className="absolute bottom-4 sm:bottom-6 w-3/4 h-7 bg-black/55 blur-lg rounded-full pointer-events-none transition-transform duration-100"
+            className="absolute bottom-4 sm:bottom-6 w-3/4 h-7 bg-black/50 blur-lg rounded-full pointer-events-none transition-transform duration-100"
             style={{
-              transform: `translate3d(${-tilt.y * 1.8}px, ${tilt.x * 1.2}px, 0px) scale(${isHovered ? 1.05 : 1})`,
+              transform: `translate3d(${-tilt.y * 1.2}px, ${tilt.x * 0.8}px, 0px) scale(${isHovered ? 1.03 : 1})`,
             }}
           />
 
@@ -186,10 +187,10 @@ export function SkinShowcase({
           <div
             className="relative w-full h-full flex items-center justify-center pointer-events-none"
             style={{
-              transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${isHovered ? 26 : 0}px) scale(${isHovered ? 1.03 : 1})`,
+              transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${isHovered ? 18 : 0}px) scale(${isHovered ? 1.02 : 1})`,
               transition: isHovered
                 ? "transform 0.08s ease-out"
-                : "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+                : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
             }}
           >
             <Image
@@ -203,7 +204,7 @@ export function SkinShowcase({
           </div>
         </div>
 
-        {/* Bottom Subtitle / Info Strip */}
+        {/* Bottom Subtitle / Video Strip */}
         <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between pointer-events-none">
           <div className="text-left">
             <span className="font-mono text-[11px] text-muted tracking-tight">
@@ -230,11 +231,11 @@ export function SkinShowcase({
         </div>
       </div>
 
-      {/* ── Chromas Swatches Strip (if skin has chromas) ── */}
+      {/* ── Chromas Swatches Strip (BASE + VARIANTS) ── */}
       {chromas.length > 1 && (
-        <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3 rounded-lg border border-border/60 bg-surface-card/60">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-border/60 bg-surface-card/60">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-muted font-semibold">
               Variants ({chromas.length})
             </span>
           </div>
@@ -242,6 +243,11 @@ export function SkinShowcase({
           <div className="flex flex-wrap items-center gap-2">
             {chromas.map((chroma, idx) => {
               const isSelected = idx === selectedChromaIdx;
+              const isBase = idx === 0 || chroma.displayName.toLowerCase().includes("standard");
+              const label = isBase
+                ? "BASE"
+                : chroma.displayName.replace(/Variant \d+/i, "").trim() || `Variant ${idx + 1}`;
+
               return (
                 <button
                   key={chroma.uuid || idx}
@@ -272,9 +278,7 @@ export function SkinShowcase({
                       }`}
                     />
                   )}
-                  <span className="truncate max-w-[110px]">
-                    {chroma.displayName.replace(/Variant \d+/i, "").trim() || `Variant ${idx + 1}`}
-                  </span>
+                  <span className="truncate max-w-[110px]">{label}</span>
                 </button>
               );
             })}
@@ -282,11 +286,11 @@ export function SkinShowcase({
         </div>
       )}
 
-      {/* ── Level Progression Strip (if skin has levels) ── */}
+      {/* ── Level Progression Strip (LEVELS: Base, VFX, Animation, Finisher) ── */}
       {levels.length > 1 && (
-        <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3 rounded-lg border border-border/60 bg-surface-card/60">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-border/60 bg-surface-card/60">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-muted font-semibold">
               Upgrades ({levels.length} Levels)
             </span>
           </div>
@@ -294,9 +298,13 @@ export function SkinShowcase({
           <div className="flex flex-wrap items-center gap-2">
             {levels.map((lvl, idx) => {
               const isSelected = idx === selectedLevelIdx;
-              const levelTitle =
-                lvl.levelItem?.replace(/EEquippableSkinLevelItem::/i, "") ||
-                `Level ${idx + 1}`;
+              const rawItem = lvl.levelItem?.replace(/EEquippableSkinLevelItem::/i, "") || "";
+              const levelLabel =
+                idx === 0
+                  ? "Level 1 (Base)"
+                  : rawItem
+                  ? `Level ${idx + 1} (${rawItem})`
+                  : `Level ${idx + 1}`;
 
               return (
                 <button
@@ -312,12 +320,7 @@ export function SkinShowcase({
                       : "border-border/80 bg-surface-muted/40 text-muted hover:border-border-light hover:text-foreground"
                   }`}
                 >
-                  <span>Lvl {idx + 1}</span>
-                  {levelTitle && levelTitle !== `Level ${idx + 1}` && (
-                    <span className="text-[10px] text-secondary font-sans font-normal opacity-85">
-                      · {levelTitle}
-                    </span>
-                  )}
+                  <span>{levelLabel}</span>
                   {lvl.streamedVideo && (
                     <Play className="h-2.5 w-2.5 text-primary fill-current ml-0.5" />
                   )}
@@ -328,7 +331,7 @@ export function SkinShowcase({
         </div>
       )}
 
-      {/* ── Theater Fullscreen Modal ── */}
+      {/* ── Theater Modal ── */}
       {isTheaterOpen && (
         <div
           role="dialog"
@@ -344,7 +347,7 @@ export function SkinShowcase({
             <div className="flex items-center justify-between border-b border-border/80 px-6 py-4 bg-background/80 backdrop-blur-sm">
               <div>
                 <span className="font-mono text-[10px] uppercase tracking-wider text-primary font-semibold">
-                  Inspect Showcase
+                  Weapon Showcase
                 </span>
                 <h3 className="font-display text-xl font-bold uppercase tracking-tight text-foreground">
                   {weaponName}
@@ -410,7 +413,7 @@ export function SkinShowcase({
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                 <span className="font-mono text-xs font-bold text-foreground uppercase">
-                  {weaponName} — Inspection Video
+                  {weaponName} — Showcase Video
                 </span>
               </div>
               <button
