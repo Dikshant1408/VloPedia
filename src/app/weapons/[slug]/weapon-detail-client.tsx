@@ -9,7 +9,7 @@ import { Container } from "@/components/container";
 import { Reveal, PageTransition } from "@/components/motion-system";
 import { ContentTierBadge } from "@/components/content-tier-badge";
 import { SkinCard } from "@/components/skin-card";
-import { WeaponInspectionViewer } from "@/components/3d/weapon-inspection-viewer";
+import { SkinShowcase } from "@/components/skin-showcase";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 import type { ValorantWeapon, ValorantSkin } from "@/lib/valorant-types";
 import { toast } from "sonner";
@@ -156,14 +156,14 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
           {/* ── Main grid ── */}
           <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
 
-            {/* Left — 3D Inspection Stage */}
+            {/* Left — 2.5D Cinematic Showcase Stage */}
             <Reveal>
               <div className="space-y-3">
-                <WeaponInspectionViewer
+                <SkinShowcase
                   weaponImageUrl={weapon.displayIcon}
                   weaponName={weapon.displayName}
                   subtitle={`${categoryLabel(weapon.category)} · ${cost ? `${cost.toLocaleString()} VP` : "Free"}`}
-                  badgeLabel="3D Interactive"
+                  badgeLabel="Inspect"
                   aspectRatio="4/3"
                 />
               </div>

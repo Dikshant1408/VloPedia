@@ -250,7 +250,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
                   />
                 </div>
                 <div>
-                  <span className="font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-cyan">INDEX BRIEFING</span>
+                  <span className="font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-secondary">INDEX BRIEFING</span>
                   <p className="font-display font-black text-lg uppercase text-foreground leading-none mt-0.5">VloPedia</p>
                 </div>
               </div>
@@ -316,7 +316,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             {/* Drawer footer */}
             <div className="relative z-10 border-t border-border px-5 py-3 font-mono text-[9px] text-muted bg-[#060B0F] flex items-center justify-between">
               <span>© {new Date().getFullYear()} VLOPEDIA</span>
-              <span className="text-cyan text-[8px]">RIOT PROTOCOL COMPLIANT</span>
+              <span className="text-secondary text-[8px]">RIOT PROTOCOL COMPLIANT</span>
             </div>
           </div>
         </div>

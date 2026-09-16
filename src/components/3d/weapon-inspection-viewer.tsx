@@ -14,7 +14,7 @@ const TacticalSceneStage = dynamic(
   () => import("./tactical-scene-stage").then((mod) => mod.TacticalSceneStage),
   {
     ssr: false,
-    loading: () => <SceneLoader label="INITIALIZING INSPECTION..." />,
+    loading: () => <SceneLoader label="Loading preview…" />,
   }
 );
 
@@ -35,7 +35,7 @@ export function WeaponInspectionViewer({
   subtitle,
   rarity,
   cost,
-  badgeLabel = "INSPECT VIEW",
+  badgeLabel = "Inspect",
   className = "",
   aspectRatio = "4/3",
 }: WeaponInspectionViewerProps) {
@@ -138,7 +138,7 @@ export function WeaponInspectionViewer({
           className="absolute right-0 top-0 rounded-bl-md border-b border-l border-border/80 bg-surface-card/90 backdrop-blur-xs px-2.5 py-1 font-sans text-[11px] font-medium text-secondary z-20 select-none flex items-center gap-1.5 shadow-xs"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          <span>{badgeLabel === "INSPECT VIEW" ? "3D Interactive" : badgeLabel}</span>
+          <span>{badgeLabel}</span>
         </div>
 
         {/* Subtle Loading overlay until Three.js texture loads */}
