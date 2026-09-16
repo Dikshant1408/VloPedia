@@ -1,450 +1,229 @@
-"use client";
+﻿"use client";
 
 import React, { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { HOME_WORLD_CONFIG, type HomeWorldCategory } from "./home-world.config";
+import { HOME_WORLD_CONFIG } from "./home-world.config";
 
 interface HomeWorldObjectsProps {
-  activeCategory: HomeWorldCategory;
   prefersReducedMotion?: boolean;
 }
 
-export function HomeWorldObjects({ activeCategory, prefersReducedMotion = false }: HomeWorldObjectsProps) {
-  // References for interactive elements
-  const agentSilhouetteRef = useRef<THREE.Group>(null);
-  const agentGlowRef = useRef<THREE.PointLight>(null);
-  const mapRadarRef = useRef<THREE.Group>(null);
-  const weaponPropRef = useRef<THREE.Group>(null);
-  const skinArtifactRef = useRef<THREE.Group>(null);
-  const dustParticlesRef = useRef<THREE.Points>(null);
+export function HomeWorldObjects({ prefersReducedMotion = false }: HomeWorldObjectsProps) {
+  const agentRef = useRef<THREE.Group>(null);
+  const rimLightRef = useRef<THREE.PointLight>(null);
+  const dustRef = useRef<THREE.Points>(null);
 
-  // Category weight targets for smooth transition
-  const categoryWeights = useRef({
-    agents: 0,
-    maps: 0,
-    weapons: 0,
-    skins: 0,
-  });
-
-  // Generate atmospheric dust motes
-  const { dustPositions, dustInitY } = useMemo(() => {
-    const count = 70;
+  const { dustPositions, dustPhases } = useMemo(() => {
+    const count = 80;
     const positions = new Float32Array(count * 3);
-    const initY = new Float32Array(count);
-
+    const phases = new Float32Array(count);
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      positions[i3] = (Math.random() - 0.5) * 7.0;
-      positions[i3 + 1] = Math.random() * 3.8 + 0.1;
-      positions[i3 + 2] = (Math.random() - 0.5) * 6.0;
-      initY[i] = positions[i3 + 1];
+      positions[i3]     = (Math.random() - 0.5) * 8.0;
+      positions[i3 + 1] = Math.random() * 4.5 + 0.2;
+      positions[i3 + 2] = (Math.random() - 0.5) * 6.5;
+      phases[i] = Math.random() * Math.PI * 2;
     }
-    return { dustPositions: positions, dustInitY: initY };
+    return { dustPositions: positions, dustPhases: phases };
   }, []);
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    const lerpSpeed = delta * 4.5;
-
-    // Smoothly interpolate category states
-    categoryWeights.current.agents = THREE.MathUtils.lerp(
-      categoryWeights.current.agents,
-      activeCategory === "agents" ? 1 : 0,
-      lerpSpeed
-    );
-    categoryWeights.current.maps = THREE.MathUtils.lerp(
-      categoryWeights.current.maps,
-      activeCategory === "maps" ? 1 : 0,
-      lerpSpeed
-    );
-    categoryWeights.current.weapons = THREE.MathUtils.lerp(
-      categoryWeights.current.weapons,
-      activeCategory === "weapons" ? 1 : 0,
-      lerpSpeed
-    );
-    categoryWeights.current.skins = THREE.MathUtils.lerp(
-      categoryWeights.current.skins,
-      activeCategory === "skins" ? 1 : 0,
-      lerpSpeed
-    );
-
-    // 1. Agent Silhouette Reaction
-    if (agentSilhouetteRef.current) {
-      const w = categoryWeights.current.agents;
-      if (!prefersReducedMotion) {
-        // Subtle breathing micro-motion
-        agentSilhouetteRef.current.position.y = 0.52 + Math.sin(t * 1.4) * 0.015;
-      }
-      if (agentGlowRef.current) {
-        agentGlowRef.current.intensity = THREE.MathUtils.lerp(0.4, 2.2, w);
-      }
+    if (agentRef.current && !prefersReducedMotion) {
+      agentRef.current.position.y = 0.52 + Math.sin(t * 1.1) * 0.012;
+      agentRef.current.rotation.y = 0.35 + Math.sin(t * 0.4) * 0.018;
     }
-
-    // 2. Map Radar Reaction
-    if (mapRadarRef.current) {
-      const w = categoryWeights.current.maps;
-      mapRadarRef.current.scale.setScalar(THREE.MathUtils.lerp(0.001, 1, w));
-      if (!prefersReducedMotion) {
-        mapRadarRef.current.rotation.y = t * 0.25;
-      }
+    if (rimLightRef.current) {
+      rimLightRef.current.intensity = 0.65 + Math.sin(t * 1.8) * 0.12;
     }
-
-    // 3. Weapon Highlight Reaction
-    if (weaponPropRef.current) {
-      const w = categoryWeights.current.weapons;
-      weaponPropRef.current.scale.setScalar(THREE.MathUtils.lerp(0.9, 1.12, w));
-    }
-
-    // 4. Skin Artifact Reaction
-    if (skinArtifactRef.current) {
-      const w = categoryWeights.current.skins;
-      skinArtifactRef.current.scale.setScalar(THREE.MathUtils.lerp(0.001, 1, w));
-      if (!prefersReducedMotion) {
-        skinArtifactRef.current.rotation.x = t * 0.6;
-        skinArtifactRef.current.rotation.y = t * 0.8;
-      }
-    }
-
-    // 5. Dust motes drifting
-    if (dustParticlesRef.current && !prefersReducedMotion) {
-      const pos = dustParticlesRef.current.geometry.attributes.position.array as Float32Array;
-      for (let i = 0; i < dustInitY.length; i++) {
+    if (dustRef.current && !prefersReducedMotion) {
+      const pos = dustRef.current.geometry.attributes.position.array as Float32Array;
+      for (let i = 0; i < dustPhases.length; i++) {
         const i3 = i * 3;
-        pos[i3 + 1] = dustInitY[i] + Math.sin(t * 0.45 + i) * 0.25;
+        pos[i3 + 1] = dustPositions[i3 + 1] + Math.sin(t * 0.38 + dustPhases[i]) * 0.22;
       }
-      dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
+      dustRef.current.geometry.attributes.position.needsUpdate = true;
     }
   });
 
   return (
     <group position={[0, -0.2, 0]}>
-      {/* ════════════════════════════════════════════════════
-          1. DISTANT SKYLINE & FLOATING ARCHITECTURAL SPIRES
-      ════════════════════════════════════════════════════ */}
-      <group position={[0, 1.8, -5.5]}>
-        {/* Distant Spire 1 */}
-        <mesh position={[-2.4, 0.4, 0]}>
-          <boxGeometry args={[0.7, 3.8, 0.7]} />
-          <meshStandardMaterial
-            color={HOME_WORLD_CONFIG.palette.skySilhouette}
-            roughness={0.9}
-            metalness={0.1}
-          />
+
+      {/* BACKGROUND — Ascent-inspired layered skyline */}
+      <group position={[0, 0, -6.5]}>
+        <mesh position={[-3.2, 1.8, 0]}>
+          <boxGeometry args={[0.55, 5.5, 0.55]} />
+          <meshStandardMaterial color="#0a0c10" roughness={1} metalness={0} />
         </mesh>
-        {/* Distant Spire 2 */}
-        <mesh position={[2.8, 0.8, -0.5]}>
-          <boxGeometry args={[0.9, 4.4, 0.9]} />
-          <meshStandardMaterial
-            color={HOME_WORLD_CONFIG.palette.skySilhouette}
-            roughness={0.9}
-            metalness={0.1}
-          />
+        <mesh position={[3.6, 2.4, -0.5]}>
+          <boxGeometry args={[0.7, 7.0, 0.7]} />
+          <meshStandardMaterial color="#09090c" roughness={1} metalness={0} />
         </mesh>
-        {/* Distant Floating Island Chunk */}
-        <mesh position={[0.4, 1.6, -1.0]} rotation={[0.1, 0.2, -0.05]}>
-          <dodecahedronGeometry args={[1.2, 0]} />
-          <meshStandardMaterial
-            color="#0c0e12"
-            roughness={0.95}
-            metalness={0.05}
-          />
+        <mesh position={[-1.4, 1.0, 0.4]}>
+          <boxGeometry args={[1.0, 3.2, 0.8]} />
+          <meshStandardMaterial color="#0c0e13" roughness={1} metalness={0} />
+        </mesh>
+        <mesh position={[1.6, 0.8, 0.2]}>
+          <boxGeometry args={[1.2, 2.8, 0.9]} />
+          <meshStandardMaterial color="#0d0f14" roughness={1} metalness={0} />
+        </mesh>
+        <mesh position={[0, 1.0, 1.5]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[18, 6]} />
+          <meshBasicMaterial color="#0a0c12" transparent opacity={0.38} depthWrite={false} />
         </mesh>
       </group>
 
-      {/* ════════════════════════════════════════════════════
-          2. MIDGROUND COURTYARD PLATFORM & STEPS
-      ════════════════════════════════════════════════════ */}
-      {/* Main paved courtyard platform */}
+      {/* MIDGROUND — Courtyard paving */}
       <mesh position={[0, -0.15, 0]} receiveShadow castShadow>
-        <boxGeometry args={[6.2, 0.3, 5.0]} />
-        <meshStandardMaterial
-          color={HOME_WORLD_CONFIG.palette.platformBase}
-          roughness={0.7}
-          metalness={0.2}
-        />
+        <boxGeometry args={[7.0, 0.28, 5.5]} />
+        <meshStandardMaterial color={HOME_WORLD_CONFIG.palette.platformBase} roughness={0.75} metalness={0.12} />
       </mesh>
-
-      {/* Beveled edge border trim */}
-      <mesh position={[0, -0.15, 2.51]}>
-        <boxGeometry args={[6.22, 0.16, 0.05]} />
-        <meshStandardMaterial
-          color={HOME_WORLD_CONFIG.palette.platformTrim}
-          roughness={0.5}
-          metalness={0.3}
-        />
-      </mesh>
-
-      {/* Courtyard stone flagstone grid inlay */}
       <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[5.6, 4.4]} />
-        <meshStandardMaterial
-          color="#1e2228"
-          roughness={0.8}
-          metalness={0.1}
-          polygonOffset
-          polygonOffsetFactor={-1}
-        />
+        <planeGeometry args={[6.5, 5.0]} />
+        <meshStandardMaterial color="#1c2028" roughness={0.85} metalness={0.08} polygonOffset polygonOffsetFactor={-1} />
+      </mesh>
+      <mesh position={[-2.8, 0.01, 0]}>
+        <boxGeometry args={[0.04, 0.014, 4.2]} />
+        <meshStandardMaterial color={HOME_WORLD_CONFIG.palette.crateAccentRed} emissive={HOME_WORLD_CONFIG.palette.crateAccentRed} emissiveIntensity={0.5} />
       </mesh>
 
-      {/* Subtle VALORANT Red inset trim line along courtyard */}
-      <mesh position={[-2.4, 0.012, 0]}>
-        <boxGeometry args={[0.04, 0.015, 3.8]} />
-        <meshStandardMaterial
-          color={HOME_WORLD_CONFIG.palette.crateAccentRed}
-          emissive={HOME_WORLD_CONFIG.palette.crateAccentRed}
-          emissiveIntensity={0.6}
-        />
-      </mesh>
-
-      {/* Architectural Elevation Steps */}
-      <group position={[1.8, 0, 0.8]}>
-        <mesh position={[0, 0.06, 0]} receiveShadow castShadow>
-          <boxGeometry args={[1.2, 0.12, 0.7]} />
-          <meshStandardMaterial color="#242930" roughness={0.7} metalness={0.2} />
+      {/* MIDGROUND — Ascent wall + archway */}
+      <group position={[-1.1, 1.4, -2.2]} rotation={[0, 0.15, 0]}>
+        <mesh position={[-1.0, 0, 0]} receiveShadow castShadow>
+          <boxGeometry args={[1.6, 2.8, 0.28]} />
+          <meshStandardMaterial color="#1e2430" roughness={0.9} metalness={0.08} />
         </mesh>
-        <mesh position={[0, 0.18, -0.45]} receiveShadow castShadow>
-          <boxGeometry args={[1.2, 0.12, 0.6]} />
-          <meshStandardMaterial color="#20252c" roughness={0.7} metalness={0.2} />
+        <mesh position={[0.55, 1.1, 0]} receiveShadow castShadow>
+          <boxGeometry args={[1.3, 0.36, 0.28]} />
+          <meshStandardMaterial color={HOME_WORLD_CONFIG.palette.wallAccent} roughness={0.75} metalness={0.2} />
         </mesh>
-      </group>
-
-      {/* ════════════════════════════════════════════════════
-          3. ARCHITECTURAL WALL & ARCHED PORTAL
-      ════════════════════════════════════════════════════ */}
-      <group position={[-1.3, 1.25, -1.0]} rotation={[0, 0.22, 0]}>
-        {/* Left Wall Block */}
-        <mesh position={[-0.85, 0, 0]} receiveShadow castShadow>
-          <boxGeometry args={[1.4, 2.5, 0.24]} />
-          <meshStandardMaterial
-            color={HOME_WORLD_CONFIG.palette.wallBase}
-            roughness={0.85}
-            metalness={0.15}
-          />
+        <mesh position={[1.28, 0.1, 0]} receiveShadow castShadow>
+          <boxGeometry args={[0.38, 2.6, 0.28]} />
+          <meshStandardMaterial color="#1a1f28" roughness={0.88} metalness={0.1} />
         </mesh>
-
-        {/* Archway Lintel Beam */}
-        <mesh position={[0.45, 1.05, 0]} receiveShadow castShadow>
-          <boxGeometry args={[1.2, 0.4, 0.24]} />
-          <meshStandardMaterial
-            color={HOME_WORLD_CONFIG.palette.wallAccent}
-            roughness={0.7}
-            metalness={0.25}
-          />
+        <mesh position={[0.2, -1.28, 0.17]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.025, 0.025, 3.2, 10]} />
+          <meshStandardMaterial color="#2e3845" roughness={0.4} metalness={0.7} />
         </mesh>
-
-        {/* Right Portal Pillar */}
-        <mesh position={[1.15, 0, 0]} receiveShadow castShadow>
-          <boxGeometry args={[0.4, 2.5, 0.24]} />
-          <meshStandardMaterial
-            color={HOME_WORLD_CONFIG.palette.wallBase}
-            roughness={0.85}
-            metalness={0.15}
-          />
-        </mesh>
-
-        {/* Industrial Conduit Line at Base */}
-        <mesh position={[0.2, -1.18, 0.15]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.03, 0.03, 2.8, 12]} />
-          <meshStandardMaterial color="#334155" roughness={0.35} metalness={0.7} />
+        <mesh position={[-1.0, 1.42, 0.02]}>
+          <boxGeometry args={[1.65, 0.035, 0.05]} />
+          <meshStandardMaterial color="#ff4655" emissive="#ff4655" emissiveIntensity={0.55} />
         </mesh>
       </group>
 
-      {/* ════════════════════════════════════════════════════
-          4. STYLIZED AGENT SILHOUETTE
-      ════════════════════════════════════════════════════ */}
-      <group ref={agentSilhouetteRef} position={[-0.75, 0.52, -0.45]} rotation={[0, 0.35, 0]}>
-        {/* Stylized Body / Torso */}
-        <mesh castShadow receiveShadow position={[0, 0.32, 0]}>
-          <capsuleGeometry args={[0.16, 0.48, 8, 16]} />
-          <meshStandardMaterial
-            color="#14171b"
-            roughness={0.4}
-            metalness={0.3}
-          />
-        </mesh>
-
-        {/* Head Silhouette */}
-        <mesh castShadow position={[0, 0.76, 0]}>
-          <sphereGeometry args={[0.12, 16, 16]} />
-          <meshStandardMaterial
-            color="#1c2026"
-            roughness={0.4}
-            metalness={0.2}
-          />
-        </mesh>
-
-        {/* Stylized Tactical Shoulder Pauldrons */}
-        <mesh position={[0, 0.54, 0]}>
-          <boxGeometry args={[0.48, 0.1, 0.22]} />
-          <meshStandardMaterial color="#22272e" roughness={0.5} metalness={0.4} />
-        </mesh>
-
-        {/* Legs Base */}
-        <mesh position={[-0.08, -0.16, 0]} castShadow>
-          <cylinderGeometry args={[0.05, 0.06, 0.48, 8]} />
-          <meshStandardMaterial color="#111316" roughness={0.6} />
-        </mesh>
-        <mesh position={[0.08, -0.16, 0]} castShadow>
-          <cylinderGeometry args={[0.05, 0.06, 0.48, 8]} />
-          <meshStandardMaterial color="#111316" roughness={0.6} />
-        </mesh>
-
-        {/* Agent Dedicated Red Rim Accent Light */}
-        <pointLight
-          ref={agentGlowRef}
-          color="#ff4655"
-          intensity={0.6}
-          distance={2.8}
-          position={[-0.2, 0.6, -0.3]}
-        />
-      </group>
-
-      {/* ════════════════════════════════════════════════════
-          5. TACTICAL SUPPLY CONTAINER / CRATE
-      ════════════════════════════════════════════════════ */}
-      <group position={[-1.5, 0.35, 0.6]} rotation={[0, -0.35, 0]}>
-        <mesh castShadow receiveShadow>
-          <boxGeometry args={[0.7, 0.7, 0.7]} />
-          <meshStandardMaterial
-            color={HOME_WORLD_CONFIG.palette.crateMetal}
-            roughness={0.45}
-            metalness={0.55}
-          />
-        </mesh>
-
-        {/* Outer Corner Protective Framing */}
-        <mesh>
-          <boxGeometry args={[0.74, 0.16, 0.74]} />
-          <meshStandardMaterial color="#2d333b" roughness={0.6} metalness={0.3} />
-        </mesh>
-
-        {/* Red Radianite Seal Inlay */}
-        <mesh position={[0, 0, 0.36]}>
-          <boxGeometry args={[0.52, 0.03, 0.015]} />
-          <meshStandardMaterial
-            color={HOME_WORLD_CONFIG.palette.crateAccentRed}
-            emissive={HOME_WORLD_CONFIG.palette.crateAccentRed}
-            emissiveIntensity={0.8}
-          />
-        </mesh>
-      </group>
-
-      {/* ════════════════════════════════════════════════════
-          6. FOREGROUND FRAMING PARAPET (CINEMATIC DEPTH)
-      ════════════════════════════════════════════════════ */}
-      <group position={[2.4, 0.15, 2.2]} rotation={[0, -0.4, 0]}>
+      {/* FOREGROUND — Parapet wall */}
+      <group position={[2.5, 0.18, 2.3]} rotation={[0, -0.38, 0]}>
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[1.8, 0.65, 0.35]} />
-          <meshStandardMaterial
-            color="#13161a"
-            roughness={0.85}
-            metalness={0.15}
-          />
+          <boxGeometry args={[2.0, 0.7, 0.38]} />
+          <meshStandardMaterial color="#12151a" roughness={0.88} metalness={0.12} />
         </mesh>
-        {/* Parapet capstone */}
-        <mesh position={[0, 0.34, 0]}>
-          <boxGeometry args={[1.86, 0.06, 0.4]} />
-          <meshStandardMaterial color="#252b33" roughness={0.6} metalness={0.3} />
+        <mesh position={[0, 0.36, 0]}>
+          <boxGeometry args={[2.06, 0.065, 0.44]} />
+          <meshStandardMaterial color="#22282f" roughness={0.65} metalness={0.28} />
         </mesh>
-      </group>
-
-      {/* ════════════════════════════════════════════════════
-          7. CATEGORY-REACTIVE THEMATIC PROPS
-      ════════════════════════════════════════════════════ */}
-
-      {/* PROP A: MAPS — Holographic Radar Sandtable on Courtyard */}
-      <group ref={mapRadarRef} position={[0.6, 0.08, 0.2]} scale={0.001}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.55, 0.6, 32]} />
-          <meshStandardMaterial
-            color="#94a3b8"
-            emissive="#94a3b8"
-            emissiveIntensity={1.0}
-            side={THREE.DoubleSide}
-          />
+        <mesh position={[-0.9, 0.52, 0]}>
+          <boxGeometry args={[0.12, 0.38, 0.4]} />
+          <meshStandardMaterial color="#1c2228" roughness={0.7} metalness={0.2} />
         </mesh>
-        <mesh rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.54, 24]} />
-          <meshStandardMaterial color="#334155" transparent opacity={0.3} side={THREE.DoubleSide} />
-        </mesh>
-        {/* Site A Beacon */}
-        <mesh position={[-0.22, 0.12, -0.14]}>
-          <cylinderGeometry args={[0.02, 0.02, 0.24, 8]} />
-          <meshStandardMaterial color="#ff4655" emissive="#ff4655" emissiveIntensity={1.6} />
-        </mesh>
-        {/* Site B Beacon */}
-        <mesh position={[0.26, 0.12, 0.16]}>
-          <cylinderGeometry args={[0.02, 0.02, 0.24, 8]} />
-          <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={1.4} />
+        <mesh position={[0.9, 0.52, 0]}>
+          <boxGeometry args={[0.12, 0.38, 0.4]} />
+          <meshStandardMaterial color="#1c2228" roughness={0.7} metalness={0.2} />
         </mesh>
       </group>
 
-      {/* PROP B: WEAPONS — Tactical Rifle Silhouette resting near archway */}
-      <group
-        ref={weaponPropRef}
-        position={[0.45, 0.55, -0.85]}
-        rotation={[0.22, 0.45, -0.18]}
-      >
+      {/* Supply container — grounded */}
+      <group position={[-2.0, 0.36, 0.9]} rotation={[0, -0.28, 0]}>
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[0.72, 0.72, 0.72]} />
+          <meshStandardMaterial color={HOME_WORLD_CONFIG.palette.crateMetal} roughness={0.48} metalness={0.52} />
+        </mesh>
+        <mesh>
+          <boxGeometry args={[0.76, 0.18, 0.76]} />
+          <meshStandardMaterial color="#252c35" roughness={0.6} metalness={0.3} />
+        </mesh>
+        <mesh position={[0, 0, 0.37]}>
+          <boxGeometry args={[0.5, 0.028, 0.014]} />
+          <meshStandardMaterial color="#ff4655" emissive="#ff4655" emissiveIntensity={0.75} />
+        </mesh>
+      </group>
+
+      {/* Elevation steps */}
+      <group position={[1.9, 0, 0.9]}>
+        <mesh position={[0, 0.065, 0]} receiveShadow castShadow>
+          <boxGeometry args={[1.3, 0.13, 0.75]} />
+          <meshStandardMaterial color="#20262e" roughness={0.72} metalness={0.18} />
+        </mesh>
+        <mesh position={[0, 0.19, -0.5]} receiveShadow castShadow>
+          <boxGeometry args={[1.3, 0.13, 0.65]} />
+          <meshStandardMaterial color="#1c2229" roughness={0.72} metalness={0.18} />
+        </mesh>
+      </group>
+
+      {/* SUBJECT — Agent silhouette (always present, cinematic breathing) */}
+      <group ref={agentRef} position={[-0.7, 0.52, -0.5]} rotation={[0, 0.35, 0]}>
+        <mesh castShadow receiveShadow position={[0, 0.32, 0]}>
+          <capsuleGeometry args={[0.155, 0.5, 8, 16]} />
+          <meshStandardMaterial color="#111418" roughness={0.45} metalness={0.28} />
+        </mesh>
+        <mesh castShadow position={[0, 0.78, 0]}>
+          <sphereGeometry args={[0.115, 16, 16]} />
+          <meshStandardMaterial color="#181d22" roughness={0.42} metalness={0.22} />
+        </mesh>
+        <mesh position={[0, 0.56, 0]}>
+          <boxGeometry args={[0.5, 0.095, 0.22]} />
+          <meshStandardMaterial color="#1e242c" roughness={0.52} metalness={0.38} />
+        </mesh>
+        <mesh position={[-0.075, -0.16, 0]} castShadow>
+          <cylinderGeometry args={[0.048, 0.058, 0.52, 8]} />
+          <meshStandardMaterial color="#0f1215" roughness={0.65} />
+        </mesh>
+        <mesh position={[0.075, -0.16, 0]} castShadow>
+          <cylinderGeometry args={[0.048, 0.058, 0.52, 8]} />
+          <meshStandardMaterial color="#0f1215" roughness={0.65} />
+        </mesh>
+        <pointLight ref={rimLightRef} color="#ff4655" intensity={0.75} distance={3.2} position={[-0.4, 0.8, -0.6]} />
+        <pointLight color="#c8d8e8" intensity={0.18} distance={2.5} position={[0.5, 0.6, 0.8]} />
+      </group>
+
+      {/* Weapon — always present, resting at archway */}
+      <group position={[0.5, 0.56, -0.9]} rotation={[0.2, 0.42, -0.16]}>
         <mesh castShadow>
-          <boxGeometry args={[1.05, 0.14, 0.06]} />
-          <meshStandardMaterial color="#16191e" roughness={0.35} metalness={0.7} />
+          <boxGeometry args={[1.1, 0.13, 0.06]} />
+          <meshStandardMaterial color="#141820" roughness={0.32} metalness={0.72} />
         </mesh>
-        <mesh position={[0.68, 0.01, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.02, 0.02, 0.45, 8]} />
-          <meshStandardMaterial color="#2d333b" roughness={0.3} metalness={0.8} />
+        <mesh position={[0.72, 0.01, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.018, 0.018, 0.48, 8]} />
+          <meshStandardMaterial color="#252d38" roughness={0.28} metalness={0.82} />
         </mesh>
-        <mesh position={[-0.06, -0.15, 0]} rotation={[0, 0, -0.2]}>
-          <boxGeometry args={[0.12, 0.2, 0.05]} />
-          <meshStandardMaterial color="#111316" roughness={0.5} metalness={0.5} />
+        <mesh position={[-0.05, -0.14, 0]} rotation={[0, 0, -0.2]}>
+          <boxGeometry args={[0.11, 0.22, 0.055]} />
+          <meshStandardMaterial color="#0f1318" roughness={0.55} metalness={0.45} />
         </mesh>
-        {/* Red Optic dot */}
-        <mesh position={[0.1, 0.09, 0]}>
-          <boxGeometry args={[0.09, 0.04, 0.03]} />
-          <meshStandardMaterial color="#ff4655" emissive="#ff4655" emissiveIntensity={1.2} />
+        <mesh position={[0.12, 0.09, 0]}>
+          <boxGeometry args={[0.085, 0.038, 0.032]} />
+          <meshStandardMaterial color="#ff4655" emissive="#ff4655" emissiveIntensity={1.4} />
+        </mesh>
+        <mesh position={[-0.62, 0.015, 0]}>
+          <boxGeometry args={[0.22, 0.09, 0.055]} />
+          <meshStandardMaterial color="#191e26" roughness={0.4} metalness={0.6} />
         </mesh>
       </group>
 
-      {/* PROP C: SKINS — Radiant Collection Relic */}
-      <group ref={skinArtifactRef} position={[-1.5, 1.25, 0.6]} scale={0.001}>
-        <mesh castShadow>
-          <dodecahedronGeometry args={[0.22, 0]} />
-          <meshStandardMaterial
-            color="#fbbf24"
-            emissive="#f59e0b"
-            emissiveIntensity={0.9}
-            roughness={0.15}
-            metalness={0.65}
-          />
-        </mesh>
-        <pointLight color="#f59e0b" intensity={2.2} distance={2.8} />
-      </group>
-
-      {/* ════════════════════════════════════════════════════
-          8. ATMOSPHERIC SUNBEAM DUST PARTICLES
-      ════════════════════════════════════════════════════ */}
-      <points ref={dustParticlesRef}>
+      {/* Atmospheric dust motes */}
+      <points ref={dustRef}>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[dustPositions, 3]}
-          />
+          <bufferAttribute attach="attributes-position" args={[dustPositions, 3]} />
         </bufferGeometry>
-        <pointsMaterial
-          size={0.032}
-          color={HOME_WORLD_CONFIG.palette.dustMotes}
-          transparent
-          opacity={0.55}
-          sizeAttenuation
-          depthWrite={false}
-        />
+        <pointsMaterial size={0.028} color={HOME_WORLD_CONFIG.palette.dustMotes} transparent opacity={0.45} sizeAttenuation depthWrite={false} />
       </points>
 
-      {/* Ground Contact Shadow */}
-      <mesh position={[0, -0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[7.5, 6.0]} />
-        <meshBasicMaterial color="#080a0d" transparent opacity={0.65} />
+      {/* Ground shadow */}
+      <mesh position={[0, -0.28, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[8.5, 7.0]} />
+        <meshBasicMaterial color="#060810" transparent opacity={0.7} />
       </mesh>
+
     </group>
   );
 }

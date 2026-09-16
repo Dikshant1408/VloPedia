@@ -168,25 +168,13 @@ export function HomepageClient() {
           {/* Centered Monumental Editorial Content */}
           <Container className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center">
             <Reveal className="space-y-6 w-full flex flex-col items-center">
-              {/* Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-card/85 px-4 py-1.5 text-xs font-sans font-medium text-secondary shadow-xs backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
-                <span>VALORANT Community Knowledge Base</span>
-              </div>
-
-              {/* Monumental Headline */}
-              <div className="space-y-1">
-                <h1 className="font-display font-black text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight text-foreground uppercase leading-[0.94] drop-shadow-sm">
-                  VLOPEDIA<br />
-                  <span className="text-secondary/85 text-3xl sm:text-4xl md:text-5xl lg:text-6xl block mt-2 font-bold tracking-tight">
-                    THE VALORANT
-                  </span>
-                  <span className="text-primary block mt-1">
-                    KNOWLEDGE BASE
-                  </span>
+              {/* Clean Headline — let the 3D scene do the visual work */}
+              <div className="space-y-2 text-center">
+                <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl tracking-tight text-foreground leading-[0.96] drop-shadow-sm">
+                  VloPedia
                 </h1>
-                <p className="font-sans text-base sm:text-lg text-secondary max-w-xl mx-auto font-normal pt-3 leading-relaxed">
-                  Search agents, weapons, maps, skins, and guides across the authoritative VALORANT database.
+                <p className="font-sans text-lg sm:text-xl text-secondary font-normal tracking-tight">
+                  Everything VALORANT. In one place.
                 </p>
               </div>
 

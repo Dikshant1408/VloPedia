@@ -122,9 +122,9 @@ export function HomeWorldScene({
           isSearching={isSearching}
         />
         <HomeWorldObjects
-          activeCategory={activeCategory}
           prefersReducedMotion={prefersReducedMotion}
         />
+
       </Suspense>
     </Canvas>
   );

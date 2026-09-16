@@ -71,27 +71,14 @@ function WeaponMesh({ textureUrl, prefersReducedMotion = false, onTextureLoaded 
 
   return (
     <group position={[0, 0, 0]}>
-      {/* Dynamic Specular Weapon Mesh */}
+      {/* Dynamic weapon mesh */}
       <mesh ref={meshRef} geometry={geometry} material={material} />
 
-      {/* Subtle Ground Shadow Projection */}
+      {/* Soft ground shadow */}
       <mesh position={[0, -1.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0, 2.0, 32]} />
-        <meshBasicMaterial
-          color="#000000"
-          transparent
-          opacity={0.35}
-          depthWrite={false}
-        />
+        <ringGeometry args={[0, 1.8, 32]} />
+        <meshBasicMaterial color="#000000" transparent opacity={0.28} depthWrite={false} />
       </mesh>
-
-      {/* Ground Tactical Target Reticle */}
-      <group position={[0, -1.06, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <gridHelper
-          args={[4.8, 8, "#FA4454", "#1E293B"]}
-          rotation={[Math.PI / 2, 0, 0]}
-        />
-      </group>
     </group>
   );
 }
@@ -162,14 +149,14 @@ export const TacticalSceneStage = forwardRef<TacticalStageHandle, TacticalSceneS
           onTouchStart={() => onUserInteract?.()}
           style={{ width: "100%", height: "100%", background: "transparent" }}
         >
-          {/* Studio Lighting */}
-          <ambientLight intensity={1.4} />
-          {/* Key light for metallic sheen */}
-          <directionalLight position={[4, 5, 4]} intensity={1.8} color="#ffffff" />
-          {/* Soft neutral fill light from opposite corner */}
-          <directionalLight position={[-4, -2, -2]} intensity={0.7} color="#e2e8f0" />
-          {/* Subtle warm accent spotlight from top */}
-          <pointLight position={[0, 4, 2]} intensity={0.8} color="#ffffff" distance={8} />
+          {/* Cinematic 3-point studio lighting */}
+          <ambientLight intensity={1.2} color="#e8edf2" />
+          {/* Key light — warm from upper-right */}
+          <directionalLight position={[4, 5, 4]} intensity={2.0} color="#fff8f0" />
+          {/* Fill light — cool from left */}
+          <directionalLight position={[-4, 0, 2]} intensity={0.55} color="#d0dce8" />
+          {/* Rim light — red accent from behind */}
+          <pointLight position={[-2, 3, -3]} intensity={0.9} color="#ff4655" distance={10} />
 
           <Suspense fallback={null}>
             <WeaponMesh
