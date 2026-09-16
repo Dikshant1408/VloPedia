@@ -101,7 +101,7 @@ export function SiteFooter({ version }: SiteFooterProps) {
             </div>
 
             <span className="font-mono text-[10px] text-muted tracking-wider">
-              © {year} VLOPEDIA
+              © {year} VLOPEDIA · AN AXRYDESTUDIO PROJECT
             </span>
           </div>
         </div>
