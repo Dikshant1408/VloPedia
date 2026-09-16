@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Shield, Cpu } from "lucide-react";
 import { ReportIssueModal } from "@/components/report-issue-modal";
@@ -40,8 +41,14 @@ export function SiteFooter({ version }: SiteFooterProps) {
           <div className="space-y-4 max-w-2xl">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="h-7 w-7 bg-primary flex items-center justify-center rotate-45 shrink-0">
-                <span className="font-display font-black text-sm text-[#0B141A] -rotate-45">V</span>
+              <div className="relative h-8 w-8 shrink-0">
+                <Image
+                  src="/images/vlopedia-icon.png"
+                  alt="VloPedia"
+                  width={32}
+                  height={32}
+                  className="rounded-md object-cover"
+                />
               </div>
               <span className="font-display font-black text-lg uppercase text-foreground tracking-tight">
                 VloPedia

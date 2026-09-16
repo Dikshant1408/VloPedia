@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AuthActions } from "@/components/auth-actions";
@@ -95,9 +96,16 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md shrink-0"
               aria-label="VloPedia Homepage"
             >
-              {/* VloPedia Red V Icon */}
-              <div className="relative h-7 w-7 bg-primary rounded-md flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 shadow-sm">
-                <span className="font-display font-black text-sm text-white">V</span>
+              {/* VloPedia Logo Icon */}
+              <div className="relative h-8 w-8 shrink-0 transition-transform group-hover:scale-105">
+                <Image
+                  src="/images/vlopedia-icon.png"
+                  alt="VloPedia"
+                  width={32}
+                  height={32}
+                  className="rounded-md object-cover"
+                  priority
+                />
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-display font-black text-lg tracking-tight text-foreground group-hover:text-primary transition-colors">
@@ -232,8 +240,14 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             {/* Drawer header */}
             <div className="relative z-10 flex items-center justify-between border-b border-border px-5 py-4 bg-surface/50">
               <div className="flex items-center gap-3">
-                <div className="h-6 w-6 bg-primary flex items-center justify-center rotate-45 shrink-0">
-                  <span className="font-display font-black text-xs text-[#080F14] -rotate-45">V</span>
+                <div className="relative h-7 w-7 shrink-0">
+                  <Image
+                    src="/images/vlopedia-icon.png"
+                    alt="VloPedia"
+                    width={28}
+                    height={28}
+                    className="rounded object-cover"
+                  />
                 </div>
                 <div>
                   <span className="font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-cyan">INDEX BRIEFING</span>
