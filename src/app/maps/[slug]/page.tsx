@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, MapPin, Compass, HelpCircle, Shield, Target } from "lucide-react";
@@ -98,13 +98,27 @@ function groupCallouts(map: ValorantMap): Record<string, string[]> {
 
 export async function generateStaticParams() {
   const maps = await getAllMaps();
-  return maps.map(m => ({ slug: slugify(m.displayName) }));
+  const validMaps = maps.map(m => ({ slug: slugify(m.displayName) }));
+  return [
+    ...validMaps,
+    { slug: "the-range" },
+    { slug: "skirmish-a" },
+    { slug: "basic-training" },
+  ];
 }
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (slug === "the-range" || slug === "skirmish-a" || slug === "basic-training") {
+    return {
+      title: "VALORANT Maps | VloPedia",
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/maps` },
+    };
+  }
+
   const maps = await getAllMaps();
   const map = findMap(maps, slug);
   if (!map) return { title: "Map Not Found | VloPedia", robots: { index: false } };
@@ -141,6 +155,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function MapDetailPage({ params }: Props) {
   const { slug } = await params;
+  if (slug === "the-range" || slug === "skirmish-a" || slug === "basic-training") {
+    permanentRedirect("/maps");
+  }
+
   const maps = await getAllMaps();
   const map = findMap(maps, slug);
   if (!map) notFound();

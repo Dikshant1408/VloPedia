@@ -71,7 +71,59 @@ async function fetchSkins(): Promise<FlatSkin[]> {
   }
 }
 
+import Link from "next/link";
+import { Container } from "@/components/container";
+
 export default async function SkinsIndexPage() {
   const skins = await fetchSkins();
-  return <SkinsClient initialSkins={skins} />;
+
+  // Group count by weapon
+  const countMap: Record<string, number> = {};
+  for (const s of skins) {
+    countMap[s.weaponSlug] = (countMap[s.weaponSlug] || 0) + 1;
+  }
+
+  const hubs = WEAPON_SLUGS.map(slug => ({
+    slug,
+    name: slug.toUpperCase(),
+    count: countMap[slug] || 0,
+  }));
+
+  return (
+    <>
+      <SkinsClient initialSkins={skins} />
+
+      {/* Server-Rendered Internal Link Mesh for Search Engines & Fast Weapon Filtering */}
+      <section className="border-t border-border bg-[#0B141A] py-16" aria-label="Weapon Skin Directories">
+        <Container>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
+            <h2 className="font-display text-2xl uppercase tracking-tight text-foreground">
+              Weapon Skin Hubs & Directories
+            </h2>
+          </div>
+          <p className="text-xs text-muted mb-8 max-w-3xl leading-relaxed">
+            Browse weapon-specific skin catalogs, inspect finisher visual effects, compare upgrade costs, and review complete tier lists for each weapon platform in VALORANT.
+          </p>
+          <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+            {hubs.map(h => (
+              <Link
+                key={h.slug}
+                href={`/skins/${h.slug}`}
+                className="group flex flex-col justify-between border border-[rgba(236,232,225,0.08)] bg-surface-card p-3.5 hover:border-primary/50 hover:bg-surface-card/80 transition-all rounded"
+              >
+                <span className="font-display font-bold text-sm uppercase text-foreground group-hover:text-primary transition-colors">
+                  {h.name} Skins
+                </span>
+                <span className="font-mono text-[10px] text-muted mt-1.5 flex items-center justify-between">
+                  <span>{h.count} Skins</span>
+                  <span className="text-primary group-hover:translate-x-0.5 transition-transform">→</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </Container>
+      </section>
+    </>
+  );
 }

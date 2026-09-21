@@ -17,6 +17,61 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+const KNOWN_AGENTS = new Set([
+  "brimstone", "viper", "omen", "killjoy", "cypher", "sova", "sage", "phoenix",
+  "jett", "reyna", "raze", "breach", "skye", "yoru", "astra", "kay/o", "kay-o",
+  "chamber", "neon", "fade", "harbor", "gekko", "deadlock", "iso", "clove", "vyse", "tejo", "veto", "waylay"
+]);
+
+const KNOWN_MAPS = new Set([
+  "ascent", "bind", "breeze", "fracture", "haven", "icebox", "lotus", "pearl",
+  "split", "sunset", "abyss", "corrode", "summit", "drift", "district", "kasbah", "piazza", "glitch"
+]);
+
+const KNOWN_WEAPONS = new Set([
+  "classic", "shorty", "frenzy", "ghost", "sheriff",
+  "stinger", "spectre", "bucky", "judge", "bulldog",
+  "guardian", "phantom", "vandal", "marshal", "outlaw",
+  "operator", "ares", "odin", "melee"
+]);
+
+function getSubjectMeta(subject: string): { href: string | null; isLink: boolean } {
+  const s = subject.toLowerCase().trim();
+
+  // Maps (e.g. "Summit Map", "Corrode Map", "Lotus C Site")
+  if (s.endsWith(" map") || s.includes(" site")) {
+    const mapName = s.replace(/ map$/, "").replace(/ [abc] site$/, "").trim().toLowerCase();
+    const mapSlug = mapName.replace(/[^a-z0-9]+/g, "-");
+    if (KNOWN_MAPS.has(mapSlug)) {
+      return { href: `/maps/${mapSlug}`, isLink: true };
+    }
+    return { href: "/maps", isLink: true };
+  }
+
+  // Weapons (e.g. "Bandit Weapon", "Outlaw Sniper", "Ares LMG", "Spectre SMG")
+  if (s.endsWith(" weapon") || s.endsWith(" sniper") || s.endsWith(" lmg") || s.endsWith(" smg") || s.endsWith(" sidearm")) {
+    const weaponName = s.replace(/ (weapon|sniper|lmg|smg|sidearm)$/, "").trim().toLowerCase();
+    const weaponSlug = weaponName.replace(/[^a-z0-9]+/g, "-");
+    if (KNOWN_WEAPONS.has(weaponSlug)) {
+      return { href: `/weapons/${weaponSlug}`, isLink: true };
+    }
+    return { href: "/weapons", isLink: true };
+  }
+
+  // Agents or Agent Abilities (e.g. "Reyna Devour", "Iso Double Tap", "Neon Agent", "Phoenix Run It Back")
+  const firstWord = s.split(" ")[0].replace(/[^a-z0-9]/g, "");
+  if (KNOWN_AGENTS.has(firstWord)) {
+    return { href: `/agents/${firstWord}`, isLink: true };
+  }
+
+  if (s.startsWith("kay/o") || s.startsWith("kay-o")) {
+    return { href: "/agents/kay-o", isLink: true };
+  }
+
+  // Non-linked subjects (e.g. "Retakes Mode", "Sentinels", "Initiators", "Weapon Prices", "Signature Abilities")
+  return { href: null, isLink: false };
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const patch = valorantDb.patches.find((p) => p.slug === slug);
@@ -76,15 +131,26 @@ export default async function PatchNotesDetailPage({ params }: Props) {
                   <h2 className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.3em] text-success">Buffs</h2>
                 </div>
                 <div className="space-y-3">
-                  {patch.buffs.map((buff) => (
-                    <div key={buff.subject} className="border border-border bg-background/50 p-4">
-                      <Link href={`/agents/${buff.subject.toLowerCase().replace(/\s+/g,"-")}`}
-                        className="font-mono-tactical text-[11px] font-black uppercase tracking-wider text-success hover:text-white transition-colors">
-                        {buff.subject}
-                      </Link>
-                      <p className="mt-1 font-sans text-xs leading-relaxed text-muted">{buff.detail}</p>
-                    </div>
-                  ))}
+                  {patch.buffs.map((buff) => {
+                    const meta = getSubjectMeta(buff.subject);
+                    return (
+                      <div key={buff.subject} className="border border-border bg-background/50 p-4">
+                        {meta.isLink && meta.href ? (
+                          <Link
+                            href={meta.href}
+                            className="font-mono-tactical text-[11px] font-black uppercase tracking-wider text-success hover:text-white transition-colors"
+                          >
+                            {buff.subject}
+                          </Link>
+                        ) : (
+                          <span className="font-mono-tactical text-[11px] font-black uppercase tracking-wider text-success">
+                            {buff.subject}
+                          </span>
+                        )}
+                        <p className="mt-1 font-sans text-xs leading-relaxed text-muted">{buff.detail}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </Reveal>
@@ -99,15 +165,26 @@ export default async function PatchNotesDetailPage({ params }: Props) {
                   <h2 className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.3em] text-error">Nerfs</h2>
                 </div>
                 <div className="space-y-3">
-                  {patch.nerfs.map((nerf) => (
-                    <div key={nerf.subject} className="border border-border bg-background/50 p-4">
-                      <Link href={`/agents/${nerf.subject.toLowerCase().replace(/\s+/g,"-")}`}
-                        className="font-mono-tactical text-[11px] font-black uppercase tracking-wider text-error hover:text-white transition-colors">
-                        {nerf.subject}
-                      </Link>
-                      <p className="mt-1 font-sans text-xs leading-relaxed text-muted">{nerf.detail}</p>
-                    </div>
-                  ))}
+                  {patch.nerfs.map((nerf) => {
+                    const meta = getSubjectMeta(nerf.subject);
+                    return (
+                      <div key={nerf.subject} className="border border-border bg-background/50 p-4">
+                        {meta.isLink && meta.href ? (
+                          <Link
+                            href={meta.href}
+                            className="font-mono-tactical text-[11px] font-black uppercase tracking-wider text-error hover:text-white transition-colors"
+                          >
+                            {nerf.subject}
+                          </Link>
+                        ) : (
+                          <span className="font-mono-tactical text-[11px] font-black uppercase tracking-wider text-error">
+                            {nerf.subject}
+                          </span>
+                        )}
+                        <p className="mt-1 font-sans text-xs leading-relaxed text-muted">{nerf.detail}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </Reveal>

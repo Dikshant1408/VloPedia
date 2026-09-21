@@ -101,10 +101,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.7,
   }));
 
-  // 4. Dynamic map pages
-  const mapSlugs = await fetchSlugs<{ displayName: string }>(
+  // 4. Dynamic map pages (only competitive/playable maps with minimap displayIcon)
+  const mapSlugs = await fetchSlugs<{ displayName: string; splash?: string; displayIcon?: string }>(
     "https://valorant-api.com/v1/maps",
-    m => slugify(m.displayName)
+    m => (m.splash && m.displayIcon ? slugify(m.displayName) : "")
   );
   const mapRoutes: MetadataRoute.Sitemap = mapSlugs.map(slug => ({
     url:             `${base}/maps/${slug}`,

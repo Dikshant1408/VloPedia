@@ -98,6 +98,12 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
                   category="Weapon"
                   url={`/weapons/${weapon.displayName.toLowerCase().replace(/\s+/g, "-")}`}
                 />
+                <Link
+                  href={`/skins/${slug}`}
+                  className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center gap-1.5"
+                >
+                  <span>{weapon.displayName} Skins →</span>
+                </Link>
                 <button
                   type="button"
                   onClick={() => {
@@ -353,12 +359,21 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
           {/* ── Skins section ── */}
           {allSkins.length > 0 && (
             <Reveal className="mt-16 space-y-8">
-              <div className="flex items-center justify-between border-b border-border pb-4">
+              <div className="flex items-center justify-between border-b border-border pb-4 flex-wrap gap-3">
                 <div className="flex items-center gap-3">
                   <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
                   <h2 className="font-display text-3xl uppercase tracking-wide text-white">Skins</h2>
                 </div>
-                <span className="font-mono-tactical text-[10px] text-muted">{allSkins.length} available</span>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono-tactical text-[10px] text-muted">{allSkins.length} available</span>
+                  <Link
+                    href={`/skins/${slug}`}
+                    className="font-mono text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                  >
+                    <span>Browse {weapon.displayName} Skin Hub & Tier List</span>
+                    <span>→</span>
+                  </Link>
+                </div>
               </div>
 
               {/* Grouped by tier */}
@@ -387,7 +402,7 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
               })}
 
               {allSkins.length > SKINS_PREVIEW && (
-                <div className="flex justify-center pt-4">
+                <div className="flex flex-wrap justify-center items-center gap-3 pt-4">
                   <Button
                     variant="outline"
                     onClick={() => setSkinsExpanded(v => !v)}
@@ -399,6 +414,11 @@ export function WeaponDetailClient({ weapon, sameCategory }: WeaponDetailClientP
                       <><ChevronDown className="h-4 w-4" aria-hidden="true" /> Show all {allSkins.length} skins</>
                     )}
                   </Button>
+                  <Link href={`/skins/${slug}`}>
+                    <Button variant="secondary" className="font-mono text-xs uppercase tracking-wider">
+                      Open Dedicated {weapon.displayName} Skin Hub →
+                    </Button>
+                  </Link>
                 </div>
               )}
             </Reveal>

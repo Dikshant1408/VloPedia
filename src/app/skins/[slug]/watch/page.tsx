@@ -22,11 +22,14 @@ function findSkin(skins: ValorantSkin[], slug: string) {
   return skins.find((s) => s.uuid.toLowerCase() === norm || slugify(s.displayName) === norm);
 }
 
+export const dynamic = "force-static";
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const skins = await getAllSkins();
   const params: { slug: string }[] = [];
 
-  // Statically generate watch pages for all skins containing showcase videos (clean slugs + legacy UUIDs)
+  // Statically generate watch pages for all skins containing showcase videos (clean slugs only)
   skins
     .filter(
       (s) =>
@@ -38,7 +41,6 @@ export async function generateStaticParams() {
       if (cleanSlug) {
         params.push({ slug: cleanSlug });
       }
-      params.push({ slug: s.uuid });
     });
 
   const seen = new Set<string>();

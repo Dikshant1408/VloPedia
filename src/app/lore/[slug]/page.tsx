@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { PageTransition, Reveal } from "@/components/motion-system";
@@ -13,15 +13,26 @@ import { BookmarkButton } from "@/components/bookmark-button";
 export const dynamic = "force-static";
 
 export async function generateStaticParams() {
-  return loreData.articles.map(a => ({
-    slug: a.slug,
-  }));
+  return [
+    ...loreData.articles.map(a => ({
+      slug: a.slug,
+    })),
+    { slug: "kingdom-corp" },
+  ];
 }
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (slug === "kingdom-corp") {
+    return {
+      title: "Kingdom Corporation | VALORANT Lore Archives | VloPedia",
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/lore/kingdom` },
+    };
+  }
+
   const article = loreData.articles.find(a => a.slug === slug);
   if (!article) return { title: "Lore Not Found | VloPedia", robots: { index: false } };
 
@@ -56,6 +67,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LoreDetailPage({ params }: Props) {
   const { slug } = await params;
+  if (slug === "kingdom-corp") {
+    permanentRedirect("/lore/kingdom");
+  }
+
   const article = loreData.articles.find(a => a.slug === slug);
   if (!article) notFound();
 

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Sparkles, Shield, Tag, Video, Layers, CheckCircle, HelpCircle, ArrowRight, FolderKanban, Crosshair } from "lucide-react";
+import { ArrowLeft, Sparkles, Shield, Tag, Video, Layers, CheckCircle, HelpCircle, ArrowRight, FolderKanban, Crosshair, ShoppingBag, Coins, Zap, Award, Info } from "lucide-react";
 import { Container } from "@/components/container";
 import { PageTransition, Reveal } from "@/components/motion-system";
 import { ContentTierBadge } from "@/components/content-tier-badge";
@@ -17,6 +17,7 @@ import { BookmarkButton } from "@/components/bookmark-button";
 import { RecordRecentView } from "@/components/record-recent-view";
 
 export const dynamic = "force-static";
+export const dynamicParams = false;
 
 const API = "https://valorant-api.com/v1";
 
@@ -57,6 +58,28 @@ function getCollectionName(skinName: string): string {
   }
   return skinName;
 }
+
+const WEAPON_ARCHETYPES: Record<string, string> = {
+  vandal: "high-precision assault rifle renowned for its guaranteed 1-tap lethal headshot damage at all ranges",
+  phantom: "silenced tactical assault rifle optimized for close-to-medium spray transfers and stealth smoke spraying",
+  operator: "devastating high-impact sniper rifle capable of one-shot lethal hits to the chest and head across any engagement distance",
+  spectre: "silenced compact submachine gun tailored for rapid eco-round maneuverability and high mobile accuracy",
+  ghost: "silenced semi-automatic sidearm favored during pistol rounds for pinpoint first-shot accuracy and stealth penetration",
+  classic: "standard-issue semi-automatic sidearm featuring an alternative secondary right-click 3-round burst for close-quarters duels",
+  sheriff: "high-caliber heavy revolver providing lethal single-shot headshot capability against unarmored and light-shield adversaries",
+  frenzy: "fully automatic machine pistol built for aggressive close-range run-and-gun entry engagements",
+  shorty: "compact double-barrel sidearm shotgun designed for ambush angles and high close-quarters burst damage",
+  stinger: "rapid-fire submachine gun with an explosive 4-round burst zoom mode for budget anti-eco rounds",
+  bucky: "pump-action tactical shotgun offering wide spread pellet bursts and an alternate right-click air-burst slug mode",
+  judge: "fully automatic combat shotgun engineered for aggressive site containment and close-quarters anchor holds",
+  bulldog: "budget bullpup assault rifle featuring automatic hip-fire and a high-cadence 3-round burst zoom mode",
+  guardian: "high-powered semi-automatic designated marksman rifle offering high wall penetration and 1-tap lethal headshots",
+  marshal: "lever-action lightweight sniper rifle optimized for fast scope recovery and cost-efficient anti-eco rounds",
+  ares: "heavy machine gun with a high-capacity drum magazine and high wall penetration tailored for defensive utility suppression",
+  odin: "rapid-fire heavy machine gun delivering overwhelming bullet saturation and extreme bullet penetration through walls",
+  outlaw: "double-barrel armor-piercing sniper rifle built to punish half-shield purchases with 140 body-shot damage",
+  melee: "tactical hand-to-hand combat melee weapon providing zero-footstep movement speed advantage and silent backstabs",
+};
 
 let skinsCache: Promise<ValorantSkin[]> | null = null;
 
@@ -128,15 +151,15 @@ export async function generateStaticParams() {
     params.push({ slug: w });
   }
 
-  // 2. Clean skin slug routes (e.g. /skins/aemondir-vandal) & legacy UUID routes (for 301 redirection)
+  // 2. Clean skin slug routes (e.g. /skins/aemondir-vandal)
   for (const s of skins) {
-    if (s.displayName.toLowerCase().startsWith("standard")) continue;
+    if (s.displayName.toLowerCase().startsWith("standard")) {
+      continue;
+    }
     const cleanSlug = slugify(s.displayName);
     if (cleanSlug) {
       params.push({ slug: cleanSlug });
     }
-    // Also include legacy UUID so static export generates the redirecting HTML
-    params.push({ slug: s.uuid });
   }
 
   // Deduplicate params
@@ -177,6 +200,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const skin = findSkin(skins, slug);
   if (!skin) return { title: "Skin Not Found | VloPedia", robots: { index: false } };
 
+  if (skin.displayName.toLowerCase().startsWith("standard")) {
+    const targetWeapon = weaponFromName(skin.displayName, skin.assetPath);
+    return {
+      title: `${skin.displayName} | VloPedia`,
+      description: `Default baseline weapon model for the ${targetWeapon.toUpperCase()} in VALORANT.`,
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/skins/${targetWeapon}` },
+    };
+  }
+
   const canonicalSlug = slugify(skin.displayName) || skin.uuid;
 
   // If accessed via legacy UUID alias, instruct search engines not to index this URL and point canonical to clean slug
@@ -197,7 +230,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const tier = CONTENT_TIER_MAP[skin.contentTierUuid ?? ""];
   const img  = skin.chromas?.[0]?.fullRender ?? skin.displayIcon;
-  const weaponName = weaponFromName(skin.displayName, skin.assetPath).toUpperCase();
 
   const pageTitle = `${skin.displayName} — Price, Variants, Upgrades & Showcase | VloPedia`;
   const pageDesc = `${skin.displayName} VALORANT skin: check its in-game store price (${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"}), ${skin.chromas?.length ?? 1} chroma colorways, Radianite upgrades, custom reload sounds, finisher VFX, and release details.`;
@@ -258,9 +290,15 @@ export default async function SkinDetailPage({ params }: Props) {
   const skin = findSkin(skins, slug);
   if (!skin) notFound();
 
+  // 3. 301 Permanent Redirect for standard base skins to weapon hub
+  if (skin.displayName.toLowerCase().startsWith("standard")) {
+    const targetWeapon = weaponFromName(skin.displayName, skin.assetPath);
+    permanentRedirect(`/skins/${targetWeapon}`);
+  }
+
   const canonicalSlug = slugify(skin.displayName);
 
-  // 3. 301 Permanent Redirect if accessed via legacy UUID
+  // 4. 301 Permanent Redirect if accessed via legacy UUID
   if (canonicalSlug && slug.toLowerCase() === skin.uuid.toLowerCase() && slug.toLowerCase() !== canonicalSlug) {
     permanentRedirect(`/skins/${canonicalSlug}`);
   }
@@ -272,6 +310,22 @@ export default async function SkinDetailPage({ params }: Props) {
   const collectionName = getCollectionName(skin.displayName);
   const collectionSlug = slugify(collectionName);
   const hasVideo = (skin.levels || []).some((l) => l.streamedVideo) || (skin.chromas || []).some((c) => c.streamedVideo);
+
+  // Content enrichment data
+  const isNightMarketEligible = tier && (tier.rarity === "SELECT" || tier.rarity === "DELUXE" || tier.rarity === "PREMIUM") && !skin.displayName.toLowerCase().includes("vct");
+  const upgradeCount = Math.max(0, (skin.levels?.length || 1) - 1);
+  const chromaCount = Math.max(0, (skin.chromas?.length || 1) - 1);
+  const totalRadianiteCost = (upgradeCount * 10) + (chromaCount * 15);
+  const weaponArchetypeDesc = WEAPON_ARCHETYPES[weaponSlug] || "primary tactical firearm in VALORANT";
+
+  // Related skins for same weapon
+  const relatedSkins = skins
+    .filter(s => {
+      if (s.uuid === skin.uuid) return false;
+      if (s.displayName.toLowerCase().startsWith("standard")) return false;
+      return weaponFromName(s.displayName, s.assetPath) === weaponSlug;
+    })
+    .slice(0, 4);
 
   const breadcrumbItems = [
     { label: "Skins", href: "/skins" },
@@ -300,8 +354,9 @@ export default async function SkinDetailPage({ params }: Props) {
         "category": "Video Game Virtual Item",
         "offers": {
           "@type": "Offer",
-          "price": tier?.price ?? 1775,
-          "priceCurrency": "VP",
+          "price": tier?.price ? (tier.price * 0.01).toFixed(2) : "17.75",
+          "priceCurrency": "USD",
+          "description": `In-game store price: ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"} (Valorant Points)`,
           "availability": "https://schema.org/InStock",
           "seller": {
             "@type": "Organization",
@@ -317,7 +372,17 @@ export default async function SkinDetailPage({ params }: Props) {
             "name": `How much does the ${skin.displayName} cost in VALORANT?`,
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": `The ${skin.displayName} costs ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"} (Valorant Points) in the in-game store rotation.`
+              "text": `The ${skin.displayName} costs ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"} (Valorant Points) in the in-game store rotation (approximately $${(tier?.price ? tier.price * 0.01 : 17.75).toFixed(2)} USD).`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": `Can the ${skin.displayName} appear in the VALORANT Night.Market?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": isNightMarketEligible
+                ? `Yes! Because the ${skin.displayName} is priced at or under 1,775 VP (${tier?.rarity ?? "Select/Deluxe/Premium"} edition), it is fully eligible to appear in the bi-monthly Night.Market with randomized discounts between 10% and 49%.`
+                : `No. The ${skin.displayName} belongs to a tier or category (such as Exclusive or Ultra) that is excluded from the Night.Market and can only be acquired when it rolls in your daily 24-hour store rotation.`
             }
           },
           {
@@ -325,7 +390,7 @@ export default async function SkinDetailPage({ params }: Props) {
             "name": `How many variants and upgrade levels does the ${skin.displayName} have?`,
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": `The ${skin.displayName} includes ${skin.chromas?.length ?? 1} colorway variants and ${skin.levels?.length ?? 1} upgrade levels unlockable with Radianite Points.`
+              "text": `The ${skin.displayName} includes ${skin.chromas?.length ?? 1} colorway variants and ${skin.levels?.length ?? 1} upgrade levels unlockable with Radianite Points (RP). Total RP required to unlock all enhancements is approximately ${totalRadianiteCost} RP.`
             }
           },
           {
@@ -335,7 +400,7 @@ export default async function SkinDetailPage({ params }: Props) {
               "@type": "Answer",
               "text": hasVideo
                 ? `Yes, the ${skin.displayName} features custom visual effects and finisher animations unlockable at Level ${skin.levels?.length || 4}.`
-                : `The ${skin.displayName} is a standard cosmetic skin without custom finisher animations.`
+                : `The ${skin.displayName} is a standard cosmetic model prioritizing competitive clarity without heavy finisher animations.`
             }
           }
         ]
@@ -422,14 +487,15 @@ export default async function SkinDetailPage({ params }: Props) {
               <AnswerBox
                 question={`What are the key facts about the ${skin.displayName} in VALORANT?`}
                 verdict={`${tier?.rarity || "PREMIUM"} Edition · ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"}`}
-                explanation={`The ${skin.displayName} is an official ${tier?.rarity || "Premium"} edition cosmetic skin for the ${weaponName}. It includes ${skin.chromas?.length || 1} chroma colorways and ${skin.levels?.length || 1} Radianite upgrade levels for custom sound effects, animations, and finishers.`}
+                explanation={`The ${skin.displayName} is an official ${tier?.rarity || "Premium"} edition cosmetic skin for the ${weaponName}. Designed for the ${weaponArchetypeDesc}, it includes ${skin.chromas?.length || 1} chroma colorways and ${skin.levels?.length || 1} progression levels unlockable with Radianite Points.`}
                 keyTakeaways={[
-                  `Store Price: ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"}`,
+                  `Store Price: ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"} (~$${(tier?.price ? tier.price * 0.01 : 17.75).toFixed(2)} USD)`,
                   `Weapon Platform: ${weaponName} (${weaponSlug})`,
                   `Collection Line: ${collectionName}`,
+                  `Night.Market Status: ${isNightMarketEligible ? "Eligible (Up to 49% Off)" : "Daily Store Only"}`,
                   `Colorway Chromas: ${skin.chromas?.length || 1} Variants`,
-                  `Upgrade Levels: ${skin.levels?.length || 1} Progression Levels`,
-                  `Finisher VFX: ${hasVideo ? "Yes (Custom Animation)" : "No"}`
+                  `Max RP Investment: ${totalRadianiteCost} Radianite Points`,
+                  `Finisher VFX: ${hasVideo ? "Yes (Custom Animation)" : "No (Clean Competitive Handling)"}`
                 ]}
                 ctaLabel={`Explore all ${weaponName} skins`}
                 ctaHref={`/skins/${weaponSlug}`}
@@ -508,7 +574,13 @@ export default async function SkinDetailPage({ params }: Props) {
                   </div>
                   <div className="flex justify-between py-1.5 border-b border-border/40">
                     <span className="text-muted">Base Store Price</span>
-                    <span className="text-primary font-bold">{tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"}</span>
+                    <span className="text-primary font-bold">{tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"} (~${(tier?.price ? tier.price * 0.01 : 17.75).toFixed(2)})</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-border/40">
+                    <span className="text-muted">Night.Market Eligible</span>
+                    <span className={`font-semibold ${isNightMarketEligible ? "text-emerald-400" : "text-amber-400"}`}>
+                      {isNightMarketEligible ? "Yes (Discount Eligible)" : "No (Store Only)"}
+                    </span>
                   </div>
                   <div className="flex justify-between py-1.5 border-b border-border/40">
                     <span className="text-muted">Total Chromas</span>
@@ -525,7 +597,7 @@ export default async function SkinDetailPage({ params }: Props) {
               <div className="rounded-lg border border-border bg-surface-card p-6 space-y-4 shadow-xs">
                 <h3 className="font-display font-bold text-lg uppercase text-foreground border-b border-border pb-3 flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-primary" />
-                  <span>Upgrade Progression</span>
+                  <span>Upgrade Progression ({totalRadianiteCost} Total RP)</span>
                 </h3>
                 <div className="space-y-3">
                   {(skin.levels || []).map((lvl, idx) => (
@@ -593,10 +665,122 @@ export default async function SkinDetailPage({ params }: Props) {
               </div>
             )}
 
+            {/* Tactical Evaluation, Acquisition & Night.Market Guide */}
+            <div className="grid gap-6 md:grid-cols-3">
+              
+              <div className="rounded-lg border border-border bg-surface-card p-6 space-y-3">
+                <div className="flex items-center gap-2 text-primary">
+                  <ShoppingBag className="h-4 w-4" />
+                  <h4 className="font-display font-bold text-sm uppercase text-foreground">How To Acquire</h4>
+                </div>
+                <p className="font-sans text-xs text-secondary leading-relaxed">
+                  The {skin.displayName} is acquired through the daily rotating store for {tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"}. In-game store rotations update every 24 hours at 00:00 UTC with 4 random weapon skins.
+                </p>
+                <div className="pt-2">
+                  <span className="font-mono text-[10px] uppercase text-muted block">Store Slot Type</span>
+                  <span className="font-sans text-xs font-semibold text-foreground">Individual Weapon Cosmetic</span>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-border bg-surface-card p-6 space-y-3">
+                <div className="flex items-center gap-2 text-primary">
+                  <Coins className="h-4 w-4" />
+                  <h4 className="font-display font-bold text-sm uppercase text-foreground">Night.Market Status</h4>
+                </div>
+                <p className="font-sans text-xs text-secondary leading-relaxed">
+                  {isNightMarketEligible
+                    ? `Eligible for the Night.Market! Because this skin is priced ≤ 1,775 VP, it can roll in your personal bi-monthly Night.Market card deck with discounts from 10% to 49% off.`
+                    : `Ineligible for Night.Market discounts. High-tier Exclusive, Ultra, or Battle Pass skins do not appear in the Night.Market pool and must be bought at full VP store price.`}
+                </p>
+                <div className="pt-2">
+                  <span className="font-mono text-[10px] uppercase text-muted block">Estimated Cash Valuation</span>
+                  <span className="font-sans text-xs font-semibold text-foreground">~${(tier?.price ? tier.price * 0.01 : 17.75).toFixed(2)} USD</span>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-border bg-surface-card p-6 space-y-3">
+                <div className="flex items-center gap-2 text-primary">
+                  <Zap className="h-4 w-4" />
+                  <h4 className="font-display font-bold text-sm uppercase text-foreground">Tactical Feedback</h4>
+                </div>
+                <p className="font-sans text-xs text-secondary leading-relaxed">
+                  {hasVideo
+                    ? `Equipped with custom auditory and visual feedback. Includes specialized inspect animations, custom weapon equip sound effects, and celebratory finisher animations.`
+                    : `Engineered for clean competitive performance. Retains the standard weapon firing audio profile and recoil animations, providing consistent audio cues preferred by tactical purists.`}
+                </p>
+                <div className="pt-2">
+                  <span className="font-mono text-[10px] uppercase text-muted block">Platform Archetype</span>
+                  <span className="font-sans text-xs font-semibold text-foreground capitalize">{weaponName} ({weaponSlug})</span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Related Weapon Skins Comparison Mesh */}
+            {relatedSkins.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-display font-bold text-xl uppercase tracking-tight text-foreground">
+                      Other Popular {weaponName} Skins
+                    </h3>
+                    <p className="font-sans text-xs text-muted">
+                      Compare pricing, tiers, and community ratings across other {weaponName} cosmetics.
+                    </p>
+                  </div>
+                  <Link
+                    href={`/skins/${weaponSlug}`}
+                    className="font-mono text-xs font-bold text-primary hover:underline"
+                  >
+                    View All {weaponName} Skins →
+                  </Link>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {relatedSkins.map((relSkin) => {
+                    const relTier = CONTENT_TIER_MAP[relSkin.contentTierUuid ?? ""];
+                    const relSlug = slugify(relSkin.displayName);
+                    const relImg = relSkin.chromas?.[0]?.fullRender ?? relSkin.displayIcon;
+                    return (
+                      <Link
+                        key={relSkin.uuid}
+                        href={`/skins/${relSlug}`}
+                        className="group rounded-lg border border-border bg-surface-card p-4 space-y-3 hover:border-primary/50 hover:shadow-md transition-all"
+                      >
+                        <div className="relative h-28 w-full rounded bg-surface">
+                          {relImg && (
+                            <Image
+                              src={relImg}
+                              alt={relSkin.displayName}
+                              fill
+                              className="object-contain p-2 group-hover:scale-105 transition-transform"
+                              unoptimized
+                            />
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono text-[10px] font-semibold text-primary uppercase">
+                              {relTier?.rarity || "SKIN"}
+                            </span>
+                            <span className="font-mono text-[11px] font-bold text-foreground">
+                              {relTier?.price ? `${relTier.price.toLocaleString()} VP` : "1,775 VP"}
+                            </span>
+                          </div>
+                          <h4 className="font-sans text-xs font-semibold text-foreground line-clamp-1 group-hover:text-primary transition-colors">
+                            {relSkin.displayName}
+                          </h4>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
           </Container>
         </div>
       </PageTransition>
     </>
   );
 }
-

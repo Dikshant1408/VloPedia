@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
@@ -76,15 +76,94 @@ async function getAgent(slug: string): Promise<ValorantAgent | null> {
 
 export async function generateStaticParams() {
   const agents = await getAllAgents();
-  return agents.map(a => ({ slug: slugify(a.displayName) }));
+  const agentSlugs = agents.map(a => ({ slug: slugify(a.displayName) }));
+  const legacySlugs = [
+    { slug: "bandit-weapon" },
+    { slug: "summit-map" },
+    { slug: "reyna-devour" },
+    { slug: "breeze-map" },
+    { slug: "corrode-map" },
+    { slug: "fracture-map" },
+    { slug: "abyss-map" },
+    { slug: "split-map" },
+    { slug: "lotus-map" },
+    { slug: "pearl-map" },
+    { slug: "ascent-map" },
+    { slug: "outlaw-sniper" },
+    { slug: "ares-lmg" },
+    { slug: "spectre-smg" },
+    { slug: "retakes-mode" },
+    { slug: "iso-double-tap" },
+    { slug: "yoru-gatecrash" },
+    { slug: "harbor-cascade" },
+    { slug: "neon-high-gear" },
+    { slug: "killjoy-turret" },
+    { slug: "chamber-tour-de-force" },
+    { slug: "omen-dark-cover" },
+    { slug: "omen-paranoia" },
+    { slug: "jett-tailwind" },
+    { slug: "deadlock-barrier" },
+    { slug: "phoenix-run-it-back" },
+    { slug: "tejo-agent" },
+    { slug: "deadlock-agent" },
+    { slug: "neon-agent" },
+    { slug: "kay-o-agent" },
+    { slug: "yoru-agent" },
+    { slug: "reyna-agent" },
+  ];
+  return [...agentSlugs, ...legacySlugs];
 }
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const norm = slug.toLowerCase().trim();
+
+  // Legacy redirects metadata
+  if (norm.endsWith("-map")) {
+    const mapName = norm.replace(/-map$/, "");
+    return {
+      title: "VALORANT Maps | ValoVault",
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/maps${mapName ? `/${mapName}` : ""}` },
+    };
+  }
+  if (norm.endsWith("-weapon") || norm.endsWith("-sniper") || norm.endsWith("-lmg") || norm.endsWith("-smg")) {
+    const weaponName = norm.replace(/-(weapon|sniper|lmg|smg)$/, "");
+    return {
+      title: "VALORANT Weapons | ValoVault",
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/weapons${weaponName && weaponName !== "bandit" ? `/${weaponName}` : ""}` },
+    };
+  }
+  if (norm === "retakes-mode" || norm.endsWith("-mode")) {
+    return {
+      title: "VALORANT Game Modes | ValoVault",
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/gamemodes` },
+    };
+  }
+  if (norm.endsWith("-agent")) {
+    const baseName = norm.replace(/-agent$/, "");
+    return {
+      title: "VALORANT Agents | ValoVault",
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/agents${baseName ? `/${baseName}` : ""}` },
+    };
+  }
+
   const agent = await getAgent(slug);
   if (!agent) return { title: "Agent Not Found | ValoVault", robots: { index: false } };
+
+  const canonicalSlug = slugify(agent.displayName);
+  if (norm !== canonicalSlug) {
+    return {
+      title: `${agent.displayName} Agent Guide | ValoVault`,
+      robots: { index: false, follow: true },
+      alternates: { canonical: `${siteConfig.url}/agents/${canonicalSlug}` },
+    };
+  }
 
   const pageTitle = `${agent.displayName} Agent Guide: Abilities, Role & Tactics | ValoVault`;
   const pageDesc = `Comprehensive ${agent.displayName} guide in VALORANT. Learn key ability tactics, agent role details, counter strategies, and background lore.`;
@@ -117,9 +196,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AgentDetailPage({ params }: Props) {
   const { slug } = await params;
+  const norm = slug.toLowerCase().trim();
+
+  // Handle legacy misrouted URLs from patch notes
+  if (norm.endsWith("-map")) {
+    const mapName = norm.replace(/-map$/, "");
+    permanentRedirect(mapName ? `/maps/${mapName}` : "/maps");
+  }
+  if (norm.endsWith("-weapon") || norm.endsWith("-sniper") || norm.endsWith("-lmg") || norm.endsWith("-smg")) {
+    const weaponName = norm.replace(/-(weapon|sniper|lmg|smg)$/, "");
+    permanentRedirect(weaponName && weaponName !== "bandit" ? `/weapons/${weaponName}` : "/weapons");
+  }
+  if (norm === "retakes-mode" || norm.endsWith("-mode")) {
+    permanentRedirect("/gamemodes");
+  }
+  if (norm.endsWith("-agent")) {
+    const baseName = norm.replace(/-agent$/, "");
+    permanentRedirect(baseName ? `/agents/${baseName}` : "/agents");
+  }
+
   const allAgents = await getAllAgents();
   const agent = await getAgent(slug);
   if (!agent) notFound();
+
+  // Canonical 301 redirect if accessed via legacy alias (e.g. /agents/reyna-devour -> /agents/reyna)
+  const canonicalSlug = slugify(agent.displayName);
+  if (norm !== canonicalSlug) {
+    permanentRedirect(`/agents/${canonicalSlug}`);
+  }
 
   const gradient = agent.backgroundGradientColors?.[0];
   const gradientHex = gradient ? `#${gradient}` : undefined;

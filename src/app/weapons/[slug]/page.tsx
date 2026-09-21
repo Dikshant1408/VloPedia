@@ -120,8 +120,9 @@ export default async function WeaponDetailPage({ params }: Props) {
         "description": `Full tactical stats and damage falloff profiles for the ${weapon.displayName} in VALORANT.`,
         "offers": {
           "@type": "Offer",
-          "price": weapon.shopData?.cost || 0,
-          "priceCurrency": "VP",
+          "price": "0.00",
+          "priceCurrency": "USD",
+          "description": weapon.shopData?.cost ? `In-game purchase cost: ${weapon.shopData.cost.toLocaleString()} Creds` : "Standard baseline sidearm",
           "availability": "https://schema.org/InStock"
         }
       }
