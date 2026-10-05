@@ -41,14 +41,14 @@ export function SiteFooter({ version }: SiteFooterProps) {
           <div className="space-y-4 max-w-2xl">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="relative h-8 w-8 shrink-0">
+              <div className="relative h-8 w-8 shrink-0 rounded-md overflow-hidden border border-white/10 shadow-sm bg-black/40">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/vlopedia-icon.png"
+                  src="/images/vlopedia-emblem.png"
                   alt="VloPedia"
                   width={32}
                   height={32}
-                  className="rounded-md object-cover w-8 h-8"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <span className="font-display font-black text-lg uppercase text-foreground tracking-tight">

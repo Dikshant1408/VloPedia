@@ -31,7 +31,7 @@ export function BundleCard({
     <Link
       href={`/bundles/${slug}`}
       className={[
-        "group relative block overflow-hidden border border-[rgba(236,232,225,0.08)] bg-[#08111A] transition-all duration-500 hover:border-primary/50",
+        "group relative block overflow-hidden border border-border bg-surface-card transition-all duration-500 hover:border-primary/50 hover:shadow-xl clip-diagonal",
         isHero ? "col-span-2" : "",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
       ]

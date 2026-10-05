@@ -349,7 +349,7 @@ export class SeoOpportunityEngine {
     } else if (metric.category === "Compare") {
       recommendedAction = "Add situational map verdict matrix and weapon recoil comparison clip.";
     } else if (metric.category === "Agents") {
-      recommendedAction = "Update Patch 9.04 balance commentary and verified synergy partners.";
+      recommendedAction = "Update Patch 13.06 balance commentary and verified synergy partners.";
     }
 
     return {
@@ -757,7 +757,7 @@ export class SeoOpportunityEngine {
     actions.push({
       rank: String(rankNum++).padStart(2, "0"),
       pillar: "DATA",
-      title: "Bridge Patch 9.04 Impact to Weapon Hub Landing Pages",
+      title: "Bridge Patch 13.06 Impact to Weapon Hub Landing Pages",
       detail: "Vandal rifle balance adjustments affect 17 organic URLs. Update damage matrices and recoil notes to protect search armor.",
       impact: "HIGH // Search Armor",
       url: "/weapons/vandal",

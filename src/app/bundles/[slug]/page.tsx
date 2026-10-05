@@ -227,21 +227,15 @@ export default async function BundleDetailPage({ params }: Props) {
         ]
       },
       {
-        "@type": "Product",
-        "name": `${bundle.displayName} VALORANT Bundle`,
+        "@type": "ItemPage",
+        "name": `${bundle.displayName} VALORANT Bundle Showcase`,
+        "url": `${siteConfig.url}/bundles/${slug}`,
         "image": heroImage ? [heroImage] : [],
         "description": bundle.extraDescription || bundle.description || `Official ${bundle.displayName} cosmetic collection package in VALORANT.`,
-        "sku": `bundle-${bundle.uuid}`,
-        "category": "Video Game Virtual Bundle",
-        "offers": {
-          "@type": "Offer",
-          "price": totalCost,
-          "priceCurrency": "VP",
-          "availability": "https://schema.org/InStock",
-          "seller": {
-            "@type": "Organization",
-            "name": "Riot Games Store"
-          }
+        "mainEntity": {
+          "@type": "Thing",
+          "name": `${bundle.displayName} Bundle`,
+          "description": `Valuation: ${totalCost > 0 ? `${totalCost.toLocaleString()} VP` : "Limited Edition"}. Contains weapons and cosmetics.`
         }
       },
       {
@@ -307,7 +301,7 @@ export default async function BundleDetailPage({ params }: Props) {
           </PageHero>
 
           {/* Breadcrumb strip */}
-          <div className="border-b border-border bg-[#0B141A] pt-4 pb-4">
+          <div className="border-b border-border bg-background pt-4 pb-4">
             <Container>
               <Breadcrumbs items={breadcrumbs} />
             </Container>
@@ -317,11 +311,11 @@ export default async function BundleDetailPage({ params }: Props) {
 
             {/* Bundle details strip */}
             <Reveal>
-              <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start border border-border bg-surface-card p-6 md:p-8">
+              <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start border border-border bg-surface p-6 md:p-8 clip-diagonal shadow-lg">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
-                    <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
                       BUNDLE SPECIFICATIONS
                     </span>
                   </div>
@@ -338,18 +332,18 @@ export default async function BundleDetailPage({ params }: Props) {
                       {bundle.extraDescription}
                     </p>
                   )}
-                  <div className="flex flex-wrap gap-4 pt-2 font-mono-tactical text-xs text-muted">
-                    <div className="flex items-center gap-1.5 border border-border bg-black/40 px-3 py-1.5">
+                  <div className="flex flex-wrap gap-4 pt-2 font-mono text-xs text-muted">
+                    <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
                       <Layers className="h-3.5 w-3.5 text-primary" />
                       <span>{includedSkins.length} WEAPON SKINS</span>
                     </div>
                     {accessories.length > 0 && (
-                      <div className="flex items-center gap-1.5 border border-border bg-black/40 px-3 py-1.5">
+                      <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
                         <Sparkles className="h-3.5 w-3.5 text-yellow-400" />
                         <span>{accessories.length} ACCESSORIES</span>
                       </div>
                     )}
-                    <div className="flex items-center gap-1.5 border border-border bg-black/40 px-3 py-1.5">
+                    <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
                       <ShoppingBag className="h-3.5 w-3.5 text-emerald-400" />
                       <span>EST. {totalCost.toLocaleString()} VP</span>
                     </div>
@@ -378,7 +372,7 @@ export default async function BundleDetailPage({ params }: Props) {
                     <h2 className="font-display text-3xl uppercase tracking-wide text-white">
                       Included Weapon Skins
                     </h2>
-                    <span className="ml-auto font-mono-tactical text-[10px] text-muted">
+                    <span className="ml-auto font-mono text-[10px] text-muted">
                       {includedSkins.length} items
                     </span>
                   </div>
@@ -392,7 +386,7 @@ export default async function BundleDetailPage({ params }: Props) {
                         <Link
                           key={skin.uuid}
                           href={`/skins/${skinSlug}`}
-                          className="group relative border border-border bg-surface-card transition-all duration-300 hover:border-primary/50"
+                          className="group relative border border-border bg-surface transition-all duration-300 hover:border-primary/50 clip-diagonal-sm"
                           style={{ borderLeftColor: tier?.color ?? "#C084FC", borderLeftWidth: "2px" }}
                         >
                           <div className="relative bg-black/40" style={{ aspectRatio: "1/1" }}>

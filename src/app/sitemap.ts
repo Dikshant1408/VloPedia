@@ -132,12 +132,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 9. Dynamic comparison routes
   const comparisonSlugs = [
     "weapons/vandal-vs-phantom",
+    "weapons/warden-vs-vandal",
+    "weapons/bandit-vs-sheriff",
     "weapons/operator-vs-outlaw",
     "weapons/spectre-vs-stinger",
     "weapons/sheriff-vs-ghost",
     "weapons/ares-vs-odin",
     "weapons/bulldog-vs-guardian",
     "agents/jett-vs-raze",
+    "agents/waylay-vs-jett",
+    "agents/tejo-vs-sova",
     "agents/omen-vs-clove",
     "agents/sova-vs-fade",
     "agents/cypher-vs-killjoy",
@@ -163,7 +167,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const weaponHubSlugs = [
     "vandal","phantom","operator","spectre","ghost","classic","sheriff",
     "frenzy","shorty","stinger","bucky","judge","bulldog","guardian",
-    "marshal","ares","odin","outlaw","melee","karambit"
+    "marshal","ares","odin","outlaw","warden","bandit","melee","karambit"
   ];
   const weaponHubRoutes: MetadataRoute.Sitemap = weaponHubSlugs.map(w => ({
     url:             `${base}/skins/${w}`,

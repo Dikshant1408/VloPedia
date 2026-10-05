@@ -100,7 +100,7 @@ export default function ChangelogPage() {
               PLATFORM CHANGELOG
             </h1>
             <p className="font-sans text-sm sm:text-base text-secondary leading-relaxed">
-              Transparent log of versioned updates, mathematical model audits, and active Patch 9.04 database synchronizations across VloPedia.
+              Transparent log of versioned updates, mathematical model audits, and active Patch 13.06 database synchronizations across VloPedia.
             </p>
           </div>
 
@@ -108,10 +108,10 @@ export default function ChangelogPage() {
           <div className="border border-[#0DF2F2]/30 bg-[#0DF2F2]/5 p-5 clip-diagonal flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
             <div className="flex items-center gap-2 text-[#0DF2F2]">
               <Activity className="h-4 w-4 animate-pulse" />
-              <span className="font-bold">DATABASE SYNCED: SEPTEMBER 4, 2026</span>
+              <span className="font-bold">DATABASE SYNCED: OCTOBER 2026</span>
             </div>
             <div className="flex items-center gap-4 text-muted">
-              <span>Active Patch: <strong className="text-white">Patch 9.04</strong></span>
+              <span>Active Patch: <strong className="text-white">Patch 13.06</strong></span>
               <span>Integrity: <strong className="text-primary">100% Verified</strong></span>
             </div>
           </div>

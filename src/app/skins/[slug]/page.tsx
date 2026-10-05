@@ -24,7 +24,7 @@ const API = "https://valorant-api.com/v1";
 const WEAPON_SLUGS = [
   "vandal","phantom","operator","spectre","ghost","classic","sheriff",
   "frenzy","shorty","stinger","bucky","judge","bulldog","guardian",
-  "marshal","ares","odin","outlaw","melee","karambit"
+  "marshal","ares","odin","outlaw","warden","bandit","melee","karambit"
 ];
 
 function slugify(text: string): string {
@@ -47,6 +47,8 @@ function weaponFromName(name: string, assetPath: string): string {
   if (p.includes("boltsniper")) return "operator";
   if (p.includes("standardsmg")) return "spectre";
   if (p.includes("revolver")) return "sheriff";
+  if (p.includes("battlerifle") || p.includes("warden")) return "warden";
+  if (p.includes("compact") || p.includes("bandit")) return "bandit";
   if (p.includes("melee")) return "melee";
   return "vandal";
 }
@@ -268,14 +270,41 @@ export default async function SkinDetailPage({ params }: Props) {
   // 1. Check if this is a Weapon Skin Hub (e.g. /skins/vandal)
   if (WEAPON_SLUGS.includes(lowerSlug)) {
     const targetWeapon = lowerSlug === "karambit" ? "melee" : lowerSlug;
-    const weaponSkins = skins.filter(s => {
-      if (s.displayName.toLowerCase().startsWith("standard")) return false;
-      const w = weaponFromName(s.displayName, s.assetPath);
-      if (lowerSlug === "karambit") {
-        return s.displayName.toLowerCase().includes("karambit");
-      }
-      return w === targetWeapon;
-    });
+    const weaponSkins = skins
+      .filter(s => {
+        if (s.displayName.toLowerCase().startsWith("standard")) return false;
+        const w = weaponFromName(s.displayName, s.assetPath);
+        if (lowerSlug === "karambit") {
+          return s.displayName.toLowerCase().includes("karambit");
+        }
+        return w === targetWeapon;
+      })
+      .map(s => ({
+        uuid: s.uuid,
+        displayName: s.displayName,
+        themeUuid: s.themeUuid,
+        contentTierUuid: s.contentTierUuid,
+        displayIcon: s.displayIcon,
+        wallpaper: null,
+        assetPath: s.assetPath,
+        chromas: (s.chromas || []).slice(0, 1).map(c => ({
+          uuid: c.uuid,
+          displayName: c.displayName,
+          displayIcon: c.displayIcon,
+          fullRender: c.fullRender,
+          swatch: null,
+          streamedVideo: s.chromas?.some(x => x.streamedVideo) ? "video" : null,
+          assetPath: "",
+        })),
+        levels: s.levels?.some(l => l.streamedVideo) ? [{
+          uuid: s.levels[0]?.uuid ?? s.uuid,
+          displayName: s.levels[0]?.displayName ?? "",
+          levelItem: null,
+          displayIcon: null,
+          streamedVideo: "video",
+          assetPath: "",
+        }] : [],
+      }));
 
     return (
       <WeaponSkinHub
@@ -325,7 +354,26 @@ export default async function SkinDetailPage({ params }: Props) {
       if (s.displayName.toLowerCase().startsWith("standard")) return false;
       return weaponFromName(s.displayName, s.assetPath) === weaponSlug;
     })
-    .slice(0, 4);
+    .slice(0, 4)
+    .map(s => ({
+      uuid: s.uuid,
+      displayName: s.displayName,
+      themeUuid: s.themeUuid,
+      contentTierUuid: s.contentTierUuid,
+      displayIcon: s.displayIcon,
+      wallpaper: null,
+      assetPath: "",
+      chromas: s.chromas && s.chromas.length > 0 ? [{
+        uuid: s.chromas[0].uuid,
+        displayName: s.chromas[0].displayName,
+        displayIcon: s.chromas[0].displayIcon,
+        fullRender: s.chromas[0].fullRender,
+        swatch: null,
+        streamedVideo: null,
+        assetPath: "",
+      }] : [],
+      levels: [],
+    }));
 
   const breadcrumbItems = [
     { label: "Skins", href: "/skins" },
@@ -346,22 +394,15 @@ export default async function SkinDetailPage({ params }: Props) {
         ]
       },
       {
-        "@type": "Product",
-        "name": `${skin.displayName} - VALORANT Skin`,
-        "image": skin.chromas?.[0]?.fullRender ?? skin.displayIcon,
+        "@type": "ItemPage",
+        "name": `${skin.displayName} - VALORANT Skin Showcase & Chromas`,
+        "url": `${siteConfig.url}/skins/${canonicalSlug}`,
         "description": `${skin.displayName} is an official ${tier?.rarity ?? "Premium"} edition cosmetic skin for the ${weaponName} in VALORANT. Features ${skin.chromas?.length ?? 1} chroma colorways and ${skin.levels?.length ?? 1} Radianite upgrade levels.`,
-        "sku": skin.uuid,
-        "category": "Video Game Virtual Item",
-        "offers": {
-          "@type": "Offer",
-          "price": tier?.price ? (tier.price * 0.01).toFixed(2) : "17.75",
-          "priceCurrency": "USD",
-          "description": `In-game store price: ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"} (Valorant Points)`,
-          "availability": "https://schema.org/InStock",
-          "seller": {
-            "@type": "Organization",
-            "name": "Riot Games Store"
-          }
+        "mainEntity": {
+          "@type": "Thing",
+          "name": skin.displayName,
+          "image": skin.chromas?.[0]?.fullRender ?? skin.displayIcon,
+          "description": `In-game store price: ${tier?.price ? `${tier.price.toLocaleString()} VP` : "1,775 VP"} (Valorant Points). Weapon: ${weaponName}.`
         }
       },
       {

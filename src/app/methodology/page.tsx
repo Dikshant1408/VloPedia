@@ -141,7 +141,7 @@ export default function MethodologyPage() {
               </p>
               <div className="p-3 border border-[rgba(236,232,225,0.04)] bg-[#08111A] font-mono text-xs flex justify-between items-center">
                 <span>Active Database Baseline:</span>
-                <span className="text-white font-bold">Patch 9.04 · Last Verified: September 1, 2026</span>
+                <span className="text-white font-bold">Patch 13.06 · Last Verified: October 2026</span>
               </div>
             </div>
           </div>

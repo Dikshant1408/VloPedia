@@ -4,7 +4,7 @@ import { PageTransition, Reveal } from "@/components/motion-system";
 import type { ValorantCompetitiveTier, ValorantCompetitiveTierEntry } from "@/lib/valorant-types";
 
 export const metadata = {
-  title: "Competitive Ranks & Tiers | ValoVault",
+  title: "Competitive Ranks & Tiers | VloPedia",
   description: "Explore all VALORANT competitive ranks and divisions. Detailed lists and high-res badge icons for Iron, Bronze, Silver, Gold, Platinum, Diamond, Ascendant, Immortal, and Radiant.",
   alternates: {
     canonical: "/tiers",

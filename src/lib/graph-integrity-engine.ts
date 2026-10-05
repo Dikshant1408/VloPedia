@@ -16,7 +16,7 @@ export interface GraphIntegrityReport {
 }
 
 export class GraphIntegrityEngine {
-  public static runAudit(currentPatch: string = "9.04"): GraphIntegrityReport {
+  public static runAudit(currentPatch: string = "13.06"): GraphIntegrityReport {
     const allEntities = KnowledgeGraphService.getAllEntities();
     const entityIdSet = new Set(allEntities.map(e => e.id));
 

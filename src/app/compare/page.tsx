@@ -14,6 +14,8 @@ export const metadata: Metadata = {
 
 const WEAPON_COMPARISONS = [
   { slug: "vandal-vs-phantom", title: "Vandal vs. Phantom", desc: "The definitive rifle duel: One-tap range vs. fire rate, bullet tracers, and recoil reset." },
+  { slug: "warden-vs-vandal", title: "Warden vs. Vandal", desc: "New semi-auto battle rifle vs. full-auto standard: 200 headshot tap-power vs. spray control." },
+  { slug: "bandit-vs-sheriff", title: "Bandit vs. Sheriff", desc: "High-capacity compact sidearm vs. heavy hand-cannon: 8-round velocity vs. raw wall-pen." },
   { slug: "operator-vs-outlaw", title: "Operator vs. Outlaw", desc: "4,700 VP sniper vs. 2,400 VP double-barrel sniper through half-shields." },
   { slug: "spectre-vs-stinger", title: "Spectre vs. Stinger", desc: "Run-and-gun SMG fire rates, burst mechanics, and eco round buy values." },
   { slug: "sheriff-vs-ghost", title: "Sheriff vs. Ghost", desc: "Eco one-taps vs. high-capacity silenced pistol accuracy." },
@@ -23,6 +25,8 @@ const WEAPON_COMPARISONS = [
 
 const AGENT_COMPARISONS = [
   { slug: "jett-vs-raze", title: "Jett vs. Raze", desc: "Operator dash entry vs. explosive satchel space creation and AOE damage." },
+  { slug: "waylay-vs-jett", title: "Waylay vs. Jett", desc: "Dynamic kinetic space-maker vs. wind duelist: Vertical mobility and dash duels." },
+  { slug: "tejo-vs-sova", title: "Tejo vs. Sova", desc: "Advanced radar recon & tracking vs. classic shock lineups and Hunter's Fury." },
   { slug: "omen-vs-clove", title: "Omen vs. Clove", desc: "Tactical team controller vs. aggressive combat controller with self-revive." },
   { slug: "sova-vs-fade", title: "Sova vs. Fade", desc: "Long-range bounce recon dart lineups vs. close-range haunt and tether debuffs." },
   { slug: "cypher-vs-killjoy", title: "Cypher vs. Killjoy", desc: "Global map trapwire intel vs. site lockdown and automated turrets." },

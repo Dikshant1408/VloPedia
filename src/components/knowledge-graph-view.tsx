@@ -71,7 +71,7 @@ export function KnowledgeGraphView({ node }: Props) {
             <span className="font-sans text-xs uppercase text-primary font-semibold">
               Data Provenance Audit
             </span>
-            <span className="font-mono text-xs text-muted">Patch 9.04 Baseline</span>
+            <span className="font-mono text-xs text-muted">Patch 13.06 Baseline</span>
           </div>
           <div className="grid gap-3 sm:grid-cols-3 font-mono text-xs">
             <div className="p-3 bg-surface rounded-md border border-border">
@@ -255,8 +255,8 @@ export function KnowledgeGraphView({ node }: Props) {
       <DataTrustBadge
         sourceType="EDITORIAL_ANALYSIS"
         sourceName="VloPedia Editorial Desk + VCT Pro Dataset"
-        patchVersion={node.fieldAttributions.tier?.patchVersion || "9.04"}
-        lastVerified={node.fieldAttributions.tier?.lastVerified || "September 3, 2026"}
+        patchVersion={node.fieldAttributions.tier?.patchVersion || "13.06"}
+        lastVerified={node.fieldAttributions.tier?.lastVerified || "October 2026"}
         confidence="HIGH"
       />
 

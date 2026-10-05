@@ -8,10 +8,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Pro Loadout Telemetry",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "Tailwind dash compensates for 5,000ms Operator post-shot mobility penalty",
     "explanation": "Jett's Tailwind allows aggressive forward angle peeking with the Operator, providing instant, risk-free repositioning after firing.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:omen",
@@ -22,10 +22,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Pro Loadout Telemetry",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "Phantom eliminates bullet tracers through Dark Cover hollow smokes",
     "explanation": "The Phantom features zero visible bullet tracers through smoke, allowing Omen to spam through his own hollow smokes without enemies determining his muzzle location.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:sova",
@@ -36,9 +36,37 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Pro Loadout Telemetry",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "High wall-penetration paired with Recon Bolt wallhack scans",
     "explanation": "Sova's Recon Bolt scans reveal enemies through wall-bangable structures on Ascent B Main and Haven Garage for lethal Odin spam finishes.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:chamber",
+    "toEntity": "weapon:bandit",
+    "relationType": "SIGNATURE_LOADOUT",
+    "directionality": "DIRECTED",
+    "sourceId": "vlopedia-radiant-desk",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT 2026 Eco Loadout Analytics",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "Bandit quick-draw equip time pairs with Headhunter heavy damage",
+    "explanation": "Chamber utilizes the Bandit sidearm on half-buy rounds for fast 0.75s sidearm backup when Headhunter bullets are conserved.",
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:kay-o",
+    "toEntity": "weapon:warden",
+    "relationType": "SIGNATURE_LOADOUT",
+    "directionality": "DIRECTED",
+    "sourceId": "vlopedia-radiant-desk",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT 2026 Battle Rifle Statistics",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "200 headshot lethal damage rewards flash-assisted angle peeks",
+    "explanation": "KAY/O's FLASH/drive clears corners while Warden's 2x ADS magnification guarantees instant 200 damage headshot eliminations on long site holds.",
+    "lastVerified": "2026-10-01"
   }
 ]

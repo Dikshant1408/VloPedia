@@ -15,8 +15,8 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const leak = valorantDb.leaks.find(l => l.slug === slug);
-  if (!leak) return { title: "Leak Not Found | ValoVault" };
-  const pageTitle = `${leak.codename} VALORANT Leak: Credibility & Intel Report | ValoVault`;
+  if (!leak) return { title: "Leak Not Found | VloPedia" };
+  const pageTitle = `${leak.codename} VALORANT Leak: Credibility & Intel Report | VloPedia`;
   const pageDesc = `In-depth data-mined intel and credibility analysis for the upcoming ${leak.codename} leak in VALORANT. See the latest codename findings.`;
 
   return {

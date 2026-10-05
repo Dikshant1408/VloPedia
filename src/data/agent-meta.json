@@ -1,22 +1,24 @@
 {
   "metadata": {
-    "patchVersion": "9.04",
-    "season": "Episode 9 Act II",
-    "lastVerified": "September 1, 2026",
+    "patchVersion": "13.06",
+    "season": "Season 2026 Act 5",
+    "lastVerified": "October 2026",
     "source": "VCT Champions & Pro Tournament Analytics Dataset"
   },
   "tiers": {
     "Jett": "S-Tier", "Omen": "S-Tier", "Sova": "S-Tier", "Cypher": "S-Tier", "Killjoy": "S-Tier",
     "Viper": "S-Tier", "Raze": "S-Tier", "Clove": "S-Tier", "Fade": "A-Tier", "Breach": "A-Tier",
     "Gekko": "A-Tier", "KAY/O": "A-Tier", "Skye": "A-Tier", "Astra": "A-Tier", "Vyse": "A-Tier",
-    "Neon": "A-Tier", "Yoru": "A-Tier", "Iso": "B-Tier", "Reyna": "B-Tier", "Phoenix": "B-Tier",
-    "Harbor": "B-Tier", "Deadlock": "B-Tier", "Chamber": "B-Tier", "Sage": "B-Tier"
+    "Neon": "A-Tier", "Yoru": "A-Tier", "Tejo": "A-Tier", "Miks": "A-Tier", "Veto": "A-Tier",
+    "Waylay": "A-Tier", "Iso": "B-Tier", "Reyna": "B-Tier", "Phoenix": "B-Tier", "Harbor": "B-Tier",
+    "Deadlock": "B-Tier", "Chamber": "B-Tier", "Sage": "B-Tier", "Brimstone": "B-Tier"
   },
   "pickRates": {
     "Jett": "84.5%", "Omen": "78.2%", "Sova": "72.4%", "Cypher": "69.1%", "Killjoy": "68.3%",
     "Viper": "65.0%", "Raze": "61.8%", "Fade": "58.6%", "Gekko": "55.4%", "Clove": "52.3%",
-    "KAY/O": "49.0%", "Breach": "44.2%", "Reyna": "42.1%", "Iso": "38.5%", "Skye": "35.2%",
-    "Neon": "34.0%", "Yoru": "31.5%", "Astra": "30.8%", "Vyse": "29.4%", "Phoenix": "28.4%",
+    "Waylay": "48.2%", "KAY/O": "49.0%", "Tejo": "46.5%", "Breach": "44.2%", "Miks": "44.0%",
+    "Reyna": "42.1%", "Veto": "41.8%", "Iso": "38.5%", "Skye": "35.2%", "Neon": "34.0%",
+    "Yoru": "31.5%", "Astra": "30.8%", "Vyse": "29.4%", "Phoenix": "28.4%", "Brimstone": "27.5%",
     "Chamber": "26.0%", "Sage": "25.2%", "Harbor": "22.1%", "Deadlock": "19.5%"
   },
   "difficulty": {
@@ -24,7 +26,8 @@
     "Cypher": "MEDIUM", "Killjoy": "MEDIUM", "Omen": "MEDIUM", "Breach": "MEDIUM", "Fade": "MEDIUM",
     "KAY/O": "MEDIUM", "Skye": "MEDIUM", "Gekko": "MEDIUM", "Vyse": "MEDIUM", "Neon": "HARD",
     "Iso": "MEDIUM", "Chamber": "MEDIUM", "Deadlock": "MEDIUM", "Reyna": "EASY", "Phoenix": "EASY",
-    "Brimstone": "EASY", "Clove": "EASY", "Sage": "EASY", "Harbor": "MEDIUM"
+    "Brimstone": "EASY", "Clove": "EASY", "Sage": "EASY", "Harbor": "MEDIUM", "Tejo": "MEDIUM",
+    "Miks": "MEDIUM", "Veto": "HARD", "Waylay": "HARD"
   },
   "bestMaps": {
     "Jett": ["Ascent", "Haven", "Breeze"],
@@ -51,7 +54,11 @@
     "Deadlock": ["Bind", "Sunset", "Split"],
     "Chamber": ["Lotus", "Breeze", "Haven"],
     "Sage": ["Icebox", "Split", "Haven"],
-    "Vyse": ["Abyss", "Bind", "Sunset"]
+    "Vyse": ["Abyss", "Bind", "Sunset"],
+    "Tejo": ["Corrode", "Summit", "Haven"],
+    "Miks": ["Summit", "Bind", "Split"],
+    "Veto": ["Corrode", "Sunset", "Abyss"],
+    "Waylay": ["Summit", "Lotus", "Ascent"]
   },
   "teammates": {
     "Jett": ["Omen", "Sova", "KAY/O"],
@@ -78,7 +85,11 @@
     "Deadlock": ["Raze", "Sova", "Omen"],
     "Chamber": ["Viper", "Sova", "Omen"],
     "Sage": ["Jett", "Omen", "Sova"],
-    "Vyse": ["Omen", "Sova", "Raze"]
+    "Vyse": ["Omen", "Sova", "Raze"],
+    "Tejo": ["Jett", "Omen", "Killjoy"],
+    "Miks": ["Jett", "Raze", "Fade"],
+    "Veto": ["Omen", "Sova", "Jett"],
+    "Waylay": ["Fade", "Omen", "Breach"]
   },
   "counters": {
     "Jett": ["Cypher", "KAY/O"],
@@ -105,6 +116,10 @@
     "Deadlock": ["Sova", "Gekko"],
     "Chamber": ["KAY/O", "Sova"],
     "Sage": ["Sova", "Raze"],
-    "Vyse": ["KAY/O", "Sova"]
+    "Vyse": ["KAY/O", "Sova"],
+    "Tejo": ["Cypher", "KAY/O"],
+    "Miks": ["KAY/O", "Cypher"],
+    "Veto": ["Sova", "KAY/O"],
+    "Waylay": ["Cypher", "Killjoy"]
   }
 }

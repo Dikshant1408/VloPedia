@@ -31,16 +31,16 @@ export default function NotFound() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#0B141A] text-foreground flex flex-col justify-center py-20">
+      <div className="min-h-screen bg-background text-foreground flex flex-col justify-center py-20">
         <Container className="max-w-3xl text-center space-y-8">
           
           {/* Tactical 404 Badge */}
-          <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-3 py-1 text-primary font-mono text-xs uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-3 py-1 text-primary font-mono text-xs uppercase tracking-widest clip-diagonal-sm">
             <ShieldAlert className="h-4 w-4" />
             <span>404 // CLASSIFIED INTEL NOT FOUND</span>
           </div>
 
-          <h1 className="font-display font-black text-5xl sm:text-7xl uppercase text-white tracking-tight">
+          <h1 className="font-display font-black text-5xl sm:text-7xl uppercase text-foreground tracking-tight">
             TACTICAL SIGNAL LOST
           </h1>
 
@@ -57,19 +57,19 @@ export default function NotFound() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search Agents, Weapons, Lore, Tools..."
-                className="w-full bg-[#0D1820] border border-[rgba(236,232,225,0.15)] pl-10 pr-4 py-2.5 font-sans text-xs text-white placeholder:text-muted focus:border-primary focus:outline-none"
+                className="w-full bg-surface-card border border-border pl-10 pr-4 py-2.5 font-sans text-xs text-foreground placeholder:text-muted focus:border-primary focus:outline-none clip-diagonal-sm"
               />
             </div>
             <button
               type="submit"
-              className="px-4 py-2.5 bg-primary text-black font-mono text-xs uppercase font-bold hover:bg-primary-hover transition-colors shrink-0"
+              className="px-4 py-2.5 bg-primary text-black font-mono text-xs uppercase font-bold hover:bg-primary-hover transition-colors shrink-0 clip-diagonal-sm"
             >
               Search
             </button>
           </form>
 
           {/* Suggested Destinations */}
-          <div className="pt-8 border-t border-[rgba(236,232,225,0.08)] space-y-4 text-left">
+          <div className="pt-8 border-t border-border/60 space-y-4 text-left">
             <h3 className="font-mono text-xs uppercase text-muted tracking-wider text-center">
               Were you looking for one of these intelligence hubs?
             </h3>
@@ -78,12 +78,12 @@ export default function NotFound() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="border border-[rgba(236,232,225,0.08)] bg-[#0D1820] p-3 text-left hover:border-primary/40 transition-colors group block"
+                  className="border border-border bg-surface-card p-3 text-left hover:border-primary/40 hover:bg-surface-elevated transition-colors group block clip-diagonal-sm"
                 >
                   <span className="font-mono text-[9px] uppercase text-primary block">
                     {item.category}
                   </span>
-                  <span className="font-sans text-xs font-bold text-white group-hover:text-primary transition-colors line-clamp-1">
+                  <span className="font-sans text-xs font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {item.name}
                   </span>
                 </Link>
@@ -91,7 +91,7 @@ export default function NotFound() {
             </div>
           </div>
 
-          <div className="pt-4">
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/"
               className="inline-flex items-center gap-2 font-mono text-xs uppercase text-primary hover:text-primary-hover font-bold"

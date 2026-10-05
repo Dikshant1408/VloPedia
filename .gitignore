@@ -48,6 +48,8 @@ coverage
 .DS_Store
 Thumbs.db
 .claude/
+.gemini/
+*.pem
 .codex/
 .kiro/
 .kilo/

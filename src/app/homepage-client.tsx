@@ -73,11 +73,11 @@ const META_AGENTS = [
 ];
 
 const DIRECTORY_ITEMS = [
-  { title: "Agents", href: "/agents", desc: "Abilities, stats, role synergies & counters", count: "26 Agents" },
-  { title: "Weapons", href: "/weapons", desc: "Ballistics, spray patterns & damage charts", count: "18 Weapons" },
-  { title: "Maps", href: "/maps", desc: "Interactive 3D radar, callouts & plant executes", count: "11 Maps" },
+  { title: "Agents", href: "/agents", desc: "Abilities, stats, role synergies & counters", count: "29 Agents" },
+  { title: "Weapons", href: "/weapons", desc: "Ballistics, spray patterns & damage charts", count: "21 Weapons" },
+  { title: "Maps", href: "/maps", desc: "Interactive 3D radar, callouts & plant executes", count: "18 Maps (7 Active)" },
   { title: "Skins", href: "/skins", desc: "1,400+ skins, chromas, tiers & audio clips", count: "1,400+ Skins" },
-  { title: "Bundles", href: "/bundles", desc: "Complete skin sets and store history", count: "Bundle Archive" },
+  { title: "Bundles", href: "/bundles", desc: "Complete skin sets and store history", count: "327+ Bundles" },
   { title: "Comp Builder", href: "/comp-builder", desc: "Simulate and optimize team agent synergies", count: "Interactive Tool" },
   { title: "Guides", href: "/guides", desc: "Agent masterclasses and crosshair placement", count: "Tutorials" },
   { title: "Lore", href: "/lore", desc: "First Light canon, Kingdom Corp & Earth-Omega", count: "Story Timeline" },
@@ -178,15 +178,15 @@ export function HomepageClient() {
                 </p>
               </div>
 
-              {/* Centered Search Bar with Focus Reactivity */}
+              {/* Centered Tactical Search Bar */}
               <div className="pt-2 max-w-2xl w-full mx-auto">
                 <form
                   onSubmit={goSearch}
                   role="search"
-                  className={`relative flex items-center rounded-xl border bg-surface-card/90 backdrop-blur-md shadow-md transition-all duration-200 ${
+                  className={`relative flex items-center border bg-surface/95 backdrop-blur-md shadow-lg transition-all duration-200 clip-diagonal-sm ${
                     isSearching
-                      ? "border-primary ring-2 ring-primary/25 bg-surface-card"
-                      : "border-border hover:border-border-light focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/25"
+                      ? "border-primary ring-1 ring-primary/40 bg-surface-elevated"
+                      : "border-border hover:border-border-light focus-within:border-primary"
                   }`}
                 >
                   <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
@@ -199,15 +199,19 @@ export function HomepageClient() {
                     }}
                     onFocus={() => setIsSearching(true)}
                     onBlur={() => setIsSearching(query.length > 0)}
-                    placeholder="Search agents, weapons, skins, maps..."
+                    placeholder="Search agents, weapons, skins, maps... (Ctrl + K)"
                     aria-label="Search VloPedia"
                     className="w-full bg-transparent px-4 py-3.5 font-sans text-sm sm:text-base text-foreground placeholder:text-muted focus:outline-none"
                   />
+                  <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 mr-2 border border-border bg-surface-elevated text-muted font-mono text-[10px] rounded-xs select-none">
+                    <span>Ctrl</span>
+                    <span>K</span>
+                  </div>
                   <Button
                     type="submit"
                     variant="primary"
                     size="sm"
-                    className="shrink-0 mr-2.5 rounded-lg font-sans text-sm font-medium px-4"
+                    className="shrink-0 mr-2.5 font-mono text-xs font-bold uppercase tracking-wider px-4 clip-diagonal-sm"
                   >
                     Search
                   </Button>
@@ -230,10 +234,10 @@ export function HomepageClient() {
                       onMouseLeave={() => setActiveCategory("idle")}
                       onFocus={() => setActiveCategory(item.cat)}
                       onBlur={() => setActiveCategory("idle")}
-                      className={`rounded-lg border px-3.5 py-1.5 text-secondary transition-all shadow-2xs font-medium backdrop-blur-xs ${
+                      className={`border px-3.5 py-1.5 text-secondary transition-all clip-diagonal-sm font-medium backdrop-blur-xs cursor-pointer ${
                         activeCategory === item.cat
                           ? "border-primary bg-primary/15 text-foreground font-semibold"
-                          : "border-border/80 bg-surface-card/75 hover:text-foreground hover:border-border-light hover:bg-surface-elevated"
+                          : "border-border bg-surface hover:text-white hover:border-border-light hover:bg-surface-elevated"
                       }`}
                     >
                       {item.label}
@@ -434,7 +438,7 @@ export function HomepageClient() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="group rounded-lg border border-border bg-surface-card p-5 hover:border-border-light hover:shadow-md transition-all flex flex-col justify-between"
+                  className="group clip-diagonal-sm border border-border bg-surface-card p-5 hover:border-border-light hover:bg-surface-elevated hover:shadow-md transition-all flex flex-col justify-between"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -447,9 +451,14 @@ export function HomepageClient() {
                       {item.desc}
                     </p>
                   </div>
-                  <span className="font-mono text-[10px] text-muted pt-4 block font-medium">
-                    {item.count}
-                  </span>
+                  <div className="flex items-center justify-between pt-4 border-t border-border/40 mt-3">
+                    <span className="font-mono text-[10px] text-muted block font-medium">
+                      {item.count}
+                    </span>
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-muted/60 group-hover:text-primary/70 transition-colors">
+                      INTEL // SEC
+                    </span>
+                  </div>
                 </Link>
               ))}
             </div>
@@ -489,9 +498,9 @@ export function HomepageClient() {
                   <div
                     key={agent.slug}
                     onMouseEnter={() => setSelectedMetaAgent(agent)}
-                    className={`group relative rounded-lg border bg-surface-card p-5 transition-all duration-200 cursor-pointer ${
+                    className={`group relative clip-diagonal-sm border bg-surface-card p-5 transition-all duration-200 cursor-pointer ${
                       isSelected
-                        ? "border-primary shadow-sm"
+                        ? "border-primary shadow-sm bg-surface-elevated"
                         : "border-border hover:border-border-light hover:bg-surface-elevated"
                     }`}
                   >
@@ -599,10 +608,10 @@ export function HomepageClient() {
 
             <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
               {/* Head to Head Rifles Table */}
-              <div className="rounded-lg border border-border bg-surface-card p-6 shadow-xs">
+              <div className="clip-diagonal-sm border border-border bg-surface-card p-6 shadow-xs">
                 <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
                   <span className="font-sans text-sm font-semibold text-foreground">
-                    Ballistic Comparison (Patch 9.04)
+                    Ballistic Comparison (Patch 13.06)
                   </span>
                   <span className="font-mono text-xs text-muted">Primary Rifles</span>
                 </div>
@@ -663,7 +672,7 @@ export function HomepageClient() {
               </div>
 
               {/* Economy Insight Panel */}
-              <div className="rounded-lg border border-border bg-surface-card p-6 flex flex-col justify-between space-y-4 shadow-xs">
+              <div className="clip-diagonal-sm border border-border bg-surface-card p-6 flex flex-col justify-between space-y-4 shadow-xs">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <Crosshair className="h-4 w-4 text-primary" />

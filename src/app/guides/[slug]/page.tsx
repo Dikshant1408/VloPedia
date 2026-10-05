@@ -6,6 +6,7 @@ import { guidesDb } from "@/lib/guides-db";
 import { ArrowLeft, BookOpen, Clock, Calendar, ChevronRight } from "lucide-react";
 import { Metadata } from "next";
 import { BookmarkButton } from "@/components/bookmark-button";
+import { siteConfig } from "@/lib/site";
 
 interface GuideDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -41,8 +42,42 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
     .filter(g => g.slug !== slug)
     .slice(0, 2);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": siteConfig.url },
+          { "@type": "ListItem", "position": 2, "name": "Guides", "item": `${siteConfig.url}/guides` },
+          { "@type": "ListItem", "position": 3, "name": guide.title, "item": `${siteConfig.url}/guides/${slug}` }
+        ]
+      },
+      {
+        "@type": "Article",
+        "headline": guide.title,
+        "description": guide.summary,
+        "author": {
+          "@type": "Organization",
+          "name": guide.author || "VloPedia Editorial Desk"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VloPedia",
+          "url": siteConfig.url
+        },
+        "mainEntityOfPage": `${siteConfig.url}/guides/${slug}`,
+        "datePublished": guide.publishedAt
+      }
+    ]
+  };
+
   return (
     <PageTransition>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="min-h-screen bg-[#0B141A] text-foreground font-sans">
         {/* Tactical grid */}
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 bg-tactical-grid bg-tactical-dots opacity-20 z-0" />

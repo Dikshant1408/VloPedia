@@ -24,14 +24,9 @@ export default function WeaponDisplay({ weapon, weaponSkins }: WeaponDisplayProp
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Product",
+          "@type": "Thing",
           "name": weapon.name,
-          "description": weapon.description,
-          "offers": {
-            "@type": "Offer",
-            "price": weapon.cost,
-            "priceCurrency": "VP"
-          }
+          "description": weapon.description
         }) }}
       />
       

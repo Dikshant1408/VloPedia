@@ -8,10 +8,10 @@
     "sourceType": "VCT_SNAPSHOT",
     "source": "VCT Map Pool Analytics",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "92.4% Pro Pick Rate on Ascent Mid courtyard",
     "explanation": "Ascent features long, open sightlines through Mid Courtyard and elevated boxes on A/B sites that maximize Jett's Operator angles and Updraft repositioning.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:sova",
@@ -22,10 +22,10 @@
     "sourceType": "VCT_SNAPSHOT",
     "source": "VCT Map Pool Analytics",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "96.1% Sova presence across international Ascent matches",
     "explanation": "Ascent's open skyboxes enable cross-map Recon Bolt lineups that scan entire bomb sites, wall-banging enemies through paper-thin wood structures with Vandal and Odin.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:viper",
@@ -36,10 +36,10 @@
     "sourceType": "VCT_SNAPSHOT",
     "source": "VCT Map Pool Analytics",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "98.5% Viper presence as sole viable solo Controller on Breeze",
     "explanation": "Breeze's massive open bomb sites require Viper's full-length Toxic Screen line to cut sightlines across A Site and B Site where dome smokes fall short.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:cypher",
@@ -50,9 +50,37 @@
     "sourceType": "VCT_SNAPSHOT",
     "source": "Radiant Ranked Telemetry",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "89.2% B Site Anchor lockdown win rate",
     "explanation": "Sunset B Site features narrow chokepoints and indestructible geometry that create un-break-able Cypher Trapwire loops against attackers.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:tejo",
+    "toEntity": "map:summit",
+    "relationType": "OPTIMAL_MAP_FIT",
+    "directionality": "DIRECTED",
+    "sourceId": "vct-pro-dataset",
+    "sourceType": "VCT_SNAPSHOT",
+    "source": "VCT 2026 Season Analysis",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "88.6% presence on high-altitude vertical terrain",
+    "explanation": "Summit's multi-tier cable bridges and vertical drop sectors are ideal for Tejo's Guided Salvo trajectory strikes and Stealth Drone reconnaissance.",
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:miks",
+    "toEntity": "map:corrode",
+    "relationType": "OPTIMAL_MAP_FIT",
+    "directionality": "DIRECTED",
+    "sourceId": "vct-pro-dataset",
+    "sourceType": "VCT_SNAPSHOT",
+    "source": "VCT Champions 2026 Analytics",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "91.3% Controller pick on Corrode industrial chokepoints",
+    "explanation": "Corrode's tight acoustic chambers maximize Miks's Waveform vision denial and Bassquake ultimate disruption across tight metal corridors.",
+    "lastVerified": "2026-10-01"
   }
 ]

@@ -124,7 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (norm.endsWith("-map")) {
     const mapName = norm.replace(/-map$/, "");
     return {
-      title: "VALORANT Maps | ValoVault",
+      title: "VALORANT Maps | VloPedia",
       robots: { index: false, follow: true },
       alternates: { canonical: `${siteConfig.url}/maps${mapName ? `/${mapName}` : ""}` },
     };
@@ -132,14 +132,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (norm.endsWith("-weapon") || norm.endsWith("-sniper") || norm.endsWith("-lmg") || norm.endsWith("-smg")) {
     const weaponName = norm.replace(/-(weapon|sniper|lmg|smg)$/, "");
     return {
-      title: "VALORANT Weapons | ValoVault",
+      title: "VALORANT Weapons | VloPedia",
       robots: { index: false, follow: true },
       alternates: { canonical: `${siteConfig.url}/weapons${weaponName && weaponName !== "bandit" ? `/${weaponName}` : ""}` },
     };
   }
   if (norm === "retakes-mode" || norm.endsWith("-mode")) {
     return {
-      title: "VALORANT Game Modes | ValoVault",
+      title: "VALORANT Game Modes | VloPedia",
       robots: { index: false, follow: true },
       alternates: { canonical: `${siteConfig.url}/gamemodes` },
     };
@@ -147,25 +147,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (norm.endsWith("-agent")) {
     const baseName = norm.replace(/-agent$/, "");
     return {
-      title: "VALORANT Agents | ValoVault",
+      title: "VALORANT Agents | VloPedia",
       robots: { index: false, follow: true },
       alternates: { canonical: `${siteConfig.url}/agents${baseName ? `/${baseName}` : ""}` },
     };
   }
 
   const agent = await getAgent(slug);
-  if (!agent) return { title: "Agent Not Found | ValoVault", robots: { index: false } };
+  if (!agent) return { title: "Agent Not Found | VloPedia", robots: { index: false } };
 
   const canonicalSlug = slugify(agent.displayName);
   if (norm !== canonicalSlug) {
     return {
-      title: `${agent.displayName} Agent Guide | ValoVault`,
+      title: `${agent.displayName} Agent Guide | VloPedia`,
       robots: { index: false, follow: true },
       alternates: { canonical: `${siteConfig.url}/agents/${canonicalSlug}` },
     };
   }
 
-  const pageTitle = `${agent.displayName} Agent Guide: Abilities, Role & Tactics | ValoVault`;
+  const pageTitle = `${agent.displayName} Agent Guide: Abilities, Role & Tactics | VloPedia`;
   const pageDesc = `Comprehensive ${agent.displayName} guide in VALORANT. Learn key ability tactics, agent role details, counter strategies, and background lore.`;
 
   return {
@@ -528,7 +528,7 @@ export default async function AgentDetailPage({ params }: Props) {
                       <Link
                         key={name}
                         href={`/agents/${slugify(name)}`}
-                        className="p-3 border border-border bg-[#0D1820] hover:border-primary/50 text-center transition-all group"
+                        className="p-3 border border-border bg-surface-elevated hover:border-primary/50 text-center transition-all group clip-diagonal-sm"
                       >
                         <span className="font-display font-bold text-sm uppercase text-white group-hover:text-primary transition-colors block">
                           {name}
@@ -555,7 +555,7 @@ export default async function AgentDetailPage({ params }: Props) {
                       <Link
                         key={name}
                         href={`/agents/${slugify(name)}`}
-                        className="p-3 border border-error/20 bg-error/5 hover:border-error/50 transition-all group"
+                        className="p-3 border border-error/30 bg-error/5 hover:border-error/60 transition-all group clip-diagonal-sm"
                       >
                         <span className="font-display font-bold text-sm uppercase text-white group-hover:text-error transition-colors block">
                           {name}
@@ -582,7 +582,7 @@ export default async function AgentDetailPage({ params }: Props) {
                       <Link
                         key={map}
                         href={`/maps/${slugify(map)}`}
-                        className="border border-border bg-surface px-4 py-2 font-mono-tactical text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:border-primary hover:text-primary"
+                        className="border border-border bg-surface px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:border-primary hover:text-primary clip-diagonal-sm"
                       >
                         📍 {map}
                       </Link>
@@ -593,8 +593,8 @@ export default async function AgentDetailPage({ params }: Props) {
 
               {/* Tactical Tips (Beginner & Advanced) */}
               <Reveal>
-                <div className="space-y-4 border border-[rgba(236,232,225,0.1)] bg-[#0D1820] p-6">
-                  <span className="font-mono-tactical text-[10px] font-bold uppercase tracking-[0.4em] text-[#0DF2F2] block mb-2">
+                <div className="space-y-4 border border-border bg-surface p-6 clip-diagonal">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-[#0DF2F2] block mb-2">
                     TACTICAL TIPS & PLAYBOOK
                   </span>
                   

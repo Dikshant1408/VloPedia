@@ -6,10 +6,10 @@ import type { ValorantBundle } from "@/lib/valorant-types";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "VALORANT Weapon Bundles Showcase | ValoVault",
+  title: "VALORANT Weapon Bundles Showcase | VloPedia",
   description: "Explore the collection of all weapon bundles in VALORANT. Check release prices, featured items, promo graphics, and add them to your collection wishlist.",
   openGraph: {
-    title: "VALORANT Weapon Bundles Showcase | ValoVault",
+    title: "VALORANT Weapon Bundles Showcase | VloPedia",
     description: "Explore the collection of all weapon bundles in VALORANT. Check release prices, featured items, promo graphics, and add them to your collection wishlist.",
   },
   alternates: {
@@ -24,7 +24,17 @@ async function fetchBundles(): Promise<BundleData[]> {
     return raw
       .filter(b => b.verticalPromoImage || b.displayIcon2 || b.displayIcon)
       .map((b, i) => ({
-        ...b,
+        uuid: b.uuid,
+        displayName: b.displayName,
+        displayNameSubText: null,
+        description: "",
+        extraDescription: null,
+        promoDescription: null,
+        useAdditionalContext: false,
+        displayIcon: b.displayIcon,
+        displayIcon2: b.displayIcon2,
+        verticalPromoImage: b.verticalPromoImage,
+        assetPath: "",
         price:  [8700, 7100, 6700, 5900, 5100][i % 5],
         active: i === 0,
       }));

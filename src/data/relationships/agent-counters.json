@@ -9,10 +9,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Radiant Ranked Telemetry",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "73% dash interception rate against head-high Trapwires",
     "explanation": "Cypher's invisible Trapwires halt Jett mid-dash, canceling her momentum and leaving her anchored and concussed in full defender crossfire.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:jett",
@@ -24,10 +24,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "VCT Match Analysis",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "ZERO/POINT suppression disables Tailwind and cancels Blade Storm ultimate",
     "explanation": "KAY/O's suppression knife suppresses all radiant abilities for 8 seconds, stripping Jett of both her dash escape and active Blade Storm knives.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:cypher",
@@ -39,10 +39,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Pro Counterplay Guide",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "Shock Darts break Trapwires from across the map without LOS",
     "explanation": "Sova's Shock Darts destroy Cypher's Trapwires and Spycam through geometry before the attack execute begins, dismantling his anchor setup.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:killjoy",
@@ -54,9 +54,54 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Competitive Meta Database",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "NULL/cmd ultimate and ZERO/POINT disable Turret and Alarmbot",
     "explanation": "KAY/O's suppression mechanics immediately shut down all automated Killjoy utility (Turret, Alarmbot, and Nanoswarms) during site takes.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:tejo",
+    "toEntity": "agent:cypher",
+    "relationType": "HARD_COUNTER",
+    "directionality": "DIRECTED",
+    "dangerLevel": "HIGH",
+    "sourceId": "vlopedia-radiant-desk",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT 2026 Match Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "Guided Salvo clears site anchor corridors before Stealth Drone entry",
+    "explanation": "Tejo's Guided Salvo targeted strikes detonate Cypher's wires and force defenders off site anchors.",
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:veto",
+    "toEntity": "agent:sova",
+    "relationType": "HARD_COUNTER",
+    "directionality": "DIRECTED",
+    "dangerLevel": "HIGH",
+    "sourceId": "vlopedia-radiant-desk",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT Champions 2026 Analysis",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "Interceptor field catches and dissolves recon darts and shock bolts mid-air",
+    "explanation": "Veto's Interceptor system intercepts incoming projectile utility, denying Sova's line-of-sight scans before site pushes.",
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:waylay",
+    "toEntity": "agent:cypher",
+    "relationType": "HARD_COUNTER",
+    "directionality": "DIRECTED",
+    "dangerLevel": "HIGH",
+    "sourceId": "vlopedia-radiant-desk",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "Radiant Ranked Telemetry",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "Refract light dash passes through trip triggers without deceleration",
+    "explanation": "Waylay's light-bending Refract enables rapid entry across trapped choke points.",
+    "lastVerified": "2026-10-01"
   }
 ]

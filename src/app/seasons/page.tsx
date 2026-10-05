@@ -53,9 +53,15 @@ const EPISODES = [
   },
   {
     episode: "Episode 9",
-    period: "January 2025 – Present",
-    acts: ["Act I", "Act II", "Act III"],
-    highlight: "Tejo, Waylay added. Ongoing competitive season.",
+    period: "January 2025 – January 2026",
+    acts: ["Act I: Tejo", "Act II: Waylay", "Act III: Corrode"],
+    highlight: "Tejo and Waylay added. Corrode map launched.",
+  },
+  {
+    episode: "Season 2026",
+    period: "January 2026 – Present",
+    acts: ["Act I: Bandit & Summit", "Act II: Miks", "Act III: Veto & Warden", "Act IV: Champions 2026", "Act V: Patch 13.06"],
+    highlight: "Miks and Veto joined roster. Summit map, Warden rifle, Bandit sidearm added. Active VCT Champions season.",
     current: true,
   },
 ];

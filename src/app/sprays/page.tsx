@@ -6,10 +6,10 @@ import { fetchWithCache } from "@/lib/api-cache";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "VALORANT Sprays & In-Game Decals Database | ValoVault",
+  title: "VALORANT Sprays & In-Game Decals Database | VloPedia",
   description: "Explore every in-game spray, animated decal, and tactical cosmetic in VALORANT with animations.",
   openGraph: {
-    title: "VALORANT Sprays & In-Game Decals Database | ValoVault",
+    title: "VALORANT Sprays & In-Game Decals Database | VloPedia",
     description: "Explore every in-game spray, animated decal, and tactical cosmetic in VALORANT with animations.",
   },
   alternates: {

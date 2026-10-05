@@ -50,6 +50,8 @@ const MAP_OPTIONS = [
   { id: "abyss",    name: "Abyss",    bestControllers: ["Omen", "Astra"], bestInitiators: ["Sova", "Fade"] },
   { id: "pearl",    name: "Pearl",    bestControllers: ["Astra", "Viper"], bestInitiators: ["Fade", "KAY/O"] },
   { id: "fracture", name: "Fracture", bestControllers: ["Brimstone", "Omen"], bestInitiators: ["Breach", "Fade"] },
+  { id: "corrode",  name: "Corrode",  bestControllers: ["Miks", "Viper"], bestInitiators: ["Tejo", "Fade"] },
+  { id: "summit",   name: "Summit",   bestControllers: ["Omen", "Astra", "Miks"], bestInitiators: ["Sova", "Tejo"] },
 ];
 
 /* ── Tactical Agent Trait Database ── */
@@ -72,6 +74,7 @@ const AGENT_TRAITS: Record<string, {
   "Yoru":      { execution: 86, siteControl: 50, info: 55, postPlant: 45, defense: 50, flash: true,  recon: true,  smoke: false, stall: false, entry: true  },
   "Neon":      { execution: 96, siteControl: 55, info: 10, postPlant: 30, defense: 50, flash: true,  recon: false, smoke: true,  stall: true,  entry: true  },
   "Iso":       { execution: 84, siteControl: 50, info: 15, postPlant: 40, defense: 60, flash: false, recon: false, smoke: true,  stall: true,  entry: true  },
+  "Waylay":    { execution: 95, siteControl: 50, info: 20, postPlant: 35, defense: 52, flash: true,  recon: false, smoke: false, stall: false, entry: true  },
   
   "Omen":      { execution: 80, siteControl: 94, info: 40, postPlant: 65, defense: 82, flash: true,  recon: false, smoke: true,  stall: false, entry: false },
   "Brimstone": { execution: 88, siteControl: 92, info: 10, postPlant: 98, defense: 78, flash: false, recon: false, smoke: true,  stall: true,  entry: false },
@@ -79,6 +82,7 @@ const AGENT_TRAITS: Record<string, {
   "Astra":     { execution: 82, siteControl: 96, info: 60, postPlant: 86, defense: 90, flash: false, recon: false, smoke: true,  stall: true,  entry: false },
   "Harbor":    { execution: 85, siteControl: 88, info: 15, postPlant: 70, defense: 68, flash: false, recon: false, smoke: true,  stall: true,  entry: false },
   "Clove":     { execution: 84, siteControl: 86, info: 20, postPlant: 60, defense: 70, flash: false, recon: false, smoke: true,  stall: true,  entry: true  },
+  "Miks":      { execution: 82, siteControl: 90, info: 35, postPlant: 76, defense: 84, flash: false, recon: false, smoke: true,  stall: true,  entry: false },
   
   "Sova":      { execution: 75, siteControl: 70, info: 98, postPlant: 92, defense: 80, flash: false, recon: true,  smoke: false, stall: true,  entry: false },
   "Fade":      { execution: 88, siteControl: 75, info: 96, postPlant: 75, defense: 78, flash: false, recon: true,  smoke: false, stall: true,  entry: false },
@@ -86,6 +90,7 @@ const AGENT_TRAITS: Record<string, {
   "Skye":      { execution: 85, siteControl: 65, info: 90, postPlant: 60, defense: 72, flash: true,  recon: true,  smoke: false, stall: false, entry: false },
   "Gekko":     { execution: 92, siteControl: 78, info: 88, postPlant: 88, defense: 75, flash: true,  recon: true,  smoke: false, stall: true,  entry: false },
   "KAY/O":     { execution: 90, siteControl: 80, info: 86, postPlant: 80, defense: 76, flash: true,  recon: true,  smoke: false, stall: true,  entry: false },
+  "Tejo":      { execution: 88, siteControl: 84, info: 92, postPlant: 86, defense: 80, flash: false, recon: true,  smoke: false, stall: true,  entry: false },
   
   "Cypher":    { execution: 50, siteControl: 85, info: 96, postPlant: 70, defense: 98, flash: false, recon: true,  smoke: true,  stall: true,  entry: false },
   "Killjoy":   { execution: 65, siteControl: 88, info: 90, postPlant: 96, defense: 98, flash: false, recon: true,  smoke: false, stall: true,  entry: false },
@@ -93,6 +98,7 @@ const AGENT_TRAITS: Record<string, {
   "Chamber":   { execution: 60, siteControl: 45, info: 70, postPlant: 40, defense: 86, flash: false, recon: true,  smoke: false, stall: true,  entry: false },
   "Sage":      { execution: 60, siteControl: 75, info: 20, postPlant: 72, defense: 90, flash: false, recon: false, smoke: false, stall: true,  entry: false },
   "Vyse":      { execution: 70, siteControl: 86, info: 50, postPlant: 82, defense: 96, flash: true,  recon: false, smoke: false, stall: true,  entry: false },
+  "Veto":      { execution: 65, siteControl: 88, info: 60, postPlant: 84, defense: 96, flash: false, recon: false, smoke: false, stall: true,  entry: false },
 };
 
 export default function CompBuilderPage() {
@@ -502,7 +508,7 @@ function CompBuilderInner() {
 
               <div className="mt-6 border-t border-[rgba(236,232,225,0.08)] pt-4 font-mono text-[10px] text-muted flex items-center justify-between">
                 <span>Map-weighted meta engine</span>
-                <span className="text-[#0DF2F2]">Patch 9.04 active</span>
+                <span className="text-[#0DF2F2]">Patch 13.06 active</span>
               </div>
             </div>
           </div>

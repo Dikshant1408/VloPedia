@@ -65,7 +65,7 @@ export const RELIABILITY_METHODOLOGY: Record<DataSourceRecord["reliability"], Re
     level: "EDITORIAL",
     title: "Expert Editorial & Tactical Strategy",
     description: "Tactical advice, tier ratings, counterplay matrices, and crosshair recommendations authored by Immortal+ analysts.",
-    verificationMethod: "Peer reviewed by radiant-level players and updated each major balance patch (e.g. Patch 9.04).",
+    verificationMethod: "Peer reviewed by radiant-level players and updated each major balance patch (e.g. Patch 13.06).",
     trustScore: 88,
   },
   COMMUNITY: {
@@ -107,14 +107,14 @@ export class SourceRegistry {
    */
   public static checkSourceHealth(): SourceHealthStatus[] {
     const sources = this.getAllSources();
-    const now = "2026-09-04T10:00:00Z";
+    const now = "2026-10-01T10:00:00Z";
 
     return sources.map(s => {
       let httpStatus = 200;
       let latencyMs = 45;
       let isSchemaValid = true;
       let healthStatus: SourceHealthStatus["healthStatus"] = "HEALTHY";
-      let statusMessage = "Operational: schema validated against Patch 9.04.";
+      let statusMessage = "Operational: schema validated against Patch 13.06.";
 
       if (s.id.includes("riot-api") || s.id.includes("valorant-api")) {
         latencyMs = 62;

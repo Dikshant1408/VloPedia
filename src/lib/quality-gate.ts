@@ -160,7 +160,7 @@ export class ContentQualityGate {
         wordCount: 320,
         hasInstantAnswer: true,
         hasStructuredData: true,
-        canonicalUrl: "https://valovault-ivory.vercel.app/skins/aemondir-vandal",
+        canonicalUrl: "https://vlopedia.website/skins/aemondir-vandal",
         internalLinkCount: 6,
         hasVerifiedSource: true,
         isLegacyAlias: false
@@ -172,7 +172,7 @@ export class ContentQualityGate {
         wordCount: 40,
         hasInstantAnswer: false,
         hasStructuredData: false,
-        canonicalUrl: "https://valovault-ivory.vercel.app/skins/libretto-stinger",
+        canonicalUrl: "https://vlopedia.website/skins/libretto-stinger",
         internalLinkCount: 1,
         hasVerifiedSource: true,
         isLegacyAlias: true
@@ -184,7 +184,7 @@ export class ContentQualityGate {
         wordCount: 420,
         hasInstantAnswer: true,
         hasStructuredData: true,
-        canonicalUrl: "https://valovault-ivory.vercel.app/bundles/a4c613c9-4970-61ca-e52a-918ae22f5315",
+        canonicalUrl: "https://vlopedia.website/bundles/a4c613c9-4970-61ca-e52a-918ae22f5315",
         internalLinkCount: 14,
         hasVerifiedSource: true,
         isLegacyAlias: false
@@ -196,7 +196,7 @@ export class ContentQualityGate {
         wordCount: 380,
         hasInstantAnswer: true,
         hasStructuredData: true,
-        canonicalUrl: "https://valovault-ivory.vercel.app/maps/lotus",
+        canonicalUrl: "https://vlopedia.website/maps/lotus",
         internalLinkCount: 8,
         hasVerifiedSource: true,
         isLegacyAlias: false

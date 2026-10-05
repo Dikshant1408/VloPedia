@@ -8,10 +8,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "VCT 2026 Masters Match Snapshots",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "84.2% Site entry success when Paranoia is paired with Tailwind dash",
     "explanation": "Omen's Paranoia blind down narrow entry chokepoints suppresses defender crosshairs, enabling Jett to Tailwind dash safely onto site without being traded.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:sova",
@@ -22,10 +22,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "VCT Pro Dataset",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "Recon Bolt scans reveal enemy positions before dash commits",
     "explanation": "Sova's Recon Bolt and Owl Drone tag defenders, allowing Jett to dash directly into isolated 1v1 engagements with confirmed target coordinates.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:raze",
@@ -36,10 +36,10 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Radiant Ranked Telemetry",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "Seize + Paint Shells combo yields lethal multi-frag rounds",
     "explanation": "Fade's Seize tether locks enemies in place with deafening and decay, guaranteeing maximum lethal damage from Raze's Paint Shells cluster grenade.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
   },
   {
     "fromEntity": "agent:viper",
@@ -50,9 +50,37 @@
     "sourceType": "EDITORIAL_ANALYSIS",
     "source": "Competitive Map Meta (Bind)",
     "confidence": "HIGH",
-    "patchVersion": "9.04",
+    "patchVersion": "13.06",
     "evidence": "Double-controller smoke line denies Hookah and A Short completely",
     "explanation": "Double-controller setup on Bind: Viper's Toxic Screen cuts A Site in half while Brimstone's rapid 3-smoke deployment locks down Hookah and B Garden.",
-    "lastVerified": "2026-09-02"
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:waylay",
+    "toEntity": "agent:fade",
+    "relationType": "TACTICAL_SYNERGY",
+    "directionality": "UNDIRECTED",
+    "sourceId": "vct-pro-dataset",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT 2026 Stage 2 Data",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "Haunt reveals allow Waylay to teleport and isolate targets instantly",
+    "explanation": "Fade's Haunt eye marks defenders, giving Waylay clear targets to execute rapid Refract flank eliminations.",
+    "lastVerified": "2026-10-01"
+  },
+  {
+    "fromEntity": "agent:tejo",
+    "toEntity": "agent:miks",
+    "relationType": "TACTICAL_SYNERGY",
+    "directionality": "UNDIRECTED",
+    "sourceId": "vct-pro-dataset",
+    "sourceType": "EDITORIAL_ANALYSIS",
+    "source": "VCT Champions 2026 Meta Analysis",
+    "confidence": "HIGH",
+    "patchVersion": "13.06",
+    "evidence": "Sonic concuss into Guided Salvo delivers unavoidable site wipe combos",
+    "explanation": "Miks's sonic concuss traps players inside site cubbies while Tejo drops targeted artillery strikes for decisive round conversions.",
+    "lastVerified": "2026-10-01"
   }
 ]

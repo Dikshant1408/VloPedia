@@ -25,21 +25,21 @@ export function BundlesClient({ initialBundles }: BundlesClientProps) {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#0B141A] text-foreground">
+      <div className="min-h-screen bg-background text-foreground">
         {/* Page header */}
-        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+        <div className="border-b border-border bg-background pt-16 pb-10">
           <Container>
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 bg-[#0DF2F2] animate-pulse" aria-hidden="true" />
               <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">
-                BUNDLE REGISTRY
+                BUNDLE REGISTRY // 327+ STORE BUNDLES
               </span>
             </div>
             <h1 className="font-display font-black text-6xl uppercase tracking-tighter text-foreground sm:text-7xl lg:text-8xl">
               BUNDLES
             </h1>
-            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-muted">
-              Every weapon bundle — past and present. Inspect contents and add to your wishlist.
+            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-secondary">
+              Every weapon bundle — past and present. Inspect weapon compositions, melee cosmetics, player cards, gun buddies, and VP prices.
             </p>
 
             {/* Search */}
@@ -51,7 +51,7 @@ export function BundlesClient({ initialBundles }: BundlesClientProps) {
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search bundles…"
                 aria-label="Search bundles"
-                className="w-full border border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] py-2.5 pl-10 pr-4 font-sans text-sm text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none"
+                className="w-full border border-border bg-surface py-2.5 pl-10 pr-4 font-sans text-sm text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none clip-diagonal-sm"
               />
             </div>
           </Container>

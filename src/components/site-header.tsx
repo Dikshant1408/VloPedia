@@ -96,14 +96,14 @@ export function SiteHeader({ version }: SiteHeaderProps) {
               aria-label="VloPedia Homepage"
             >
               {/* VloPedia Logo Icon */}
-              <div className="relative h-8 w-8 shrink-0 transition-transform group-hover:scale-105">
+              <div className="relative h-9 w-9 shrink-0 transition-transform group-hover:scale-105 rounded-md overflow-hidden border border-white/10 shadow-sm bg-black/40">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/vlopedia-icon.png"
+                  src="/images/vlopedia-emblem.png"
                   alt="VloPedia"
-                  width={32}
-                  height={32}
-                  className="rounded-md object-cover w-8 h-8"
+                  width={36}
+                  height={36}
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div className="flex flex-col leading-none">
@@ -239,14 +239,14 @@ export function SiteHeader({ version }: SiteHeaderProps) {
             {/* Drawer header */}
             <div className="relative z-10 flex items-center justify-between border-b border-border px-5 py-4 bg-surface/50">
               <div className="flex items-center gap-3">
-                <div className="relative h-7 w-7 shrink-0">
+                <div className="relative h-8 w-8 shrink-0 rounded-md overflow-hidden border border-white/10 shadow-sm bg-black/40">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/vlopedia-icon.png"
+                    src="/images/vlopedia-emblem.png"
                     alt="VloPedia"
-                    width={28}
-                    height={28}
-                    className="rounded object-cover w-7 h-7"
+                    width={32}
+                    height={32}
+                    className="w-full h-full object-contain"
                   />
                 </div>
                 <div>

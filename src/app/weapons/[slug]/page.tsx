@@ -97,10 +97,38 @@ export default async function WeaponDetailPage({ params }: Props) {
   const weapon = findWeapon(weapons, slug);
   if (!weapon) notFound();
 
-  // Category-mates for the compare feature
+  // Category-mates for the compare feature — strip skins so huge nested arrays aren't duplicated across all pages
   const sameCategory = weapons
     .filter(w => w.category === weapon.category && w.uuid !== weapon.uuid)
-    .slice(0, 8);
+    .slice(0, 8)
+    .map(w => ({
+      ...w,
+      skins: [],
+    }));
+
+  // Sanitize weapon skins: WeaponDetail only needs first chroma & basic skin metadata for SkinCard
+  const sanitizedWeapon: ValorantWeapon = {
+    ...weapon,
+    skins: (weapon.skins || []).map(s => ({
+      uuid: s.uuid,
+      displayName: s.displayName,
+      themeUuid: s.themeUuid,
+      contentTierUuid: s.contentTierUuid,
+      displayIcon: s.displayIcon,
+      wallpaper: null,
+      assetPath: "",
+      chromas: s.chromas && s.chromas.length > 0 ? [{
+        uuid: s.chromas[0].uuid,
+        displayName: s.chromas[0].displayName,
+        displayIcon: s.chromas[0].displayIcon,
+        fullRender: s.chromas[0].fullRender,
+        swatch: null,
+        streamedVideo: null,
+        assetPath: "",
+      }] : [],
+      levels: [],
+    })),
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -114,16 +142,15 @@ export default async function WeaponDetailPage({ params }: Props) {
         ]
       },
       {
-        "@type": "Product",
-        "name": `${weapon.displayName} - VALORANT Weapon`,
-        "image": [weapon.displayIcon],
+        "@type": "ItemPage",
+        "name": `${weapon.displayName} - VALORANT Weapon Guide & Ballistic Stats`,
+        "url": `${siteConfig.url}/weapons/${slug}`,
         "description": `Full tactical stats and damage falloff profiles for the ${weapon.displayName} in VALORANT.`,
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "USD",
-          "description": weapon.shopData?.cost ? `In-game purchase cost: ${weapon.shopData.cost.toLocaleString()} Creds` : "Standard baseline sidearm",
-          "availability": "https://schema.org/InStock"
+        "mainEntity": {
+          "@type": "Thing",
+          "name": weapon.displayName,
+          "image": weapon.displayIcon,
+          "description": `VALORANT weapon in the ${weapon.category.replace(/EEquippableCategory::/i, "")} class. In-game buy cost: ${weapon.shopData?.cost ? `${weapon.shopData.cost.toLocaleString()} Creds` : "Free starting sidearm"}.`
         }
       }
     ]
@@ -135,7 +162,8 @@ export default async function WeaponDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <WeaponDetailClient weapon={weapon} sameCategory={sameCategory} />
+      <WeaponDetailClient weapon={sanitizedWeapon} sameCategory={sameCategory} />
     </>
   );
 }
+

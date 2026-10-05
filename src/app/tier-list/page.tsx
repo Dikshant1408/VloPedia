@@ -10,10 +10,10 @@ import type { ValorantAgent } from "@/lib/valorant-types";
 
 /* ── Static tier assignments (community meta) ── */
 const TIER_SLUGS: Record<string, string[]> = {
-  S: ["jett", "omen", "killjoy", "sova", "clove", "vyse"],
-  A: ["breach", "fade", "kayo", "neon", "raze", "reyna", "skye", "sage", "chamber", "viper"],
-  B: ["astra", "brimstone", "harbor", "iso", "yoru", "deadlock", "gekko", "cypher"],
-  C: ["phoenix", "skye", "tejo", "waylay"],
+  S: ["jett", "omen", "killjoy", "sova", "cypher", "viper", "raze", "clove"],
+  A: ["fade", "breach", "gekko", "kayo", "skye", "astra", "vyse", "neon", "yoru", "tejo", "miks", "veto", "waylay"],
+  B: ["iso", "reyna", "phoenix", "harbor", "deadlock", "chamber", "sage", "brimstone"],
+  C: [],
 };
 
 const TIER_STYLE: Record<string, { bg: string; border: string; text: string; label: string }> = {

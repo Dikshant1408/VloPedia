@@ -143,11 +143,11 @@ export class KnowledgeGraphService {
   } {
     this.init();
     return {
-      version: "v1.2-canonical",
-      patchVersion: "9.04",
+      version: "v1.3-canonical",
+      patchVersion: "13.06",
       totalEntities: this.entities.size,
       totalRelationships: this.relationships.length,
-      lastAuditDate: "2026-09-04",
+      lastAuditDate: "2026-10-01",
     };
   }
 

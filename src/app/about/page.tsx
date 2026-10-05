@@ -4,8 +4,8 @@ import { Shield, Cpu, Target, Compass, Database } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us — ValoVault",
-  description: "Learn more about ValoVault, the ultimate independent VALORANT companion and tactical encyclopedia.",
+  title: "About Us — VloPedia",
+  description: "Learn more about VloPedia, the ultimate independent VALORANT companion and tactical encyclopedia.",
   alternates: {
     canonical: "/about",
   },
@@ -27,10 +27,10 @@ export default function AboutPage() {
                 <span className="font-mono text-xs text-primary tracking-[0.25em] uppercase font-bold">CORE INTEL</span>
               </div>
               <h1 className="font-display text-5xl uppercase tracking-tighter text-white sm:text-6xl">
-                ABOUT VALOVAULT
+                ABOUT VLOPEDIA
               </h1>
               <p className="mt-3 max-w-xl font-sans text-sm leading-relaxed text-secondary">
-                The ultimate independent database, collection tracker, and tactical strategy vault for VALORANT players.
+                The ultimate independent database, collection tracker, and tactical strategy encyclopedia for VALORANT players.
               </p>
             </Container>
           </div>
@@ -51,10 +51,10 @@ export default function AboutPage() {
                     {"// EMPATHETIC DESIGNED FOR COMPETITIVE INTELLIGENCE"}
                   </p>
                   <p className="text-sm leading-relaxed text-muted">
-                    ValoVault was built with a clear purpose: to centralize game diagnostics and cosmetics tracking in a premium, ultra-responsive web environment. We believe that competitive players deserve instant access to frame-accurate weapon parameters, agent ability maps, lore files, and custom strategy builders. 
+                    VloPedia was built with a clear purpose: to centralize game diagnostics, frame-accurate weapon ballistics, and cosmetics tracking in a premium, ultra-responsive web environment. We believe that competitive players deserve instant access to weapon parameters, agent ability maps, lore files, and custom strategy builders. 
                   </p>
                   <p className="text-sm leading-relaxed text-muted">
-                    By compiling public metadata and developing interactive tactical tools, we aim to bridge the gap between casual gameplay and deep tactical understanding, helping players optimize their loadouts and compositions.
+                    By compiling verified public metadata and developing interactive tactical tools, we aim to bridge the gap between casual gameplay and deep tactical understanding, helping players optimize their loadouts and compositions.
                   </p>
                 </div>
               </Reveal>
@@ -70,7 +70,7 @@ export default function AboutPage() {
                     {"// STATE-OF-THE-ART FRONTEND ARCHITECTURE"}
                   </p>
                   <p className="text-sm leading-relaxed text-muted">
-                    ValoVault is built on a modern, high-performance tech stack configured for speed and static delivery:
+                    VloPedia is built on a modern, high-performance tech stack configured for speed and static delivery:
                   </p>
                   <ul className="list-disc pl-5 space-y-1.5 text-xs text-muted font-mono uppercase">
                     <li><strong className="text-white">Framework:</strong> Next.js 15 & React 19 Client Engine</li>
@@ -129,7 +129,7 @@ export default function AboutPage() {
                 <div>
                   <span className="font-bold block tracking-wider mb-1">RIOT Games Community Disclaimer</span>
                   <p className="text-muted leading-relaxed text-[10px] normal-case font-sans">
-                    ValoVault is an independent fan-made companion website created under Riot Games&apos; &quot;Legal Jibber Jabber&quot; policy using assets owned by Riot Games. VALORANT and Riot Games are trademarks or registered trademarks of Riot Games, Inc. ValoVault is not affiliated with, sponsored by, or approved by Riot Games, and has no official affiliation with the game developers.
+                    VloPedia is an independent fan-made companion website created under Riot Games&apos; &quot;Legal Jibber Jabber&quot; policy using assets owned by Riot Games. VALORANT and Riot Games are trademarks or registered trademarks of Riot Games, Inc. VloPedia is not affiliated with, sponsored by, or approved by Riot Games, and has no official affiliation with the game developers.
                   </p>
                 </div>
               </div>

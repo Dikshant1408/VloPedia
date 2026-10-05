@@ -6,10 +6,10 @@ import { fetchWithCache } from "@/lib/api-cache";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "VALORANT Gun Buddies & Charms Catalogue | ValoVault",
+  title: "VALORANT Gun Buddies & Charms Catalogue | VloPedia",
   description: "Browse the complete database of all gun buddies and weapon charms in VALORANT. Filter, search, and view HD icons.",
   openGraph: {
-    title: "VALORANT Gun Buddies & Charms Catalogue | ValoVault",
+    title: "VALORANT Gun Buddies & Charms Catalogue | VloPedia",
     description: "Browse the complete database of all gun buddies and weapon charms in VALORANT. Filter, search, and view HD icons.",
   },
   alternates: {

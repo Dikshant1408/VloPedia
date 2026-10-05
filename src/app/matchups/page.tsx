@@ -37,6 +37,8 @@ const COUNTERS: Record<string, string[]> = {
   Deadlock:   ["Sova","Breach","Jett","Raze"],
   Chamber:    ["Fade","Sova","Breach","KAY/O"],
   Vyse:       ["Sova","Breach","Fade","Jett"],
+  Miks:       ["KAY/O","Cypher","Fade","Sova"],
+  Veto:       ["Sova","KAY/O","Breach","Raze"],
 };
 
 export default function MatchupsPage() {

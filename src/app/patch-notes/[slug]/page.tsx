@@ -32,7 +32,7 @@ const KNOWN_WEAPONS = new Set([
   "classic", "shorty", "frenzy", "ghost", "sheriff",
   "stinger", "spectre", "bucky", "judge", "bulldog",
   "guardian", "phantom", "vandal", "marshal", "outlaw",
-  "operator", "ares", "odin", "melee"
+  "operator", "ares", "odin", "warden", "bandit", "melee"
 ]);
 
 function getSubjectMeta(subject: string): { href: string | null; isLink: boolean } {
@@ -75,11 +75,11 @@ function getSubjectMeta(subject: string): { href: string | null; isLink: boolean
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const patch = valorantDb.patches.find((p) => p.slug === slug);
-  if (!patch) return { title: "Patch Notes Not Found | ValoVault" };
+  if (!patch) return { title: "Patch Notes Not Found | VloPedia" };
   return {
-    title: `Patch ${patch.version} | ValoVault`,
-    description: `Patch ${patch.version} — ${patch.date}. Buffs: ${patch.buffs.map(b=>b.subject).join(", ")}.`,
-    openGraph: { type:"website", title:`Patch ${patch.version} | ValoVault`, description:`Balance changes for ${patch.version}.` },
+    title: `VALORANT Patch ${patch.version} Notes & Balance Changes | VloPedia`,
+    description: `VALORANT Patch ${patch.version} notes (${patch.date}). Tactical overview of buffs: ${patch.buffs.map(b=>b.subject).join(", ") || "None"}.`,
+    openGraph: { type:"website", title:`Patch ${patch.version} | VloPedia`, description:`Balance changes for ${patch.version}.` },
     alternates: {
       canonical: `/patch-notes/${slug}`,
     },

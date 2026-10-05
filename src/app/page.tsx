@@ -22,7 +22,11 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   verification: {
-    google: "VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw",
+    google: [
+      "FlbgsDmDRsMGCDsekr2iLEDY7e_nW547KQEN3kcFNRI",
+      "3vDY6qxEsTfaDAK803XjxHNSHmszpmX484JGXnKeJOw",
+      "VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw",
+    ],
   },
   other: {
     "c5e365bb4ddff86b4d42f01bc4bd01051bc9845a": "c5e365bb4ddff86b4d42f01bc4bd01051bc9845a",

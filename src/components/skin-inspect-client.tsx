@@ -82,32 +82,34 @@ export function SkinInspectClient({ skin }: Props) {
       <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr] items-stretch">
         
         {/* Cinematic Weapon Showcase Container */}
-        <div className="rounded-xl border border-border bg-surface-card p-6 sm:p-8 relative flex flex-col justify-between space-y-6 shadow-xs">
+        <div className="border border-border bg-surface p-6 sm:p-8 relative flex flex-col justify-between space-y-6 shadow-lg clip-diagonal">
           <div className="space-y-6">
             
             {/* Header Identity */}
             <div className="space-y-1.5 text-center sm:text-left">
-              <span className="font-mono text-xs font-semibold text-primary block uppercase tracking-wider">
-                Weapon Showcase
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs font-bold text-primary block uppercase tracking-widest">
+                  {"// WEAPON SKIN DOSSIER"}
+                </span>
+                <span className="font-mono text-[10px] text-muted uppercase">
+                  {skin.weaponSlug ? skin.weaponSlug.toUpperCase() : "WEAPON"}
+                </span>
+              </div>
               <h1 className="text-3xl sm:text-4xl font-black text-foreground font-display tracking-tight uppercase">
                 {skin.name}
               </h1>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
-                <Badge className="border-primary/30 bg-primary/10 text-primary font-medium">
+                <Badge className="border-primary/30 bg-primary/10 text-primary font-bold clip-diagonal-sm">
                   {skin.rarity}
                 </Badge>
-                <span className="text-xs text-secondary border border-border rounded px-2.5 py-0.5">
+                <span className="text-xs text-secondary border border-border px-2.5 py-0.5 font-mono clip-diagonal-sm">
                   {currentVariant?.name || "Standard"}
-                </span>
-                <span className="text-xs font-mono text-muted">
-                  {skin.weaponSlug ? skin.weaponSlug.toUpperCase() : "WEAPON"}
                 </span>
               </div>
             </div>
 
             {/* ── Cinematic Showcase Stage ── */}
-            <div className="relative w-full aspect-[16/9] rounded-xl border border-border/70 bg-gradient-to-b from-surface-elevated/50 via-surface-card to-surface-card flex items-center justify-center p-6 sm:p-10 overflow-hidden group shadow-sm">
+            <div className="relative w-full aspect-[16/9] border border-border/80 bg-gradient-to-b from-surface-elevated/40 via-surface to-surface flex items-center justify-center p-6 sm:p-10 overflow-hidden group shadow-inner clip-diagonal-sm">
               {/* Studio Radial Ambient Backdrop */}
               <div className="absolute inset-0 bg-radial from-white/[0.05] via-transparent to-transparent pointer-events-none" />
               
@@ -225,10 +227,10 @@ export function SkinInspectClient({ skin }: Props) {
                           setActiveVideo("inspect");
                         }
                       }}
-                      className={`p-2 rounded-lg border text-center transition-all cursor-pointer ${
+                      className={`p-2.5 border text-center transition-all cursor-pointer clip-diagonal-sm ${
                         selectedVideoUrl === levelData?.videoUrl && hasVideo
-                          ? "border-primary bg-primary/10 text-primary font-bold shadow-2xs"
-                          : "border-border bg-surface-muted/60 text-secondary hover:border-border-light hover:text-foreground"
+                          ? "border-primary bg-primary/15 text-primary font-bold shadow-md"
+                          : "border-border bg-surface text-secondary hover:border-border-light hover:text-foreground hover:bg-surface-elevated"
                       }`}
                     >
                       <span className="block text-xs font-bold uppercase">{item.label}</span>

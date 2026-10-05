@@ -54,9 +54,9 @@ const TYPE_CONFIG = {
 
 export function DataTrustBadge({
   sourceType,
-  patchVersion = "9.04",
+  patchVersion = "13.06",
   sourceName = "VloPedia Verified Data",
-  lastVerified = "September 2, 2026",
+  lastVerified = "October 2026",
   confidence = "HIGH",
   className = "",
 }: Props) {

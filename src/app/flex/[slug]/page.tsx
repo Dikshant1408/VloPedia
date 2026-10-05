@@ -34,14 +34,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const items = await getAllFlexItems();
   const item = items.find(i => i.uuid === slug);
-  if (!item) return { title: "Flex Item Not Found | ValoVault", robots: { index: false } };
+  if (!item) return { title: "Flex Item Not Found | VloPedia", robots: { index: false } };
 
   const cleanName = item.displayName.endsWith(" Flex")
     ? item.displayName.slice(0, -5)
     : item.displayName;
 
   return {
-    title: `${cleanName} Inspect | ValoVault`,
+    title: `${cleanName} Inspect | VloPedia`,
     description: `Inspect the interactive animation, 3D diagnostics, and hologram view for the ${cleanName} expression accessory.`,
     alternates: {
       canonical: `/flex/${slug}`,

@@ -45,31 +45,31 @@ const WEAPONS_LIST = ["Vandal", "Phantom", "Operator", "Sheriff", "Spectre", "Gh
 const VERIFIED_ENTITY_UPDATES: Record<string, { type: string; date: string; title: string; desc: string; patch: string }> = {
   "jett": {
     type: "BALANCE_VERIFIED",
-    date: "Sep 4, 2026",
-    title: "Jett Tailwind & Updraft Calibrated",
-    desc: "Active competitive meta tier remains S-Tier under Patch 9.04. Tailwind dash windup confirmed.",
-    patch: "9.04"
+    date: "Oct 1, 2026",
+    title: "Jett Tailwind & Drift Calibrated",
+    desc: "Active competitive meta tier remains S-Tier under Patch 13.06. Tailwind dash and passive drift confirmed.",
+    patch: "13.06"
   },
   "omen": {
     type: "STRATEGY_UPDATED",
-    date: "Sep 3, 2026",
+    date: "Oct 1, 2026",
     title: "Omen Ascent & Haven One-Ways Verified",
     desc: "Rechargeable dark cover timing tested. Synergizes with Sova recon darts for A Main one-ways.",
-    patch: "9.04"
+    patch: "13.06"
   },
   "vandal": {
     type: "BALLISTICS_CONFIRMED",
-    date: "Sep 2, 2026",
+    date: "Oct 1, 2026",
     title: "Vandal Zero-Dropoff Damage Confirmed",
     desc: "160 headshot lethality verified across 0-50m. Recoil reset time remains 0.375s.",
-    patch: "9.04"
+    patch: "13.06"
   },
   "ascent": {
     type: "MAP_COMP_UPDATED",
-    date: "Sep 3, 2026",
+    date: "Oct 1, 2026",
     title: "Ascent Pro Meta Comp Calibrated",
     desc: "Jett / Omen / Sova / Killjoy / KAY/O holds 96% synergy rating in VCT Pro Snapshots.",
-    patch: "9.04"
+    patch: "13.06"
   },
   "first-light": {
     type: "CANON_EVIDENCE",
@@ -508,10 +508,10 @@ export default function MyValorantProfilePage() {
               {followedEntities.map((slug) => {
                 const update = VERIFIED_ENTITY_UPDATES[slug] || {
                   type: "VERIFIED_RECORD",
-                  date: "Sep 3, 2026",
+                  date: "Oct 1, 2026",
                   title: `${slug.toUpperCase()} Database Entry`,
-                  desc: "Canonical stats, abilities, and relationship graph calibrated to Patch 9.04.",
-                  patch: "9.04"
+                  desc: "Canonical stats, abilities, and relationship graph calibrated to Patch 13.06.",
+                  patch: "13.06"
                 };
 
                 return (

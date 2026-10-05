@@ -42,7 +42,7 @@
       "id": "vlopedia-radiant-desk",
       "name": "VloPedia Radiant Editorial Desk",
       "type": "EDITORIAL_ANALYSIS",
-      "url": "https://valovault-ivory.vercel.app/methodology",
+      "url": "https://vlopedia.website/methodology",
       "description": "Qualitative solo-queue meta tiers, agent matchup counters, and situational map synergy evaluations formulated by Radiant analysts.",
       "reliability": "EDITORIAL",
       "updateFrequency": "Bi-Weekly Editorial Pass"
@@ -51,7 +51,7 @@
       "id": "community-verified-reports",
       "name": "Community Editorial Corrections Pipeline",
       "type": "COMMUNITY",
-      "url": "https://valovault-ivory.vercel.app/admin/health",
+      "url": "https://vlopedia.website/admin/health",
       "description": "Peer-reviewed player correction submissions audited and approved by the VloPedia editorial desk.",
       "reliability": "COMMUNITY",
       "updateFrequency": "Continuous"

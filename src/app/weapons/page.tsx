@@ -28,5 +28,12 @@ async function fetchWeapons(): Promise<ValorantWeapon[]> {
 
 export default async function WeaponsIndexPage() {
   const weapons = await fetchWeapons();
-  return <WeaponsClient initialWeapons={weapons} />;
+  // Strip heavy nested skins array from weapons for the index page.
+  // WeaponsClient and WeaponCard only need base stats, shopData, displayName, displayIcon, category, uuid.
+  const sanitizedWeapons = weapons.map(w => ({
+    ...w,
+    skins: [],
+  }));
+  return <WeaponsClient initialWeapons={sanitizedWeapons} />;
 }
+

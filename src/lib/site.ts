@@ -7,7 +7,7 @@ export const siteConfig = {
   developerUrl: "https://github.com/Godrikt",
   description:
     "The definitive VALORANT tactical encyclopedia. Agents, weapons, maps, skins, tools, and source-backed lore — all in one unified knowledge engine.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://valovault-ivory.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://vlopedia.website",
 };
 
 export const navigationItems = [

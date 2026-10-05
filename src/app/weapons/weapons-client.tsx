@@ -36,20 +36,20 @@ export function WeaponsClient({ initialWeapons }: WeaponsClientProps) {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#0B141A] text-foreground">
+      <div className="min-h-screen bg-background text-foreground">
         {/* Page header */}
-        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+        <div className="border-b border-border bg-background pt-16 pb-10">
           <Container>
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 bg-[#0DF2F2] animate-pulse" aria-hidden="true" />
-              <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">ARMORY MATRIX</span>
+              <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">ARMORY TELEMETRY // 21 ARSENAL WEAPONS</span>
             </div>
             <h1 className="font-display font-black text-6xl uppercase tracking-tighter text-foreground sm:text-7xl lg:text-8xl flex items-center gap-4">
               WEAPONS
               <span className="w-2.5 h-2.5 bg-[#0DF2F2] rounded-full animate-pulse hidden sm:block" aria-hidden="true" />
             </h1>
-            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-muted">
-              Every weapon in the arsenal — full stats, 3D inspection, and all available skins.
+            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-secondary">
+              Every weapon in the arsenal — full ballistic statistics, damage falloff profiles, fire rates, buy costs, and verified skin showcases.
             </p>
 
             {/* Category quick-links */}
@@ -60,7 +60,7 @@ export function WeaponsClient({ initialWeapons }: WeaponsClientProps) {
                     key={cat.key}
                     type="button"
                     onClick={() => scrollTo(cat.key)}
-                    className="border border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                    className="border border-border bg-surface px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted transition-all hover:border-primary hover:text-white hover:bg-surface-elevated clip-diagonal-sm cursor-pointer"
                   >
                     {cat.label}
                   </button>

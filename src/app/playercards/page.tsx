@@ -6,10 +6,10 @@ import { fetchWithCache } from "@/lib/api-cache";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "VALORANT Player Cards & Identity Banners | ValoVault",
+  title: "VALORANT Player Cards & Identity Banners | VloPedia",
   description: "Check out all profile banners, player cards, and identity items in VALORANT with HD portrait preview.",
   openGraph: {
-    title: "VALORANT Player Cards & Identity Banners | ValoVault",
+    title: "VALORANT Player Cards & Identity Banners | VloPedia",
     description: "Check out all profile banners, player cards, and identity items in VALORANT with HD portrait preview.",
   },
   alternates: {

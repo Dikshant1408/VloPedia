@@ -48,19 +48,34 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
   return (
     <Link
       href={`/weapons/${slug}`}
-      className="group relative block overflow-hidden rounded-lg border border-border bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-light hover:shadow-md"
+      className="group relative block overflow-hidden border border-border bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg clip-diagonal"
     >
+      {/* Top technical header bar */}
+      <div className="flex items-center justify-between border-b border-border/60 bg-surface px-4 py-2 font-mono text-[10px] text-muted">
+        <div className="flex items-center gap-2">
+          <span className="text-muted/60 select-none">+</span>
+          <span className="uppercase tracking-widest text-secondary font-bold">
+            {weapon.shopData?.categoryText ?? weapon.category.replace(/EEquippableCategory::/i, "")}
+          </span>
+        </div>
+        {weapon.weaponStats && (
+          <span className="tracking-wider">
+            MAG: <strong className="text-white">{weapon.weaponStats.magazineSize}</strong> · ROF: <strong className="text-white">{weapon.weaponStats.fireRate}</strong>
+          </span>
+        )}
+      </div>
+
       {/* Weapon image — 3:1 ratio */}
-      <div className="relative w-full bg-black/40" style={{ aspectRatio: "3/1" }}>
+      <div className="relative w-full bg-black/30" style={{ aspectRatio: "3/1" }}>
         <Image
           src={weapon.displayIcon}
           alt={weapon.displayName}
           fill
           sizes="(max-width:640px) 100vw, 50vw"
-          className="object-contain px-8 py-4 transition-transform duration-500 group-hover:scale-[1.03]"
+          className="object-contain px-8 py-4 transition-transform duration-500 group-hover:scale-[1.04]"
           unoptimized
         />
-        {/* Subtle inner glow */}
+        {/* Subtle inner radial highlight */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -72,19 +87,18 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
       </div>
 
       {/* Info row */}
-      <div className="flex items-center justify-between border-t border-border px-5 py-3">
-        <div className="flex items-center gap-3">
-          <h3 className="font-display text-lg uppercase tracking-wide text-white">
+      <div className="flex items-center justify-between border-t border-border px-5 py-3 bg-surface-card">
+        <div>
+          <h3 className="font-display font-black text-xl uppercase tracking-wide text-white group-hover:text-primary transition-colors">
             {weapon.displayName}
           </h3>
-          <span className="border border-border px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-muted">
-            {weapon.shopData?.categoryText ?? weapon.category.replace(/EEquippableCategory::/i, "")}
-          </span>
         </div>
-        {cost && (
+        {cost ? (
           <span className="font-mono text-sm font-bold text-primary">
             {cost.toLocaleString()} <span className="text-[10px] text-muted">VP</span>
           </span>
+        ) : (
+          <span className="font-mono text-xs uppercase tracking-wider text-muted">Free Standard</span>
         )}
       </div>
 

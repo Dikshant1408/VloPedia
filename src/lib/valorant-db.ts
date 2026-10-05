@@ -1,5 +1,5 @@
 export interface AgentAbility {
-  key: "Q" | "E" | "C" | "X";
+  key: "Q" | "E" | "C" | "X" | "Passive";
   name: string;
   description: string;
   type: string;
@@ -160,7 +160,14 @@ export const valorantDb = {
                 "type": "Ultimate Ability",
                 "description": "ACTIVATE to enter Astral Form where you can place Stars with FIRE. Stars can be reactivated later, transforming them into a Nova Pulse, Nebula, or Gravity Well.\r\n\r\nWhen Cosmic Divide is charged, use ALT FIRE in Astral Form to begin aiming it, then FIRE to select two locations. An infinite Cosmic Divide connects the two points you select. Cosmic Divide blocks bullets and sound.",
                 "icon": "https://media.valorant-api.com/agents/41fb69c1-4189-7b37-f117-bcaf1e96f1bf/abilities/ultimate/displayicon.png"
-            }
+            },
+            {
+                "key": "Passive",
+                "name": "ASTRAL FORM",
+                "type": "Passive Ability",
+                "description": "ACTIVATE (Ultimate Key) to enter Astral Form where you can survey the map and place Stars with PRIMARY FIRE. Stars can later be transformed into Nova Pulse, Nebula, or Gravity Well.",
+                "icon": "https://media.valorant-api.com/agents/41fb69c1-4189-7b37-f117-bcaf1e96f1bf/abilities/passive/displayicon.png"
+            },
         ]
     },
     {
@@ -507,7 +514,14 @@ export const valorantDb = {
                 "type": "Ultimate Ability",
                 "description": "EQUIP a chemical sprayer. FIRE to spray a chemical cloud in all directions around Viper, creating a large cloud that Nearsights players and Decays the health of enemies inside of it. HOLD the ability key to disperse the cloud early.",
                 "icon": "https://media.valorant-api.com/agents/707eab51-4836-f488-046a-cda6bf494859/abilities/ultimate/displayicon.png"
-            }
+            },
+            {
+                "key": "Passive",
+                "name": "TOXIC",
+                "type": "Passive Ability",
+                "description": "Viper's chemical weapons inflict a Decay debuff that instantly subtracts enemy health while exposed. Health begins regenerating shortly after leaving the chemical zone.",
+                "icon": "https://media.valorant-api.com/agents/707eab51-4836-f488-046a-cda6bf494859/abilities/passive/displayicon.png"
+            },
         ]
     },
     {
@@ -619,6 +633,13 @@ export const valorantDb = {
                 "type": "Signature Utility",
                 "description": "INSTANTLY throw a projectile that expands into a brief vision-blocking cloud on impact with a surface. HOLD the ability key to curve the smoke in the direction of your crosshair.",
                 "icon": "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/abilities/grenade/displayicon.png"
+            },
+            {
+                "key": "Passive",
+                "name": "DRIFT",
+                "type": "Passive Ability",
+                "description": "Holding the jump button while falling allows Jett to glide through the air, negating fall damage and enabling aerial mobility.",
+                "icon": "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/abilities/passive/displayicon.png"
             },
             {
                 "key": "X",
@@ -734,6 +755,13 @@ export const valorantDb = {
                 "type": "Basic Utility",
                 "description": "EQUIP a flare orb that takes a curving path and detonates shortly after throwing. FIRE to curve the flare orb to the left, detonating and Blinding any player who sees the orb. ALT FIRE to curve the flare orb to the right. Curveball resets a charge every two kills.",
                 "icon": "https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/abilities/ability2/displayicon.png"
+            },
+            {
+                "key": "Passive",
+                "name": "HEATING UP",
+                "type": "Passive Ability",
+                "description": "Phoenix's fire abilities heal him over time instead of dealing damage when he stands inside the flames.",
+                "icon": "https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/abilities/passive/displayicon.png"
             },
             {
                 "key": "X",
@@ -1307,6 +1335,13 @@ export const valorantDb = {
                 "icon": "https://media.valorant-api.com/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa/abilities/grenade/displayicon.png"
             },
             {
+                "key": "Passive",
+                "name": "UNCANNY MARKSMAN",
+                "type": "Passive Ability",
+                "description": "Custom bow modifications allow Sova to bounce Recon and Shock arrows up to two times off surfaces before detonation.",
+                "icon": "https://media.valorant-api.com/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa/abilities/passive/displayicon.png"
+            },
+            {
                 "key": "X",
                 "name": "HUNTER'S FURY",
                 "type": "Ultimate Ability",
@@ -1774,6 +1809,54 @@ export const valorantDb = {
 ],
   weapons: [
     {
+        "slug": "warden",
+        "name": "WARDEN",
+        "category": "RIFLES",
+        "cost": 2900,
+        "fireRate": 6.5,
+        "reloadSpeed": 2.5,
+        "magazineSize": 18,
+        "dmgHead": 200,
+        "dmgBody": 50,
+        "dmgLeg": 42,
+        "description": "High-caliber precision battle rifle engineered for mid-to-long distance combat with guaranteed lethal headshots and ADS magnification.",
+        "recoil": "Heavy vertical kick with tight initial three-round grouping.",
+        "skins": [],
+        "portrait": "https://media.valorant-api.com/weapons/8db0a1bf-4a50-832a-4566-faaaa6d250ca/displayicon.png"
+    },
+    {
+        "slug": "bandit",
+        "name": "BANDIT",
+        "category": "SIDEARMS",
+        "cost": 600,
+        "fireRate": 5.1,
+        "reloadSpeed": 1.5,
+        "magazineSize": 8,
+        "dmgHead": 152,
+        "dmgBody": 39,
+        "dmgLeg": 33,
+        "description": "Tactical compact sidearm featuring high close-range stopping power and rapid equip speed, ideal for eco round dueling.",
+        "recoil": "Moderate recoil with fast crosshair centering recovery.",
+        "skins": [],
+        "portrait": "https://media.valorant-api.com/weapons/410b2e0b-4ceb-1321-1727-20858f7f3477/displayicon.png"
+    },
+    {
+        "slug": "melee",
+        "name": "MELEE",
+        "category": "HEAVY",
+        "cost": 0,
+        "fireRate": 1.0,
+        "reloadSpeed": 0,
+        "magazineSize": 0,
+        "dmgHead": 75,
+        "dmgBody": 50,
+        "dmgLeg": 50,
+        "description": "Tactical combat knife equipped to all operatives. Deals double damage when striking opponents from behind.",
+        "recoil": "Instant strike",
+        "skins": [],
+        "portrait": "https://media.valorant-api.com/weapons/2f59173c-4bed-b6c3-2191-dea9b58be9c7/displayicon.png"
+    },
+    {
         "slug": "classic",
         "name": "CLASSIC",
         "category": "SIDEARMS",
@@ -1831,7 +1914,7 @@ export const valorantDb = {
         "magazineSize": 13,
         "dmgHead": 105,
         "dmgBody": 30,
-        "dmgLeg": 25,
+        "dmgLeg": 25.5,
         "description": "Standard issue ghost tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1845,9 +1928,9 @@ export const valorantDb = {
         "fireRate": 4,
         "reloadSpeed": 2.25,
         "magazineSize": 6,
-        "dmgHead": 159,
+        "dmgHead": 159.5,
         "dmgBody": 55,
-        "dmgLeg": 46,
+        "dmgLeg": 46.75,
         "description": "Standard issue sheriff tactical gear.",
         "recoil": "HEAVY KICKBACK, SLOW RECOVERY DRIFT",
         "skins": [
@@ -1864,9 +1947,9 @@ export const valorantDb = {
         "fireRate": 16,
         "reloadSpeed": 2.25,
         "magazineSize": 20,
-        "dmgHead": 67,
+        "dmgHead": 67.5,
         "dmgBody": 27,
-        "dmgLeg": 22,
+        "dmgLeg": 22.95,
         "description": "Standard issue stinger tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1928,9 +2011,9 @@ export const valorantDb = {
         "fireRate": 10,
         "reloadSpeed": 2.5,
         "magazineSize": 24,
-        "dmgHead": 115,
+        "dmgHead": 115.5,
         "dmgBody": 35,
-        "dmgLeg": 29,
+        "dmgLeg": 29.75,
         "description": "Standard issue bulldog tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1946,7 +2029,7 @@ export const valorantDb = {
         "magazineSize": 12,
         "dmgHead": 195,
         "dmgBody": 65,
-        "dmgLeg": 48,
+        "dmgLeg": 48.75,
         "description": "Standard issue guardian tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1999,7 +2082,7 @@ export const valorantDb = {
         "magazineSize": 5,
         "dmgHead": 202,
         "dmgBody": 101,
-        "dmgLeg": 85,
+        "dmgLeg": 85.85,
         "description": "Standard issue marshal tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -2049,7 +2132,7 @@ export const valorantDb = {
         "magazineSize": 50,
         "dmgHead": 75,
         "dmgBody": 30,
-        "dmgLeg": 25,
+        "dmgLeg": 25.5,
         "description": "Standard issue ares tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -2203,6 +2286,33 @@ export const valorantDb = {
     }
 ],
   maps: [
+    {
+        "slug": "summit",
+        "name": "SUMMIT",
+        "location": "29° 18' FC\" N, 110° 25' ZQ\" E",
+        "lore": "A high-altitude aerospace research complex perched amidst sheer mountain peaks in China. Features dual bomb sites separated by winding transit tunnels and elevated snow bridges.",
+        "callouts": [
+            "A SITE",
+            "B SITE",
+            "MID TOWER",
+            "A LINK",
+            "B CORRIDOR",
+            "SNOW BRIDGE",
+            "A LOBBY",
+            "B LOBBY",
+            "A MAIN",
+            "B MAIN",
+            "MID COURTYARD",
+            "DEFENDER SPAWN"
+        ],
+        "strategies": [
+            "Fight for early control of Mid Tower to isolate A and B site defensive rotations.",
+            "Coordinate fast executes across the open Snow Bridge with long smokes and flash lineups.",
+            "Utilize sentinel anchor utility on B Corridor to shut down fast attacker split pushes."
+        ],
+        "minimapUrl": "https://media.valorant-api.com/maps/756da597-416b-c0f2-f47b-afbdf28670bc/displayicon.png",
+        "splashUrl": "https://media.valorant-api.com/maps/756da597-416b-c0f2-f47b-afbdf28670bc/splash.png"
+    },
     {
         "slug": "ascent",
         "name": "ASCENT",
@@ -2419,6 +2529,127 @@ export const valorantDb = {
     }
 ],
   patches: [
+    {
+        "slug": "patch-1306",
+        "version": "13.06",
+        "date": "SEPTEMBER 22, 2026",
+        "title": "VALORANT Patch Notes 13.06",
+        "season": "Season 2026",
+        "act": "Act 5",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-06/",
+        "tags": ["Warden Fine-Tuning", "Bandit Balance", "Champions 2026", "Map Rotation"],
+        "buffs": [
+            {
+                "subject": "Warden Rifle",
+                "detail": "Tightened first-shot recovery time from 0.35s to 0.30s while maintaining 200 headshot lethal profile."
+            },
+            {
+                "subject": "Summit Map",
+                "detail": "Added additional cover prop on B Site Link to balance attacker plant defense options."
+            }
+        ],
+        "nerfs": [
+            {
+                "subject": "Bandit Sidearm",
+                "detail": "Adjusted damage falloff at 30-50m range from 116 to 112 headshot damage to prevent long-distance spam."
+            }
+        ],
+        "updates": [
+            "Active competitive map pool confirmed for Season 2026 Act 5: Abyss, Bind, Corrode, Haven, Lotus, Split, Summit.",
+            "Implemented official VCT Champions 2026 celebratory esports interface and trophy flex item animations.",
+            "Fixed audio occlusion issues on Summit cable transit tunnels."
+        ]
+    },
+    {
+        "slug": "patch-1305",
+        "version": "13.05",
+        "date": "SEPTEMBER 8, 2026",
+        "title": "VALORANT Patch Notes 13.05",
+        "season": "Season 2026",
+        "act": "Act 5",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-05/",
+        "tags": ["Agent Balance", "Tejo", "Veto", "Sentinel Tuning"],
+        "buffs": [
+            {
+                "subject": "Veto Sentinel",
+                "detail": "Decreased Interceptor deploy time by 0.25s for faster site anchor response."
+            },
+            {
+                "subject": "Miks Controller",
+                "detail": "Increased Waveform width radius by 1.5 meters for wider corridor vision denial."
+            }
+        ],
+        "nerfs": [
+            {
+                "subject": "Tejo Initiator",
+                "detail": "Reduced Guided Salvo explosion radius slightly to reward direct target coordination."
+            }
+        ],
+        "updates": [
+            "Refined tactical radar minimap icon responsiveness during high-particle ultimate executions.",
+            "Updated store bundle rotation backend with optimized preview rendering."
+        ]
+    },
+    {
+        "slug": "patch-1304",
+        "version": "13.04",
+        "date": "AUGUST 25, 2026",
+        "title": "VALORANT Patch Notes 13.04",
+        "season": "Season 2026",
+        "act": "Act 4",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-04/",
+        "tags": ["Waylay Tuning", "Corrode Fixes", "Audio Polish"],
+        "buffs": [
+            {
+                "subject": "Waylay Duelist",
+                "detail": "Reduced recovery winddown on Lightspeed to enhance smooth repositioning."
+            },
+            {
+                "subject": "Corrode Map",
+                "detail": "Optimized lighting and visibility across rusted chemical pipeline corridors."
+            }
+        ],
+        "nerfs": [
+            {
+                "subject": "Odin Heavy",
+                "detail": "Slightly increased crouch-to-stand spread decay to stabilize defensive choke holds."
+            }
+        ],
+        "updates": [
+            "Improved directional spatial audio processing on PC and console editions.",
+            "Added automated competitive match toxicity detection filters in voice and text channels."
+        ]
+    },
+    {
+        "slug": "patch-1303",
+        "version": "13.03",
+        "date": "AUGUST 11, 2026",
+        "title": "VALORANT Patch Notes 13.03",
+        "season": "Season 2026",
+        "act": "Act 4",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-03/",
+        "tags": ["Economy Rules", "Performance", "Anti-Cheat"],
+        "buffs": [
+            {
+                "subject": "Deadlock Barrier",
+                "detail": "Increased spherical core anchor health by 50 HP."
+            },
+            {
+                "subject": "Harbor High Tide",
+                "detail": "Reduced recharge cooldown from 40s to 38s."
+            }
+        ],
+        "nerfs": [
+            {
+                "subject": "Clove Not Dead Yet",
+                "detail": "Reduced post-revive timer window by 1 second to enforce proactive gunfight engagement."
+            }
+        ],
+        "updates": [
+            "Optimized memory footprint on mid-tier client setups, reducing frame hitching by up to 15%.",
+            "Upgraded Vanguard cheat signature detection heuristics for high-rank competitive lobbies."
+        ]
+    },
     {
         "slug": "patch-1302",
         "version": "13.02",

@@ -18,7 +18,7 @@ export function slugify(text: string): string {
  * Handles "release-09.04-shipping-21-2784534", "release-13.05", "13.05.00.5350494", etc.
  */
 export function formatPatchVersion(raw?: string | null): string {
-  if (!raw) return "9.04";
+  if (!raw) return "13.06";
   const match = raw.match(/(?:release-)?0*(\d+\.\d+)/i);
   if (match && match[1]) {
     return match[1];
@@ -27,5 +27,5 @@ export function formatPatchVersion(raw?: string | null): string {
   if (digits && digits[0]) {
     return digits[0];
   }
-  return "9.04";
+  return "13.06";
 }

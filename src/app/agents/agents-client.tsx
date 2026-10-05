@@ -43,22 +43,22 @@ export function AgentsClient({ initialAgents }: AgentsClientProps) {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#0B141A] text-foreground">
+      <div className="min-h-screen bg-background text-foreground">
         {/* Page header */}
-        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+        <div className="border-b border-border bg-background pt-16 pb-10">
           <Container>
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 bg-[#0DF2F2]" aria-hidden="true" />
               <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">
-                DATABASE_ONLINE // v1.23
+                PROTOCOL OPERATIVE DIRECTORY // 29 PLAYABLE AGENTS
               </span>
             </div>
             <h1 className="font-display font-black text-6xl uppercase tracking-tighter text-foreground sm:text-7xl lg:text-8xl flex items-center gap-4">
               AGENTS
               <span className="w-2.5 h-2.5 bg-[#0DF2F2] rounded-full animate-pulse" aria-hidden="true" />
             </h1>
-            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-muted">
-              Every operative in the Protocol. Browse by role, study abilities, and build your tactical identity.
+            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-secondary">
+              Every operative in the Protocol. Browse by tactical combat role, study signature ability kits, and analyze competitive counterplay matrices.
             </p>
 
             {/* Role filter pills */}
@@ -74,10 +74,10 @@ export function AgentsClient({ initialAgents }: AgentsClientProps) {
                   onClick={() => setFilter(role)}
                   aria-pressed={filter === role}
                   className={[
-                    "border px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest transition-all duration-200",
+                    "border px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest transition-all duration-200 clip-diagonal-sm cursor-pointer",
                     filter === role
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-[rgba(236,232,225,0.08)] bg-[rgba(15,28,36,0.8)] text-muted hover:border-white/30 hover:text-white",
+                      ? "border-primary bg-primary/10 text-primary shadow-sm"
+                      : "border-border bg-surface text-muted hover:border-border-light hover:text-white hover:bg-surface-elevated",
                     role !== "All" ? ROLE_ACCENT[role] ?? "" : "",
                     filter === role && role !== "All" ? (ROLE_ACCENT[role] ?? "").replace("/40", "") : "",
                   ].filter(Boolean).join(" ")}

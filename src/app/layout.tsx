@@ -6,8 +6,6 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { siteConfig } from "@/lib/site";
 import { ValorantApiClient } from "@/lib/valorantApi";
-import Script from "next/script";
-import AdSenseLoader from "@/components/AdSenseLoader";
 
 /* ── Fonts ── */
 const displayFont = Outfit({
@@ -79,7 +77,14 @@ export const metadata: Metadata = {
     images: [`${siteConfig.url}/images/og-image.png`],
   },
   verification: {
-    google: "VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw",
+    google: [
+      "FlbgsDmDRsMGCDsekr2iLEDY7e_nW547KQEN3kcFNRI",
+      "3vDY6qxEsTfaDAK803XjxHNSHmszpmX484JGXnKeJOw",
+      "VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw",
+    ],
+  },
+  other: {
+    "google-adsense-account": "ca-pub-5851997796287592",
   },
 };
 
@@ -115,13 +120,18 @@ export default async function RootLayout({
             `,
           }}
         />
+        <meta name="google-site-verification" content="FlbgsDmDRsMGCDsekr2iLEDY7e_nW547KQEN3kcFNRI" />
+        <meta name="google-site-verification" content="3vDY6qxEsTfaDAK803XjxHNSHmszpmX484JGXnKeJOw" />
         <meta name="google-site-verification" content="VbOud-rNqUMkcxFbAo5MAilwSmfScxu3ro_2z63BxUw" />
         <meta name="c5e365bb4ddff86b4d42f01bc4bd01051bc9845a" content="c5e365bb4ddff86b4d42f01bc4bd01051bc9845a" />
         <meta name="google-adsense-account" content="ca-pub-5851997796287592" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5851997796287592"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://wsrv.nl" />
         <link rel="dns-prefetch" href="https://valorant-api.com" />
-        <link rel="dns-prefetch" href="https://pl30712689.profitableratecpmnetwork.com" />
-        <link rel="dns-prefetch" href="https://pl30712688.profitableratecpmnetwork.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -181,15 +191,6 @@ export default async function RootLayout({
             <SiteFooter version={version} />
           </div>
         </Providers>
-        <AdSenseLoader />
-        <Script
-          src="https://pl30712689.profitableratecpmnetwork.com/41/39/b0/4139b03b71bd333ff596418dde78d57c.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="https://pl30712688.profitableratecpmnetwork.com/08/9e/b4/089eb435e7d1e894c66eb7e6b9e589d4.js"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );

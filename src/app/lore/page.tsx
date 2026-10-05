@@ -35,7 +35,7 @@ export default function LoreHubPage() {
                 </span>
               </div>
               <span className="font-mono text-[10px] uppercase tracking-wider text-muted border border-[rgba(236,232,225,0.1)] px-2.5 py-1">
-                Data Freshness: Editorial Verified (Patch 9.04)
+                Data Freshness: Editorial Verified (Patch 13.06)
               </span>
             </div>
 

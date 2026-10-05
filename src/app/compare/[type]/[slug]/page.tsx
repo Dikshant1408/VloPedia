@@ -14,6 +14,8 @@ export const dynamic = "force-static";
 
 const WEAPON_PAIRS = [
   "vandal-vs-phantom",
+  "warden-vs-vandal",
+  "bandit-vs-sheriff",
   "operator-vs-outlaw",
   "spectre-vs-stinger",
   "sheriff-vs-ghost",
@@ -23,6 +25,8 @@ const WEAPON_PAIRS = [
 
 const AGENT_PAIRS = [
   "jett-vs-raze",
+  "waylay-vs-jett",
+  "tejo-vs-sova",
   "omen-vs-clove",
   "sova-vs-fade",
   "cypher-vs-killjoy",

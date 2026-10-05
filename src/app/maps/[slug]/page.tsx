@@ -57,6 +57,7 @@ function findMap(maps: ValorantMap[], slug: string): ValorantMap | null {
 }
 
 const MAP_LORE_FALLBACKS: Record<string, string> = {
+  summit: "Perched atop towering mountain peaks in China, Summit is an advanced aerospace research facility featuring two bomb sites linked by scenic snow bridges, interior tram tunnels, and sharp vertical drops.",
   corrode: "A specialized tactical facility featuring heavy industrial pipelines and rusted chemical corridors. Designed for intense vertical confrontations and tight choke-point utility warfare.",
   pearl: "Located on Omega Earth in an underwater biodome off the coast of Lisbon, Portugal. Pearl provides classic tactical combat across two sites with no doors, ascenders, or teleporters.",
   lotus: "An ancient subterranean complex situated in the Western Ghats of India. Lotus challenges teams with a rare three-site layout (A, B, C) featuring rotating stone doorways and destructible barriers.",
@@ -266,7 +267,7 @@ export default async function MapDetailPage({ params }: Props) {
           </PageHero>
 
           {/* Breadcrumbs bar */}
-          <div className="border-b border-border bg-[#0B141A] pt-4 pb-4">
+          <div className="border-b border-border bg-background pt-4 pb-4">
             <Container>
               <Breadcrumbs items={breadcrumbs} />
             </Container>
@@ -346,7 +347,7 @@ export default async function MapDetailPage({ params }: Props) {
                               {calloutGroups[region].map(name => (
                                 <span
                                   key={name}
-                                  className="border border-border bg-surface px-3 py-1.5 font-mono-tactical text-[11px] font-bold uppercase text-foreground"
+                                  className="border border-border bg-surface px-3 py-1.5 font-mono text-[11px] font-bold uppercase text-foreground clip-diagonal-sm"
                                 >
                                   {name}
                                 </span>

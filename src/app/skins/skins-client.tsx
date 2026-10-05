@@ -14,7 +14,11 @@ type TierFilter = (typeof TIER_FILTERS)[number];
 const SORT_OPTIONS = ["Newest", "A–Z", "Z–A", "Price ↑", "Price ↓"] as const;
 type SortOption = (typeof SORT_OPTIONS)[number];
 
-const WEAPON_SLUGS = ["vandal","phantom","operator","spectre","ghost","classic","sheriff","frenzy","shorty","stinger","bucky","judge","bulldog","guardian","marshal","ares","odin","outlaw","melee"];
+const WEAPON_SLUGS = [
+  "vandal","phantom","operator","spectre","ghost","classic","sheriff",
+  "frenzy","shorty","stinger","bucky","judge","bulldog","guardian",
+  "marshal","ares","odin","outlaw","warden","bandit","melee"
+];
 
 export interface FlatSkin {
   uuid: string;
@@ -77,17 +81,17 @@ export function SkinsClient({ initialSkins }: SkinsClientProps) {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#0B141A] text-foreground">
+      <div className="min-h-screen bg-background text-foreground">
         {/* Header */}
-        <div className="border-b border-[rgba(236,232,225,0.08)] bg-[#0B141A] pt-16 pb-10">
+        <div className="border-b border-border bg-background pt-16 pb-10">
           <Container>
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 bg-[#0DF2F2] animate-pulse" aria-hidden="true" />
-              <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">SKINS CATALOGUE</span>
+              <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">COSMETIC REPERTORY // 1,400+ SKINS</span>
             </div>
             <h1 className="font-display font-black text-6xl uppercase tracking-tighter text-foreground sm:text-7xl lg:text-8xl">SKINS</h1>
-            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-muted">
-              Every weapon skin in VALORANT — variants, levels, and video previews.
+            <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-secondary">
+              Every weapon skin in VALORANT — chromas, variants, finisher animations, audio inspection clips, and store tiers.
             </p>
           </Container>
         </div>

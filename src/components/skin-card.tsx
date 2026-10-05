@@ -37,7 +37,7 @@ export function SkinCard({ skin, onWishlist, className }: SkinCardProps) {
   return (
     <div
       className={[
-        "group relative flex flex-col rounded-lg overflow-hidden border border-border bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-light hover:shadow-md",
+        "group relative flex flex-col overflow-hidden border border-border bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg clip-diagonal-sm",
         className ?? "",
       ]
         .filter(Boolean)

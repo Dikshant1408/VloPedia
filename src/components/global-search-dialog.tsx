@@ -32,8 +32,8 @@ interface SearchItem {
 }
 
 const GO_TO_ITEMS: SearchItem[] = [
-  { id: "goto-agents", category: "GO TO", title: "Agents", subtitle: "Complete operative roster, abilities, and counter-picks", href: "/agents", badge: "26 Agents" },
-  { id: "goto-weapons", category: "GO TO", title: "Weapons", subtitle: "Damage falloffs, fire rates, recoil, and buy costs", href: "/weapons", badge: "19 Arsenal" },
+  { id: "goto-agents", category: "GO TO", title: "Agents", subtitle: "Complete operative roster, abilities, and counter-picks", href: "/agents", badge: "29 Agents" },
+  { id: "goto-weapons", category: "GO TO", title: "Weapons", subtitle: "Damage falloffs, fire rates, recoil, and buy costs", href: "/weapons", badge: "21 Weapons" },
   { id: "goto-maps", category: "GO TO", title: "Maps", subtitle: "Callouts, layouts, active pool, and team comp fit", href: "/maps", badge: "Tactical Maps" },
   { id: "goto-skins", category: "GO TO", title: "Skins & Bundles", subtitle: "Skin database, finishers, chromas, and VP store prices", href: "/skins", badge: "1,400+ Skins" },
   { id: "goto-tools", category: "GO TO", title: "Tactical Tools", subtitle: "Comp builder, sensitivity converter, tier lists", href: "/tools", badge: "7 Tools" },
@@ -370,7 +370,7 @@ export function GlobalSearchDialog() {
       onClick={() => setOpen(false)}
     >
       <div 
-        className="w-full max-w-2xl border border-border bg-surface-card shadow-2xl shadow-black overflow-hidden flex flex-col max-h-[82vh] relative"
+        className="w-full max-w-2xl clip-diagonal-sm border border-border bg-surface-card shadow-2xl shadow-black overflow-hidden flex flex-col max-h-[82vh] relative"
         onClick={e => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >

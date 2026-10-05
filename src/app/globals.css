@@ -8,33 +8,34 @@
 :root {
   color-scheme: dark;
 
-  /* Core palette — Rich neutral dark */
-  --background:       #0F1012;
-  --surface:          #17181C;
-  --surface-elevated: #1F2126;
-  --surface-card:     #17181C;
-  --border:           rgba(255, 255, 255, 0.08);
-  --border-light:     rgba(255, 255, 255, 0.14);
+  /* Core palette — Tactical Command Dark */
+  --background:       #080B10;
+  --surface:          #0D1118;
+  --surface-elevated: #121821;
+  --surface-card:     #0E131B;
+  --border:           rgba(236, 232, 225, 0.08);
+  --border-light:     rgba(236, 232, 225, 0.15);
+  --border-active:    rgba(255, 70, 85, 0.45);
 
-  /* Primary Accent — Pure VALORANT Red */
+  /* Primary Accent — Pure VALORANT Radianite Red */
   --primary:          #FF4655;
   --primary-rgb:      255, 70, 85;
   --primary-soft:     rgba(255, 70, 85, 0.12);
   --primary-softer:   rgba(255, 70, 85, 0.05);
 
-  /* Secondary Accent — Neutral Slate Gray (Demoted from neon cyan) */
-  --cyan:             #94A3B8;
-  --cyan-rgb:         148, 163, 184;
-  --cyan-soft:        rgba(148, 163, 184, 0.10);
+  /* Secondary Accent — Restrained Tactical Cyan/Teal */
+  --cyan:             #0DF2F2;
+  --cyan-rgb:         13, 242, 242;
+  --cyan-soft:        rgba(13, 242, 242, 0.08);
 
   /* Text — Clean editorial hierarchy */
   --foreground:       #F4F4F5;
   --text-primary:     #F4F4F5;
-  --text-secondary:   #A1A1AA;
-  --text-muted:       #71717A;
-  --secondary:        #A1A1AA;
-  --muted:            #71717A;
-  --muted-dark:       rgba(255, 255, 255, 0.18);
+  --text-secondary:   #94A3B8;
+  --text-muted:       #64748B;
+  --secondary:        #94A3B8;
+  --muted:            #64748B;
+  --muted-dark:       rgba(236, 232, 225, 0.18);
 
   /* Semantic */
   --success: #22c55e;
@@ -43,9 +44,9 @@
   --danger:  #FF4655;
 
   /* Surface tokens */
-  --surface-glass:   rgba(15, 16, 18, 0.85);
-  --surface-overlay: rgba(15, 16, 18, 0.96);
-  --gradient-hero:   linear-gradient(to bottom, transparent 0%, #0F1012 100%);
+  --surface-glass:   rgba(13, 17, 24, 0.88);
+  --surface-overlay: rgba(8, 11, 16, 0.96);
+  --gradient-hero:   linear-gradient(to bottom, transparent 0%, #080B10 100%);
 
   /* Role accent colors */
   --role-duelist:    #F87171;
@@ -273,39 +274,36 @@ h3 { font-size: clamp(1.5rem, 2.5vw, 2.5rem); }
   pointer-events: none;
 }
 
-/* ── Tactical Geometry Hierarchy (ValoVault Semantic Hierarchy) ── */
-/* 1. TacticalHero: Flagship system cards & marquee hero modules (14px double cut) */
+/* ── Tactical Geometry Hierarchy ── */
+/* Subtle angular chamfers provide distinct identity without sacrificing layout usability */
 .tactical-hero,
 .clip-tactical-hero,
-/* ── Modern Editorial Card Shapes (De-clipped) ── */
-/* Replaced aggressive angular cuts with clean, human rounded cards */
-.tactical-banner,
-.clip-tactical-banner,
 .clip-diagonal-lg {
-  clip-path: none !important;
-  border-radius: 0.75rem;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  border-radius: 2px;
 }
 
 .tactical-panel-card,
 .clip-tactical-panel,
 .clip-diagonal {
-  clip-path: none !important;
-  border-radius: 0.5rem;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  border-radius: 2px;
 }
 
 .tactical-control,
 .clip-tactical-control,
 .clip-diagonal-sm {
-  clip-path: none !important;
-  border-radius: 0.375rem;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+  border-radius: 2px;
 }
 
 .clip-double-diagonal,
-.cut-corner-br,
-.cut-corner-tl-br,
-.cut-corner-bl-tr {
-  clip-path: none !important;
-  border-radius: 0.5rem;
+.cut-corner-br {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+
+.cut-corner-tl-br {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .tactical-flat,

@@ -13,7 +13,7 @@ import {
 
 const getWeaponSlugFromName = (name: string, assetPath: string): string => {
   const lowerName = name.toLowerCase();
-  const weapons = ["vandal", "phantom", "classic", "sheriff", "ghost", "shorty", "frenzy", "stinger", "spectre", "bucky", "judge", "bulldog", "guardian", "marshal", "operator", "ares", "odin", "outlaw", "melee"];
+  const weapons = ["vandal", "phantom", "classic", "sheriff", "ghost", "shorty", "frenzy", "stinger", "spectre", "bucky", "judge", "bulldog", "guardian", "marshal", "operator", "ares", "odin", "outlaw", "warden", "bandit", "melee"];
   for (const w of weapons) {
     if (lowerName.endsWith(w)) {
       return w;
@@ -39,6 +39,8 @@ const getWeaponSlugFromName = (name: string, assetPath: string): string => {
   if (path.includes("outlaw")) return "outlaw";
   if (path.includes("lightmachinegun")) return "ares";
   if (path.includes("heavymachinegun")) return "odin";
+  if (path.includes("battlerifle") || path.includes("warden")) return "warden";
+  if (path.includes("compact") || path.includes("bandit")) return "bandit";
   if (path.includes("melee")) return "melee";
 
   return "vandal";
