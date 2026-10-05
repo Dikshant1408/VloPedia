@@ -65,42 +65,42 @@ export interface SceneDefinition {
 
 export const SCENE_REGISTRY: SceneDefinition[] = [
   {
-    id: "ascent",
-    name: "Ascent",
+    id: "tactical-deck",
+    name: "Tactical Intelligence Deck",
     status: "active",
-    releaseDate: "2026-09-16",
-    featuredMonth: 8, // September — inaugural active scene
-    fallbackImage: "/images/map-ascent.webp",
-    mobileFallbackImage: "/images/map-ascent.webp",
+    releaseDate: "2026-10-05",
+    featuredMonth: null,
+    fallbackImage: "/images/tactical-grid-bg.png",
+    mobileFallbackImage: "/images/tactical-grid-bg.png",
     camera: {
       fov: 38,
-      driftAmplitudeX: 0.04,   // Calm, subtle ambient drift
-      driftAmplitudeY: 0.025,
-      driftSpeed: 0.18,        // Slower, graceful breathing
-      parallaxMaxAngle: 0.04,  // Restrained mouse parallax (~2.3 degrees)
+      driftAmplitudeX: 0.02,
+      driftAmplitudeY: 0.012,
+      driftSpeed: 0.12,
+      parallaxMaxAngle: 0.025,
       states: {
-        idle:    { position: [0.15, 1.22, 4.4],  lookAt: [0, 0.55, 0] },
-        agents:  { position: [-0.45, 1.05, 3.6], lookAt: [-0.65, 0.95, -0.2] },
-        maps:    { position: [0.4, 1.85, 4.8],   lookAt: [0, 0.5, -0.8] },
-        weapons: { position: [0.85, 1.0, 3.5],   lookAt: [0.55, 0.6, -0.5] },
-        skins:   { position: [-0.25, 1.15, 3.7], lookAt: [-0.25, 0.8, 0.2] },
+        idle:    { position: [0, 0.45, 4.2],  lookAt: [0, 0.25, 0] },
+        agents:  { position: [0.35, 0.45, 4.0], lookAt: [1.2, 0.3, 0] },
+        maps:    { position: [-0.2, 0.55, 4.3],  lookAt: [0.6, 0.2, 0] },
+        weapons: { position: [0.4, 0.45, 3.9],  lookAt: [1.4, 0.35, 0] },
+        skins:   { position: [0.3, 0.5, 4.0],   lookAt: [1.1, 0.3, 0] },
       },
     },
     lighting: {
-      ambientColor: "#ece2d2",       // Warm Mediterranean ambient fill
-      ambientIntensity: 0.7,
-      keyLightColor: "#fff3d6",      // Warm golden Mediterranean daylight
-      keyLightIntensity: 2.6,
-      keyLightPosition: [5.5, 7.0, 3.5],
-      accentColor: "#ff4655",        // Subtle VALORANT red rim for agent silhouette
-      accentIntensity: 0.75,
-      accentPosition: [-2.2, 1.8, 0.8],
-      fillColor: "#8ebde8",          // Cool Mediterranean sky dome fill
+      ambientColor: "#080A0F",
+      ambientIntensity: 0.85,
+      keyLightColor: "#E2E8F0",
+      keyLightIntensity: 1.8,
+      keyLightPosition: [4.0, 6.0, 3.0],
+      accentColor: "#FF4655",
+      accentIntensity: 1.4,
+      accentPosition: [2.4, 1.2, 0.8],
+      fillColor: "#0B132B",
       fillIntensity: 0.5,
-      fillPosition: [-4.0, 5.0, -2.0],
+      fillPosition: [-4.0, 2.0, -2.0],
     },
     importObjects: () =>
-      import("./ascent-scene").then((m) => ({ SceneObjects: m.AscentSceneObjects })),
+      import("./tactical-deck-scene").then((m) => ({ SceneObjects: m.TacticalDeckSceneObjects })),
   },
   // Future scenes registered with status 'in_development' to prevent premature auto-swap
   {

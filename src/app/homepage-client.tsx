@@ -19,6 +19,7 @@ import { valorantDb } from "@/lib/valorant-db";
 import { CONTENT_TIER_MAP, DEFAULT_TIER } from "@/lib/valorant-types";
 import type { ValorantAgent, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
 
+import { HomeWorld } from "@/components/3d/home-world";
 import { IntelligenceCore, type CoreDomain, DOMAIN_METADATA } from "@/components/3d/intelligence-core";
 
 function slugify(text: string): string {
@@ -153,14 +154,31 @@ export function HomepageClient() {
       <div className="min-h-screen bg-background text-foreground">
 
         {/* ═══════════════════════════════════════════
-            1. TACTICAL HERO: THE VALORANT INTELLIGENCE CORE
+            1. TACTICAL HERO: TACTICAL INTELLIGENCE DECK
         ═══════════════════════════════════════════ */}
-        <section ref={heroRef} className="relative min-h-[85vh] lg:min-h-[90vh] w-full overflow-hidden border-b border-border bg-background flex flex-col justify-center py-12 lg:py-16">
-          {/* Subtle background tactical grid */}
-          <div className="absolute inset-0 bg-grid-white/[0.015] bg-[size:32px_32px] pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/80 to-background pointer-events-none" />
+        <section ref={heroRef} className="relative min-h-[85vh] lg:min-h-[92vh] w-full overflow-hidden border-b border-border bg-background flex flex-col justify-between py-10 lg:py-14">
+          {/* 3D Cinematic Tactical Deck Layer with graceful scroll easing */}
+          <motion.div
+            style={{
+              y: heroY,
+              opacity: useTransform(scrollYProgress, [0, 0.75], [1, 0.2]),
+            }}
+            className="absolute inset-0 pointer-events-none z-0"
+          >
+            <HomeWorld
+              activeCategory={activeDomain === "idle" ? "idle" : (activeDomain as any)}
+              isSearching={isSearching}
+            />
+          </motion.div>
 
-          <Container className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Clean Central Negative Space Readability Gradient ensuring WCAG AAA typography */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-transparent pointer-events-none z-[1]" />
+          <div className="absolute inset-0 bg-radial from-transparent via-background/40 to-background/90 pointer-events-none z-[1]" />
+
+          {/* Top spacer */}
+          <div className="w-full relative z-10" />
+
+          <Container className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
             <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] items-center">
               
               {/* Left Column: VloPedia Command Center (Center/Left) */}
@@ -168,7 +186,7 @@ export function HomepageClient() {
                 {/* Tactical Status Pill */}
                 <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-3 py-1 text-primary font-mono text-[10px] uppercase tracking-widest clip-diagonal-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                  <span>VALORANT INTELLIGENCE CORE // PATCH 13.06</span>
+                  <span>VALORANT INTELLIGENCE DECK // ARCHIVE 13.06</span>
                 </div>
 
                 {/* Main Headline */}
@@ -260,20 +278,31 @@ export function HomepageClient() {
                 </div>
               </div>
 
-              {/* Right Column: VloPedia Intelligence Core (Occupies 35-45% of visual area) */}
+              {/* Right Column: The Signature VALORANT Intelligence Core (Focal Point on Right Flank) */}
               <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[480px] flex items-center justify-center">
-                {/* Tactical Frame & Reticle Brackets */}
+                {/* Tactical Reticle Corner Brackets */}
                 <div className="absolute top-0 right-0 w-4 h-[2px] bg-primary/60 pointer-events-none" />
                 <div className="absolute top-0 right-0 w-[2px] h-4 bg-primary/60 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-4 h-[2px] bg-cyan/60 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[2px] h-4 bg-cyan/60 pointer-events-none" />
 
-                {/* 3D / Fallback Core Component */}
+                {/* Tactical Core Component */}
                 <IntelligenceCore activeDomain={activeDomain} />
               </div>
 
             </div>
           </Container>
+
+          {/* Bottom Animated Tactical Scroll Cue */}
+          <div className="relative z-10 pt-6 flex justify-center">
+            <a
+              href="#latest"
+              className="group inline-flex items-center gap-2 font-mono text-[10px] text-muted hover:text-foreground tracking-widest uppercase transition-colors cursor-pointer py-1 px-3 border border-border/40 bg-surface/50 clip-diagonal-sm backdrop-blur-xs"
+            >
+              <span>Scroll to explore database</span>
+              <span className="text-primary font-bold transition-transform group-hover:translate-y-0.5">↓</span>
+            </a>
+          </div>
         </section>
 
         {/* ═══════════════════════════════════════════

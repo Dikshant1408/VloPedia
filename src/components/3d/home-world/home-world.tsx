@@ -59,26 +59,23 @@ export function HomeWorld({
           </div>
         )
       ) : (
-        /* ── First-Class Cinematic Fallback (Mobile, Reduced Motion, or Non-WebGL) ── */
-        <div className="absolute inset-0 h-full w-full overflow-hidden bg-[#0A0E14]">
-          <div className="relative h-full w-full">
-            <Image
-              src={activeSceneDef.fallbackImage || "/images/map-ascent.webp"}
-              alt="Ascent Cinematic Environment"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center opacity-45 brightness-95 contrast-105"
-            />
-            {/* Warm Golden Sunlight Dome wash */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[#ffdca8]/10 to-[#86b6e4]/20 pointer-events-none" />
+        /* ── First-Class Tactical Intelligence Fallback (Mobile, Reduced Motion, or Non-WebGL) ── */
+        <div className="absolute inset-0 h-full w-full overflow-hidden bg-[#080A0F]">
+          <div className="relative h-full w-full flex items-center justify-center">
+            {/* Subtle dark tactical atmospheric grid */}
+            <div className="absolute inset-0 bg-tactical-grid opacity-[0.25]" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-background via-surface/40 to-background pointer-events-none" />
+            
+            {/* Subtle cyan and red ambient tactical floor reflections */}
+            <div className="absolute -bottom-24 left-1/4 w-96 h-48 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 right-1/4 w-96 h-48 rounded-full bg-[#00E5FF]/5 blur-3xl pointer-events-none" />
           </div>
         </div>
       )}
 
-      {/* Cinematic Vignette Overlay ensuring WCAG AAA typography readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30 pointer-events-none" />
-      <div className="absolute inset-0 bg-radial from-transparent via-background/25 to-background/75 pointer-events-none" />
+      {/* Cinematic Vignette Overlay ensuring WCAG AAA typography readability in the clean central zone */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40 pointer-events-none" />
+      <div className="absolute inset-0 bg-radial from-background/40 via-background/75 to-background pointer-events-none" />
     </div>
   );
 }

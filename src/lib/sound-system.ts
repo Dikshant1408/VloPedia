@@ -100,7 +100,7 @@ class SoundSystem {
    * Synthesizes and plays a tactical sound effect
    */
   public play(type: SoundType): void {
-    if (this.isMuted) return;
+    if (this.isMuted || !this.isInitialized) return;
 
     const ctx = this.getContext();
     if (!ctx) return;
