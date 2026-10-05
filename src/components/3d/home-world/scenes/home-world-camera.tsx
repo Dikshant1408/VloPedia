@@ -56,20 +56,19 @@ export function HomeWorldCamera({
     let baseLookZ = activeState.lookAt[2];
 
     if (isMobileViewport) {
-      // Crop to agent focal point in vertical portrait frame
-      basePosX = -0.45;
-      basePosY = 0.95;
-      basePosZ = 3.2;
-      baseLookX = -0.45;
-      baseLookY = 0.65;
-      baseLookZ = -1.35;
+      basePosX = 0;
+      basePosY = activeState.position[1] + 0.2;
+      basePosZ = activeState.position[2] + 1.2;
+      baseLookX = 0;
+      baseLookY = activeState.lookAt[1];
+      baseLookZ = activeState.lookAt[2];
     } else if (isTabletViewport) {
-      basePosX = -0.15;
-      basePosY = 1.12;
-      basePosZ = 3.8;
-      baseLookX = -0.25;
-      baseLookY = 0.58;
-      baseLookZ = -0.6;
+      basePosX = activeState.position[0] * 0.7;
+      basePosY = activeState.position[1] + 0.1;
+      basePosZ = activeState.position[2] + 0.5;
+      baseLookX = activeState.lookAt[0] * 0.7;
+      baseLookY = activeState.lookAt[1];
+      baseLookZ = activeState.lookAt[2];
     }
 
     if (prefersReducedMotion) {

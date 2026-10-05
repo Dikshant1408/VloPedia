@@ -187,31 +187,34 @@ export function HomepageClient() {
                 {/* Tactical Status Pill */}
                 <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-3 py-1 text-primary font-mono text-[10px] uppercase tracking-widest clip-diagonal-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                  <span>VALORANT INTELLIGENCE DECK // ARCHIVE 13.06</span>
+                  <span>TACTICAL INTELLIGENCE TERMINAL // ARCHIVE 13.06</span>
                 </div>
 
-                {/* Main Headline */}
-                <div className="space-y-2">
-                  <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl uppercase tracking-tight text-foreground leading-[0.94]">
+                {/* Main Headline & Identity */}
+                <div className="space-y-1.5">
+                  <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-8xl uppercase tracking-tight text-[#F5F5F5] leading-[0.92]">
                     VloPedia
                   </h1>
-                  <p className="font-sans text-lg sm:text-xl text-secondary font-normal tracking-tight">
-                    Everything VALORANT. In one place.
+                  <div className="font-mono text-xs sm:text-sm font-bold uppercase tracking-widest text-[#FF4655]">
+                    THE VALORANT DATABASE
+                  </div>
+                  <p className="font-sans text-sm sm:text-base text-[#7C8491] font-normal tracking-tight pt-1 max-w-xl">
+                    Explore agents, weapons, skins, maps and competitive intelligence in one unified armory database.
                   </p>
                 </div>
 
-                {/* Tactical Search Box */}
+                {/* Tactical Search Box — Primary Interaction */}
                 <div className="w-full max-w-xl">
                   <form
                     onSubmit={goSearch}
                     role="search"
-                    className={`relative flex items-center border bg-surface/95 backdrop-blur-md shadow-lg transition-all duration-200 clip-diagonal-sm ${
+                    className={`relative flex items-center border bg-[#0D1118]/95 backdrop-blur-xl shadow-2xl transition-all duration-200 clip-diagonal-sm ${
                       isSearching
-                        ? "border-primary ring-1 ring-primary/40 bg-surface-elevated"
-                        : "border-border hover:border-border-light focus-within:border-primary"
+                        ? "border-[#FF4655] ring-2 ring-[#FF4655]/25 bg-[#151A22]"
+                        : "border-white/10 hover:border-white/20 focus-within:border-[#FF4655]"
                     }`}
                   >
-                    <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
+                    <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-[#7C8491]" aria-hidden="true" />
                     <input
                       type="search"
                       value={query}
@@ -223,9 +226,9 @@ export function HomepageClient() {
                       onBlur={() => setIsSearching(query.length > 0)}
                       placeholder="Search agents, weapons, skins, maps... (Ctrl + K)"
                       aria-label="Search VloPedia"
-                      className="w-full bg-transparent px-4 py-3.5 font-sans text-sm sm:text-base text-foreground placeholder:text-muted focus:outline-none"
+                      className="w-full bg-transparent px-4 py-4 font-sans text-sm sm:text-base text-[#F5F5F5] placeholder:text-[#7C8491] focus:outline-none"
                     />
-                    <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 mr-2 border border-border bg-surface-elevated text-muted font-mono text-[10px] select-none">
+                    <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 mr-2 border border-white/10 bg-[#151A22] text-[#7C8491] font-mono text-[10px] select-none">
                       <span>Ctrl</span>
                       <span>K</span>
                     </div>
@@ -233,27 +236,27 @@ export function HomepageClient() {
                       type="submit"
                       variant="primary"
                       size="sm"
-                      className="shrink-0 mr-2.5 font-mono text-xs font-bold uppercase tracking-wider px-4 clip-diagonal-sm"
+                      className="shrink-0 mr-2.5 font-mono text-xs font-bold uppercase tracking-wider px-5 py-2.5 clip-diagonal-sm shadow-md"
                     >
                       Search
                     </Button>
                   </form>
                 </div>
 
-                {/* Interactive Knowledge Domain Nodes */}
-                <div className="space-y-2.5 w-full pt-1">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-muted block">
-                    DATABASE EXPLORATION // HOVER NODES TO ENGAGE CORE
+                {/* Tactical Navigation Controls (Not generic rounded buttons!) */}
+                <div className="space-y-2 w-full pt-1">
+                  <span className="font-mono text-[9px] uppercase tracking-wider text-[#7C8491] block">
+                    DATABASE SECTORS // SELECT TO ENGAGE ARMORY
                   </span>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-xl">
                     {[
-                      { domain: "agents" as const, label: "Agents", count: "29", href: "/agents" },
-                      { domain: "weapons" as const, label: "Weapons", count: "21", href: "/weapons" },
-                      { domain: "skins" as const, label: "Skins", count: "1,400+", href: "/skins" },
-                      { domain: "maps" as const, label: "Maps", count: "18", href: "/maps" },
-                      { domain: "bundles" as const, label: "Bundles", count: "327+", href: "/bundles" },
-                      { domain: "tools" as const, label: "Tools", count: "7", href: "/tools" },
+                      { domain: "agents" as const, label: "AGENTS", count: "29", href: "/agents" },
+                      { domain: "weapons" as const, label: "WEAPONS", count: "21", href: "/weapons" },
+                      { domain: "skins" as const, label: "SKINS", count: "1,400+", href: "/skins" },
+                      { domain: "maps" as const, label: "MAPS", count: "18", href: "/maps" },
+                      { domain: "bundles" as const, label: "BUNDLES", count: "327+", href: "/bundles" },
+                      { domain: "tools" as const, label: "GUIDES", count: "LORE", href: "/guides" },
                     ].map((item) => {
                       const isActive = activeDomain === item.domain;
                       return (
@@ -264,14 +267,14 @@ export function HomepageClient() {
                           onMouseLeave={() => setActiveDomain("idle")}
                           onFocus={() => setActiveDomain(item.domain)}
                           onBlur={() => setActiveDomain("idle")}
-                          className={`flex items-center justify-between px-3 py-2 border clip-diagonal-sm transition-all text-xs ${
+                          className={`flex items-center justify-between px-3.5 py-2.5 border clip-diagonal-sm transition-all text-xs font-mono tracking-wider ${
                             isActive
-                              ? "border-primary bg-primary/15 text-foreground shadow-xs"
-                              : "border-border bg-surface-card hover:bg-surface-elevated hover:border-border-light text-secondary hover:text-foreground"
+                              ? "border-[#FF4655] bg-[#FF4655]/15 text-[#F5F5F5] shadow-xs"
+                              : "border-white/10 bg-[#0D1118]/80 hover:bg-[#151A22] hover:border-white/25 text-[#7C8491] hover:text-[#F5F5F5]"
                           }`}
                         >
-                          <span className="font-sans font-semibold">{item.label}</span>
-                          <span className="font-mono text-[10px] text-muted">[{item.count}]</span>
+                          <span className="font-bold">{item.label}</span>
+                          <span className="text-[10px] text-[#7C8491]">[{item.count}]</span>
                         </Link>
                       );
                     })}

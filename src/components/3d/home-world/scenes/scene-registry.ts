@@ -65,8 +65,8 @@ export interface SceneDefinition {
 
 export const SCENE_REGISTRY: SceneDefinition[] = [
   {
-    id: "tactical-deck",
-    name: "Tactical Intelligence Deck",
+    id: "tactical-workstation",
+    name: "Tactical Armory Workstation",
     status: "active",
     releaseDate: "2026-10-05",
     featuredMonth: null,
@@ -74,33 +74,33 @@ export const SCENE_REGISTRY: SceneDefinition[] = [
     mobileFallbackImage: "/images/tactical-grid-bg.png",
     camera: {
       fov: 38,
-      driftAmplitudeX: 0.02,
-      driftAmplitudeY: 0.012,
-      driftSpeed: 0.12,
-      parallaxMaxAngle: 0.025,
+      driftAmplitudeX: 0.015,
+      driftAmplitudeY: 0.01,
+      driftSpeed: 0.1,
+      parallaxMaxAngle: 0.025, // 2-3 degrees clamped
       states: {
-        idle:    { position: [0, 0.45, 4.2],  lookAt: [0, 0.25, 0] },
-        agents:  { position: [0.35, 0.45, 4.0], lookAt: [1.2, 0.3, 0] },
-        maps:    { position: [-0.2, 0.55, 4.3],  lookAt: [0.6, 0.2, 0] },
-        weapons: { position: [0.4, 0.45, 3.9],  lookAt: [1.4, 0.35, 0] },
-        skins:   { position: [0.3, 0.5, 4.0],   lookAt: [1.1, 0.3, 0] },
+        idle:    { position: [0.12, 0.65, 4.2],  lookAt: [0.3, 0.2, 0] },
+        agents:  { position: [0.25, 0.62, 4.0],  lookAt: [0.9, 0.25, 0] },
+        maps:    { position: [-0.1, 0.7, 4.3],   lookAt: [0.4, 0.2, 0] },
+        weapons: { position: [0.35, 0.62, 3.9],  lookAt: [1.2, 0.28, 0] },
+        skins:   { position: [0.28, 0.65, 4.0],  lookAt: [1.0, 0.25, 0] },
       },
     },
     lighting: {
-      ambientColor: "#080A0F",
+      ambientColor: "#07090D",
       ambientIntensity: 0.85,
-      keyLightColor: "#E2E8F0",
+      keyLightColor: "#F5F5F5",
       keyLightIntensity: 1.8,
-      keyLightPosition: [4.0, 6.0, 3.0],
+      keyLightPosition: [3.5, 5.0, 3.5],
       accentColor: "#FF4655",
-      accentIntensity: 1.4,
-      accentPosition: [2.4, 1.2, 0.8],
-      fillColor: "#0B132B",
-      fillIntensity: 0.5,
-      fillPosition: [-4.0, 2.0, -2.0],
+      accentIntensity: 1.6,
+      accentPosition: [2.2, 1.2, 0.5],
+      fillColor: "#7DD3FC",
+      fillIntensity: 0.45,
+      fillPosition: [-3.5, 2.0, -1.0],
     },
     importObjects: () =>
-      import("./tactical-deck-scene").then((m) => ({ SceneObjects: m.TacticalDeckSceneObjects })),
+      import("./tactical-workstation-scene").then((m) => ({ SceneObjects: m.TacticalWorkstationSceneObjects })),
   },
 ];
 
