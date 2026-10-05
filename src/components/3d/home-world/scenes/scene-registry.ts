@@ -102,41 +102,6 @@ export const SCENE_REGISTRY: SceneDefinition[] = [
     importObjects: () =>
       import("./tactical-deck-scene").then((m) => ({ SceneObjects: m.TacticalDeckSceneObjects })),
   },
-  // Future scenes registered with status 'in_development' to prevent premature auto-swap
-  {
-    id: "haven",
-    name: "Haven",
-    status: "in_development",
-    releaseDate: "2026-10-01",
-    featuredMonth: 9,
-    fallbackImage: "/images/map-ascent.webp",
-    mobileFallbackImage: "/images/map-ascent.webp",
-    camera: {
-      fov: 38,
-      driftAmplitudeX: 0.04,
-      driftAmplitudeY: 0.025,
-      driftSpeed: 0.18,
-      parallaxMaxAngle: 0.04,
-      states: {
-        idle: { position: [0, 1.2, 4.5], lookAt: [0, 0.5, 0] },
-      },
-    },
-    lighting: {
-      ambientColor: "#d8c8b4",
-      ambientIntensity: 0.6,
-      keyLightColor: "#ffe4c4",
-      keyLightIntensity: 2.2,
-      keyLightPosition: [4.0, 6.0, 3.0],
-      accentColor: "#ff4655",
-      accentIntensity: 0.6,
-      accentPosition: [-2.0, 1.5, 1.0],
-      fillColor: "#9ec5e8",
-      fillIntensity: 0.4,
-      fillPosition: [-3.0, 4.0, -2.0],
-    },
-    importObjects: () =>
-      import("./ascent-scene").then((m) => ({ SceneObjects: m.AscentSceneObjects })),
-  },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────

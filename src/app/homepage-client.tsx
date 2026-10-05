@@ -20,7 +20,8 @@ import { CONTENT_TIER_MAP, DEFAULT_TIER } from "@/lib/valorant-types";
 import type { ValorantAgent, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
 
 import { HomeWorld } from "@/components/3d/home-world";
-import { IntelligenceCore, type CoreDomain, DOMAIN_METADATA } from "@/components/3d/intelligence-core";
+
+type CoreDomain = "idle" | "agents" | "weapons" | "maps" | "skins" | "bundles" | "tools";
 
 function slugify(text: string): string {
   return text
@@ -278,16 +279,40 @@ export function HomepageClient() {
                 </div>
               </div>
 
-              {/* Right Column: The Signature VALORANT Intelligence Core (Focal Point on Right Flank) */}
-              <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[480px] flex items-center justify-center">
+              {/* Right Column: Holographic Tactical Viewport Framing the 3D Core */}
+              <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[480px] flex items-center justify-center pointer-events-none select-none">
                 {/* Tactical Reticle Corner Brackets */}
-                <div className="absolute top-0 right-0 w-4 h-[2px] bg-primary/60 pointer-events-none" />
-                <div className="absolute top-0 right-0 w-[2px] h-4 bg-primary/60 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-4 h-[2px] bg-cyan/60 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-[2px] h-4 bg-cyan/60 pointer-events-none" />
+                <div className="absolute top-4 right-4 w-6 h-[2px] bg-primary/60" />
+                <div className="absolute top-4 right-4 w-[2px] h-6 bg-primary/60" />
+                <div className="absolute bottom-4 left-4 w-6 h-[2px] bg-[#00E5FF]/60" />
+                <div className="absolute bottom-4 left-4 w-[2px] h-6 bg-[#00E5FF]/60" />
+                <div className="absolute top-4 left-4 w-3 h-[2px] bg-white/20" />
+                <div className="absolute top-4 left-4 w-[2px] h-3 bg-white/20" />
+                <div className="absolute bottom-4 right-4 w-3 h-[2px] bg-white/20" />
+                <div className="absolute bottom-4 right-4 w-[2px] h-3 bg-white/20" />
 
-                {/* Tactical Core Component */}
-                <IntelligenceCore activeDomain={activeDomain} />
+                {/* Top Telemetry Header */}
+                <div className="absolute top-6 left-6 right-6 flex items-center justify-between font-mono text-[9px] uppercase tracking-wider text-muted/70">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                    <span>RADIANITE TELEMETRY // CORE ACTIVE</span>
+                  </span>
+                  <span className="text-secondary/60">SYS.ID: VLOP-1306</span>
+                </div>
+
+                {/* Bottom Telemetry Status Readout */}
+                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between font-mono text-[9px] uppercase tracking-wider text-muted/70">
+                  <div className="space-y-0.5">
+                    <div className="text-[8px] text-muted/50">TARGET VECTOR</div>
+                    <div className="text-foreground font-semibold">
+                      {activeDomain === "idle" ? "GLOBAL ARCHIVE" : `${activeDomain.toUpperCase()} SECTOR`}
+                    </div>
+                  </div>
+                  <div className="text-right space-y-0.5">
+                    <div className="text-[8px] text-muted/50">RADIANITE HARVEST</div>
+                    <div className="text-primary font-bold">100% SYNCHRONIZED</div>
+                  </div>
+                </div>
               </div>
 
             </div>
