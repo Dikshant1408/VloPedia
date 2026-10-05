@@ -1,32 +1,10 @@
 import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { siteConfig } from "@/lib/site";
 import { ValorantApiClient } from "@/lib/valorantApi";
-
-/* ── Fonts ── */
-const displayFont = Outfit({
-  weight: ["400", "700", "900"],
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-});
-
-const monoFont = JetBrains_Mono({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
-  display: "swap",
-});
-
-const bodyFont = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -98,10 +76,16 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${displayFont.variable} ${monoFont.variable} ${bodyFont.variable} dark`}
+      className="dark"
       suppressHydrationWarning
     >
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;700;900&display=swap"
+          rel="stylesheet"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
