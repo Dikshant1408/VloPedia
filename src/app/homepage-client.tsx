@@ -1,27 +1,22 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
   ArrowRight, Search as SearchIcon,
-  Heart, Crosshair
+  Heart, Shield, Crosshair, Zap, Eye, Compass, Flame, Radio
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserWishlist } from "@/hooks/use-user-wishlist";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
-import { Reveal, StaggerContainer, PageTransition } from "@/components/motion-system";
-import { MapCard } from "@/components/map-card";
+import { PageTransition } from "@/components/motion-system";
 import { valorantDb } from "@/lib/valorant-db";
 import { CONTENT_TIER_MAP, DEFAULT_TIER } from "@/lib/valorant-types";
-import type { ValorantAgent, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
-
-import { HomeWorld } from "@/components/3d/home-world";
-
-type CoreDomain = "idle" | "agents" | "weapons" | "maps" | "skins" | "bundles" | "tools";
+import type { ValorantMap, ValorantSkin } from "@/lib/valorant-types";
 
 function slugify(text: string): string {
   return text
@@ -31,58 +26,302 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-const META_AGENTS = [
+// ── Cinematic Hero Roster ────────────────────────────────────────────────────
+interface HeroAgent {
+  name: string;
+  callsign: string;
+  role: "DUELIST" | "CONTROLLER" | "INITIATOR" | "SENTINEL";
+  origin: string;
+  tagline: string;
+  quote: string;
+  accentColor: string;
+  glowColor: string;
+  portrait: string;
+  entry: number;
+  mobility: number;
+  info: number;
+  slug: string;
+}
+
+const HERO_AGENTS: HeroAgent[] = [
   {
     name: "Jett",
-    role: "Duelist",
-    slug: "jett",
+    callsign: "WIND WALKER",
+    role: "DUELIST",
+    origin: "South Korea",
+    tagline: "High-velocity entry aggression with Tailwind escapes and lethal Bladestorm daggers.",
+    quote: "Think you can keep up? Good luck.",
+    accentColor: "#FF4655",
+    glowColor: "rgba(255, 70, 85, 0.28)",
+    portrait: "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/fullportrait.png",
     entry: 96,
     mobility: 98,
     info: 44,
-    bestMaps: ["Ascent", "Haven", "Breeze"],
-    portrait: "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/fullportrait.png",
+    slug: "jett",
   },
   {
     name: "Omen",
-    role: "Controller",
-    slug: "omen",
+    callsign: "SHADOW OPERATIVE",
+    role: "CONTROLLER",
+    origin: "Unknown",
+    tagline: "Omnipresent tactical smokes, teleport flanking, and Paranoia vision denial.",
+    quote: "Scatter. They cannot hide from shadows.",
+    accentColor: "#818CF8",
+    glowColor: "rgba(129, 140, 248, 0.28)",
+    portrait: "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b1c-7add8277706a/fullportrait.png",
     entry: 68,
     mobility: 86,
     info: 74,
-    bestMaps: ["Ascent", "Lotus", "Sunset"],
-    portrait: "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b1c-7add8277706a/fullportrait.png",
+    slug: "omen",
   },
   {
-    name: "Sova",
-    role: "Initiator",
-    slug: "sova",
-    entry: 54,
-    mobility: 50,
-    info: 98,
-    bestMaps: ["Ascent", "Haven", "Breeze"],
-    portrait: "https://media.valorant-api.com/agents/3207dd43-4636-1679-b5ce-f3880977e8fb/fullportrait.png",
+    name: "Reyna",
+    callsign: "SOUL REAPER",
+    role: "DUELIST",
+    origin: "Mexico",
+    tagline: "Devouring fallen enemies to heal, dismiss into invulnerability, and overwhelm rounds.",
+    quote: "They found a monster. Let them suffer.",
+    accentColor: "#C084FC",
+    glowColor: "rgba(192, 132, 252, 0.28)",
+    portrait: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/fullportrait.png",
+    entry: 94,
+    mobility: 88,
+    info: 38,
+    slug: "reyna",
   },
   {
-    name: "Killjoy",
-    role: "Sentinel",
-    slug: "killjoy",
-    entry: 42,
-    mobility: 46,
-    info: 94,
-    bestMaps: ["Ascent", "Lotus", "Icebox"],
-    portrait: "https://media.valorant-api.com/agents/1e58d929-473b-fb37-02d9-5fbe4144646f/fullportrait.png",
+    name: "Phoenix",
+    callsign: "SOLAR IGNITION",
+    role: "DUELIST",
+    origin: "United Kingdom",
+    tagline: "Flash entry curves, blazing wall cover, and second-chance Run It Back ultimate.",
+    quote: "Just watch my back. I got the rest.",
+    accentColor: "#FB923C",
+    glowColor: "rgba(251, 146, 60, 0.28)",
+    portrait: "https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/fullportrait.png",
+    entry: 90,
+    mobility: 82,
+    info: 46,
+    slug: "phoenix",
+  },
+  {
+    name: "Viper",
+    callsign: "TOXIC ALCHEMIST",
+    role: "CONTROLLER",
+    origin: "United States",
+    tagline: "Deploys poisonous chemical screens, acid decay puddles, and total site-locking Pit.",
+    quote: "Welcome to my world. Don't breathe.",
+    accentColor: "#4ADE80",
+    glowColor: "rgba(74, 222, 128, 0.25)",
+    portrait: "https://media.valorant-api.com/agents/707eab51-4836-f488-046a-cda6bf494859/fullportrait.png",
+    entry: 52,
+    mobility: 48,
+    info: 82,
+    slug: "viper",
   },
 ];
 
-const DIRECTORY_ITEMS = [
-  { title: "Agents", href: "/agents", desc: "Abilities, stats, role synergies & counters", count: "29 Agents" },
-  { title: "Weapons", href: "/weapons", desc: "Ballistics, spray patterns & damage charts", count: "21 Weapons" },
-  { title: "Maps", href: "/maps", desc: "Interactive 3D radar, callouts & plant executes", count: "18 Maps (7 Active)" },
-  { title: "Skins", href: "/skins", desc: "1,400+ skins, chromas, tiers & audio clips", count: "1,400+ Skins" },
-  { title: "Bundles", href: "/bundles", desc: "Complete skin sets and store history", count: "327+ Bundles" },
-  { title: "Comp Builder", href: "/comp-builder", desc: "Simulate and optimize team agent synergies", count: "Interactive Tool" },
-  { title: "Guides", href: "/guides", desc: "Agent masterclasses and crosshair placement", count: "Tutorials" },
-  { title: "Lore", href: "/lore", desc: "First Light canon, Kingdom Corp & Earth-Omega", count: "Story Timeline" },
+// ── Featured Armory Weapons ──────────────────────────────────────────────────
+interface ArmoryWeapon {
+  slug: string;
+  name: string;
+  category: string;
+  cost: number;
+  headshotDmg: number;
+  bodyDmg: number;
+  fireRate: number;
+  magazine: number;
+  description: string;
+  recoilTrait: string;
+  iconUrl: string;
+}
+
+const ARMORY_WEAPONS: ArmoryWeapon[] = [
+  {
+    slug: "vandal",
+    name: "VANDAL",
+    category: "RIFLE",
+    cost: 2900,
+    headshotDmg: 160,
+    bodyDmg: 40,
+    fireRate: 9.75,
+    magazine: 25,
+    description: "Guaranteed lethal 160 headshot damage at any distance. The definitive tournament rifle.",
+    recoilTrait: "Heavy vertical kick with precision first 3-shot clustering",
+    iconUrl: "https://media.valorant-api.com/weapons/9c82e14d-4e4c-1647-a728-4f8150495393/displayicon.png",
+  },
+  {
+    slug: "phantom",
+    name: "PHANTOM",
+    category: "RIFLE",
+    cost: 2900,
+    headshotDmg: 156,
+    bodyDmg: 39,
+    fireRate: 11.0,
+    magazine: 30,
+    description: "Silenced barrel with zero bullet tracers through smoke and a blistering 11.0 rds/sec rate.",
+    recoilTrait: "Tight, predictable horizontal spray transfer recovery",
+    iconUrl: "https://media.valorant-api.com/weapons/ee8e8d15-496b-07ac-e5f6-8fae5d4c7b1a/displayicon.png",
+  },
+  {
+    slug: "operator",
+    name: "OPERATOR",
+    category: "SNIPER",
+    cost: 4700,
+    headshotDmg: 255,
+    bodyDmg: 150,
+    fireRate: 0.75,
+    magazine: 5,
+    description: "High-caliber bolt-action rifle dealing lethal single-round body hits across all sightlines.",
+    recoilTrait: "Heavy bolt cycle with mandatory stationary accuracy",
+    iconUrl: "https://media.valorant-api.com/weapons/a03b24d3-4319-996d-0f8c-94bbfba1dfc7/displayicon.png",
+  },
+  {
+    slug: "sheriff",
+    name: "SHERIFF",
+    category: "SIDEARM",
+    cost: 800,
+    headshotDmg: 159,
+    bodyDmg: 55,
+    fireRate: 4.0,
+    magazine: 6,
+    description: "High-impact sidearm with 159 headshot lethality up to 30 meters on eco buys.",
+    recoilTrait: "High recoil requiring measured cadence between shots",
+    iconUrl: "https://media.valorant-api.com/weapons/e370fa57-4757-3604-3648-499e1f642d3f/displayicon.png",
+  },
+  {
+    slug: "spectre",
+    name: "SPECTRE",
+    category: "SMG",
+    cost: 1600,
+    headshotDmg: 78,
+    bodyDmg: 26,
+    fireRate: 13.33,
+    magazine: 30,
+    description: "Close-quarters silenced submachine gun ideal for run-and-gun pressure rounds.",
+    recoilTrait: "High stability with low recoil spread while moving",
+    iconUrl: "https://media.valorant-api.com/weapons/462080d1-4035-2937-7c09-27aa2a5c27a7/displayicon.png",
+  },
+];
+
+// ── Iconic Skin Showcases ────────────────────────────────────────────────────
+interface FeaturedSkinShowcase {
+  name: string;
+  weapon: string;
+  tier: "EXCLUSIVE" | "ULTRA" | "PREMIUM";
+  price: number;
+  iconUrl: string;
+  slug: string;
+  theme: string;
+}
+
+const FEATURED_COLLECTIONS: FeaturedSkinShowcase[] = [
+  {
+    name: "Champions 2024 Vandal",
+    weapon: "Vandal",
+    tier: "EXCLUSIVE",
+    price: 2675,
+    iconUrl: "https://media.valorant-api.com/weaponskins/e0df7ba2-4b2a-bf39-8664-88aa3801267b/displayicon.png",
+    slug: "vandal",
+    theme: "Championship Aura & Trophy Finisher",
+  },
+  {
+    name: "Kuronami Vandal",
+    weapon: "Vandal",
+    tier: "EXCLUSIVE",
+    price: 2375,
+    iconUrl: "https://media.valorant-api.com/weaponskins/758c545b-4171-aa3a-5309-fa986ee35a11/displayicon.png",
+    slug: "vandal",
+    theme: "Water Flow & Dual Kunai Reload",
+  },
+  {
+    name: "Reaver Vandal",
+    weapon: "Vandal",
+    tier: "PREMIUM",
+    price: 1775,
+    iconUrl: "https://media.valorant-api.com/weaponskins/43c22421-4f15-8947-a9a3-5c829e0a0d9b/displayicon.png",
+    slug: "vandal",
+    theme: "Necrotic Bells & Dark Telekinesis",
+  },
+  {
+    name: "Prime 2.0 Phantom",
+    weapon: "Phantom",
+    tier: "PREMIUM",
+    price: 1775,
+    iconUrl: "https://media.valorant-api.com/weaponskins/7e997f8c-4a37-58b9-50e5-79a0b4d45863/displayicon.png",
+    slug: "phantom",
+    theme: "Hypercar Radiance & Laser Discharge",
+  },
+  {
+    name: "Araxys Vandal",
+    weapon: "Vandal",
+    tier: "EXCLUSIVE",
+    price: 2175,
+    iconUrl: "https://media.valorant-api.com/weaponskins/e78112c3-42bc-2234-a21c-4395e5efd3e3/displayicon.png",
+    slug: "vandal",
+    theme: "Alien Mechanical Armor Plates",
+  },
+];
+
+// ── Cinematic Map Sectors ────────────────────────────────────────────────────
+interface BattlefieldMap {
+  name: string;
+  location: string;
+  slug: string;
+  sites: string;
+  feature: string;
+  splashUrl: string;
+}
+
+const BATTLEFIELD_MAPS: BattlefieldMap[] = [
+  {
+    name: "Ascent",
+    location: "San Marco, Italy",
+    slug: "ascent",
+    sites: "2 SITES",
+    feature: "Controllable mechanical blast doors & dominant Mid courtyard",
+    splashUrl: "https://media.valorant-api.com/maps/7eaecc1b-4337-bbf6-6ab9-04b8f06b3319/splash.png",
+  },
+  {
+    name: "Haven",
+    location: "Thimphu, Bhutan",
+    slug: "haven",
+    sites: "3 SITES",
+    feature: "Three bomb sites with rapid defender rotations and Garage lurk control",
+    splashUrl: "https://media.valorant-api.com/maps/2bee0dc9-4ffe-519b-1cbd-7fbe763a6047/splash.png",
+  },
+  {
+    name: "Lotus",
+    location: "Western Ghats, India",
+    slug: "lotus",
+    sites: "3 SITES",
+    feature: "Three sites linked by sound-emitting rotating stone doorways",
+    splashUrl: "https://media.valorant-api.com/maps/2fe4ed3a-450a-948b-6d6b-e89a78e680a9/splash.png",
+  },
+  {
+    name: "Sunset",
+    location: "Los Angeles, USA",
+    slug: "sunset",
+    sites: "2 SITES",
+    feature: "Traditional 2-site layout centered around high-friction Mid control",
+    splashUrl: "https://media.valorant-api.com/maps/92584fbe-486a-b1b2-9faa-39b0f486b498/splash.png",
+  },
+  {
+    name: "Split",
+    location: "Tokyo, Japan",
+    slug: "split",
+    sites: "2 SITES",
+    feature: "High verticality with tactical rope ascenders and narrow choke chokepoints",
+    splashUrl: "https://media.valorant-api.com/maps/d960549e-485c-e861-8d71-aa9d1aed12a2/splash.png",
+  },
+  {
+    name: "Bind",
+    location: "Rabat, Morocco",
+    slug: "bind",
+    sites: "2 SITES",
+    feature: "Zero Mid lane; replaced by two instant one-way teleporter chambers",
+    splashUrl: "https://media.valorant-api.com/maps/2c9d57ec-4431-9c5e-2939-8f9ef6dd5cba/splash.png",
+  },
 ];
 
 export function HomepageClient() {
@@ -90,758 +329,983 @@ export function HomepageClient() {
   const { addWishlistItem, items: wishlistItems } = useUserWishlist();
   const reduce = useReducedMotion();
 
-  const [randomSkin, setRandomSkin]   = useState<ValorantSkin | null>(null);
-  const [maps, setMaps]               = useState<any[]>([]);
-  const [selectedMetaAgent, setSelectedMetaAgent] = useState(META_AGENTS[0]);
-  const [activeDomain, setActiveDomain] = useState<CoreDomain>("idle");
-  const [isSearching, setIsSearching] = useState(false);
+  // State
+  const [activeHeroAgentIdx, setActiveHeroAgentIdx] = useState(0);
+  const [activeArmoryWeapon, setActiveArmoryWeapon] = useState<ArmoryWeapon>(ARMORY_WEAPONS[0]);
+  const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>("ALL");
+  const [randomSkin, setRandomSkin] = useState<ValorantSkin | null>(null);
+  const [query, setQuery] = useState("");
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  const activeAgent = HERO_AGENTS[activeHeroAgentIdx];
+
+  // Auto-cycle hero agents gently if not reduced motion (every 9s)
   useEffect(() => {
-    fetch("https://valorant-api.com/v1/maps")
-      .then(r => r.json()).then(j => {
-        const raw: ValorantMap[] = j.data ?? [];
-        setMaps(raw.filter(m => m.splash && m.displayIcon).slice(0, 6).map(m => ({
-          slug: m.displayName.toLowerCase().replace(/\s+/g, "-"),
-          name: m.displayName,
-          location: m.coordinates ?? undefined,
-          splashUrl: m.splash || m.listViewIcon,
-          lore: m.narrativeDescription ?? undefined,
-        })));
-      }).catch(() => {});
+    if (reduce) return;
+    const interval = setInterval(() => {
+      setActiveHeroAgentIdx((prev) => (prev + 1) % HERO_AGENTS.length);
+    }, 9000);
+    return () => clearInterval(interval);
+  }, [reduce]);
 
+  // Fetch a daily random skin from API
+  useEffect(() => {
     fetch("https://valorant-api.com/v1/weapons/skins")
-      .then(r => r.json()).then(j => {
+      .then((r) => r.json())
+      .then((j) => {
         const skins: ValorantSkin[] = j.data ?? [];
-        const validSkins = skins.filter(s => s.displayIcon && !s.displayName.toLowerCase().includes("standard"));
+        const validSkins = skins.filter(
+          (s) => s.displayIcon && !s.displayName.toLowerCase().includes("standard")
+        );
         if (validSkins.length > 0) {
           const randIdx = Math.floor(Math.random() * validSkins.length);
           setRandomSkin(validSkins[randIdx]);
         }
-      }).catch(() => {});
+      })
+      .catch(() => {});
   }, []);
 
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY   = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "12%"]);
-  const overlay = useTransform(scrollYProgress, [0, 1], [0.4, 0.94]);
+  // Subtle Mouse Parallax Handler (Desktop)
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (reduce || typeof window === "undefined") return;
+    const { innerWidth, innerHeight } = window;
+    const x = (e.clientX / innerWidth - 0.5) * 2;
+    const y = (e.clientY / innerHeight - 0.5) * 2;
+    setMousePos({ x, y });
+  };
 
-  const [query, setQuery] = useState("");
   const goSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const q = query.trim();
     window.location.href = q.length >= 2 ? `/search?q=${encodeURIComponent(q)}` : "/search";
   };
 
-  const handleWishlist = async (title: string, type: "skin"|"bundle") => {
+  const handleWishlist = async (title: string, type: "skin" | "bundle") => {
     if (!user) {
-      toast.info("Sign in to save items", { action: { label: "Sign In", onClick: signInWithDiscord } });
+      toast.info("Sign in to save items", {
+        action: { label: "Sign In", onClick: signInWithDiscord },
+      });
       return;
     }
-    if (wishlistItems.some(w => w.title === title)) { toast.info(`Already saved to wishlist`); return; }
+    if (wishlistItems.some((w) => w.title === title)) {
+      toast.info(`Already saved to wishlist`);
+      return;
+    }
     try {
       await addWishlistItem({ title, category: type });
       toast.success(`Added "${title}" to your wishlist`);
-    } catch { toast.error("Could not save item"); }
+    } catch {
+      toast.error("Could not save item");
+    }
   };
 
-  const mapCards = maps.length > 0 ? maps : valorantDb.maps.slice(0, 6).map(m => ({
-    slug: m.slug, name: m.name, location: m.location, splashUrl: m.splashUrl, lore: m.lore,
-  }));
+  // Filtered agents for Section 2
+  const filteredAgents = useMemo(() => {
+    if (selectedRoleFilter === "ALL") return valorantDb.agents.slice(0, 8);
+    return valorantDb.agents.filter((a) => a.role === selectedRoleFilter).slice(0, 8);
+  }, [selectedRoleFilter]);
 
   const latestPatch = valorantDb.patches[0];
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-background text-foreground">
-
-        {/* ═══════════════════════════════════════════
-            1. TACTICAL HERO: TACTICAL INTELLIGENCE DECK
-        ═══════════════════════════════════════════ */}
-        <section ref={heroRef} className="relative min-h-[85vh] lg:min-h-[92vh] w-full overflow-hidden border-b border-border bg-background flex flex-col justify-between py-10 lg:py-14">
-          {/* 3D Cinematic Tactical Deck Layer with graceful scroll easing */}
+      <div
+        className="min-h-screen bg-[#08090C] text-[#F5F5F5] selection:bg-[#FF4655] selection:text-white"
+        onMouseMove={handleMouseMove}
+      >
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 1: HERO — "ENTER THE PROTOCOL"
+            Cinematic visual trailer opening with official Agent keyart
+        ═══════════════════════════════════════════════════════════════ */}
+        <section className="relative min-h-[90vh] lg:min-h-[96vh] w-full overflow-hidden border-b border-white/[0.08] flex flex-col justify-between pt-10 pb-8 sm:pb-12">
+          
+          {/* Top Thin Red Cinematic Accent Beam */}
           <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
+            className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF4655] to-transparent z-20 origin-center"
+          />
+
+          {/* Background Atmospheric Layers with 2px Parallax */}
+          <div
+            className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
             style={{
-              y: heroY,
-              opacity: useTransform(scrollYProgress, [0, 0.75], [1, 0.2]),
+              transform: reduce
+                ? "none"
+                : `translate(${mousePos.x * 2}px, ${mousePos.y * 2}px)`,
+              transition: "transform 0.25s ease-out",
             }}
-            className="absolute inset-0 pointer-events-none z-0"
           >
-            <HomeWorld
-              activeCategory={activeDomain === "idle" ? "idle" : (activeDomain as any)}
-              isSearching={isSearching}
+            {/* Dark tactical vignette */}
+            <div className="absolute inset-0 bg-[#08090C]" />
+            
+            {/* Dynamic Agent Atmospheric Backlight Bloom */}
+            <div
+              className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full blur-[140px] opacity-30 transition-colors duration-1000"
+              style={{ backgroundColor: activeAgent.accentColor }}
             />
-          </motion.div>
 
-          {/* Clean Central Negative Space Readability Gradient ensuring WCAG AAA typography */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-transparent pointer-events-none z-[1]" />
-          <div className="absolute inset-0 bg-radial from-transparent via-background/40 to-background/90 pointer-events-none z-[1]" />
+            {/* Subtle environmental grid watermark */}
+            <div className="absolute inset-0 bg-tactical-grid opacity-[0.18]" />
 
-          {/* Top spacer */}
-          <div className="w-full relative z-10" />
+            {/* Cinematic Gradient Vignette */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08090C] via-transparent to-[#08090C]/80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#08090C] via-[#08090C]/85 to-transparent lg:to-transparent" />
+          </div>
 
-          <Container className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
-            <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] items-center">
+          {/* Main Hero Container */}
+          <Container className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full my-auto py-6 sm:py-12">
+            <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
               
-              {/* Left Column: VloPedia Command Center (Center/Left) */}
-              <div className="space-y-6 flex flex-col items-start text-left">
-                {/* Tactical Status Pill */}
-                <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-3 py-1 text-primary font-mono text-[10px] uppercase tracking-widest clip-diagonal-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                  <span>TACTICAL INTELLIGENCE TERMINAL // ARCHIVE 13.06</span>
-                </div>
+              {/* ── Left / Center Column: Cinematic Typography & Dominant Search ── */}
+              <div className="space-y-6 sm:space-y-8 flex flex-col items-start text-left max-w-2xl">
+                
+                {/* 0.5s Eyebrow */}
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="inline-flex items-center gap-2.5 px-3 py-1 border border-white/10 bg-[#101218]/90 text-white font-mono text-[11px] uppercase tracking-widest clip-diagonal-sm"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF4655] animate-pulse" />
+                  <span>THE VALORANT DATABASE</span>
+                </motion.div>
 
-                {/* Main Headline & Identity */}
-                <div className="space-y-1.5">
-                  <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-8xl uppercase tracking-tight text-[#F5F5F5] leading-[0.92]">
-                    VloPedia
+                {/* 0.8s Main Heading: VLOPEDIA */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="space-y-2"
+                >
+                  <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-8xl tracking-tight text-[#F5F5F5] uppercase leading-[0.92]">
+                    VLOPEDIA
                   </h1>
-                  <div className="font-mono text-xs sm:text-sm font-bold uppercase tracking-widest text-[#FF4655]">
-                    THE VALORANT DATABASE
-                  </div>
-                  <p className="font-sans text-sm sm:text-base text-[#7C8491] font-normal tracking-tight pt-1 max-w-xl">
-                    Explore agents, weapons, skins, maps and competitive intelligence in one unified armory database.
+                  <p className="font-mono text-base sm:text-lg text-[#FF4655] font-bold uppercase tracking-wider">
+                    Everything VALORANT.
                   </p>
-                </div>
+                  <p className="font-sans text-sm sm:text-base text-[#858B96] leading-relaxed max-w-lg pt-1">
+                    Explore agents, weapons, skins, and maps. The definitive tactical intelligence archive for competitive VALORANT.
+                  </p>
+                </motion.div>
 
-                {/* Tactical Search Box — Primary Interaction */}
-                <div className="w-full max-w-xl">
+                {/* 1.2s Search Interface — Dominant Primary CTA */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.7, delay: 0.8 }}
+                  className="w-full"
+                >
                   <form
                     onSubmit={goSearch}
                     role="search"
-                    className={`relative flex items-center border bg-[#0D1118]/95 backdrop-blur-xl shadow-2xl transition-all duration-200 clip-diagonal-sm ${
-                      isSearching
-                        ? "border-[#FF4655] ring-2 ring-[#FF4655]/25 bg-[#151A22]"
-                        : "border-white/10 hover:border-white/20 focus-within:border-[#FF4655]"
-                    }`}
+                    className="relative flex items-center border border-white/15 bg-[#101218]/95 hover:border-[#FF4655]/60 focus-within:border-[#FF4655] focus-within:ring-2 focus-within:ring-[#FF4655]/25 backdrop-blur-xl shadow-2xl transition-all duration-200 clip-diagonal-sm"
                   >
-                    <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-[#7C8491]" aria-hidden="true" />
+                    <SearchIcon className="ml-4 sm:ml-5 h-5 w-5 shrink-0 text-[#858B96]" aria-hidden="true" />
                     <input
                       type="search"
                       value={query}
-                      onChange={(e) => {
-                        setQuery(e.target.value);
-                        setIsSearching(e.target.value.length > 0);
-                      }}
-                      onFocus={() => setIsSearching(true)}
-                      onBlur={() => setIsSearching(query.length > 0)}
+                      onChange={(e) => setQuery(e.target.value)}
                       placeholder="Search agents, weapons, skins, maps... (Ctrl + K)"
                       aria-label="Search VloPedia"
-                      className="w-full bg-transparent px-4 py-4 font-sans text-sm sm:text-base text-[#F5F5F5] placeholder:text-[#7C8491] focus:outline-none"
+                      className="w-full bg-transparent px-4 py-4 sm:py-4.5 font-sans text-sm sm:text-base text-[#F5F5F5] placeholder:text-[#858B96] focus:outline-none"
                     />
-                    <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 mr-2 border border-white/10 bg-[#151A22] text-[#7C8491] font-mono text-[10px] select-none">
+                    <div className="hidden sm:flex items-center gap-1 px-2.5 py-1 mr-2 border border-white/10 bg-[#08090C] text-[#858B96] font-mono text-[10px] select-none rounded">
                       <span>Ctrl</span>
                       <span>K</span>
                     </div>
                     <Button
                       type="submit"
                       variant="primary"
-                      size="sm"
-                      className="shrink-0 mr-2.5 font-mono text-xs font-bold uppercase tracking-wider px-5 py-2.5 clip-diagonal-sm shadow-md"
+                      className="shrink-0 mr-2 sm:mr-3 font-mono text-xs font-bold uppercase tracking-wider px-5 sm:px-6 py-2.5 bg-[#FF4655] hover:bg-[#FF4655]/90 text-white clip-diagonal-sm shadow-md"
                     >
-                      Search
+                      SEARCH
                     </Button>
                   </form>
-                </div>
+                </motion.div>
 
-                {/* Tactical Navigation Controls (Not generic rounded buttons!) */}
-                <div className="space-y-2 w-full pt-1">
-                  <span className="font-mono text-[9px] uppercase tracking-wider text-[#7C8491] block">
-                    DATABASE SECTORS // SELECT TO ENGAGE ARMORY
-                  </span>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-xl">
-                    {[
-                      { domain: "agents" as const, label: "AGENTS", count: "29", href: "/agents" },
-                      { domain: "weapons" as const, label: "WEAPONS", count: "21", href: "/weapons" },
-                      { domain: "skins" as const, label: "SKINS", count: "1,400+", href: "/skins" },
-                      { domain: "maps" as const, label: "MAPS", count: "18", href: "/maps" },
-                      { domain: "bundles" as const, label: "BUNDLES", count: "327+", href: "/bundles" },
-                      { domain: "tools" as const, label: "GUIDES", count: "LORE", href: "/guides" },
-                    ].map((item) => {
-                      const isActive = activeDomain === item.domain;
-                      return (
-                        <Link
-                          key={item.domain}
-                          href={item.href}
-                          onMouseEnter={() => setActiveDomain(item.domain)}
-                          onMouseLeave={() => setActiveDomain("idle")}
-                          onFocus={() => setActiveDomain(item.domain)}
-                          onBlur={() => setActiveDomain("idle")}
-                          className={`flex items-center justify-between px-3.5 py-2.5 border clip-diagonal-sm transition-all text-xs font-mono tracking-wider ${
-                            isActive
-                              ? "border-[#FF4655] bg-[#FF4655]/15 text-[#F5F5F5] shadow-xs"
-                              : "border-white/10 bg-[#0D1118]/80 hover:bg-[#151A22] hover:border-white/25 text-[#7C8491] hover:text-[#F5F5F5]"
-                          }`}
-                        >
-                          <span className="font-bold">{item.label}</span>
-                          <span className="text-[10px] text-[#7C8491]">[{item.count}]</span>
-                        </Link>
-                      );
-                    })}
+                {/* 1.5s Tactical Navigation Controls (Not generic rounded pills) */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.7, delay: 1.0 }}
+                  className="space-y-2.5 w-full pt-1"
+                >
+                  <div className="flex items-center justify-between text-[10px] font-mono text-[#858B96] uppercase tracking-wider">
+                    <span>EXPLORE ARCHIVE BY SECTOR</span>
+                    <span className="hidden sm:inline">29 OPERATIVES • 21 ARSENAL</span>
                   </div>
-                </div>
+
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                    {[
+                      { label: "AGENTS", count: "29", href: "/agents" },
+                      { label: "WEAPONS", count: "21", href: "/weapons" },
+                      { label: "SKINS", count: "1,400+", href: "/skins" },
+                      { label: "MAPS", count: "18", href: "/maps" },
+                      { label: "BUNDLES", count: "327+", href: "/bundles" },
+                      { label: "GUIDES", count: "LORE", href: "/guides" },
+                    ].map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="group flex flex-col items-center justify-center p-2.5 border border-white/10 bg-[#101218]/80 hover:bg-[#151A22] hover:border-[#FF4655] transition-all text-center clip-diagonal-sm"
+                      >
+                        <span className="font-mono text-xs font-bold text-[#F5F5F5] group-hover:text-[#FF4655] transition-colors">
+                          {item.label}
+                        </span>
+                        <span className="font-mono text-[9px] text-[#858B96] mt-0.5">
+                          {item.count}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </motion.div>
+
               </div>
 
-              {/* Right Column: Holographic Tactical Viewport Framing the 3D Core */}
-              <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[480px] flex items-center justify-center pointer-events-none select-none">
-                {/* Tactical Reticle Corner Brackets */}
-                <div className="absolute top-4 right-4 w-6 h-[2px] bg-primary/60" />
-                <div className="absolute top-4 right-4 w-[2px] h-6 bg-primary/60" />
-                <div className="absolute bottom-4 left-4 w-6 h-[2px] bg-[#00E5FF]/60" />
-                <div className="absolute bottom-4 left-4 w-[2px] h-6 bg-[#00E5FF]/60" />
-                <div className="absolute top-4 left-4 w-3 h-[2px] bg-white/20" />
-                <div className="absolute top-4 left-4 w-[2px] h-3 bg-white/20" />
-                <div className="absolute bottom-4 right-4 w-3 h-[2px] bg-white/20" />
-                <div className="absolute bottom-4 right-4 w-[2px] h-3 bg-white/20" />
-
-                {/* Top Telemetry Header */}
-                <div className="absolute top-6 left-6 right-6 flex items-center justify-between font-mono text-[9px] uppercase tracking-wider text-muted/70">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    <span>RADIANITE TELEMETRY // CORE ACTIVE</span>
+              {/* ── Right Column: Official Large Agent Key Art with 6px Parallax ── */}
+              <div className="relative w-full h-[450px] sm:h-[550px] lg:h-[620px] flex items-center justify-center">
+                
+                {/* Agent Callsign Watermark in Massive Typography */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+                  style={{
+                    transform: reduce
+                      ? "none"
+                      : `translate(${mousePos.x * -3}px, ${mousePos.y * -3}px)`,
+                  }}
+                >
+                  <span className="font-display font-black text-[120px] sm:text-[160px] lg:text-[200px] text-white/[0.03] uppercase tracking-tighter select-none whitespace-nowrap">
+                    {activeAgent.name}
                   </span>
-                  <span className="text-secondary/60">SYS.ID: VLOP-1306</span>
                 </div>
 
-                {/* Bottom Telemetry Status Readout */}
-                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between font-mono text-[9px] uppercase tracking-wider text-muted/70">
-                  <div className="space-y-0.5">
-                    <div className="text-[8px] text-muted/50">TARGET VECTOR</div>
-                    <div className="text-foreground font-semibold">
-                      {activeDomain === "idle" ? "GLOBAL ARCHIVE" : `${activeDomain.toUpperCase()} SECTOR`}
+                {/* 1.0s Large High-Res Transparent Agent Key Art */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeAgent.name}
+                    initial={{ opacity: 0, x: 24, scale: 0.96 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: -24, scale: 0.98 }}
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative w-full h-full flex items-center justify-center"
+                    style={{
+                      transform: reduce
+                        ? "none"
+                        : `translate(${mousePos.x * -6}px, ${mousePos.y * -6}px)`,
+                      transition: "transform 0.2s ease-out",
+                    }}
+                  >
+                    <Image
+                      src={activeAgent.portrait}
+                      alt={`VALORANT Agent ${activeAgent.name}`}
+                      fill
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 650px"
+                      className="object-contain object-center drop-shadow-[0_20px_50px_rgba(0,0,0,0.85)] filter brightness-105"
+                    />
+
+                    {/* Agent Dossier Overlay Card */}
+                    <div className="absolute bottom-4 left-2 right-2 sm:bottom-6 sm:left-6 sm:right-auto max-w-sm border border-white/10 bg-[#101218]/90 backdrop-blur-md p-4 clip-diagonal-sm shadow-2xl">
+                      <div className="flex items-center justify-between gap-3 pb-2 mb-2 border-b border-white/10 font-mono text-[10px]">
+                        <span className="text-[#FF4655] font-bold uppercase tracking-wider">
+                          {activeAgent.role} {'//'} {activeAgent.origin}
+                        </span>
+                        <span className="text-[#858B96] uppercase">{activeAgent.callsign}</span>
+                      </div>
+                      <p className="font-sans text-xs text-[#F5F5F5] italic leading-snug">
+                        &ldquo;{activeAgent.quote}&rdquo;
+                      </p>
+                      <div className="mt-3 flex items-center justify-between pt-2 border-t border-white/5 font-mono text-[10px]">
+                        <span className="text-[#858B96]">ENTRY: {activeAgent.entry}</span>
+                        <span className="text-[#858B96]">MOBILITY: {activeAgent.mobility}</span>
+                        <span className="text-[#FF4655] font-semibold">INFO: {activeAgent.info}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right space-y-0.5">
-                    <div className="text-[8px] text-muted/50">RADIANITE HARVEST</div>
-                    <div className="text-primary font-bold">100% SYNCHRONIZED</div>
-                  </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Floating Atmospheric Spark/Embers with 10px Parallax */}
+                <div
+                  className="absolute inset-0 pointer-events-none select-none"
+                  style={{
+                    transform: reduce
+                      ? "none"
+                      : `translate(${mousePos.x * 10}px, ${mousePos.y * 10}px)`,
+                    transition: "transform 0.3s ease-out",
+                  }}
+                >
+                  <div className="absolute top-1/4 left-1/4 w-1.5 h-1.5 rounded-full bg-[#FF4655] opacity-60 blur-xs" />
+                  <div className="absolute top-1/3 right-1/4 w-2 h-2 rounded-full bg-white opacity-40 blur-xs" />
+                  <div className="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 rounded-full bg-[#FF4655] opacity-50 blur-xs" />
                 </div>
+
+                {/* Quick Agent Selector Tabs */}
+                <div className="absolute -bottom-4 sm:bottom-0 right-0 flex items-center gap-1.5 bg-[#101218]/90 border border-white/10 p-1 clip-diagonal-sm z-20">
+                  {HERO_AGENTS.map((agent, idx) => (
+                    <button
+                      key={agent.name}
+                      onClick={() => setActiveHeroAgentIdx(idx)}
+                      className={`px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
+                        activeHeroAgentIdx === idx
+                          ? "bg-[#FF4655] text-white"
+                          : "text-[#858B96] hover:text-[#F5F5F5] hover:bg-white/5"
+                      }`}
+                    >
+                      {agent.name}
+                    </button>
+                  ))}
+                </div>
+
               </div>
 
             </div>
           </Container>
 
-          {/* Bottom Animated Tactical Scroll Cue */}
-          <div className="relative z-10 pt-6 flex justify-center">
-            <a
-              href="#latest"
-              className="group inline-flex items-center gap-2 font-mono text-[10px] text-muted hover:text-foreground tracking-widest uppercase transition-colors cursor-pointer py-1 px-3 border border-border/40 bg-surface/50 clip-diagonal-sm backdrop-blur-xs"
-            >
-              <span>Scroll to explore database</span>
-              <span className="text-primary font-bold transition-transform group-hover:translate-y-0.5">↓</span>
-            </a>
+          {/* ── Bottom Database Stats Strip & Scroll Cue ── */}
+          <div className="relative z-10 border-t border-white/[0.08] bg-[#101218]/60 backdrop-blur-xs py-3.5">
+            <Container className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 font-mono text-xs text-[#858B96] tracking-wider uppercase">
+                <span className="flex items-center gap-2">
+                  <span className="text-[#F5F5F5] font-bold">29</span> AGENTS
+                </span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-2">
+                  <span className="text-[#F5F5F5] font-bold">21</span> WEAPONS
+                </span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-2">
+                  <span className="text-[#F5F5F5] font-bold">1,400+</span> SKINS
+                </span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-2">
+                  <span className="text-[#F5F5F5] font-bold">18</span> MAPS
+                </span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-2">
+                  <span className="text-[#FF4655] font-bold">327+</span> BUNDLES
+                </span>
+              </div>
+
+              <a
+                href="#agents-showcase"
+                className="group inline-flex items-center gap-2 font-mono text-[11px] text-[#858B96] hover:text-white uppercase tracking-widest transition-colors cursor-pointer"
+              >
+                <span>SCROLL TO ENTER</span>
+                <span className="text-[#FF4655] font-bold transition-transform group-hover:translate-y-0.5">↓</span>
+              </a>
+            </Container>
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════
-            2. THE LATEST (VALORANT UPDATES & SPOTLIGHT)
-        ═══════════════════════════════════════════ */}
-        <section id="latest" className="border-b border-border bg-background py-16 scroll-mt-12">
-          <Container>
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] items-stretch">
-              {/* Featured Item */}
-              <div className="flex flex-col justify-between rounded-lg border border-border bg-surface-card p-6 sm:p-8 shadow-xs">
-                <div>
-                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-border">
-                    <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
-                      Featured Skin
-                    </span>
-                    <span className="font-mono text-xs text-muted">Daily Spotlight</span>
-                  </div>
-
-                  {randomSkin ? (
-                    <div className="space-y-4">
-                      <div className="relative aspect-[16/10] w-full rounded-md border border-border/70 bg-surface-muted flex items-center justify-center overflow-hidden p-6">
-                        {randomSkin.displayIcon && (
-                          <Image
-                            src={randomSkin.displayIcon}
-                            alt={randomSkin.displayName}
-                            fill
-                            sizes="(max-width: 1024px) 100vw, 500px"
-                            className="object-contain p-4 transition-transform duration-500 hover:scale-105"
-                          />
-                        )}
-                      </div>
-                      <div className="space-y-1.5 pt-2">
-                        <h3 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-foreground">
-                          {randomSkin.displayName}
-                        </h3>
-                        <p className="font-sans text-xs text-secondary leading-relaxed line-clamp-2">
-                          Explore full upgrade animations, custom sound effects, and chroma colorways for the {randomSkin.displayName}.
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="py-12 text-center text-muted">Loading featured skin...</div>
-                  )}
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 2: MEET THE AGENTS — "THE PROTOCOL"
+            Large character visual showcase with roles and abilities
+        ═══════════════════════════════════════════════════════════════ */}
+        <section id="agents-showcase" className="py-20 lg:py-28 border-b border-white/[0.08] bg-[#08090C] relative scroll-mt-12">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6">
+            
+            {/* Section Header */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#FF4655]">
+                  <Shield className="h-3.5 w-3.5" />
+                  <span>SECTION 02 // ROSTER RECON</span>
                 </div>
-
-                {randomSkin && (
-                  <div className="pt-6 mt-6 border-t border-border flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-baseline gap-1 font-mono">
-                      <span className="text-xl font-bold text-foreground">
-                        {(CONTENT_TIER_MAP[randomSkin.contentTierUuid ?? ""] || DEFAULT_TIER).price.toLocaleString()}
-                      </span>
-                      <span className="text-xs text-primary font-semibold">VP</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleWishlist(randomSkin.displayName, "skin")}
-                        className="gap-1.5 text-xs"
-                      >
-                        <Heart className="h-3.5 w-3.5" /> Save
-                      </Button>
-                      <Link href={`/skins/${slugify(randomSkin.displayName) || randomSkin.uuid}`}>
-                        <Button variant="primary" size="sm" className="gap-1 text-xs">
-                          Inspect Skin <ArrowRight className="h-3.5 w-3.5" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Latest Updates & News List */}
-              <div className="flex flex-col justify-between rounded-lg border border-border bg-surface-card p-6 sm:p-8 shadow-xs">
-                <div>
-                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-border">
-                    <span className="font-sans text-xs font-semibold uppercase tracking-wider text-secondary">
-                      Latest Updates
-                    </span>
-                    <Link href="/patch-notes" className="font-sans text-xs text-primary hover:underline">
-                      All patch notes →
-                    </Link>
-                  </div>
-
-                  <div className="divide-y divide-border/60">
-                    {/* Patch Note Item */}
-                    {latestPatch && (
-                      <div className="py-3.5 space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="rounded bg-primary/10 border border-primary/20 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
-                            Patch {latestPatch.version}
-                          </span>
-                          <span className="font-mono text-[10px] text-muted">{latestPatch.date}</span>
-                        </div>
-                        <Link
-                          href={`/patch-notes/${latestPatch.slug}`}
-                          className="font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                        >
-                          Competitive Balance & Agent Adjustments
-                        </Link>
-                        <p className="font-sans text-xs text-secondary line-clamp-2">
-                          {latestPatch.buffs.length} buffs and {latestPatch.nerfs.length} nerfs active in the current tournament pool.
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Meta Update Item */}
-                    <div className="py-3.5 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="rounded bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-400">
-                          Meta
-                        </span>
-                        <span className="font-mono text-[10px] text-muted">Ascent Pool</span>
-                      </div>
-                      <Link
-                        href="/comp-builder?map=ascent&agents=jett,omen,sova,killjoy,kayo"
-                        className="font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                      >
-                        Ascent S-Tier Standard Composition
-                      </Link>
-                      <p className="font-sans text-xs text-secondary">
-                        Jett, Omen, Sova, Killjoy, and KAY/O maintain an 88/100 team synergy index.
-                      </p>
-                    </div>
-
-                    {/* Skin Catalog Item */}
-                    <div className="py-3.5 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="rounded bg-surface-muted border border-border px-1.5 py-0.5 font-mono text-[10px] font-semibold text-secondary">
-                          Database
-                        </span>
-                        <span className="font-mono text-[10px] text-muted">Cosmetics</span>
-                      </div>
-                      <Link
-                        href="/skins"
-                        className="font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                      >
-                        1,400+ Skins & Chroma Variants Cataloged
-                      </Link>
-                      <p className="font-sans text-xs text-secondary">
-                        Browse tier prices, in-game audio previews, and inspection videos.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-border flex items-center justify-between">
-                  <Link href="/guides" className="text-xs font-semibold text-secondary hover:text-foreground">
-                    Browse Guides & Tutorials →
-                  </Link>
-                  <Link href="/sensitivity" className="text-xs font-semibold text-secondary hover:text-foreground">
-                    Sens Converter →
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            3. EXPLORE VLOPEDIA (EDITORIAL DIRECTORY)
-        ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-background py-16">
-          <Container>
-            <div className="mb-8 flex items-end justify-between gap-4">
-              <div>
-                <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-foreground">
-                  Explore VloPedia
+                <h2 className="font-display font-black text-4xl sm:text-5xl uppercase tracking-tight text-[#F5F5F5]">
+                  MEET THE AGENTS
                 </h2>
-                <p className="font-sans text-xs sm:text-sm text-secondary mt-1">
-                  Comprehensive databases, game mechanics, and competitive tools.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {DIRECTORY_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="group clip-diagonal-sm border border-border bg-surface-card p-5 hover:border-border-light hover:bg-surface-elevated hover:shadow-md transition-all flex flex-col justify-between"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-display font-bold text-lg text-foreground group-hover:text-primary transition-colors">
-                        {item.title}
-                      </h3>
-                      <ArrowRight className="h-4 w-4 text-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                    </div>
-                    <p className="font-sans text-xs text-secondary leading-relaxed">
-                      {item.desc}
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-border/40 mt-3">
-                    <span className="font-mono text-[10px] text-muted block font-medium">
-                      {item.count}
-                    </span>
-                    <span className="font-mono text-[9px] uppercase tracking-wider text-muted/60 group-hover:text-primary/70 transition-colors">
-                      INTEL // SEC
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </Container>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            4. AGENTS DOMINATING THIS PATCH
-        ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-background py-16">
-          <Container>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-              <div className="space-y-1.5">
-                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
-                  Operatives
-                </span>
-                <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground">
-                  Your Agents
-                </h2>
-                <p className="font-sans text-sm text-secondary max-w-xl">
-                  Inspect competitive efficiency, entry aggression, and map mastery ratings before queuing.
+                <p className="font-sans text-sm sm:text-base text-[#858B96] max-w-xl">
+                  Every Agent. Every ability. Every role. Master the full roster with verified combat ratings and team counters.
                 </p>
               </div>
 
-              <Link
-                href="/agents"
-                className="font-sans text-xs font-semibold text-primary hover:underline transition-colors flex items-center gap-1 shrink-0"
-              >
-                View all agents →
-              </Link>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {META_AGENTS.map((agent) => {
-                const isSelected = selectedMetaAgent.slug === agent.slug;
-                return (
-                  <div
-                    key={agent.slug}
-                    onMouseEnter={() => setSelectedMetaAgent(agent)}
-                    className={`group relative clip-diagonal-sm border bg-surface-card p-5 transition-all duration-200 cursor-pointer ${
-                      isSelected
-                        ? "border-primary shadow-sm bg-surface-elevated"
-                        : "border-border hover:border-border-light hover:bg-surface-elevated"
+              {/* Role Filter Tabs */}
+              <div className="flex flex-wrap items-center gap-1.5 border border-white/10 bg-[#101218] p-1 clip-diagonal-sm">
+                {["ALL", "DUELIST", "INITIATOR", "CONTROLLER", "SENTINEL"].map((role) => (
+                  <button
+                    key={role}
+                    onClick={() => setSelectedRoleFilter(role)}
+                    className={`px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer ${
+                      selectedRoleFilter === role
+                        ? "bg-[#FF4655] text-white"
+                        : "text-[#858B96] hover:text-[#F5F5F5] hover:bg-white/5"
                     }`}
                   >
-                    {/* Top Identity Header */}
+                    {role}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Expansive Agent Cards Showcase */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {filteredAgents.map((agent) => (
+                <div
+                  key={agent.slug}
+                  className="group relative border border-white/10 bg-[#101218] hover:border-[#FF4655]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden clip-diagonal-sm hover:shadow-xl"
+                >
+                  {/* Top Character Visual Stage */}
+                  <div className="relative h-64 w-full bg-gradient-to-b from-[#151A22] to-[#101218] flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 bg-tactical-grid opacity-15" />
+                    
+                    {/* Role Stamp Background Watermark */}
+                    <span className="absolute top-3 left-3 font-display font-black text-4xl text-white/[0.04] uppercase select-none">
+                      {agent.role}
+                    </span>
+
+                    {/* Agent Full Portrait with Hover Zoom */}
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={agent.portrait}
+                        alt={agent.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 300px"
+                        className="object-contain object-bottom transition-transform duration-500 group-hover:scale-105 filter drop-shadow-md"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Character Dossier Info */}
+                  <div className="p-5 space-y-4">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-display font-black text-2xl uppercase tracking-tight text-foreground group-hover:text-primary transition-colors">
+                        <h3 className="font-display font-black text-2xl uppercase tracking-tight text-[#F5F5F5] group-hover:text-[#FF4655] transition-colors">
                           {agent.name}
                         </h3>
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-muted">
-                          {agent.role}
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#FF4655]">
+                          {agent.role} {'//'} {agent.origin}
                         </span>
                       </div>
-                      <div className="h-6 w-6 rounded border border-border bg-surface flex items-center justify-center font-mono text-[10px] font-bold text-secondary">
-                        {agent.name.slice(0, 2).toUpperCase()}
-                      </div>
                     </div>
 
-                    <div className="my-3.5 h-px w-full bg-border/60" />
+                    <p className="font-sans text-xs text-[#858B96] line-clamp-2 leading-relaxed">
+                      {agent.bio}
+                    </p>
 
-                    {/* Stats Metrics */}
-                    <div className="space-y-2 font-mono text-xs">
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-muted">Entry</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 rounded-full bg-border overflow-hidden">
-                            <div className="h-full bg-primary" style={{ width: `${agent.entry}%` }} />
-                          </div>
-                          <span className="font-bold text-foreground w-6 text-right">{agent.entry}</span>
-                        </div>
+                    {/* Signature Ability Icons Strip */}
+                    <div className="pt-2 border-t border-white/10">
+                      <div className="text-[10px] font-mono text-[#858B96] uppercase mb-1.5">
+                        ABILITIES
                       </div>
-
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-muted">Mobility</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 rounded-full bg-border overflow-hidden">
-                            <div className="h-full bg-secondary" style={{ width: `${agent.mobility}%` }} />
+                      <div className="flex items-center gap-2">
+                        {agent.abilities.slice(0, 4).map((ability, idx) => (
+                          <div
+                            key={idx}
+                            title={`${ability.name}: ${ability.description}`}
+                            className="relative h-8 w-8 rounded border border-white/10 bg-[#08090C] flex items-center justify-center p-1 hover:border-[#FF4655] transition-colors"
+                          >
+                            {ability.icon ? (
+                              <Image
+                                src={ability.icon}
+                                alt={ability.name}
+                                width={24}
+                                height={24}
+                                className="object-contain filter invert opacity-80 group-hover:opacity-100"
+                              />
+                            ) : (
+                              <span className="font-mono text-[10px] text-[#858B96]">{ability.key}</span>
+                            )}
                           </div>
-                          <span className="font-bold text-foreground w-6 text-right">{agent.mobility}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-muted">Info</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 rounded-full bg-border overflow-hidden">
-                            <div className="h-full bg-amber-400" style={{ width: `${agent.info}%` }} />
-                          </div>
-                          <span className="font-bold text-foreground w-6 text-right">{agent.info}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Best Maps List */}
-                    <div className="mt-4 pt-3 border-t border-border/40 font-mono text-[10px]">
-                      <span className="text-muted uppercase tracking-wider block mb-1">Best Maps:</span>
-                      <div className="flex flex-wrap gap-1">
-                        {agent.bestMaps.map((map) => (
-                          <span key={map} className="rounded border border-border bg-surface px-1.5 py-0.5 text-secondary">
-                            {map}
-                          </span>
                         ))}
                       </div>
                     </div>
 
+                    {/* Action Button */}
                     <Link
                       href={`/agents/${agent.slug}`}
-                      className="mt-4 flex items-center justify-between rounded border border-border bg-surface-muted px-3 py-1.5 font-sans text-xs font-medium text-secondary group-hover:border-primary/60 group-hover:text-primary transition-colors"
+                      className="inline-flex w-full items-center justify-between px-3 py-2 border border-white/10 bg-[#08090C] hover:border-[#FF4655] font-mono text-xs text-[#F5F5F5] hover:text-[#FF4655] transition-colors clip-diagonal-sm"
                     >
-                      <span>View Agent Profile</span>
-                      <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                      <span>INSPECT DOSSIER</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
-                );
-              })}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 text-center">
+              <Link href="/agents">
+                <Button
+                  variant="outline"
+                  className="font-mono text-xs font-bold uppercase tracking-wider px-8 py-3 border-white/15 text-[#F5F5F5] hover:border-[#FF4655] hover:text-[#FF4655] clip-diagonal-sm"
+                >
+                  VIEW ALL 29 VALORANT AGENTS →
+                </Button>
+              </Link>
             </div>
           </Container>
         </section>
 
-        {/* ═══════════════════════════════════════════
-            5. YOUR WEAPONS (RIFLE BALLISTICS)
-        ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-background py-16">
-          <Container>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-              <div className="space-y-1.5">
-                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
-                  Arsenal
-                </span>
-                <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground">
-                  Your Weapons
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 3: THE ARMORY — "PRECISION. POWER. CONTROL."
+            Cinematic Weapon Showcase with real ballistics & damage tables
+        ═══════════════════════════════════════════════════════════════ */}
+        <section className="py-20 lg:py-28 border-b border-white/[0.08] bg-[#0A0D13] relative">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6">
+            
+            {/* Header */}
+            <div className="space-y-2 mb-12">
+              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#FF4655]">
+                <Crosshair className="h-3.5 w-3.5" />
+                <span>SECTION 03 // BALLISTIC SPECIFICATIONS</span>
+              </div>
+              <h2 className="font-display font-black text-4xl sm:text-5xl uppercase tracking-tight text-[#F5F5F5]">
+                THE ARMORY
+              </h2>
+              <p className="font-mono text-xs sm:text-sm text-[#FF4655] font-bold tracking-widest uppercase">
+                PRECISION. POWER. CONTROL.
+              </p>
+            </div>
+
+            {/* Weapon Showcase Grid */}
+            <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] items-stretch">
+              
+              {/* Left: Interactive Weapon Visual Stage */}
+              <div className="border border-white/10 bg-[#101218] p-6 sm:p-10 flex flex-col justify-between clip-diagonal-sm relative overflow-hidden">
+                <div className="absolute inset-0 bg-tactical-grid opacity-10 pointer-events-none" />
+
+                {/* Top Info Header */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                  <div>
+                    <span className="font-mono text-[10px] text-[#FF4655] uppercase font-bold tracking-widest">
+                      {activeArmoryWeapon.category} {'//'} CALIBER ARCHIVE
+                    </span>
+                    <h3 className="font-display font-black text-4xl sm:text-5xl uppercase tracking-tight text-[#F5F5F5]">
+                      {activeArmoryWeapon.name}
+                    </h3>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="font-mono text-[10px] text-[#858B96] uppercase block">CREDIT COST</span>
+                    <span className="font-mono text-2xl font-bold text-[#F5F5F5]">{activeArmoryWeapon.cost}</span>
+                  </div>
+                </div>
+
+                {/* Massive Weapon Artwork Display */}
+                <div className="relative h-48 sm:h-64 w-full flex items-center justify-center my-6">
+                  <Image
+                    src={activeArmoryWeapon.iconUrl}
+                    alt={activeArmoryWeapon.name}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 700px"
+                    className="object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)] transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+
+                {/* Ballistics Stat Bar */}
+                <div className="grid grid-cols-3 gap-3 border-t border-white/10 pt-6 font-mono">
+                  <div className="p-3 border border-white/10 bg-[#08090C] text-center">
+                    <span className="text-[10px] text-[#858B96] uppercase block">HEADSHOT</span>
+                    <span className="text-2xl font-black text-[#FF4655]">{activeArmoryWeapon.headshotDmg}</span>
+                    <span className="text-[9px] text-[#858B96] block">HP LETHALITY</span>
+                  </div>
+                  <div className="p-3 border border-white/10 bg-[#08090C] text-center">
+                    <span className="text-[10px] text-[#858B96] uppercase block">BODY IMPACT</span>
+                    <span className="text-2xl font-black text-[#F5F5F5]">{activeArmoryWeapon.bodyDmg}</span>
+                    <span className="text-[9px] text-[#858B96] block">HP BASE</span>
+                  </div>
+                  <div className="p-3 border border-white/10 bg-[#08090C] text-center">
+                    <span className="text-[10px] text-[#858B96] uppercase block">FIRE RATE</span>
+                    <span className="text-2xl font-black text-[#F5F5F5]">{activeArmoryWeapon.fireRate}</span>
+                    <span className="text-[9px] text-[#858B96] block">ROUNDS / SEC</span>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/5">
+                  <p className="font-sans text-xs text-[#858B96] max-w-md">
+                    {activeArmoryWeapon.description}
+                  </p>
+                  <Link href={`/compare/weapons/vandal-vs-phantom`}>
+                    <Button variant="primary" size="sm" className="font-mono text-xs uppercase tracking-wider bg-[#FF4655] text-white">
+                      COMPARE BALLISTICS →
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right: Quick Weapon Selector List */}
+              <div className="space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <span className="font-mono text-[10px] text-[#858B96] uppercase tracking-wider block mb-2">
+                    SELECT FIREARM TO INSPECT
+                  </span>
+
+                  {ARMORY_WEAPONS.map((w) => {
+                    const isSelected = activeArmoryWeapon.slug === w.slug;
+                    return (
+                      <button
+                        key={w.slug}
+                        onClick={() => setActiveArmoryWeapon(w)}
+                        className={`w-full p-4 border transition-all text-left flex items-center justify-between clip-diagonal-sm cursor-pointer ${
+                          isSelected
+                            ? "border-[#FF4655] bg-[#151A22] shadow-md"
+                            : "border-white/10 bg-[#101218] hover:border-white/20 hover:bg-[#13171F]"
+                        }`}
+                      >
+                        <div className="space-y-0.5">
+                          <span className="font-mono text-[10px] text-[#858B96] uppercase block">
+                            {w.category}
+                          </span>
+                          <span className="font-display font-black text-xl text-[#F5F5F5]">
+                            {w.name}
+                          </span>
+                        </div>
+
+                        <div className="text-right font-mono">
+                          <span className="text-xs text-[#FF4655] font-bold block">{w.headshotDmg} HS</span>
+                          <span className="text-[10px] text-[#858B96]">{w.cost} Creds</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <Link
+                  href="/weapons"
+                  className="p-3 border border-white/10 bg-[#101218] hover:border-[#FF4655] text-center font-mono text-xs font-bold text-[#F5F5F5] hover:text-[#FF4655] transition-colors block clip-diagonal-sm"
+                >
+                  VIEW FULL 21-WEAPON ARSENAL →
+                </Link>
+              </div>
+
+            </div>
+          </Container>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 4: THE COLLECTION — "SKINS THAT DEFINE THE ROUND"
+            Showcase premium skins from the actual database
+        ═══════════════════════════════════════════════════════════════ */}
+        <section className="py-20 lg:py-28 border-b border-white/[0.08] bg-[#08090C] relative">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6">
+            
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#FF4655]">
+                  <Flame className="h-3.5 w-3.5" />
+                  <span>SECTION 04 // COSMETIC ARCHIVE</span>
+                </div>
+                <h2 className="font-display font-black text-4xl sm:text-5xl uppercase tracking-tight text-[#F5F5F5]">
+                  THE COLLECTION
                 </h2>
-                <p className="font-sans text-sm text-secondary max-w-xl">
-                  Head-to-head ballistic specs for competitive decision-making.
+                <p className="font-mono text-xs sm:text-sm text-[#FF4655] font-bold tracking-widest uppercase">
+                  SKINS THAT DEFINE THE ROUND
                 </p>
               </div>
 
-              <Link
-                href="/compare"
-                className="font-sans text-xs font-semibold text-primary hover:underline transition-colors flex items-center gap-1 shrink-0"
-              >
-                Compare all weapons →
+              <Link href="/skins" className="font-mono text-xs font-bold text-[#FF4655] hover:underline uppercase tracking-wider">
+                EXPLORE 1,400+ SKINS →
               </Link>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-              {/* Head to Head Rifles Table */}
-              <div className="clip-diagonal-sm border border-border bg-surface-card p-6 shadow-xs">
-                <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
-                  <span className="font-sans text-sm font-semibold text-foreground">
-                    Ballistic Comparison (Patch 13.06)
-                  </span>
-                  <span className="font-mono text-xs text-muted">Primary Rifles</span>
-                </div>
+            {/* Skins Grid */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {FEATURED_COLLECTIONS.map((skin) => (
+                <div
+                  key={skin.name}
+                  className="group border border-white/10 bg-[#101218] hover:border-[#FF4655]/60 transition-all duration-300 p-6 flex flex-col justify-between clip-diagonal-sm hover:shadow-xl"
+                >
+                  <div>
+                    <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 font-mono text-[10px]">
+                      <span className="px-2 py-0.5 border border-white/10 bg-[#08090C] text-[#FF4655] font-bold uppercase">
+                        {skin.tier} TIER
+                      </span>
+                      <span className="text-[#F5F5F5] font-bold">{skin.price} VP</span>
+                    </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left font-mono text-xs">
-                    <thead>
-                      <tr className="border-b border-border text-muted text-[10px] uppercase">
-                        <th className="py-2 pr-4 font-semibold">Specification</th>
-                        <th className="py-2 px-4 text-primary font-bold">Vandal</th>
-                        <th className="py-2 px-4 text-foreground font-bold">Phantom</th>
-                        <th className="py-2 pl-4 text-right font-semibold">Advantage</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border/30">
-                      <tr>
-                        <td className="py-2.5 pr-4 text-secondary">Headshot Damage</td>
-                        <td className="py-2.5 px-4 font-bold text-foreground">160 (All ranges)</td>
-                        <td className="py-2.5 px-4 text-secondary">156 (0-15m) / 140 (15-30m)</td>
-                        <td className="py-2.5 pl-4 text-right text-primary font-bold">Vandal (1-tap always)</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2.5 pr-4 text-secondary">Fire Rate</td>
-                        <td className="py-2.5 px-4 text-secondary">9.75 rds/sec</td>
-                        <td className="py-2.5 px-4 font-bold text-foreground">11.0 rds/sec</td>
-                        <td className="py-2.5 pl-4 text-right text-foreground font-bold">Phantom (+12.8%)</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2.5 pr-4 text-secondary">Magazine Capacity</td>
-                        <td className="py-2.5 px-4 text-secondary">25 rounds</td>
-                        <td className="py-2.5 px-4 font-bold text-foreground">30 rounds</td>
-                        <td className="py-2.5 pl-4 text-right text-foreground font-bold">Phantom (+5 rds)</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2.5 pr-4 text-secondary">First-Bullet Spread</td>
-                        <td className="py-2.5 px-4 text-secondary">0.25 deg</td>
-                        <td className="py-2.5 px-4 font-bold text-foreground">0.20 deg</td>
-                        <td className="py-2.5 pl-4 text-right text-foreground font-bold">Phantom (Tighter)</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2.5 pr-4 text-secondary">Tracer Suppression</td>
-                        <td className="py-2.5 px-4 text-muted">Visible tracers</td>
-                        <td className="py-2.5 px-4 font-bold text-emerald-400">Silent / No bullet tracers</td>
-                        <td className="py-2.5 pl-4 text-right text-emerald-400 font-bold">Phantom (Smoke spray)</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                    {/* Skin Render Display */}
+                    <div className="relative h-40 w-full my-4 flex items-center justify-center">
+                      <Image
+                        src={skin.iconUrl}
+                        alt={skin.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 400px"
+                        className="object-contain transition-transform duration-500 group-hover:scale-105 filter drop-shadow-md"
+                      />
+                    </div>
 
-                <div className="mt-5 pt-3 border-t border-border flex flex-wrap items-center justify-between gap-3 text-xs">
-                  <span className="text-secondary text-xs">Summary: Vandal dominates long duels; Phantom dominates close trades & controller smokes.</span>
-                  <Link href="/compare?w1=vandal&w2=phantom">
-                    <Button variant="outline" size="sm" className="rounded-md text-xs">
-                      Full Comparison Matrix →
+                    <h3 className="font-display font-black text-xl uppercase tracking-tight text-[#F5F5F5] group-hover:text-[#FF4655] transition-colors">
+                      {skin.name}
+                    </h3>
+                    <p className="font-sans text-xs text-[#858B96] mt-1">
+                      {skin.theme}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleWishlist(skin.name, "skin")}
+                      className="gap-1.5 text-xs font-mono border-white/10 hover:border-[#FF4655]"
+                    >
+                      <Heart className="h-3 w-3" /> Save
                     </Button>
-                  </Link>
+                    <Link href={`/skins/${skin.slug}`}>
+                      <Button variant="primary" size="sm" className="font-mono text-xs uppercase bg-[#FF4655] text-white">
+                        Inspect
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
+              ))}
+
+              {/* Daily Spotlight Skin (Live from API) */}
+              {randomSkin && (
+                <div className="border border-[#FF4655]/40 bg-[#121620] p-6 flex flex-col justify-between clip-diagonal-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-[#FF4655] text-white font-mono text-[9px] px-2 py-0.5 font-bold uppercase tracking-wider">
+                    DAILY SPOTLIGHT
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 font-mono text-[10px]">
+                      <span className="text-[#FF4655] font-bold uppercase">LIVE SPOTLIGHT</span>
+                      <span className="text-[#F5F5F5] font-bold">
+                        {(CONTENT_TIER_MAP[randomSkin.contentTierUuid ?? ""] || DEFAULT_TIER).price} VP
+                      </span>
+                    </div>
+
+                    <div className="relative h-40 w-full my-4 flex items-center justify-center">
+                      {randomSkin.displayIcon && (
+                        <Image
+                          src={randomSkin.displayIcon}
+                          alt={randomSkin.displayName}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 400px"
+                          className="object-contain transition-transform duration-500 hover:scale-105 filter drop-shadow-md"
+                        />
+                      )}
+                    </div>
+
+                    <h3 className="font-display font-black text-xl uppercase tracking-tight text-[#F5F5F5]">
+                      {randomSkin.displayName}
+                    </h3>
+                    <p className="font-sans text-xs text-[#858B96] mt-1">
+                      Cataloged with inspect audio clips and chroma colorways.
+                    </p>
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleWishlist(randomSkin.displayName, "skin")}
+                      className="gap-1.5 text-xs font-mono border-white/10 hover:border-[#FF4655]"
+                    >
+                      <Heart className="h-3 w-3" /> Save
+                    </Button>
+                    <Link href={`/skins/${slugify(randomSkin.displayName) || randomSkin.uuid}`}>
+                      <Button variant="primary" size="sm" className="font-mono text-xs uppercase bg-[#FF4655] text-white">
+                        Inspect
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Container>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 5: THE BATTLEFIELD — "SECTOR RECONNAISSANCE"
+            Cinematic full-width official map splash art with hover pan/zoom
+        ═══════════════════════════════════════════════════════════════ */}
+        <section className="py-20 lg:py-28 border-b border-white/[0.08] bg-[#0A0D13] relative">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6">
+            
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#FF4655]">
+                  <Compass className="h-3.5 w-3.5" />
+                  <span>SECTION 05 // COMBAT ENVIRONMENTS</span>
+                </div>
+                <h2 className="font-display font-black text-4xl sm:text-5xl uppercase tracking-tight text-[#F5F5F5]">
+                  THE BATTLEFIELD
+                </h2>
+                <p className="font-mono text-xs sm:text-sm text-[#FF4655] font-bold tracking-widest uppercase">
+                  18 COMBAT SECTORS // 7 ACTIVE TOURNAMENT SITES
+                </p>
               </div>
 
-              {/* Economy Insight Panel */}
-              <div className="clip-diagonal-sm border border-border bg-surface-card p-6 flex flex-col justify-between space-y-4 shadow-xs">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Crosshair className="h-4 w-4 text-primary" />
-                    <span className="font-sans text-sm font-bold text-foreground">
-                      Buy Economics
+              <Link href="/maps" className="font-mono text-xs font-bold text-[#FF4655] hover:underline uppercase tracking-wider">
+                INTERACTIVE 3D RADAR MAPS →
+              </Link>
+            </div>
+
+            {/* Cinematic Maps Showcase */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {BATTLEFIELD_MAPS.map((map) => (
+                <Link
+                  key={map.slug}
+                  href={`/maps/${map.slug}`}
+                  className="group relative h-80 border border-white/10 overflow-hidden clip-diagonal-sm flex flex-col justify-end p-6 hover:border-[#FF4655] transition-all duration-300"
+                >
+                  {/* Full-bleed Map Splash with Hover Zoom */}
+                  <Image
+                    src={map.splashUrl}
+                    alt={map.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 450px"
+                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
+                  />
+
+                  {/* Gradient Overlay for Typography Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#08090C] via-[#08090C]/60 to-transparent" />
+
+                  {/* Top Location Tag */}
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between font-mono text-[10px] text-white/80">
+                    <span className="px-2 py-0.5 border border-white/20 bg-[#08090C]/80 backdrop-blur-xs">
+                      {map.sites}
+                    </span>
+                    <span>{map.location}</span>
+                  </div>
+
+                  {/* Map Identity */}
+                  <div className="relative z-10 space-y-1">
+                    <h3 className="font-display font-black text-3xl uppercase tracking-tight text-[#F5F5F5] group-hover:text-[#FF4655] transition-colors">
+                      {map.name}
+                    </h3>
+                    <p className="font-sans text-xs text-[#858B96] line-clamp-2">
+                      {map.feature}
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[#FF4655] font-bold pt-2">
+                      VIEW CALLOUTS &amp; EXECUTIONS →
                     </span>
                   </div>
-                  <p className="font-sans text-xs text-secondary leading-relaxed">
-                    Both rifles cost exactly 2,900 Creds. Full buy threshold is 3,900 Creds (with Heavy Shields) or 4,300 Creds with signature utility.
-                  </p>
-                  <div className="space-y-2 pt-1 font-mono text-xs">
-                    <div className="flex justify-between border-b border-border/40 pb-1.5">
-                      <span className="text-muted">Full Buy Target:</span>
-                      <span className="text-foreground font-bold">3,900 Creds</span>
+                </Link>
+              ))}
+            </div>
+          </Container>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 6: COMPETITIVE INTELLIGENCE & UTILITY SUITE
+        ═══════════════════════════════════════════════════════════════ */}
+        <section className="py-20 border-b border-white/[0.08] bg-[#08090C] relative">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6">
+            
+            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-stretch">
+              
+              {/* Latest Patch & Tournament Balance */}
+              <div className="border border-white/10 bg-[#101218] p-6 sm:p-8 clip-diagonal-sm flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/10 font-mono text-xs">
+                    <span className="text-[#FF4655] font-bold uppercase tracking-wider">
+                      LATEST INTEL // ACTIVE BALANCE
+                    </span>
+                    <Link href="/patch-notes" className="text-[#858B96] hover:text-white">
+                      All Patch Notes →
+                    </Link>
+                  </div>
+
+                  {latestPatch && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <span className="px-2 py-0.5 bg-[#FF4655]/15 border border-[#FF4655]/40 text-[#FF4655] font-mono text-xs font-bold">
+                          PATCH {latestPatch.version}
+                        </span>
+                        <span className="font-mono text-xs text-[#858B96]">{latestPatch.date}</span>
+                      </div>
+
+                      <h3 className="font-display font-black text-2xl uppercase tracking-tight text-[#F5F5F5]">
+                        Competitive Balance &amp; Agent Adjustments
+                      </h3>
+
+                      <p className="font-sans text-xs text-[#858B96] leading-relaxed">
+                        Tournament meta updates affecting {latestPatch.buffs.length} buffed abilities and {latestPatch.nerfs.length} agent nerfs.
+                      </p>
+
+                      <div className="grid gap-2 pt-2 sm:grid-cols-2">
+                        {latestPatch.buffs.slice(0, 2).map((b, i) => (
+                          <div key={i} className="p-3 border border-emerald-500/20 bg-emerald-500/5 font-mono text-xs">
+                            <span className="text-emerald-400 font-bold block mb-1">BUFF: {b.subject}</span>
+                            <span className="text-[#858B96] text-[11px]">{b.detail}</span>
+                          </div>
+                        ))}
+                        {latestPatch.nerfs.slice(0, 2).map((n, i) => (
+                          <div key={i} className="p-3 border border-[#FF4655]/20 bg-[#FF4655]/5 font-mono text-xs">
+                            <span className="text-[#FF4655] font-bold block mb-1">NERF: {n.subject}</span>
+                            <span className="text-[#858B96] text-[11px]">{n.detail}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex justify-between border-b border-border/40 pb-1.5">
-                      <span className="text-muted">Loss Bonus Min:</span>
-                      <span className="text-amber-400 font-bold">1,900 Creds</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted">Loss Bonus Max (3+):</span>
-                      <span className="text-emerald-400 font-bold">2,900 Creds</span>
-                    </div>
+                  )}
+                </div>
+
+                <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+                  <Link href={`/patch-notes/${latestPatch?.slug || "patch-1306"}`}>
+                    <Button variant="outline" size="sm" className="font-mono text-xs uppercase border-white/10 text-[#F5F5F5] hover:border-[#FF4655]">
+                      READ FULL PATCH BREAKDOWN →
+                    </Button>
+                  </Link>
+                  <Link href="/tier-list" className="font-mono text-xs text-[#858B96] hover:text-[#FF4655]">
+                    Agent Tier List →
+                  </Link>
+                </div>
+              </div>
+
+              {/* Tactical Utilities & Tools */}
+              <div className="border border-white/10 bg-[#101218] p-6 sm:p-8 clip-diagonal-sm flex flex-col justify-between">
+                <div>
+                  <div className="pb-4 mb-4 border-b border-white/10 font-mono text-xs text-[#FF4655] font-bold uppercase tracking-wider">
+                    TACTICAL ENGINES
+                  </div>
+
+                  <div className="divide-y divide-white/10">
+                    <Link
+                      href="/comp-builder"
+                      className="group py-3.5 block transition-colors"
+                    >
+                      <span className="font-mono text-[10px] text-[#FF4655] font-bold uppercase block">TOOL // META SIMULATOR</span>
+                      <span className="font-display font-bold text-lg text-[#F5F5F5] group-hover:text-[#FF4655] transition-colors block">
+                        Team Comp Builder
+                      </span>
+                      <span className="font-sans text-xs text-[#858B96] block mt-0.5">
+                        Simulate and optimize team agent synergies across all 18 maps.
+                      </span>
+                    </Link>
+
+                    <Link
+                      href="/sensitivity"
+                      className="group py-3.5 block transition-colors"
+                    >
+                      <span className="font-mono text-[10px] text-[#FF4655] font-bold uppercase block">TOOL // CONVERTER</span>
+                      <span className="font-display font-bold text-lg text-[#F5F5F5] group-hover:text-[#FF4655] transition-colors block">
+                        Sensitivity &amp; eDPI Matcher
+                      </span>
+                      <span className="font-sans text-xs text-[#858B96] block mt-0.5">
+                        Convert sensitivity across CS2, Apex, Overwatch, and Rainbow Six.
+                      </span>
+                    </Link>
+
+                    <Link
+                      href="/lore"
+                      className="group py-3.5 block transition-colors"
+                    >
+                      <span className="font-mono text-[10px] text-[#FF4655] font-bold uppercase block">DATABASE // CANON ARCHIVE</span>
+                      <span className="font-display font-bold text-lg text-[#F5F5F5] group-hover:text-[#FF4655] transition-colors block">
+                        First Light &amp; VALORANT Lore Timeline
+                      </span>
+                      <span className="font-sans text-xs text-[#858B96] block mt-0.5">
+                        Chronological story archive, Kingdom Corp secrets, and Earth-Omega canon.
+                      </span>
+                    </Link>
                   </div>
                 </div>
 
-                <Link href="/economy" className="w-full">
-                  <Button variant="secondary" size="sm" className="w-full rounded-md font-sans text-xs">
-                    View Economy Guide
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            6. YOUR MAPS
-        ═══════════════════════════════════════════ */}
-        <section className="border-b border-border bg-background py-16">
-          <Container>
-            <div className="mb-8 flex items-end justify-between gap-4">
-              <div>
-                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-primary">
-                  Geography
-                </span>
-                <h2 className="font-display font-black text-3xl sm:text-4xl uppercase tracking-tight text-foreground mt-1">
-                  Your Maps
-                </h2>
-              </div>
-              <Link href="/maps" className="hidden sm:block font-sans text-xs font-semibold text-primary hover:underline transition-colors">
-                View all maps →
-              </Link>
-            </div>
-            <StaggerContainer className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {mapCards.map((map, i) => (
-                <MapCard key={map.slug} map={map} size={i === 0 ? "large" : "small"} />
-              ))}
-            </StaggerContainer>
-          </Container>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            7. CLOSING COMMUNITY CTA
-        ═══════════════════════════════════════════ */}
-        <section className="border-t border-border bg-surface-card py-20">
-          <Container>
-            <div className="mx-auto max-w-2xl text-center space-y-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-secondary shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
-                <span>Your VALORANT Notebook</span>
-              </div>
-              <h2 className="font-display font-black text-4xl uppercase tracking-tight text-foreground sm:text-5xl">
-                Make VloPedia Yours.
-              </h2>
-              <p className="font-sans text-sm leading-relaxed text-secondary">
-                Track collections, save wishlists, and plan every competitive queue.
-              </p>
-              <div className="flex justify-center gap-3 pt-2">
-                {user ? (
-                  <Link href="/dashboard">
-                    <Button variant="primary" size="lg" className="rounded-md gap-2 font-sans font-medium text-sm">
-                      Open Dashboard <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                    </Button>
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+                  <Link href="/tools" className="text-[#858B96] hover:text-[#F5F5F5]">
+                    All 7 Tactical Tools →
                   </Link>
-                ) : (
-                  <Button variant="primary" size="lg" className="rounded-md font-sans font-medium text-sm" onClick={signInWithDiscord}>
-                    Sign in with Discord
-                  </Button>
-                )}
-                <Link href="/agents">
-                  <Button variant="outline" size="lg" className="rounded-md font-sans font-medium text-sm">
-                    Browse Agents
-                  </Button>
-                </Link>
+                  <Link href="/guides" className="text-[#FF4655] font-semibold hover:underline">
+                    Masterclass Guides →
+                  </Link>
+                </div>
               </div>
+
             </div>
           </Container>
         </section>
@@ -850,3 +1314,5 @@ export function HomepageClient() {
     </PageTransition>
   );
 }
+
+export default HomepageClient;
