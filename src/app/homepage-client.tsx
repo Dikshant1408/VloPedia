@@ -19,7 +19,7 @@ import { valorantDb } from "@/lib/valorant-db";
 import { CONTENT_TIER_MAP, DEFAULT_TIER } from "@/lib/valorant-types";
 import type { ValorantAgent, ValorantMap, ValorantSkin } from "@/lib/valorant-types";
 
-import { HomeWorld, type HomeWorldCategory } from "@/components/3d/home-world";
+import { IntelligenceCore, type CoreDomain, DOMAIN_METADATA } from "@/components/3d/intelligence-core";
 
 function slugify(text: string): string {
   return text
@@ -91,7 +91,7 @@ export function HomepageClient() {
   const [randomSkin, setRandomSkin]   = useState<ValorantSkin | null>(null);
   const [maps, setMaps]               = useState<any[]>([]);
   const [selectedMetaAgent, setSelectedMetaAgent] = useState(META_AGENTS[0]);
-  const [activeCategory, setActiveCategory] = useState<HomeWorldCategory>("idle");
+  const [activeDomain, setActiveDomain] = useState<CoreDomain>("idle");
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
@@ -153,111 +153,127 @@ export function HomepageClient() {
       <div className="min-h-screen bg-background text-foreground">
 
         {/* ═══════════════════════════════════════════
-            1. FULL-BLEED CINEMATIC HERO: "THE VALORANT WORLD IS ALIVE"
+            1. TACTICAL HERO: THE VALORANT INTELLIGENCE CORE
         ═══════════════════════════════════════════ */}
-        <section ref={heroRef} className="relative min-h-[92vh] w-full overflow-hidden border-b border-border bg-background flex flex-col justify-between items-center text-center pt-16 sm:pt-20 pb-8">
-          {/* Full-bleed 3D Cinematic Scene Layer */}
-          <HomeWorld
-            activeCategory={activeCategory}
-            isSearching={isSearching}
-          />
+        <section ref={heroRef} className="relative min-h-[85vh] lg:min-h-[90vh] w-full overflow-hidden border-b border-border bg-background flex flex-col justify-center py-12 lg:py-16">
+          {/* Subtle background tactical grid */}
+          <div className="absolute inset-0 bg-grid-white/[0.015] bg-[size:32px_32px] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/80 to-background pointer-events-none" />
 
-          {/* Top spacer */}
-          <div className="w-full" />
+          <Container className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] items-center">
+              
+              {/* Left Column: VloPedia Command Center (Center/Left) */}
+              <div className="space-y-6 flex flex-col items-start text-left">
+                {/* Tactical Status Pill */}
+                <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-3 py-1 text-primary font-mono text-[10px] uppercase tracking-widest clip-diagonal-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                  <span>VALORANT INTELLIGENCE CORE // PATCH 13.06</span>
+                </div>
 
-          {/* Centered Monumental Editorial Content */}
-          <Container className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center">
-            <Reveal className="space-y-6 w-full flex flex-col items-center">
-              {/* Clean Headline — let the 3D scene do the visual work */}
-              <div className="space-y-2 text-center">
-                <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl tracking-tight text-foreground leading-[0.96] drop-shadow-sm">
-                  VloPedia
-                </h1>
-                <p className="font-sans text-lg sm:text-xl text-secondary font-normal tracking-tight">
-                  Everything VALORANT. In one place.
-                </p>
-              </div>
+                {/* Main Headline */}
+                <div className="space-y-2">
+                  <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl uppercase tracking-tight text-foreground leading-[0.94]">
+                    VloPedia
+                  </h1>
+                  <p className="font-sans text-lg sm:text-xl text-secondary font-normal tracking-tight">
+                    Everything VALORANT. In one place.
+                  </p>
+                </div>
 
-              {/* Centered Tactical Search Bar */}
-              <div className="pt-2 max-w-2xl w-full mx-auto">
-                <form
-                  onSubmit={goSearch}
-                  role="search"
-                  className={`relative flex items-center border bg-surface/95 backdrop-blur-md shadow-lg transition-all duration-200 clip-diagonal-sm ${
-                    isSearching
-                      ? "border-primary ring-1 ring-primary/40 bg-surface-elevated"
-                      : "border-border hover:border-border-light focus-within:border-primary"
-                  }`}
-                >
-                  <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(e) => {
-                      setQuery(e.target.value);
-                      setIsSearching(e.target.value.length > 0);
-                    }}
-                    onFocus={() => setIsSearching(true)}
-                    onBlur={() => setIsSearching(query.length > 0)}
-                    placeholder="Search agents, weapons, skins, maps... (Ctrl + K)"
-                    aria-label="Search VloPedia"
-                    className="w-full bg-transparent px-4 py-3.5 font-sans text-sm sm:text-base text-foreground placeholder:text-muted focus:outline-none"
-                  />
-                  <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 mr-2 border border-border bg-surface-elevated text-muted font-mono text-[10px] rounded-xs select-none">
-                    <span>Ctrl</span>
-                    <span>K</span>
-                  </div>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="sm"
-                    className="shrink-0 mr-2.5 font-mono text-xs font-bold uppercase tracking-wider px-4 clip-diagonal-sm"
+                {/* Tactical Search Box */}
+                <div className="w-full max-w-xl">
+                  <form
+                    onSubmit={goSearch}
+                    role="search"
+                    className={`relative flex items-center border bg-surface/95 backdrop-blur-md shadow-lg transition-all duration-200 clip-diagonal-sm ${
+                      isSearching
+                        ? "border-primary ring-1 ring-primary/40 bg-surface-elevated"
+                        : "border-border hover:border-border-light focus-within:border-primary"
+                    }`}
                   >
-                    Search
-                  </Button>
-                </form>
-
-                {/* Category Chips with Hover Interactivity to 3D World */}
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-4 font-sans text-xs">
-                  {[
-                    { label: "Agents", href: "/agents", cat: "agents" as const },
-                    { label: "Weapons", href: "/weapons", cat: "weapons" as const },
-                    { label: "Maps", href: "/maps", cat: "maps" as const },
-                    { label: "Skins", href: "/skins", cat: "skins" as const },
-                    { label: "Guides", href: "/guides", cat: "idle" as const },
-                    { label: "Comp Builder", href: "/comp-builder", cat: "idle" as const },
-                  ].map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onMouseEnter={() => setActiveCategory(item.cat)}
-                      onMouseLeave={() => setActiveCategory("idle")}
-                      onFocus={() => setActiveCategory(item.cat)}
-                      onBlur={() => setActiveCategory("idle")}
-                      className={`border px-3.5 py-1.5 text-secondary transition-all clip-diagonal-sm font-medium backdrop-blur-xs cursor-pointer ${
-                        activeCategory === item.cat
-                          ? "border-primary bg-primary/15 text-foreground font-semibold"
-                          : "border-border bg-surface hover:text-white hover:border-border-light hover:bg-surface-elevated"
-                      }`}
+                    <SearchIcon className="ml-4 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
+                    <input
+                      type="search"
+                      value={query}
+                      onChange={(e) => {
+                        setQuery(e.target.value);
+                        setIsSearching(e.target.value.length > 0);
+                      }}
+                      onFocus={() => setIsSearching(true)}
+                      onBlur={() => setIsSearching(query.length > 0)}
+                      placeholder="Search agents, weapons, skins, maps... (Ctrl + K)"
+                      aria-label="Search VloPedia"
+                      className="w-full bg-transparent px-4 py-3.5 font-sans text-sm sm:text-base text-foreground placeholder:text-muted focus:outline-none"
+                    />
+                    <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 mr-2 border border-border bg-surface-elevated text-muted font-mono text-[10px] select-none">
+                      <span>Ctrl</span>
+                      <span>K</span>
+                    </div>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="sm"
+                      className="shrink-0 mr-2.5 font-mono text-xs font-bold uppercase tracking-wider px-4 clip-diagonal-sm"
                     >
-                      {item.label}
-                    </Link>
-                  ))}
+                      Search
+                    </Button>
+                  </form>
+                </div>
+
+                {/* Interactive Knowledge Domain Nodes */}
+                <div className="space-y-2.5 w-full pt-1">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-muted block">
+                    DATABASE EXPLORATION // HOVER NODES TO ENGAGE CORE
+                  </span>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-xl">
+                    {[
+                      { domain: "agents" as const, label: "Agents", count: "29", href: "/agents" },
+                      { domain: "weapons" as const, label: "Weapons", count: "21", href: "/weapons" },
+                      { domain: "skins" as const, label: "Skins", count: "1,400+", href: "/skins" },
+                      { domain: "maps" as const, label: "Maps", count: "18", href: "/maps" },
+                      { domain: "bundles" as const, label: "Bundles", count: "327+", href: "/bundles" },
+                      { domain: "tools" as const, label: "Tools", count: "7", href: "/tools" },
+                    ].map((item) => {
+                      const isActive = activeDomain === item.domain;
+                      return (
+                        <Link
+                          key={item.domain}
+                          href={item.href}
+                          onMouseEnter={() => setActiveDomain(item.domain)}
+                          onMouseLeave={() => setActiveDomain("idle")}
+                          onFocus={() => setActiveDomain(item.domain)}
+                          onBlur={() => setActiveDomain("idle")}
+                          className={`flex items-center justify-between px-3 py-2 border clip-diagonal-sm transition-all text-xs ${
+                            isActive
+                              ? "border-primary bg-primary/15 text-foreground shadow-xs"
+                              : "border-border bg-surface-card hover:bg-surface-elevated hover:border-border-light text-secondary hover:text-foreground"
+                          }`}
+                        >
+                          <span className="font-sans font-semibold">{item.label}</span>
+                          <span className="font-mono text-[10px] text-muted">[{item.count}]</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </Reveal>
-          </Container>
 
-          {/* Bottom Animated Scroll Cue */}
-          <div className="relative z-10 pt-6">
-            <a
-              href="#latest"
-              className="group inline-flex flex-col items-center gap-1.5 font-mono text-[11px] text-muted hover:text-foreground transition-colors cursor-pointer"
-            >
-              <span className="tracking-wider uppercase">Scroll to explore</span>
-              <span className="text-primary font-bold text-sm transition-transform group-hover:translate-y-1">↓</span>
-            </a>
-          </div>
+              {/* Right Column: VloPedia Intelligence Core (Occupies 35-45% of visual area) */}
+              <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[480px] flex items-center justify-center">
+                {/* Tactical Frame & Reticle Brackets */}
+                <div className="absolute top-0 right-0 w-4 h-[2px] bg-primary/60 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[2px] h-4 bg-primary/60 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-4 h-[2px] bg-cyan/60 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-[2px] h-4 bg-cyan/60 pointer-events-none" />
+
+                {/* 3D / Fallback Core Component */}
+                <IntelligenceCore activeDomain={activeDomain} />
+              </div>
+
+            </div>
+          </Container>
         </section>
 
         {/* ═══════════════════════════════════════════
