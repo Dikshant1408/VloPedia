@@ -62,6 +62,11 @@ const MAP_LORE_FALLBACKS: Record<string, string> = {
   pearl: "Located on Omega Earth in an underwater biodome off the coast of Lisbon, Portugal. Pearl provides classic tactical combat across two sites with no doors, ascenders, or teleporters.",
   lotus: "An ancient subterranean complex situated in the Western Ghats of India. Lotus challenges teams with a rare three-site layout (A, B, C) featuring rotating stone doorways and destructible barriers.",
   abyss: "A vertigo-inducing underground facility shrouded by cavernous chasms and deadly drops. Demands precise movement discipline and creative displacement utility.",
+  district: "A neon-soaked urban battle arena in Los Angeles engineered for aggressive encounters, vertical dueling perches, and high-tempo Team Deathmatch combat.",
+  kasbah: "A sun-bleached desert citadel featuring layered architectural levels, elevated archways, and intense central dueling lanes.",
+  drift: "A serene tropical island resort converted into an exhilarating combat simulation zone with zip-line long sightlines and rapid flank paths.",
+  glitch: "An experimental cyber-arena combining fractured simulations of Haven and Sunset into a high-intensity combat testing ground.",
+  piazza: "A picturesque Tuscan historic square featuring narrow cobblestone corridors, classical statues, and open courtyard duels.",
 };
 
 function buildStrategies(map: ValorantMap): string[] {

@@ -3,17 +3,24 @@ import { CosmeticsGrid, type CosmeticItem } from "@/components/cosmetics-grid";
 import type { ValorantPlayerCard } from "@/lib/valorant-types";
 import { fetchWithCache } from "@/lib/api-cache";
 
+import { siteConfig } from "@/lib/site";
+
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "VALORANT Player Cards & Identity Banners | VloPedia",
   description: "Check out all profile banners, player cards, and identity items in VALORANT with HD portrait preview.",
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: "VALORANT Player Cards & Identity Banners | VloPedia",
     description: "Check out all profile banners, player cards, and identity items in VALORANT with HD portrait preview.",
+    url: `${siteConfig.url}/playercards`,
   },
   alternates: {
-    canonical: "/playercards",
+    canonical: `${siteConfig.url}/playercards`,
   },
 };
 

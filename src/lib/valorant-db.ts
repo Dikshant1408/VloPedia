@@ -2511,6 +2511,102 @@ export const valorantDb = {
         "minimapUrl": "https://media.valorant-api.com/maps/1c18ab1f-420d-0d8b-71d0-77ad3c439115/displayicon.png",
         "splashUrl": "https://media.valorant-api.com/maps/1c18ab1f-420d-0d8b-71d0-77ad3c439115/splash.png"
     }
+,
+    {
+        "slug": "district",
+        "name": "DISTRICT",
+        "location": "34° 03' N, 118° 15' W",
+        "lore": "A neon-soaked urban battle arena in Los Angeles engineered for aggressive encounters, vertical dueling perches, and fast-paced Team Deathmatch combat.",
+        "callouts": [
+            "MID LANE",
+            "SIDE ALLEY",
+            "ROOFTOP SNIPER",
+            "SPAWN LOBBY",
+            "COURTYARD"
+        ],
+        "strategies": [
+            "Dominate top mid to gain control over cross-map sightlines.",
+            "Use aggressive movement abilities to reposition between high-ground ledges."
+        ],
+        "minimapUrl": "https://media.valorant-api.com/maps/690b3ed2-4dff-945b-8223-6da834e30d24/displayicon.png",
+        "splashUrl": "https://media.valorant-api.com/maps/690b3ed2-4dff-945b-8223-6da834e30d24/splash.png"
+    },
+    {
+        "slug": "kasbah",
+        "name": "KASBAH",
+        "location": "31° 37' N, 7° 59' W",
+        "lore": "A sun-bleached desert citadel featuring layered architectural levels, elevated archways, and intense central dueling lanes.",
+        "callouts": [
+            "PILLAR MID",
+            "COURTYARD",
+            "ARCHWAY",
+            "RAMP",
+            "SPAWN VAULT"
+        ],
+        "strategies": [
+            "Control Pillar Mid to dictate tempo and deny enemy cross-rotations.",
+            "Utilize flashes and concussions before swinging into narrow archway choke points."
+        ],
+        "minimapUrl": "https://media.valorant-api.com/maps/12452a9d-48c3-0b02-e7eb-0381c3520404/displayicon.png",
+        "splashUrl": "https://media.valorant-api.com/maps/12452a9d-48c3-0b02-e7eb-0381c3520404/splash.png"
+    },
+    {
+        "slug": "drift",
+        "name": "DRIFT",
+        "location": "8° 24' S, 115° 11' E",
+        "lore": "A serene tropical island resort converted into an exhilarating combat simulation zone with zip-line long sightlines and rapid flank paths.",
+        "callouts": [
+            "BEACH LANE",
+            "MID RESORT",
+            "OVERLOOK",
+            "GAZEBO",
+            "PIER"
+        ],
+        "strategies": [
+            "Hold Mid Resort with high-damage rifles to catch aggressive flankers.",
+            "Coordinate pincer movements through Overlook and Beach Lane."
+        ],
+        "minimapUrl": "https://media.valorant-api.com/maps/2c09d728-42d5-30d8-43dc-96a05cc7ee9d/displayicon.png",
+        "splashUrl": "https://media.valorant-api.com/maps/2c09d728-42d5-30d8-43dc-96a05cc7ee9d/splash.png"
+    },
+    {
+        "slug": "glitch",
+        "name": "GLITCH",
+        "location": "Arena Simulation Core",
+        "lore": "An experimental cyber-arena combining fractured simulations of Haven and Sunset into a high-intensity combat testing ground.",
+        "callouts": [
+            "HAVEN SECTOR",
+            "SUNSET SECTOR",
+            "NEXUS MID",
+            "TELEPORT BAY",
+            "OVERPASS"
+        ],
+        "strategies": [
+            "Capitalize on asymmetric sightlines between the simulated map halves.",
+            "Use vertical utility to clear high perches around Nexus Mid."
+        ],
+        "minimapUrl": "https://media.valorant-api.com/maps/d6336a5a-428f-c591-98db-c8a291159134/displayicon.png",
+        "splashUrl": "https://media.valorant-api.com/maps/d6336a5a-428f-c591-98db-c8a291159134/splash.png"
+    },
+    {
+        "slug": "piazza",
+        "name": "PIAZZA",
+        "location": "43° 46' N, 11° 15' E",
+        "lore": "A picturesque Tuscan historic square featuring narrow cobblestone corridors, classical statues, and open courtyard duels.",
+        "callouts": [
+            "CLOCK TOWER",
+            "MID FOUNTAIN",
+            "PIAZZA ARCADES",
+            "BALCONY",
+            "TERRACE"
+        ],
+        "strategies": [
+            "Secure Mid Fountain early with smokes to split the enemy team's vision.",
+            "Use Balcony elevation to gain tactical rifle crossfires onto approaching attackers."
+        ],
+        "minimapUrl": "https://media.valorant-api.com/maps/de28aa9b-4cbe-1003-320e-6cb3ec309557/displayicon.png",
+        "splashUrl": "https://media.valorant-api.com/maps/de28aa9b-4cbe-1003-320e-6cb3ec309557/splash.png"
+    }
 ],
   lore: [
     {
@@ -2529,6 +2625,36 @@ export const valorantDb = {
     }
 ],
   patches: [
+    {
+        "slug": "patch-1307",
+        "version": "13.07",
+        "date": "OCTOBER 6, 2026",
+        "title": "VALORANT Patch Notes 13.07",
+        "season": "Season 2026",
+        "act": "Act 5",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-07/",
+        "tags": ["TDM Arenas", "Map Tuning", "Agent Polish", "Matchmaking"],
+        "buffs": [
+            {
+                "subject": "Glitch Arena",
+                "detail": "Optimized lighting and sightline contrast across Nexus Mid and Haven Sector simulation boundaries."
+            },
+            {
+                "subject": "District & Piazza",
+                "detail": "Improved initial spawn pacing and safe recovery angles in Team Deathmatch rotations."
+            }
+        ],
+        "nerfs": [
+            {
+                "subject": "Warden Hipfire",
+                "detail": "Slightly widened moving hipfire spread cone to encourage deliberate ADS and stationary firing discipline."
+            }
+        ],
+        "updates": [
+            "Added enhanced telemetry logging for custom match tactical timeouts.",
+            "Integrated seamless cross-arena audio spatialization across all 5 Team Deathmatch proving grounds."
+        ]
+    },
     {
         "slug": "patch-1306",
         "version": "13.06",

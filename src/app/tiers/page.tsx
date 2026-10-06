@@ -2,12 +2,22 @@ import Image from "next/image";
 import { Container } from "@/components/container";
 import { PageTransition, Reveal } from "@/components/motion-system";
 import type { ValorantCompetitiveTier, ValorantCompetitiveTierEntry } from "@/lib/valorant-types";
+import { siteConfig } from "@/lib/site";
 
 export const metadata = {
   title: "Competitive Ranks & Tiers | VloPedia",
   description: "Explore all VALORANT competitive ranks and divisions. Detailed lists and high-res badge icons for Iron, Bronze, Silver, Gold, Platinum, Diamond, Ascendant, Immortal, and Radiant.",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: "Competitive Ranks & Tiers | VloPedia",
+    description: "Explore all VALORANT competitive ranks and divisions. Detailed lists and high-res badge icons for Iron, Bronze, Silver, Gold, Platinum, Diamond, Ascendant, Immortal, and Radiant.",
+    url: `${siteConfig.url}/tiers`,
+  },
   alternates: {
-    canonical: "/tiers",
+    canonical: `${siteConfig.url}/tiers`,
   },
 };
 

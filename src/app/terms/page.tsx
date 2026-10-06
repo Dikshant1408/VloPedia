@@ -1,11 +1,22 @@
 import { Container } from "@/components/container";
 import { PageTransition } from "@/components/motion-system";
 
+import { siteConfig } from "@/lib/site";
+
 export const metadata = {
   title: "Terms of Service — VloPedia",
   description: "Read the Terms of Service for using VloPedia.",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: "Terms of Service — VloPedia",
+    description: "Read the Terms of Service for using VloPedia.",
+    url: `${siteConfig.url}/terms`,
+  },
   alternates: {
-    canonical: "/terms",
+    canonical: `${siteConfig.url}/terms`,
   },
 };
 
