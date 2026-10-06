@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
-import { PageTransition, Reveal } from "@/components/motion-system";
 import type { ValorantCompetitiveTier, ValorantCompetitiveTierEntry } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
 import competitiveTiersFallback from "@/data/competitive-tiers-fallback.json";
@@ -90,8 +89,7 @@ export default async function TiersPage() {
   const groups = groupByDivision(tierEntries);
 
   return (
-    <PageTransition>
-      <div className="min-h-screen bg-[#080B10] text-[#F4F4F5]">
+    <div className="min-h-screen bg-[#080B10] text-[#F4F4F5]">
 
         {/* Header */}
         <div className="border-b border-white/10 bg-[#0A0D14] pt-16 pb-12 relative overflow-hidden">
@@ -141,8 +139,7 @@ export default async function TiersPage() {
             const description = DIVISION_DESCRIPTIONS[divName] ?? "";
 
             return (
-              <Reveal key={divName}>
-                <section id={divName.toLowerCase()} aria-label={divName} className="scroll-mt-24">
+              <section key={divName} id={divName.toLowerCase()} aria-label={divName} className="scroll-mt-24">
                   {/* Division Header */}
                   <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-4">
                     <div>
@@ -252,12 +249,10 @@ export default async function TiersPage() {
                     })}
                   </div>
                 </section>
-              </Reveal>
             );
           })}
         </Container>
       </div>
-    </PageTransition>
   );
 }
 
