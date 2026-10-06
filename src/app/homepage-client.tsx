@@ -497,7 +497,7 @@ const ARMORY_WEAPONS: ArmoryWeapon[] = [
     magazine: 25,
     description: "High-damage assault rifle providing consistent 160 headshot lethality at any range without falloff.",
     recoilTrait: "Heavy vertical kick after 3-shot burst; demands micro-strafing precision",
-    iconUrl: "https://media.valorant-api.com/weapons/9c82e14d-4e4c-ab54-ced6-f68b2d2c86c2/displayicon.png",
+    iconUrl: "https://media.valorant-api.com/weapons/9c82e19d-4575-0200-1a81-3eacf00cf872/displayicon.png",
   },
   {
     slug: "phantom",
@@ -536,7 +536,7 @@ const ARMORY_WEAPONS: ArmoryWeapon[] = [
     magazine: 6,
     description: "High-impact sidearm with 159 headshot lethality up to 30 meters on eco buys.",
     recoilTrait: "High recoil requiring measured cadence between shots",
-    iconUrl: "https://media.valorant-api.com/weapons/e370fa57-4757-3604-3648-499e1f642d3f/displayicon.png",
+    iconUrl: "https://media.valorant-api.com/weapons/e336c6b8-418d-9340-d77f-7a9e4cfe0702/displayicon.png",
   },
   {
     slug: "spectre",
@@ -1333,12 +1333,14 @@ export function HomepageClient() {
                 {/* Center Large Weapon Artwork */}
                 <div className="relative h-48 sm:h-64 w-full my-6 flex items-center justify-center">
                   <Image
+                    key={activeArmoryWeapon.slug}
                     src={activeArmoryWeapon.iconUrl}
                     alt={activeArmoryWeapon.name}
                     fill
-                    loading="lazy"
+                    priority
                     sizes="(max-width: 1024px) 100vw, 700px"
                     className="object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.9)]"
+                    unoptimized
                   />
                 </div>
 

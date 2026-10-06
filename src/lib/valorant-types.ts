@@ -332,11 +332,11 @@ export const CONTENT_TIER_MAP: Record<string, ContentTierInfo> = {
     color: "#FBBF24",
     iconUrl: "https://media.valorant-api.com/contenttiers/411e4a55-4e59-7757-41f0-86a53f101bb5/displayicon.png",
   },
-  "e046854e-4062-37f4-6607-19a9ba8426fc": {
+  "e046854e-406c-37f4-6607-19a9ba8426fc": {
     rarity: "EXCLUSIVE",
     price: 2175,
     color: "#F87171",
-    iconUrl: "https://media.valorant-api.com/contenttiers/e046854e-4062-37f4-6607-19a9ba8426fc/displayicon.png",
+    iconUrl: "https://media.valorant-api.com/contenttiers/e046854e-406c-37f4-6607-19a9ba8426fc/displayicon.png",
   },
 };
 

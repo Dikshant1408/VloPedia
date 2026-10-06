@@ -520,7 +520,7 @@ export const valorantDb = {
                 "name": "TOXIC",
                 "type": "Passive Ability",
                 "description": "Viper's chemical weapons inflict a Decay debuff that instantly subtracts enemy health while exposed. Health begins regenerating shortly after leaving the chemical zone.",
-                "icon": "https://media.valorant-api.com/agents/707eab51-4836-f488-046a-cda6bf494859/abilities/passive/displayicon.png"
+                "icon": null
             },
         ]
     },
@@ -761,7 +761,7 @@ export const valorantDb = {
                 "name": "HEATING UP",
                 "type": "Passive Ability",
                 "description": "Phoenix's fire abilities heal him over time instead of dealing damage when he stands inside the flames.",
-                "icon": "https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/abilities/passive/displayicon.png"
+                "icon": null
             },
             {
                 "key": "X",
@@ -1339,7 +1339,7 @@ export const valorantDb = {
                 "name": "UNCANNY MARKSMAN",
                 "type": "Passive Ability",
                 "description": "Custom bow modifications allow Sova to bounce Recon and Shock arrows up to two times off surfaces before detonation.",
-                "icon": "https://media.valorant-api.com/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa/abilities/passive/displayicon.png"
+                "icon": null
             },
             {
                 "key": "X",
