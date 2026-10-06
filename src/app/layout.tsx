@@ -112,14 +112,19 @@ export default async function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.addEventListener('error', function(e) {
-                if (e && e.message && (e.message.indexOf('Loading chunk') !== -1 || e.message.indexOf('ChunkLoadError') !== -1)) {
-                  if (!sessionStorage.getItem('chunk_reload_time')) {
-                    sessionStorage.setItem('chunk_reload_time', Date.now());
+              function handleChunkError(err) {
+                var msg = (err && (err.message || err.reason || String(err))) || '';
+                if (msg.indexOf('Loading chunk') !== -1 || msg.indexOf('ChunkLoadError') !== -1 || msg.indexOf('Failed to fetch') !== -1) {
+                  var key = 'chunk_reload_' + window.location.pathname;
+                  var last = sessionStorage.getItem(key);
+                  if (!last || (Date.now() - parseInt(last, 10) > 10000)) {
+                    sessionStorage.setItem(key, String(Date.now()));
                     window.location.reload();
                   }
                 }
-              });
+              }
+              window.addEventListener('error', function(e) { handleChunkError(e); });
+              window.addEventListener('unhandledrejection', function(e) { handleChunkError(e.reason); });
             `,
           }}
         />

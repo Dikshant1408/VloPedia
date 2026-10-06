@@ -123,7 +123,7 @@ export function AgentsClient({ initialAgents }: AgentsClientProps) {
                         <motion.div
                           key={agent.uuid}
                           layout
-                          initial={{ opacity: 0, scale: 0.95 }}
+                          initial={false}
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.95 }}
                           transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.2) }}
