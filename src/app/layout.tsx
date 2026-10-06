@@ -110,6 +110,20 @@ export default async function RootLayout({
         <meta name="c5e365bb4ddff86b4d42f01bc4bd01051bc9845a" content="c5e365bb4ddff86b4d42f01bc4bd01051bc9845a" />
         <meta name="google-adsense-account" content="ca-pub-5851997796287592" />
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('error', function(e) {
+                if (e && e.message && (e.message.indexOf('Loading chunk') !== -1 || e.message.indexOf('ChunkLoadError') !== -1)) {
+                  if (!sessionStorage.getItem('chunk_reload_time')) {
+                    sessionStorage.setItem('chunk_reload_time', Date.now());
+                    window.location.reload();
+                  }
+                }
+              });
+            `,
+          }}
+        />
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5851997796287592"
           crossOrigin="anonymous"
