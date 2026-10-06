@@ -827,7 +827,7 @@ export function HomepageClient() {
   const latestPatch = valorantDb.patches[0];
 
   return (
-    <PageTransition>
+    <div className="w-full">
       <div
         onMouseMove={handleMouseMove}
         className="min-h-screen bg-[#08090C] text-[#F5F5F5] selection:bg-[#FF4655] selection:text-white"
@@ -840,7 +840,7 @@ export function HomepageClient() {
           
           {/* 0.3s Fast Accent Line Entrance */}
           <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
+            initial={false}
             animate={{ scaleX: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF4655] to-transparent z-20 origin-center"
@@ -882,7 +882,7 @@ export function HomepageClient() {
                 
                 {/* 0.5s Eyebrow: The VALORANT Database & Real-time Indicator */}
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
                   className="inline-flex items-center gap-2.5 px-3 py-1 border border-white/10 bg-[#101218]/90 text-white font-mono text-[11px] uppercase tracking-widest clip-diagonal-sm"
@@ -897,7 +897,7 @@ export function HomepageClient() {
 
                 {/* 0.8s Title Reveal: Aggressive Display Typography */}
                 <motion.div
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.6 }}
                   className="space-y-2"
@@ -915,7 +915,7 @@ export function HomepageClient() {
 
                 {/* 1.2s Dominant Search Bar CTA with Ctrl+K */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.98 }}
+                  initial={false}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="w-full"
@@ -950,7 +950,7 @@ export function HomepageClient() {
 
                 {/* Database Quick Launch Grid */}
                 <motion.div
-                  initial={{ opacity: 0 }}
+                  initial={false}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.65, duration: 0.5 }}
                   className="space-y-2.5 w-full pt-1"
@@ -1008,7 +1008,7 @@ export function HomepageClient() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeAgent.name}
-                    initial={{ opacity: 0, x: 24, scale: 0.96 }}
+                    initial={false}
                     animate={{ opacity: 1, x: 0, scale: 1 }}
                     exit={{ opacity: 0, x: -24, scale: 0.98 }}
                     transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -1764,7 +1764,7 @@ export function HomepageClient() {
         </section>
 
       </div>
-    </PageTransition>
+    </div>
   );
 }
 
