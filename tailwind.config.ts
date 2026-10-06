@@ -8,10 +8,10 @@ const config: Config = {
     extend: {
       colors: {
         /* Core palette */
-        background:          "var(--background)",
-        surface:             "var(--surface)",
-        "surface-elevated":  "var(--surface-elevated)",
-        "surface-card":      "var(--surface-card)",
+        background:          "rgb(var(--background-rgb, 8, 11, 16) / <alpha-value>)",
+        surface:             "rgb(var(--surface-rgb, 13, 17, 24) / <alpha-value>)",
+        "surface-elevated":  "rgb(var(--surface-elevated-rgb, 18, 24, 33) / <alpha-value>)",
+        "surface-card":      "rgb(var(--surface-card-rgb, 14, 19, 27) / <alpha-value>)",
         "surface-glass":     "var(--surface-glass)",
         "surface-overlay":   "var(--surface-overlay)",
 

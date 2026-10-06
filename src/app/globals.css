@@ -14,13 +14,17 @@
   --font-jetbrains: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
 
   /* Core palette — Tactical Command Dark */
-  --background:       #080B10;
-  --surface:          #0D1118;
-  --surface-elevated: #121821;
-  --surface-card:     #0E131B;
-  --border:           rgba(236, 232, 225, 0.08);
-  --border-light:     rgba(236, 232, 225, 0.15);
-  --border-active:    rgba(255, 70, 85, 0.45);
+  --background:           #080B10;
+  --background-rgb:       8, 11, 16;
+  --surface:              #0D1118;
+  --surface-rgb:          13, 17, 24;
+  --surface-elevated:     #121821;
+  --surface-elevated-rgb: 18, 24, 33;
+  --surface-card:         #0E131B;
+  --surface-card-rgb:     14, 19, 27;
+  --border:               rgba(236, 232, 225, 0.08);
+  --border-light:         rgba(236, 232, 225, 0.15);
+  --border-active:        rgba(255, 70, 85, 0.45);
 
   /* Primary Accent — Pure VALORANT Radianite Red */
   --primary:          #FF4655;
@@ -89,11 +93,15 @@ html.light, .light {
   color-scheme: light;
 
   /* Core palette — Warm paper editorial */
-  --background:       #FAF9F6;
-  --surface:          #FFFFFF;
-  --surface-elevated: #F4F4F5;
-  --surface-card:     #FFFFFF;
-  --border:           rgba(0, 0, 0, 0.08);
+  --background:           #FAF9F6;
+  --background-rgb:       250, 249, 246;
+  --surface:              #FFFFFF;
+  --surface-rgb:          255, 255, 255;
+  --surface-elevated:     #F4F4F5;
+  --surface-elevated-rgb: 244, 244, 245;
+  --surface-card:         #FFFFFF;
+  --surface-card-rgb:     255, 255, 255;
+  --border:               rgba(0, 0, 0, 0.08);
   --border-light:     rgba(0, 0, 0, 0.14);
 
   /* Accent colors */

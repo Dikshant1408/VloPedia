@@ -118,11 +118,11 @@ export function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
           <motion.div
             key="mega-backdrop"
             aria-hidden="true"
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-black/80 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
             onClick={onClose}
           />
 
@@ -133,31 +133,37 @@ export function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
             role="dialog"
             aria-label="All sections"
             aria-modal="true"
-            className="absolute left-0 right-0 top-full z-50 border-b border-border bg-background/95 backdrop-blur-xl"
-            initial={{ opacity: 0, y: -8 }}
+            className="absolute left-0 right-0 top-full z-50 border-b border-white/10 bg-[#080B10] shadow-[0_30px_70px_rgba(0,0,0,0.95)] max-h-[calc(100vh-4.5rem)] overflow-y-auto"
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="mx-auto max-w-8xl px-4 py-8 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-8xl px-4 py-8 sm:px-6 lg:px-8 relative">
+              {/* Tactical subtle top red hairline accent */}
+              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#FF4655]/40 to-transparent pointer-events-none" />
+
               <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
                 {NAV_GROUPS.map((group) => (
                   <div key={group.title}>
-                    <h2 className="mb-4 font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-primary">
-                      {group.title}
-                    </h2>
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="h-1.5 w-1.5 bg-[#FF4655] shrink-0" aria-hidden="true" />
+                      <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-[#FF4655]">
+                        {group.title}
+                      </h2>
+                    </div>
                     <ul className="space-y-1" role="list">
                       {group.items.map((item) => (
                         <li key={item.href}>
                           <Link
                             href={item.href}
                             onClick={onClose}
-                            className="group flex flex-col rounded-none border border-transparent px-3 py-2 transition-colors hover:border-border hover:bg-surface focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                            className="group flex flex-col rounded-md border border-transparent px-3 py-2 transition-all hover:border-white/10 hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
                           >
-                            <span className="font-sans text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                            <span className="font-sans text-sm font-semibold text-[#F4F4F5] group-hover:text-[#FF4655] transition-colors">
                               {item.label}
                             </span>
-                            <span className="font-sans text-[11px] text-muted">
+                            <span className="font-sans text-[11px] text-[#858B96] group-hover:text-[#B0B7C3] transition-colors leading-snug mt-0.5">
                               {item.desc}
                             </span>
                           </Link>
@@ -169,14 +175,14 @@ export function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
               </div>
 
               {/* Close row */}
-              <div className="mt-8 flex justify-end border-t border-border pt-4">
+              <div className="mt-8 flex justify-end border-t border-white/10 pt-4">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-muted hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary cursor-pointer"
+                  className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#858B96] hover:text-[#F4F4F5] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary cursor-pointer px-3 py-1.5 rounded-sm hover:bg-white/[0.05]"
                 >
                   <X className="h-3.5 w-3.5" aria-hidden="true" />
-                  Close
+                  Close Menu (Esc)
                 </button>
               </div>
             </div>

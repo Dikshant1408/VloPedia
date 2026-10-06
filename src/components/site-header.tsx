@@ -79,7 +79,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
   return (
     <>
       <GlobalSearchDialog />
-      <header className="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-xl shadow-md">
+      <header className="sticky top-0 z-50 border-b border-border bg-[#0D1118]/95 backdrop-blur-xl shadow-md">
         {/* Route progress bar */}
         <Suspense fallback={null}>
           <ProgressBar />
@@ -128,6 +128,7 @@ export function SiteHeader({ version }: SiteHeaderProps) {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onMouseEnter={() => setMegaOpen(false)}
                     className={`relative px-3 py-1.5 font-sans text-sm font-medium transition-colors rounded-md ${
                       isActive
                         ? "text-primary bg-primary/10 font-semibold"
