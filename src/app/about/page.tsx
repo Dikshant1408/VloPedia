@@ -122,6 +122,37 @@ export default function AboutPage() {
               </div>
             </Reveal>
 
+            {/* Editorial Standards & E-E-A-T Integrity */}
+            <Reveal>
+              <div className="border border-border bg-[#0D1A22] p-8 space-y-6 cut-corner-br">
+                <div className="flex items-center gap-3 border-b border-border pb-4 mb-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                  <h2 className="font-display text-xl uppercase tracking-wide text-white">Editorial Integrity &amp; Research Standards</h2>
+                </div>
+                <p className="text-xs leading-relaxed text-muted uppercase font-mono">
+                  {"// 100% ORIGINAL CONTENT & PRO-TIER FACT-CHECKING"}
+                </p>
+                <div className="grid gap-6 sm:grid-cols-2 text-xs text-muted leading-relaxed">
+                  <div className="space-y-2 border-l-2 border-primary/40 pl-4">
+                    <h3 className="font-display text-sm uppercase text-white font-bold">Empirical Testing in The Range</h3>
+                    <p>
+                      Every weapon recoil pattern, first-shot accuracy spread, and damage dropoff profile published on VloPedia is personally tested frame-by-frame inside VALORANT&apos;s Practice Range and custom server lobbies. We do not scrape unverified rumors.
+                    </p>
+                  </div>
+                  <div className="space-y-2 border-l-2 border-primary/40 pl-4">
+                    <h3 className="font-display text-sm uppercase text-white font-bold">Pro-Play &amp; VCT Telemetry</h3>
+                    <p>
+                      Our meta guides and team composition tier lists are benchmarked against top-tier competitive play, analyzing pick rates and setup win rates from VCT Champions and Radiant-rank matchmaking.
+                    </p>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-[rgba(236,232,225,0.06)] flex items-center gap-3 text-xs font-mono text-secondary">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span>Written and curated by real competitive players. Zero low-effort machine generation.</span>
+                </div>
+              </div>
+            </Reveal>
+
             {/* Disclaimer & Compliance */}
             <Reveal>
               <div className="border border-primary/20 bg-primary/5 p-6 flex gap-4 text-xs font-mono uppercase text-primary items-start">

@@ -8,6 +8,8 @@ export interface Guide {
   summary: string;
   content: string;
   author: string;
+  authorRole?: string;
+  reviewedBy?: string;
   publishedAt: string;
   relatedAgents?: string[];
   relatedWeapons?: string[];

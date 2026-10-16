@@ -1,10 +1,34 @@
 import type { Metadata } from "next";
+import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { siteConfig } from "@/lib/site";
 import { ValorantApiClient } from "@/lib/valorantApi";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+  weight: ["400", "700", "900"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  display: "swap",
+  weight: ["400", "500", "700"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -76,16 +100,14 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className="dark"
+      className={`dark ${inter.variable} ${outfit.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;700;900&display=swap"
-          rel="stylesheet"
-        />
+        {/* Riot CDN Anycast edge preconnections */}
+        <link rel="preconnect" href="https://media.valorant-api.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://media.valorant-api.com" />
+        <link rel="dns-prefetch" href="https://valorant.dyn.riotcdn.net" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -128,13 +150,12 @@ export default async function RootLayout({
             `,
           }}
         />
-        <script
-          async
+        <Script
+          id="google-adsense"
+          strategy="lazyOnload"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5851997796287592"
           crossOrigin="anonymous"
         />
-        <link rel="dns-prefetch" href="https://wsrv.nl" />
-        <link rel="dns-prefetch" href="https://valorant-api.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -193,6 +214,8 @@ export default async function RootLayout({
             </main>
             <SiteFooter version={version} />
           </div>
+          <Analytics />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>

@@ -257,12 +257,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.5,
   }));
 
-  // 14. Dynamic guides pages
+  // 14. Dynamic guides pages (High-value editorial content)
   const guidesRoutes: MetadataRoute.Sitemap = guidesDb.map(g => ({
     url:             `${base}/guides/${g.slug}`,
     lastModified:    now,
     changeFrequency: "weekly",
-    priority:        0.7,
+    priority:        0.9,
   }));
 
   // 15. Dynamic Best-For Intent pages

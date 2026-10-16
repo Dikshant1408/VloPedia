@@ -58,3 +58,8 @@ Thumbs.db
 .eslintcache
 *.zip
 
+# Backups & private deployment scripts
+out_backup/
+scratch/
+scripts/deploy_production_sync.py
+
