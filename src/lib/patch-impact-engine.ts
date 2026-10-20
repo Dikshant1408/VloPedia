@@ -61,7 +61,7 @@ export class PatchImpactEngine {
    * Evaluates the multi-tier ripple impact across the knowledge graph and content library when an entity is patched.
    * Patch -> Entity changed -> Meta -> Counters/Synergies -> Map Fit -> Guides -> Comparisons -> Best-for
    */
-  public static evaluateImpact(entityId: string, currentPatch: string = "13.06"): PatchImpactResult {
+  public static evaluateImpact(entityId: string, currentPatch: string = "13.08"): PatchImpactResult {
     const entity = KnowledgeGraphService.getEntityById(entityId);
     const slug = entity?.slug || entityId.split(":")[1] || entityId;
     const type = entity?.type || (entityId.startsWith("agent:") ? "AGENT" : entityId.startsWith("weapon:") ? "WEAPON" : "MAP");
@@ -210,13 +210,13 @@ export class PatchImpactEngine {
    */
   public static getContentFreshness(lastReviewedDate: string = "2026-10-01"): FreshnessBadgeInfo {
     const reviewDate = new Date(lastReviewedDate);
-    const now = new Date("2026-10-05T09:00:00Z");
+    const now = new Date("2026-10-19T00:00:00Z");
     const diffDays = Math.max(0, Math.floor((now.getTime() - reviewDate.getTime()) / (1000 * 60 * 60 * 24)));
 
     let status: FreshnessBadgeInfo["status"] = "FRESH";
     let patchAgeCount = 0;
-    let badgeLabel = "✓ Patch 13.06 Verified";
-    let tooltipText = `Reviewed on ${lastReviewedDate}. Fully calibrated to active Patch 13.06.`;
+    let badgeLabel = "✓ Patch 13.08 Verified";
+    let tooltipText = `Reviewed on ${lastReviewedDate}. Fully calibrated to active Patch 13.08.`;
 
     if (diffDays > 30) {
       status = "CRITICAL_UPDATE_REQUIRED";

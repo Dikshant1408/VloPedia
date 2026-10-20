@@ -303,6 +303,46 @@
           "content": "Vincent Fabron is a former French military marksman turned high-end weapons designer. Unbeknownst to Brimstone, Chamber orchestrated the destruction of the joint Alpha-Omega research facility (Fracture) to force both Earths to rely exclusively on his custom-crafted weaponry and teleportation teleporters."
         }
       ]
+    },
+    {
+      "slug": "scions-of-the-hourglass",
+      "title": "Faction Dossier: The Scions of the Hourglass & The Abyss Facility",
+      "category": "FACTIONS",
+      "readTime": "9 min read",
+      "summary": "The subterranean extremist order dedicated to weaponizing raw Radianite, secret keepers of the Abyss containment prison, and the ancient foes of Vyse.",
+      "canonStatus": "CONFIRMED",
+      "evidenceSource": "Abyss Map Easter Eggs, Vyse Agent Reveal Cinematic, Range Basement Audio Transcripts",
+      "whyDoWeKnowThis": "In-game environmental assets in Abyss (Sector 4 and holding cells), audio intercepts from Brimstone's terminal, and Vyse's voice lines confirm the Hourglass operates autonomous black sites beneath sovereign radar.",
+      "sections": [
+        {
+          "heading": "1. Origins of the Ancient Cabal",
+          "content": "Long before First Light, esoteric circles sought power through dormant underground minerals. When First Light erupted in 2039, the Hourglass reemerged with vast private funding, capturing Radiants to conduct genetic experiments and develop bio-metallic living armaments."
+        },
+        {
+          "heading": "2. The Abyss Containment Facility",
+          "content": "Deep within the glaciers of Svalbard, Norway, the Hourglass constructed Abyss—a colossal cavernous prison designed to contain rogue entities and dangerous metal-manipulating Radiants like Vyse until her explosive escape."
+        }
+      ]
+    },
+    {
+      "slug": "hush-telekinetic-front",
+      "title": "Intelligence Dossier: Codename 'Hush' & The Chinese Radianite Axis",
+      "category": "AGENT_LORE",
+      "readTime": "8 min read",
+      "summary": "Classified telemetry on the Cantonese Radiant Duelist 'Hush'. Her telekinetic Spike manipulation, aerial suspension nodes, and ability mimicry.",
+      "canonStatus": "STRONGLY IMPLIED",
+      "evidenceSource": "VCT Champions 2026 Narrative Showcase, PBE Audio Strings, Sector 7 Radar Logs",
+      "whyDoWeKnowThis": "Riot's formal narrative cinematic during Champions 2026 confirmed operative Hush emerging from mainland Canton, operating independently from Kingdom Shanghai to disrupt both Alpha and Omega clandestine incursions.",
+      "sections": [
+        {
+          "heading": "1. The Telekinetic Radiant of Canton",
+          "content": "Hush represents a rare tier of Radiant evolution capable of macroscopic telekinetic projection. Rather than conjuring elemental substances, she manipulates the physical coordinates of matter—enabling remote defusal/planting coordinates and aerial anchor traversal."
+        },
+        {
+          "heading": "2. Geopolitical Alignment",
+          "content": "Operating outside official VALORANT Protocol ranks, Hush presents an unpredictable third faction on the Asian front, resisting Kingdom Corporation's monopoly while refusing subservience to the Omega Earth invasion force."
+        }
+      ]
     }
   ]
 }

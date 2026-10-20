@@ -17,10 +17,10 @@
 ## 🏛️ The Three Pillars
 
 ### 1. 🗄️ Database & Knowledge Graph
-- **Operatives (`/agents`)**: Deep tactical dossiers for all 26 agents with ability breakdowns, playstyles, high-synergy teammates, direct counter-picks, best maps, pro meta ratings, and audio voice lines.
-- **Weapons & Ballistics (`/weapons`)**: Comprehensive damage matrices across distance falloffs, fire rates, magazine sizes, first-bullet spread, and wall penetration.
-- **Tactical Maps (`/maps`)**: Site layouts, default callouts, execute paths, and agent win-rate tiers.
-- **Skins & Cosmetics (`/skins`)**: Over 1,400 skins with chromas, finisher previews, streamed inspect videos, and VP valuations.
+- **Operatives (`/agents`)**: Deep tactical dossiers for all 29 agents with ability breakdowns, playstyles, high-synergy teammates, direct counter-picks, best maps, pro meta ratings, and audio voice lines.
+- **Weapons & Ballistics (`/weapons`)**: Comprehensive damage matrices across distance falloffs, fire rates, magazine sizes, first-bullet spread, and wall penetration for all 21 weapons (including the Warden battle rifle and Bandit sidearm).
+- **Tactical Maps (`/maps`)**: Site layouts, default callouts, execute paths, and agent win-rate tiers across all 18 competitive and arena maps (including the Patch 13.08 Corrode rework).
+- **Skins & Cosmetics (`/skins` & `/bundles`)**: Over 1,400 skins and 320+ bundles with chromas, finisher previews, streamed inspect videos, and VP valuations (including POPMONZ and Champions 2026).
 
 ### 2. 🛠️ Tactical Tools & Problem Solvers
 - **Comp Synergy Builder (`/comp-builder`)**: Map-weighted 5-agent tactical evaluation measuring Execution, Site Control, Recon/Intel, Retake, and Post-Plant ratings (/100) with strategic breakdowns.

@@ -144,10 +144,10 @@ export class KnowledgeGraphService {
     this.init();
     return {
       version: "v1.3-canonical",
-      patchVersion: "13.06",
+      patchVersion: "13.08",
       totalEntities: this.entities.size,
       totalRelationships: this.relationships.length,
-      lastAuditDate: "2026-10-01",
+      lastAuditDate: "2026-10-19",
     };
   }
 

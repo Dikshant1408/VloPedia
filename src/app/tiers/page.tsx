@@ -251,6 +251,79 @@ export default async function TiersPage() {
                 </section>
             );
           })}
+
+          {/* Patch 13.08 / Act 6 Ranked Intelligence Dossier */}
+          <section className="mt-16 border border-white/10 bg-[#0C1018] p-8 clip-diagonal relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="w-2.5 h-2.5 bg-[#0DF2F2] animate-pulse" />
+                  <span className="font-mono text-xs text-[#0DF2F2] font-bold tracking-[0.25em] uppercase">
+                    COMPETITIVE PROTOCOL // ACT 6 UPDATE
+                  </span>
+                </div>
+                <span className="font-mono text-xs text-white/50 bg-white/5 px-2.5 py-1 border border-white/10">
+                  PATCH 13.08 CALIBRATION
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Map Rating System */}
+                <div className="border border-white/10 bg-[#10141D] p-5">
+                  <div className="font-mono text-[10px] text-[#0DF2F2] tracking-wider uppercase mb-1">
+                    NEW FEATURE // METRIC
+                  </div>
+                  <h3 className="font-display text-lg uppercase text-white font-bold mb-2">
+                    Map Rating System (0–500)
+                  </h3>
+                  <p className="font-sans text-xs text-[#94A3B8] leading-relaxed">
+                    Evaluates your individual map mastery on a 0 to 500 rating scale and assigns letter grades from C to S across Competitive and Premier modes based on Overall Win Rate, ATK/DEF splits, and Performance Score.
+                  </p>
+                </div>
+
+                {/* Performance Score */}
+                <div className="border border-white/10 bg-[#10141D] p-5">
+                  <div className="font-mono text-[10px] text-primary tracking-wider uppercase mb-1">
+                    SCORING ALGORITHM
+                  </div>
+                  <h3 className="font-display text-lg uppercase text-white font-bold mb-2">
+                    Performance Score 2.0
+                  </h3>
+                  <p className="font-sans text-xs text-[#94A3B8] leading-relaxed">
+                    Recalibrated combat contribution models ensure damage output, adjusted eliminations, and first-contact trades appropriately reward impactful support and auxiliary playstyles without distorting RR.
+                  </p>
+                </div>
+
+                {/* Map Pool Rotation */}
+                <div className="border border-white/10 bg-[#10141D] p-5">
+                  <div className="font-mono text-[10px] text-[#6AE2AF] tracking-wider uppercase mb-1">
+                    ACTIVE POOL ROTATION
+                  </div>
+                  <h3 className="font-display text-lg uppercase text-white font-bold mb-2">
+                    Act 6 Active Map Pool
+                  </h3>
+                  <p className="font-sans text-xs text-[#94A3B8] leading-relaxed mb-3">
+                    Competitive and Premier map pools have rotated with major site overhauls:
+                  </p>
+                  <div className="flex flex-wrap gap-2 font-mono text-[11px]">
+                    <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                      + CORRODE (REWORK)
+                    </span>
+                    <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                      + BIND
+                    </span>
+                    <span className="px-2 py-0.5 bg-rose-500/10 border border-rose-500/30 text-rose-400 line-through">
+                      - ASCENT
+                    </span>
+                    <span className="px-2 py-0.5 bg-rose-500/10 border border-rose-500/30 text-rose-400 line-through">
+                      - SPLIT
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </Container>
       </div>
   );

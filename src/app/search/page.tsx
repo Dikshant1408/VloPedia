@@ -38,7 +38,7 @@ const TYPE_COLOR: Record<ResultType, string> = {
   COMPARE: "border-purple-400/40 bg-purple-400/10 text-purple-400",
 };
 
-const TRENDING = ["best controller on ascent", "vandal vs phantom", "jett", "first light", "800 dpi 0.3", "clove", "comp builder"];
+const TRENDING = ["patch 13.08", "popmonz bundle", "corrode rework", "map rating system", "hush agent", "champions 2026 phantom", "vandal vs phantom", "clove"];
 
 export default function SearchPage() {
   return (

@@ -18,7 +18,11 @@ export const metadata: Metadata = {
   },
 };
 
-const WEAPON_SLUGS = ["vandal","phantom","operator","spectre","ghost","classic","sheriff","frenzy","shorty","stinger","bucky","judge","bulldog","guardian","marshal","ares","odin","outlaw","melee"];
+const WEAPON_SLUGS = [
+  "vandal","phantom","operator","spectre","ghost","classic","sheriff",
+  "frenzy","shorty","stinger","bucky","judge","bulldog","guardian",
+  "marshal","ares","odin","outlaw","warden","bandit","melee"
+];
 
 function weaponFromName(name: string, assetPath: string): string {
   const lower = name.toLowerCase();
@@ -42,6 +46,8 @@ function weaponFromName(name: string, assetPath: string): string {
   if (p.includes("outlaw")) return "outlaw";
   if (p.includes("lightmachine")) return "ares";
   if (p.includes("heavymachine")) return "odin";
+  if (p.includes("battlerifle") || p.includes("warden")) return "warden";
+  if (p.includes("compact") || p.includes("bandit")) return "bandit";
   if (p.includes("melee")) return "melee";
   return "vandal";
 }

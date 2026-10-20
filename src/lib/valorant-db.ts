@@ -1866,7 +1866,7 @@ export const valorantDb = {
         "magazineSize": 12,
         "dmgHead": 78,
         "dmgBody": 26,
-        "dmgLeg": 22,
+        "dmgLeg": 22.1,
         "description": "Standard issue classic tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1882,7 +1882,7 @@ export const valorantDb = {
         "magazineSize": 2,
         "dmgHead": 22,
         "dmgBody": 11,
-        "dmgLeg": 9,
+        "dmgLeg": 9.35,
         "description": "Standard issue shorty tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1898,7 +1898,7 @@ export const valorantDb = {
         "magazineSize": 15,
         "dmgHead": 78,
         "dmgBody": 26,
-        "dmgLeg": 22,
+        "dmgLeg": 22.1,
         "description": "Standard issue frenzy tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1965,7 +1965,7 @@ export const valorantDb = {
         "magazineSize": 30,
         "dmgHead": 78,
         "dmgBody": 26,
-        "dmgLeg": 22,
+        "dmgLeg": 22.1,
         "description": "Standard issue spectre tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -1997,7 +1997,7 @@ export const valorantDb = {
         "magazineSize": 5,
         "dmgHead": 34,
         "dmgBody": 17,
-        "dmgLeg": 14,
+        "dmgLeg": 14.45,
         "description": "Standard issue judge tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -2045,7 +2045,7 @@ export const valorantDb = {
         "magazineSize": 30,
         "dmgHead": 156,
         "dmgBody": 39,
-        "dmgLeg": 33,
+        "dmgLeg": 33.15,
         "description": "Standard issue phantom tactical gear.",
         "recoil": "EASY TO SPRAY, SILENCED FIRING AND ZERO BULLET TRACERS",
         "skins": [
@@ -2148,7 +2148,7 @@ export const valorantDb = {
         "magazineSize": 100,
         "dmgHead": 95,
         "dmgBody": 38,
-        "dmgLeg": 32,
+        "dmgLeg": 32.3,
         "description": "Standard issue odin tactical gear.",
         "recoil": "MODERATE STABLE RECOIL PROFILE",
         "skins": [],
@@ -2156,6 +2156,62 @@ export const valorantDb = {
     }
 ],
   skins: [
+    {
+        "slug": "popmonz-phantom",
+        "name": "POPMONZ PHANTOM",
+        "weaponSlug": "phantom",
+        "price": 2175,
+        "rarity": "EXCLUSIVE",
+        "variants": [
+            {
+                "id": "default",
+                "name": "Popmonz Original (White / Red)",
+                "hex": "#f43f5e",
+                "hueRotate": "hue-rotate-0"
+            },
+            {
+                "id": "blue",
+                "name": "Popmonz Neo Blue",
+                "hex": "#0ea5e9",
+                "hueRotate": "hue-rotate-[190deg]"
+            },
+            {
+                "id": "yellow",
+                "name": "Popmonz Sunny Yellow",
+                "hex": "#eab308",
+                "hueRotate": "hue-rotate-[60deg]"
+            },
+            {
+                "id": "purple",
+                "name": "Popmonz Cosmic Violet",
+                "hex": "#8b5cf6",
+                "hueRotate": "hue-rotate-[270deg]"
+            }
+        ],
+        "inspectVideoUrl": null,
+        "reloadVideoUrl": null,
+        "communityRating": 4.9,
+        "popularity": 97
+    },
+    {
+        "slug": "champions-2026-phantom",
+        "name": "CHAMPIONS 2026 PHANTOM",
+        "weaponSlug": "phantom",
+        "price": 2675,
+        "rarity": "EXCLUSIVE",
+        "variants": [
+            {
+                "id": "default",
+                "name": "Champions VCT Gold",
+                "hex": "#fbbf24",
+                "hueRotate": "hue-rotate-0"
+            }
+        ],
+        "inspectVideoUrl": null,
+        "reloadVideoUrl": null,
+        "communityRating": 5.0,
+        "popularity": 99
+    },
     {
         "slug": "reaver-vandal",
         "name": "REAVER VANDAL",
@@ -2257,6 +2313,51 @@ export const valorantDb = {
     }
 ],
   bundles: [
+    {
+        "slug": "popmonz-bundle",
+        "name": "POPMONZ",
+        "price": 8700,
+        "active": true,
+        "endsInSeconds": 604800,
+        "skins": [
+            "phantom-popmonz",
+            "odin-popmonz",
+            "sheriff-popmonz",
+            "stinger-popmonz",
+            "melee-popmonz"
+        ],
+        "description": "Vibrant capsule-machine inspired weaponry housing interactive miniature creature companions with custom animations and a gacha-themed creature finisher.",
+        "trailerUrl": "https://www.youtube.com/embed/e_E9W2GD7Zw"
+    },
+    {
+        "slug": "champions-2026-bundle",
+        "name": "CHAMPIONS 2026",
+        "price": 6640,
+        "active": true,
+        "endsInSeconds": 259200,
+        "skins": [
+            "phantom-champions-2026",
+            "melee-champions-2026-blade-fan"
+        ],
+        "description": "Official VCT Champions 2026 celebratory collection featuring dynamic Attack/Defense side-morphing aesthetics, pro kill counter trophies, and golden Champions aura.",
+        "trailerUrl": "https://www.youtube.com/embed/e_E9W2GD7Zw"
+    },
+    {
+        "slug": "nocturnum-bundle",
+        "name": "NOCTURNUM",
+        "price": 8700,
+        "active": false,
+        "endsInSeconds": 0,
+        "skins": [
+            "phantom-nocturnum",
+            "classic-nocturnum",
+            "marshal-nocturnum",
+            "bulldog-nocturnum",
+            "melee-nocturnum-scythe"
+        ],
+        "description": "Forged in eldritch mysticism with dark ritual summon finishers and a transforming dual Scythe-to-Dagger melee.",
+        "trailerUrl": "https://www.youtube.com/embed/e_E9W2GD7Zw"
+    },
     {
         "slug": "eviction-bundle",
         "name": "Eviction ultra",
@@ -2499,14 +2600,15 @@ export const valorantDb = {
         "slug": "corrode",
         "name": "CORRODE",
         "location": "48\u00b0 38' FH\" N8, 1\u00b0 33' YV\" W8",
-        "lore": "VALORANT tactical map layout for Corrode.",
+        "lore": "VALORANT coastal industrial facility updated in Act 6 with an overhauled Lower Mid wall, enhanced defender rotation corridors, and calibrated A-Site plant boundaries.",
         "callouts": [
             "A SITE",
             "B SITE",
             "MID AREA"
         ],
         "strategies": [
-            "Control key choke points and block sightlines with smokes"
+            "Control key choke points and block sightlines with smokes",
+            "Leverage the raised Lower Mid wall to deny early defender sightlines and protect cross-lane pushes"
         ],
         "minimapUrl": "https://media.valorant-api.com/maps/1c18ab1f-420d-0d8b-71d0-77ad3c439115/displayicon.png",
         "splashUrl": "https://media.valorant-api.com/maps/1c18ab1f-420d-0d8b-71d0-77ad3c439115/splash.png"
@@ -2625,6 +2727,41 @@ export const valorantDb = {
     }
 ],
   patches: [
+    {
+        "slug": "patch-1308",
+        "version": "13.08",
+        "date": "OCTOBER 14, 2026",
+        "title": "VALORANT Patch Notes 13.08",
+        "season": "Season 2026",
+        "act": "Act 6",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-08/",
+        "tags": ["Act 6 Kickoff", "Map Rating System", "Corrode Rework", "Map Rotation", "Anti-Cheat"],
+        "buffs": [
+            {
+                "subject": "Map Rating System",
+                "detail": "Introduced dynamic 0 to 500 proficiency rating and C-to-S letter grades evaluating individual win rates, ATK/DEF splits, and performance scores across Competitive and Premier modes."
+            },
+            {
+                "subject": "Performance Score Tuning",
+                "detail": "Recalibrated auxiliary and support role scoring impacts on damage, first-contact trades, and adjusted deaths to prevent rank progression skew."
+            },
+            {
+                "subject": "Killjoy Alarmbot",
+                "detail": "Resolved projectile destruction VFX and audio occlusion feedback when destroyed by moving door mechanisms."
+            }
+        ],
+        "nerfs": [
+            {
+                "subject": "Corrode A-Site Post-Plant",
+                "detail": "Reworked A-Site plant zone geometry, raised Lower Mid wall, and shifted A-Link approach path to reduce oppressive attacker post-plant control."
+            }
+        ],
+        "updates": [
+            "Competitive Map Pool Rotation: Corrode (Reworked) and Bind added to active pool; Ascent and Split rotated out.",
+            "Refreshed Queue and Match Mode selection interface alongside revamped Career navigation for legacy badges and accolades.",
+            "Published Act 5 Anti-Cheat & Penalties Transparency Report detailing 171,000+ banned cheaters, 54,000 botters, and 76,000 rank manipulators penalized."
+        ]
+    },
     {
         "slug": "patch-1307",
         "version": "13.07",
@@ -3255,6 +3392,22 @@ export const valorantDb = {
     }
   ],
   leaks: [
+    {
+        "slug": "agent-31-hush",
+        "codename": "HUSH",
+        "category": "AGENT",
+        "discoveredDate": "2026-09-28",
+        "details": "Chinese female Duelist codenamed 'Hush' showcased during VCT Champions grand finals. Features a telekinesis passive (picking up weapons & Spike from range), an aerial levitation anchor, throwable nearsighting mist cannon, and secondary signature ability mimicry from allies.",
+        "credibility": "HIGH"
+    },
+    {
+        "slug": "custom-game-replay-system",
+        "codename": "REPLAY_V2",
+        "category": "MAP",
+        "discoveredDate": "2026-08-15",
+        "details": "Engine telemetry hooks confirmed expanded custom match spectator timeline scrubbing, party leader replay sharing, and client-side crosshair perspective rendering.",
+        "credibility": "HIGH"
+    },
     {
         "slug": "agent-26-claw",
         "codename": "CLAW",

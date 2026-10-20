@@ -20,7 +20,7 @@
     ],
     "content": "Starting your VALORANT journey can feel overwhelming with dozens of abilities, smokes, and line-ups. For new players, picking agents with simple, transparent utility allows you to focus on fundamental crosshair placement, movement, and game sense.\n\n### 1. Brimstone (Controller)\nBrimstone's Sky Smokes use an intuitive top-down tablet interface. Unlike Omen or Astra, you don't need complex camera manipulation. Drop 3 smokes across site entrances, place a Stim Beacon to boost your team's fire rate, and hold your crosshair at head level.\n\n### 2. Phoenix (Duelist)\nPhoenix is self-sufficient. His Hot Hands and Blaze wall heal him, his flashes are simple corner curves, and his ultimate (Run It Back) grants a risk-free extra life to scout bombsites.\n\n### 3. Killjoy (Sentinel)\nKilljoy lets your automated utility watch your back. Place an Alarmbot and Turret at chokepoints—when they fire or sound alarms, you instantly know where the enemy is without having to facecheck.\n\n### 4. Reyna (Duelist)\nIf you have FPS background and want pure gun duels, Reyna's kit rewards fragging. Dismiss lets you reposition safely after kills, and Devour restores 100 HP.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "best-agents-for-solo-queue",
@@ -42,7 +42,7 @@
     ],
     "content": "Solo queue ranked in VALORANT is notorious for inconsistent comms and uncoordinated teammates. To climb consistently from Silver to Immortal, you need agents who don't rely on teammates to execute.\n\n### 1. Omen (Controller)\nOmen is the undisputed solo queue king. His rechargeable Dark Cover smokes ensure your team always has vision denial, Paranoia is a massive teamfight blind through walls, and Shrouded Step lets you outplay enemies in 1vX clutches.\n\n### 2. Clove (Controller / Duelist Hybrid)\nClove solves the biggest problem in solo queue: aggressive controllers who die early. Clove can drop smokes even after death, self-buff movement speed, and self-resurrect with Not Dead Yet.\n\n### 3. Jett (Duelist)\nJett's Tailwind dash allows you to take aggressive first-blood angles with an Operator or Vandal and reset safely without trading out.\n\n### 4. Cypher (Sentinel)\nIn solo queue where teammates rarely watch flanks, Cypher's Trapwires and Spycam lock down entire halves of the map, preventing enemy rotations.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "best-agents-for-ascent",
@@ -64,7 +64,7 @@
     ],
     "content": "Ascent is defined by thin paper-thin walls, wide mid courtyard sightlines, and closing mechanical doors.\n\n### The S-Tier Ascent Comp (88/100 Synergy)\n* **Jett (Duelist):** Operator dominance on Mid and Dash entries over smokes onto A Site and B Site.\n* **Sova (Initiator):** Recon Bolt scans entire bombsites through open skyboxes; Shock Darts clear B Main and Mid cubby.\n* **Omen (Controller):** One-way smokes on A Main and B Main, plus Mid Pizza vision blocks.\n* **Killjoy (Sentinel):** Lockdown covers the entirety of B Site for uncounterable retakes and attacker executes.\n* **KAY/O (Flex Initiator):** ZERO/POINT suppresses Killjoy utility and Jett dashes through mid.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "how-to-counter-jett",
@@ -85,7 +85,7 @@
     ],
     "content": "Jett remains the most picked Duelist across VCT and competitive ranked due to her instant escape dash and Operator synergy.\n\n### 1. Flash and Suppress (KAY/O & Breach)\nNever dry-peek an angle where Jett is suspected of holding with an Operator. Use KAY/O's knife (ZERO/POINT) to suppress her dash. A suppressed Jett cannot escape and is forced into a standard rifle trade.\n\n### 2. Trapwire Placement (Cypher)\nPosition Cypher Trapwires at non-standard ankle-height levels at site choke points. When Jett dashes into site, she gets tagged, revealed, and stunned, making her an easy kill.\n\n### 3. Bait the Dash Timer\nJett's Tailwind has a 12-second activation window once primed. Use utility (drones, prowlers, jump-peeks) to force her to activate Tailwind, then wait 12 seconds before executing.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "vandal-vs-phantom",
@@ -105,7 +105,7 @@
     ],
     "content": "The eternal debate in VALORANT: $2,900 Vandal vs $2,900 Phantom.\n\n### 1. Damage Falloff\n* **Vandal:** 160 Head / 40 Body / 34 Leg at ALL ranges (0-50m). One-tap headshot kill through heavy armor at any distance.\n* **Phantom:**\n  * 0-15m: 156 Head (1-shot kill)\n  * 15-30m: 140 Head (leaves enemy with 10 HP through heavy shields!)\n  * 30-50m: 124 Head\n\n### 2. Phantom's Hidden Advantages\n* Faster fire rate (11 rds/s vs 9.75 rds/s)\n* Silencer: No bullet tracers through smoke (enemies cannot spam back accurately)\n* Larger magazine (30 rounds vs 25 rounds)\n* Quicker first-bullet recovery and tighter spray\n\n### When to Pick Which:\n* Pick **Vandal** for long-range maps (Breeze, Icebox, Ascent A Long).\n* Pick **Phantom** for Controller agents spamming smokes (Omen, Viper, Brimstone) and close-quarters maps (Split, Bind, Sunset).",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "best-sensitivity-for-valorant",
@@ -120,7 +120,7 @@
     ],
     "content": "High sensitivity in tactical shooters causes micro-inaccuracies. In VALORANT, precision headshots require calibrated eDPI (Effective DPI = In-game Sens × Mouse DPI).\n\n### The Pro Meta Standard (200 – 300 eDPI)\n* Over **75% of VCT Pro players** play between 200 and 300 eDPI (e.g. 0.25 to 0.35 at 800 DPI).\n* **Average cm/360°:** ~45 cm to 55 cm per full 360-degree rotation.\n\n### How to Find Your Sweet Spot\n1. Set mouse DPI to 800 or 1600.\n2. Start at in-game sens **0.30 at 800 DPI** (240 eDPI).\n3. Go to The Range on Medium bots. If you are constantly overshooting the head, lower by 0.02. If you are undershooting, raise by 0.02.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "how-valorant-economy-works",
@@ -135,7 +135,7 @@
     ],
     "content": "Credits win games. A team with superior economy will consistently fight with Vandal + Heavy Armor against inferior SMGs.\n\n### Core Rules\n* **Win Reward:** +3,000 credits\n* **Loss Reward:** +1,900 (Base) -> +2,400 (Loss 2) -> +2,900 (Loss 3+)\n* **Kill Reward:** +200 credits\n* **Spike Plant:** +300 credits to the whole team\n\n### Golden Rule of Buying\nLook at the 'Minimum Next Round' number on your buy menu. If saving this round keeps your minimum next round above **3,900 credits**, you are guaranteed a full Vandal + Heavy Shield buy next round.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "best-crosshair-settings",
@@ -150,7 +150,7 @@
     ],
     "content": "A good crosshair offers high contrast against backgrounds (Cyan or Green) without obstructing head targets.\n\n### Top Pro Crosshair Codes\n* **TenZ Classic Dot/Inner:** `0;s;1;P;c;5;h;0;m;1;0t;1;0l;2;0o;2;0a;1`\n* **Demon1 Small Plus:** `0;s;1;P;c;1;o;1;d;1;0b;0;1b;0`\n* **Aspas Tight 1-4-2-2:** `0;P;c;5;o;1;d;1;z;1;f;0;0t;1;0l;1;0o;1;0a;1`",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "how-to-rank-up-from-gold",
@@ -166,7 +166,7 @@
     ],
     "content": "Gold players usually understand the basics, but suffer from poor gunfight hygiene and uncoordinated trading.\n\n### The 5 Levers to Reach Diamond\n1. **Stop Crouching on Every Duel:** In Gold, spraying and crouching places your head right into enemy crosshairs. Burst 2-3 bullets, strafe, and burst again.\n2. **Isolate 1v1s:** Never take open-angle 1v2 fights. Slice the angle so only one enemy can see you at any time.\n3. **Trading Kills:** Always position within 2 seconds of your entry Duelist. If your teammate dies, swing immediately to trade the kill.\n4. **Play the Spike Timer:** Attackers win when the bomb explodes. Don't hunt the last defender off the site.\n5. **Main 2 Agents Max:** Master all lineups and nuances of two agents rather than filling randomly.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "best-agents-for-low-elo",
@@ -187,7 +187,7 @@
     ],
     "content": "In Iron, Bronze, and Silver, players rarely check corners, constantly push through smokes, and ignore flank audio.\n\n### 1. Reyna\nLow elo players struggle to hit headshots. Reyna's Devour lets you heal to full health after every kill, allowing you to easily win 1v3 rounds.\n\n### 2. Killjoy\nLow elo players rush onto site without destroying utility. Killjoy's Nanoswarms and Turret will easily score multi-kills without you risking your life.\n\n### 3. Brimstone\nDrop three orbital smokes with your tablet and use Incendiary to deny defuses completely from safe cover.",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)"
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)"
   },
   {
     "slug": "how-to-play-abyss-map-guide",
@@ -197,7 +197,7 @@
     "summary": "Master Abyss with environmental hazard strategies, jump mechanics, B Danger hold setups, and the highest win-rate agent picks.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedAgents": [
       "Omen",
@@ -219,7 +219,7 @@
     "summary": "Maximize your carry potential on Clove with post-death smoke placements, Pick-Me-Up overheal trading, and Not Dead Yet resurrection resets.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedAgents": [
       "Clove",
@@ -239,7 +239,7 @@
     "summary": "Lock down bombsites with Vyse using concealed Arc Rose blinds, isolation Shear walls, and weapon-disabling Steel Garden ultimates.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedAgents": [
       "Vyse",
@@ -259,7 +259,7 @@
     "summary": "Dominate duels with Iso's reactive bullet shield, bulletproof Contingency wall entries, and guaranteed 1v1 Kill Contract arena engagements.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedAgents": [
       "Iso",
@@ -279,7 +279,7 @@
     "summary": "Master the $2,400 Outlaw double-barrel sniper: 140 body-shot mechanics, fast double-tap followups, and how to punish light armor buys.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedWeapons": [
       "outlaw",
@@ -299,7 +299,7 @@
     "summary": "Learn professional movement fundamentals: frame-perfect counter-strafing, silent jump peeks, dead-zone firing, and wide-swing mechanics.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedTools": [
       "/tools/sensitivity"
@@ -314,7 +314,7 @@
     "summary": "Upgrade your aim consistency by mastering head-level geometry, common map line references, and angle-slicing protocols.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedTools": [
       "/tools/crosshair",
@@ -330,7 +330,7 @@
     "summary": "Dominate Sunset with optimal team compositions, aggressive Mid Courtyard control, B Main anti-rush setups, and A Elbow holds.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedAgents": [
       "Cypher",
@@ -352,7 +352,7 @@
     "summary": "Win more rounds on Lotus with revolving door timing tricks, A Tree control protocols, and fast C Site attacker executes.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedAgents": [
       "Omen",
@@ -374,7 +374,7 @@
     "summary": "Win disadvantaged clutch rounds consistently by isolating 1v1 gunfights, manipulating sound cues, and mastering spike tap timings.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedTools": [
       "/economy"
@@ -389,7 +389,7 @@
     "summary": "The definitive weapon tier list ranking all 19 firearms by cost efficiency, time-to-kill, and competitive viability in the current meta.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedWeapons": [
       "vandal",
@@ -412,7 +412,7 @@
     "summary": "The ultimate ranking of the best Vandal skins based on firing audio satisfaction, crisp recoil animations, and iconic finisher VFX.",
     "author": "Godrikt",
     "authorRole": "Lead Tactical Analyst & Radiant Competitor",
-    "reviewedBy": "VloPedia Strategy Board (Patch 13.06 Verified)",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
     "publishedAt": "October 2026",
     "relatedWeapons": [
       "vandal"
@@ -421,5 +421,51 @@
       "/skins/vandal"
     ],
     "content": "While cosmetic skins provide no mathematical advantage, sound design and visual feedback significantly influence aim rhythm and mental confidence.\n\n### 1. Prime Vandal (The All-Time Classic)\nReleased in Episode 1, Prime remains the gold standard. Its laser firing audio has an ultra-crisp cutoff that makes single-tap pacing effortless, accompanied by the iconic reload animation.\n\n### 2. Kuronami Vandal (S-Tier Finisher & VFX)\nThe Kuronami Vandal combines traditional shinobi blade aesthetics with water-manipulation magic. Its weather-altering storm finisher and clean metallic audio make it one of the most sought-after skins in VALORANT history.\n\n### 3. Araxys Vandal (Transforming Sci-Fi Armor)\nAraxys features dynamic alien armor plates that open and close in real-time as you fire. The heavy, resonant firing sound creates a feeling of overwhelming stopping power.\n\n### 4. Reaver Vandal (Dark Necromancy Favorite)\nThe Reaver Vandal is renowned for its dark bell chime on kill confirmations and satisfying reload pull. It remains a staple across both casual and VCT professional lobbies.\n\n### 5. Prelude to Chaos Vandal (Heavy Metal Saturation)\nFeaturing a spinning dark-matter core and electric guitar chord accents on kills, Prelude to Chaos provides unmatched auditory feedback for aggressive duelists."
+  },
+  {
+    "slug": "corrode-rework-map-guide",
+    "title": "Patch 13.08 Corrode Map Guide: Mid Control, A-Link Rotations & Retakes",
+    "category": "Map Strategy",
+    "readTime": "8 min read",
+    "summary": "Master the newly reworked Corrode layout in Act 6: updated Lower Mid wall geometry, faster defender rotations, and adjusted A-Site plant zones.",
+    "author": "Godrikt",
+    "authorRole": "Lead Tactical Analyst & Radiant Competitor",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
+    "publishedAt": "October 2026",
+    "relatedAgents": [
+      "Omen",
+      "Killjoy",
+      "Sova",
+      "Jett",
+      "Cypher"
+    ],
+    "relatedTools": [
+      "/maps/corrode",
+      "/comp-builder"
+    ],
+    "content": "With Patch 13.08 and Act 6, Riot brought Corrode back into the active competitive pool accompanied by substantial layout adjustments designed to reduce oppressive attacker post-plants and give defenders faster cross-map rotations.\n\n### 1. The Lower Mid Wall Rework\nThe Lower Mid barrier has been raised significantly. Previously, attackers could hop onto boxes and establish uncontested sightlines into defender spawn rotations. The heightened barrier forces deliberate utility investment (like flash or dash) to contest Mid territory, allowing defenders to cross safely between A and B Links.\n\n### 2. A-Link Reconfiguration\nThe half-wall heading toward A-Link has been repositioned. Attackers can no longer be spotted immediately from Top-Mid when maneuvering toward A-Link, unlocking dynamic split-site attacks.\n\n### 3. A-Site Post-Plant Calibration\nA-Site's plant boundaries were restructured to eliminate safe, deep chokepoint spam from A-Link. Defenders now have wider retake angles with more natural cover props, leveling the playing field during 3v3 and 2v2 retake scenarios.\n\n### 4. Optimal Agent Composition for Corrode\n* **Controller (Omen):** High-elevation Paranoia and Dark Cover smokes perfectly block the newly opened Mid sightlines.\n* **Sentinel (Killjoy / Cypher):** Alarmbots and Trapwires secure the modified defender rotation tunnels.\n* **Initiator (Sova):** Recon darts reveal attackers pushing through the modified A-Link corridor."
+  },
+  {
+    "slug": "act-6-map-rating-system",
+    "title": "How VALORANT's Map Rating System Works: S-Tier Grades & Performance Score",
+    "category": "Ranked",
+    "readTime": "7 min read",
+    "summary": "A complete competitive breakdown of the new 0 to 500 Map Rating scale, letter grades (C to S), and Performance Score 2.0 calibration.",
+    "author": "Godrikt",
+    "authorRole": "Lead Tactical Analyst & Radiant Competitor",
+    "reviewedBy": "VloPedia Strategy Board (Patch 13.08 Verified)",
+    "publishedAt": "October 2026",
+    "relatedAgents": [
+      "Jett",
+      "Omen",
+      "Killjoy",
+      "Clove",
+      "Sova"
+    ],
+    "relatedTools": [
+      "/tiers",
+      "/tier-list"
+    ],
+    "content": "Introduced in Patch 13.08 for Act 6, the Map Rating System gives players transparent feedback on their map proficiency across Competitive and Premier queues.\n\n### 1. The 0 to 500 Rating Scale\nEvery player begins each competitive act with a baseline rating. The system continuously calculates your rating per map based on four core pillars:\n* **Overall Match Win Rate (40% weight):** Consistently converting rounds into match wins is the heaviest contributing factor.\n* **Attacker Win Rate (20% weight):** Measures how effectively your team converts offensive rounds on typically defender-sided maps.\n* **Defender Win Rate (20% weight):** Evaluates site anchoring and retake execution frequency.\n* **Performance Score 2.0 (20% weight):** Evaluates round-by-round combat impact, including damage dealt, trade efficiency, and first-contact engagements.\n\n### 2. Letter Grades (C to S-Tier)\n* **S-Tier (420–500 pts):** Exceptional win rate (>65%) and high combat impact. Indicates a comfort-pick map.\n* **A-Tier (340–419 pts):** Solid positive win rate (>53%) with consistent round utility contribution.\n* **B-Tier (260–339 pts):** Average 50% split. Good foundational play but occasional macro mistakes.\n* **C-Tier (Below 260 pts):** Negative win rate (<45%). Signals a need to review lineups, agent comfort, and default execute paths.\n\n### 3. Performance Score 2.0 Adjustments\nPatch 13.08 recalibrated how support and auxiliary agents gain performance points. First Bloods and raw damage impact now carry higher weight than raw kill count, ensuring controllers who deal heavy chip damage or sentinels who stall plants earn appropriate performance rating recognition."
   }
 ]

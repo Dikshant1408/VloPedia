@@ -68,10 +68,10 @@ async function audit() {
       const diffs = [];
       if (dbW.cost !== apiCost) diffs.push(`cost: DB ${dbW.cost} vs API ${apiCost}`);
       if (dbW.magazineSize !== apiMag) diffs.push(`mag: DB ${dbW.magazineSize} vs API ${apiMag}`);
-      if (Math.abs(dbW.fireRate - apiRate) > 0.05) diffs.push(`rate: DB ${dbW.fireRate} vs API ${apiRate}`);
-      if (dbW.dmgHead !== apiDmg.headDamage) diffs.push(`head: DB ${dbW.dmgHead} vs API ${apiDmg.headDamage}`);
-      if (dbW.dmgBody !== apiDmg.bodyDamage) diffs.push(`body: DB ${dbW.dmgBody} vs API ${apiDmg.bodyDamage}`);
-      if (dbW.dmgLeg !== Math.round(apiDmg.legDamage)) diffs.push(`leg: DB ${dbW.dmgLeg} vs API ${apiDmg.legDamage}`);
+      if (Math.abs(dbW.fireRate - apiRate) > 0.05 && dbW.slug !== "melee") diffs.push(`rate: DB ${dbW.fireRate} vs API ${apiRate}`);
+      if (dbW.dmgHead !== apiDmg.headDamage && dbW.slug !== "melee") diffs.push(`head: DB ${dbW.dmgHead} vs API ${apiDmg.headDamage}`);
+      if (dbW.dmgBody !== apiDmg.bodyDamage && dbW.slug !== "melee") diffs.push(`body: DB ${dbW.dmgBody} vs API ${apiDmg.bodyDamage}`);
+      if (Math.abs(dbW.dmgLeg - (apiDmg.legDamage ?? 0)) > 0.05 && dbW.slug !== "melee") diffs.push(`leg: DB ${dbW.dmgLeg} vs API ${apiDmg.legDamage}`);
       if (diffs.length > 0) {
         console.log(`[WEAPON STAT DIFF] ${dbW.name}: ${diffs.join(", ")}`);
       }

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-const COMPETITIVE_ROTATION = new Set(["abyss", "bind", "corrode", "haven", "lotus", "split", "summit"]);
+const COMPETITIVE_ROTATION = new Set(["abyss", "bind", "corrode", "haven", "lotus", "summit", "sunset"]);
 const TDM_MAPS = new Set(["district", "kasbah", "drift", "glitch", "piazza"]);
 
 async function fetchMaps(): Promise<MapData[]> {

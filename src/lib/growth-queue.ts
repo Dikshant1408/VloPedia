@@ -61,15 +61,15 @@ export class GrowthQueueEngine {
     const generatedTasks: GrowthTask[] = [];
 
     // 1. Ingest Patch Impact Tasks
-    const patchResult = PatchImpactEngine.evaluateImpact("weapon:vandal", "13.06");
+    const patchResult = PatchImpactEngine.evaluateImpact("weapon:vandal", "13.08");
     if (patchResult.reviewStatus !== "FRESH") {
       generatedTasks.push({
-        id: "gt-patch-vandal-1306",
+        id: "gt-patch-vandal-1308",
         source: "PATCH_IMPACT",
         priority: "CRITICAL",
         status: "PENDING",
-        title: "Update 17 Dependent Pages for Vandal Patch 13.06",
-        detail: "Vandal first-bullet accuracy or damage falloff adjusted in Patch 13.06. Dependent weapon comparison guides, skin hubs, and tier lists require immediate review.",
+        title: "Update 17 Dependent Pages for Vandal Patch 13.08",
+        detail: "Vandal weapon balance verified under Patch 13.08. Dependent weapon comparison guides, skin hubs, and tier lists require immediate review.",
         targetUrl: "/weapons/vandal",
         affectedEntityId: "weapon:vandal",
         estimatedImpressionImpact: 450,
@@ -77,9 +77,9 @@ export class GrowthQueueEngine {
           "Audit ballistic damage table in /weapons/vandal",
           "Update /compare/weapons/vandal-vs-phantom recoil dispersion notes",
           "Refresh weapon tier badge in /skins/vandal hub",
-          "Verify and bump lastReviewed timestamp to Patch 13.06"
+          "Verify and bump lastReviewed timestamp to Patch 13.08"
         ],
-        createdAt: "2026-10-01"
+        createdAt: "2026-10-19"
       });
     }
 

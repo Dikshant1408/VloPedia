@@ -26,7 +26,7 @@ export default function PrivacyPage() {
               PRIVACY POLICY
             </h1>
             <p className="mt-2 font-mono text-xs text-muted">
-              LAST UPDATE: AUGUST 2026 // VERSION 1.0
+              LAST UPDATE: OCTOBER 2026 // VERSION 1.1
             </p>
           </Container>
         </div>

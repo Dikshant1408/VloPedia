@@ -308,7 +308,16 @@ export function GlobalSearchDialog() {
       badge: a.canonStatus,
     }));
 
-    return [...STATIC_TOOLS, ...STATIC_COMPARES, ...STATIC_GUIDES, ...loreItems, ...liveItems, ...patchItems];
+    const leakItems: SearchItem[] = valorantDb.leaks.map(l => ({
+      id: `leak-${l.slug}`,
+      category: "Lore",
+      title: `${l.codename} (Upcoming ${l.category})`,
+      subtitle: `${l.credibility} CREDIBILITY · ${l.details.slice(0, 75)}...`,
+      href: `/leaks/${l.slug}`,
+      badge: `${l.credibility} LEAK`,
+    }));
+
+    return [...STATIC_TOOLS, ...STATIC_COMPARES, ...STATIC_GUIDES, ...loreItems, ...leakItems, ...liveItems, ...patchItems];
   }, [liveItems]);
 
   // Computed results: Recent + Context + Go-To + Actions when query is empty, else filtered results
