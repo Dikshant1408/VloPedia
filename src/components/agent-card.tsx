@@ -3,7 +3,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { ValorantAgent } from "@/lib/valorant-types";
 import { RoleBadge } from "./role-badge";
-
 import { slugify } from "@/lib/utils";
 
 interface AgentCardProps {
@@ -15,22 +14,24 @@ interface AgentCardProps {
 /**
  * V2 Agent card — portrait-dominant, 4:5 aspect ratio.
  * Framer Motion `layout` prop enables animated reorder on role filter.
- * Does NOT use EntityCard.
+ * Supports live playable agents as well as upcoming teaser/leak dossiers.
  */
 export function AgentCard({ agent, featured = false }: AgentCardProps) {
-  const slug = slugify(agent.displayName);
+  const isUpcoming = agent.displayName.toUpperCase() === "HUSH" || !agent.isPlayableCharacter;
+  const slug = isUpcoming ? "agent-31-hush" : slugify(agent.displayName);
+  const targetHref = isUpcoming ? "/leaks/agent-31-hush" : `/agents/${slug}`;
   const portrait = agent.fullPortrait || agent.bustPortrait || agent.displayIcon;
 
   return (
     <motion.div layout className={featured ? "col-span-2" : ""}>
       <Link
-        href={`/agents/${slug}`}
+        href={targetHref}
         className="group relative block overflow-hidden border border-border bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg clip-diagonal"
         style={{ aspectRatio: "4/5" }}
       >
         {/* Top-right tactical index marker */}
         <div className="absolute top-2 right-4 z-10 font-mono text-[9px] text-muted tracking-widest uppercase opacity-70 group-hover:text-primary group-hover:opacity-100 transition-colors">
-          OP // {agent.displayName.slice(0, 3).toUpperCase()}
+          {isUpcoming ? "LEAK // HUSH" : `OP // ${agent.displayName.slice(0, 3).toUpperCase()}`}
         </div>
 
         {/* Background gradient from agent colors */}
@@ -66,9 +67,15 @@ export function AgentCard({ agent, featured = false }: AgentCardProps) {
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <div className="flex items-center justify-between mb-1.5">
             <RoleBadge role={agent.role?.displayName ?? "Unknown"} size="sm" />
-            <span className="font-mono text-[9px] uppercase tracking-wider text-muted group-hover:text-[#0DF2F2] transition-colors">
-              Verified
-            </span>
+            {isUpcoming ? (
+              <span className="font-mono text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 border border-amber-500/50 bg-amber-500/15 text-amber-300">
+                UPCOMING // LEAK
+              </span>
+            ) : (
+              <span className="font-mono text-[9px] uppercase tracking-wider text-muted group-hover:text-[#0DF2F2] transition-colors">
+                Verified
+              </span>
+            )}
           </div>
           <h3 className="font-display font-black text-2xl uppercase tracking-wide text-white group-hover:text-primary transition-colors">
             {agent.displayName}
@@ -76,7 +83,7 @@ export function AgentCard({ agent, featured = false }: AgentCardProps) {
         </div>
 
         {/* Primary accent line on hover */}
-        <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-primary transition-all duration-300 group-hover:w-full" />
+        <div className={`absolute bottom-0 left-0 h-[2px] w-0 ${isUpcoming ? "bg-amber-400" : "bg-primary"} transition-all duration-300 group-hover:w-full`} />
       </Link>
     </motion.div>
   );

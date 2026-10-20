@@ -82,6 +82,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "https://valorant-api.com/v1/agents?isPlayableCharacter=true",
     a => slugify(a.displayName)
   );
+  if (!agentSlugs.includes("hush")) {
+    agentSlugs.push("hush");
+  }
   const agentRoutes: MetadataRoute.Sitemap = agentSlugs.map(slug => ({
     url:             `${base}/agents/${slug}`,
     lastModified:    now,

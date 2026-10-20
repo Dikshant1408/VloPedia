@@ -50,7 +50,7 @@ export function AgentsClient({ initialAgents }: AgentsClientProps) {
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 bg-[#0DF2F2]" aria-hidden="true" />
               <span className="font-mono text-xs text-[#0DF2F2] tracking-[0.25em] uppercase font-bold">
-                PROTOCOL OPERATIVE DIRECTORY // 29 PLAYABLE AGENTS
+                PROTOCOL OPERATIVE DIRECTORY // {initialAgents.length} OPERATIVES (INCL. UPCOMING HUSH)
               </span>
             </div>
             <h1 className="font-display font-black text-6xl uppercase tracking-tighter text-foreground sm:text-7xl lg:text-8xl flex items-center gap-4">
