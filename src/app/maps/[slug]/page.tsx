@@ -293,19 +293,35 @@ export default async function MapDetailPage({ params }: Props) {
                           TACTICAL 3D SANDTABLE // RADAR PROJECTION
                         </span>
                       </div>
-                      <TacticalMapViewer
-                        mapName={map.displayName}
-                        minimapUrl={map.displayIcon?.startsWith("https://media.valorant-api.com/maps/") ? undefined : map.displayIcon}
-                        fallbackSplashUrl={map.splash}
-                        callouts={map.callouts}
-                        xMultiplier={map.xMultiplier}
-                        yMultiplier={map.yMultiplier}
-                        xScalarToAdd={map.xScalarToAdd}
-                        yScalarToAdd={map.yScalarToAdd}
-                        coordinates={map.coordinates}
-                        aspectRatio="16/10"
-                        className="w-full shadow-xl"
-                      />
+                      {map.displayIcon?.startsWith("https://media.valorant-api.com/maps/") ? (
+                        <div className="flex items-center justify-center min-h-[300px] bg-surface-card border border-border rounded-lg p-6 text-center">
+                          <div className="flex flex-col items-center justify-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                              <Compass className="w-6 h-6 text-primary" />
+                            </div>
+                            <p className="font-mono text-xs text-muted font-bold uppercase tracking-wider">
+                              3D Sandtable Unavailable — Map Texture Unreachable
+                            </p>
+                            <p className="text-[9px] text-muted/60 leading-relaxed">
+                              The tactical sandtable texture for this map could not be loaded from the Valorant API. Use the Sector Media Archive below for visual reference.
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <TacticalMapViewer
+                          mapName={map.displayName}
+                          minimapUrl={map.displayIcon}
+                          fallbackSplashUrl={map.splash}
+                          callouts={map.callouts}
+                          xMultiplier={map.xMultiplier}
+                          yMultiplier={map.yMultiplier}
+                          xScalarToAdd={map.xScalarToAdd}
+                          yScalarToAdd={map.yScalarToAdd}
+                          coordinates={map.coordinates}
+                          aspectRatio="16/10"
+                          className="w-full shadow-xl"
+                        />
+                      )}
                     </div>
                   )}
 
