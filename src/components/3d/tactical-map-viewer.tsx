@@ -239,7 +239,7 @@ export function TacticalMapViewer({
         {hasWebGL && isVisible && (
           <TacticalMapStage
             ref={stageRef}
-            minimapUrl={minimapUrl}
+            minimapUrl={minimapUrl || "/images/map-ascent.webp"}
             callouts={processedCallouts}
             activeLayer={activeLayer}
             autoRotate={isAutoRotating}
