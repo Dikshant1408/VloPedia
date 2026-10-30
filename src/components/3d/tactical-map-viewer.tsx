@@ -345,7 +345,7 @@ export function TacticalMapViewer({
         <div className="relative w-full h-full" onDoubleClick={handleReset}>
           <TacticalMapStage
             ref={theaterStageRef}
-            minimapUrl={minimapUrl}
+            minimapUrl={minimapUrl || "/images/map-ascent.webp"}
             callouts={processedCallouts}
             activeLayer={activeLayer}
             autoRotate={isAutoRotating}
