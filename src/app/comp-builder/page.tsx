@@ -98,6 +98,7 @@ const AGENT_TRAITS: Record<string, {
   "Chamber":   { execution: 60, siteControl: 45, info: 70, postPlant: 40, defense: 86, flash: false, recon: true,  smoke: false, stall: true,  entry: false },
   "Sage":      { execution: 60, siteControl: 75, info: 20, postPlant: 72, defense: 90, flash: false, recon: false, smoke: false, stall: true,  entry: false },
   "Vyse":      { execution: 70, siteControl: 86, info: 50, postPlant: 82, defense: 96, flash: true,  recon: false, smoke: false, stall: true,  entry: false },
+  "Hush":     { execution: 82, siteControl: 65, info: 70, postPlant: 75, defense: 78, flash: true,  recon: false, smoke: false, stall: true,  entry: true },
   "Veto":      { execution: 65, siteControl: 88, info: 60, postPlant: 84, defense: 96, flash: false, recon: false, smoke: false, stall: true,  entry: false },
 };
 
@@ -508,7 +509,7 @@ function CompBuilderInner() {
 
               <div className="mt-6 border-t border-[rgba(236,232,225,0.08)] pt-4 font-mono text-[10px] text-muted flex items-center justify-between">
                 <span>Map-weighted meta engine</span>
-                <span className="text-[#0DF2F2]">Patch 13.06 active</span>
+                <span className="text-[#0DF2F2]">Patch 13.09 active</span>
               </div>
             </div>
           </div>

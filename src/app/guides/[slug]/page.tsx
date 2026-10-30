@@ -266,7 +266,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
                     <div className="mt-4 pt-4 border-t border-[rgba(236,232,225,0.06)] flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] text-muted">
                       <div className="flex items-center gap-2">
                         <ShieldCheck className="h-4 w-4 text-primary" />
-                        <span>Reviewed By: <strong className="text-white">{guide.reviewedBy || "VloPedia Strategy Board (Patch 13.06 Verified)"}</strong></span>
+                        <span>Reviewed By: <strong className="text-white">{guide.reviewedBy || "VloPedia Strategy Board (Patch 13.09 Verified)"}</strong></span>
                       </div>
                       <Link href="/about" className="text-primary hover:underline">
                         About Our Editorial Standards →

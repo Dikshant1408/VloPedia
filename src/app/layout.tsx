@@ -152,7 +152,7 @@ export default async function RootLayout({
         />
         <Script
           id="google-adsense"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5851997796287592"
           crossOrigin="anonymous"
         />

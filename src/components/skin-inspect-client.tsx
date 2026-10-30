@@ -95,9 +95,9 @@ export function SkinInspectClient({ skin }: Props) {
                   {skin.weaponSlug ? skin.weaponSlug.toUpperCase() : "WEAPON"}
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-black text-foreground font-display tracking-tight uppercase">
+              <h2 className="text-3xl sm:text-4xl font-black text-foreground font-display tracking-tight uppercase">
                 {skin.name}
-              </h1>
+              </h2>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
                 <Badge className="border-primary/30 bg-primary/10 text-primary font-bold clip-diagonal-sm">
                   {skin.rarity}

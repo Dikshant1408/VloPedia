@@ -1805,6 +1805,70 @@ export const valorantDb = {
                 "icon": "https://media.valorant-api.com/agents/efba5359-4016-a1e5-7626-b1ae76895940/abilities/ultimate/displayicon.png"
             }
         ]
+    },
+    {
+        "slug": "hush",
+        "name": "HUSH",
+        "role": "DUELIST",
+        "origin": "China",
+        "bio": "Chinese operative Hush uses her telekinesis to close the most classified cases. Fighting with precision and finesse, she redirects her combat utility in midair to disrupt and displace the enemy team before suspending them helplessly for the killing blow.",
+        "portrait": "https://media.valorant-api.com/agents/ddd5a15c-4fbe-42fa-3789-11a55ca5ee04/fullportrait.png",
+        "bestMaps": [
+            "ascent",
+            "bind",
+            "haven"
+        ],
+        "counters": [
+            "Jett",
+            "Omen"
+        ],
+        "voiceLines": [
+            {
+                "context": "Match Start",
+                "text": "Hush online. Let's get to work."
+            },
+            {
+                "context": "Ultimate Ready",
+                "text": "Ultimate is ready!"
+            }
+        ],
+        "abilities": [
+            {
+                "key": "Q",
+                "name": "FLASHBULB",
+                "type": "Basic Utility",
+                "description": "EQUIP Flashbulb. FIRE to throw. ALT FIRE to prepare it instead. REACTIVATE to direct it towards your crosshair. Explodes on any surface or after a delay, flashing all players looking at it.",
+                "icon": "https://media.valorant-api.com/agents/ddd5a15c-4fbe-42fa-3789-11a55ca5ee04/abilities/ability1/displayicon.png"
+            },
+            {
+                "key": "C",
+                "name": "DISPLACEMENT",
+                "type": "Basic Utility",
+                "description": "EQUIP Displacement. FIRE to throw. ALT FIRE to prepare it instead. REACTIVATE to direct it towards your crosshair. Explodes on any surface or after a delay, pulling all players towards the center and concussing them if they collide with any surface or another player. Resets every two kills.",
+                "icon": "https://media.valorant-api.com/agents/ddd5a15c-4fbe-42fa-3789-11a55ca5ee04/abilities/ability2/displayicon.png"
+            },
+            {
+                "key": "E",
+                "name": "FLOW",
+                "type": "Signature Utility",
+                "description": "INSTANTLY create an anchor. If Hush is in the air, briefly levitate in place. After a delay, propel towards it.",
+                "icon": "https://media.valorant-api.com/agents/ddd5a15c-4fbe-42fa-3789-11a55ca5ee04/abilities/grenade/displayicon.png"
+            },
+            {
+                "key": "X",
+                "name": "SUSPENSION",
+                "type": "Ultimate Ability",
+                "description": "INSTANTLY prepare Suspension. FIRE to send it forward, steering with your crosshair. REACTIVATE or press FIRE again to detonate, levitating all players.",
+                "icon": "https://media.valorant-api.com/agents/ddd5a15c-4fbe-42fa-3789-11a55ca5ee04/abilities/ultimate/displayicon.png"
+            },
+            {
+                "key": "Passive",
+                "name": "TELEKINESIS",
+                "type": "Passive Ability",
+                "description": "Hush can pick up weapons, the Spike, and INTERACT with switches from an increased range.",
+                "icon": "https://media.valorant-api.com/agents/ddd5a15c-4fbe-42fa-3789-11a55ca5ee04/abilities/passive/displayicon.png"
+            }
+        ]
     }
 ],
   weapons: [
@@ -2998,10 +3062,36 @@ export const valorantDb = {
                 "detail": "Balanced early round penetration rates."
             }
         ],
-        "updates": [
+"updates": [
             "Launched competitive matchmaking Act 4",
             "Added in-client Notification Inbox system",
             "Updated Omen Shrouded Step sound signature"
+        ]
+    },
+    {
+        "slug": "patch-1309",
+        "version": "13.09",
+        "date": "OCTOBER 28, 2026",
+        "title": "VALORANT Patch Notes 13.09",
+        "season": "Season 2026",
+        "act": "Act 5",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-09/",
+        "tags": ["HUSH Agent", "New Duelist", "Telekinesis System"],
+        "buffs": [
+            {
+                "subject": "HUSH Agent",
+                "detail": "Released brand new Chinese telekinesis Duelist agent HUSH."
+            },
+            {
+                "subject": "Duelist Class",
+                "detail": "Added new utility displacement mechanics across all duelists."
+            }
+        ],
+        "nerfs": [],
+        "updates": [
+            "Introduced HUSH to the armory with full telekinesis passive system",
+            "Added new Flashbulb and Displacement utility items",
+            "Updated competitive map pool for Act 5"
         ]
     },
     {
@@ -3391,14 +3481,14 @@ export const valorantDb = {
         ]
     }
   ],
-  leaks: [
+leaks: [
     {
         "slug": "agent-31-hush",
         "codename": "HUSH",
         "category": "AGENT",
         "discoveredDate": "2026-09-28",
-        "details": "Chinese female Duelist codenamed 'Hush' showcased during VCT Champions grand finals. Features a telekinesis passive (picking up weapons & Spike from range), an aerial levitation anchor, throwable nearsighting mist cannon, and secondary signature ability mimicry from allies.",
-        "credibility": "HIGH"
+        "details": "Chinese female Duelist codenamed 'Hush' showcased during VCT Champions grand finals. Features a telekinesis passive (picking up weapons & Spike from range), an aerial levitation anchor, throwable nearsighting mist cannon, and secondary signature ability mimicry from allies. OFFICIALLY RELEASED in Patch 13.09 (October 28, 2026).",
+        "credibility": "CONFIRMED"
     },
     {
         "slug": "custom-game-replay-system",

@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { getAgentKnowledgeNode } from "@/lib/knowledge-graph";
 
 const MAPS = ["Ascent", "Bind", "Haven", "Sunset", "Lotus", "Split", "Icebox", "Breeze", "Abyss", "Fracture"];
-const AGENTS = ["Jett", "Omen", "Sova", "Raze", "Cypher", "Killjoy", "Reyna", "Clove", "Viper", "Fade", "Gekko", "KAY/O", "Breach", "Neon", "Yoru", "Iso", "Vyse", "Sage"];
+const AGENTS = ["Jett", "Omen", "Sova", "Raze", "Cypher", "Killjoy", "Reyna", "Clove", "Viper", "Fade", "Gekko", "KAY/O", "Breach", "Neon", "Yoru", "Iso", "Vyse", "Sage", "Hush"];
 const SIDES = ["Attack", "Defense"] as const;
 
 const MAP_COMPS: Record<string, { comp: string[]; synergy: number; desc: string }> = {
@@ -29,6 +29,7 @@ const MAP_COMPS: Record<string, { comp: string[]; synergy: number; desc: string 
   Breeze: { comp: ["Jett", "Viper", "Sova", "Cypher", "KAY/O"], synergy: 95, desc: "Long-range Vandal/Operator duels with full-length Toxic Screen line splits." },
   Abyss: { comp: ["Jett", "Omen", "Sova", "Vyse", "Cypher"], synergy: 92, desc: "High verticality with mid chasm control and isolation traps." },
   Fracture: { comp: ["Raze", "Brimstone", "Breach", "Fade", "Killjoy"], synergy: 90, desc: "Pincer attacks from both spawns with rolling Breach fault lines." },
+  Corrode: { comp: ["Hush", "Omen", "Sova", "Vyse", "Cypher"], synergy: 91, desc: "Vertical map with telekinesis-assisted spike control and isolation traps." },
 };
 
 export interface CompletedMatchLog {

@@ -153,6 +153,66 @@ export default function AboutPage() {
               </div>
             </Reveal>
 
+            {/* Leadership & Editorial Team */}
+            <Reveal>
+              <div className="border border-border bg-[#0D1A22] p-8 space-y-6 cut-corner-br">
+                <div className="flex items-center gap-3 border-b border-border pb-4 mb-2">
+                  <Database className="h-5 w-5 text-primary" />
+                  <h2 className="font-display text-xl uppercase tracking-wide text-white">Editorial Board &amp; Leadership</h2>
+                </div>
+                <p className="text-xs leading-relaxed text-muted uppercase font-mono">
+                  {"// VERIFIED HUMAN EXPERTISE // COMPETITIVE INTEGRITY"}
+                </p>
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div className="border border-[rgba(236,232,225,0.06)] bg-black/40 p-5 space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center font-display font-bold text-primary">
+                        GD
+                      </div>
+                      <div>
+                        <h3 className="font-display text-base font-bold text-white uppercase tracking-wide">Godrikt</h3>
+                        <p className="text-xs font-mono text-primary">Founder &amp; Lead Tactical Analyst</p>
+                      </div>
+                    </div>
+                    <p className="text-xs leading-relaxed text-muted">
+                      Radiant-tier competitive player and software architect at AxrydeStudio. Godrikt leads VloPedia&apos;s data telemetry research, empirical practice-range recoil benchmarking, and competitive guide authoring.
+                    </p>
+                    <div className="pt-2 flex items-center gap-4 text-xs font-mono text-secondary">
+                      <a href="https://github.com/Godrikt" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                        GitHub Profile &rarr;
+                      </a>
+                      <a href="/contact" className="hover:text-primary transition-colors">
+                        Direct Inquiries &rarr;
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="border border-[rgba(236,232,225,0.06)] bg-black/40 p-5 space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#0DF2F2]/20 border border-[#0DF2F2]/40 flex items-center justify-center font-display font-bold text-[#0DF2F2]">
+                        AX
+                      </div>
+                      <div>
+                        <h3 className="font-display text-base font-bold text-white uppercase tracking-wide">AxrydeStudio Strategy Board</h3>
+                        <p className="text-xs font-mono text-[#0DF2F2]">VCT Telemetry &amp; Meta Review Desk</p>
+                      </div>
+                    </div>
+                    <p className="text-xs leading-relaxed text-muted">
+                      Our independent strategy collective analyzes competitive VCT international match VODs, Riot Games patch notes, and high-rank match telemetry to ensure all strategy guides reflect current patch meta rules.
+                    </p>
+                    <div className="pt-2 flex items-center gap-4 text-xs font-mono text-secondary">
+                      <a href="/methodology" className="hover:text-primary transition-colors">
+                        Review Methodology &rarr;
+                      </a>
+                      <a href="/changelog" className="hover:text-primary transition-colors">
+                        Patch Updates &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+
             {/* Disclaimer & Compliance */}
             <Reveal>
               <div className="border border-primary/20 bg-primary/5 p-6 flex gap-4 text-xs font-mono uppercase text-primary items-start">

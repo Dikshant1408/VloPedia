@@ -308,6 +308,15 @@ const AGENT_THEMES: Record<string, { callsign: string; quote: string; accentColo
     mobility: 68,
     info: 80,
   },
+  hush: {
+    callsign: "TELEKINETIC ASSASSIN",
+    quote: "Nothing escapes her focus.",
+    accentColor: "#F472B6",
+    glowColor: "rgba(244, 114, 182, 0.28)",
+    entry: 82,
+    mobility: 78,
+    info: 70,
+  },
 };
 
 function buildHeroAgents(): HeroAgent[] {

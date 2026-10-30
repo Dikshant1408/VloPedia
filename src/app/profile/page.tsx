@@ -37,7 +37,7 @@ const DEFAULT_PROFILE: MyValoProfile = {
   crosshairCode: "0;s;1;P;c;5;h;0;m;1;0l;4;0v;4;0g;1;0o;2;0a;1;0f;0;1b;0",
 };
 
-const AGENTS_LIST = ["Jett", "Omen", "Sova", "Raze", "Cypher", "Killjoy", "Reyna", "Clove", "Viper", "Fade", "Gekko", "KAY/O", "Breach", "Neon", "Yoru", "Iso", "Vyse"];
+const AGENTS_LIST = ["Jett", "Omen", "Sova", "Raze", "Cypher", "Killjoy", "Reyna", "Clove", "Viper", "Fade", "Gekko", "KAY/O", "Breach", "Neon", "Yoru", "Iso", "Vyse", "Hush"];
 const MAPS_LIST = ["Ascent", "Bind", "Haven", "Sunset", "Lotus", "Split", "Icebox", "Breeze", "Abyss", "Fracture"];
 const WEAPONS_LIST = ["Vandal", "Phantom", "Operator", "Sheriff", "Spectre", "Ghost", "Outlaw", "Guardian", "Odin"];
 
@@ -47,29 +47,29 @@ const VERIFIED_ENTITY_UPDATES: Record<string, { type: string; date: string; titl
     type: "BALANCE_VERIFIED",
     date: "Oct 1, 2026",
     title: "Jett Tailwind & Drift Calibrated",
-    desc: "Active competitive meta tier remains S-Tier under Patch 13.06. Tailwind dash and passive drift confirmed.",
-    patch: "13.06"
+    desc: "Active competitive meta tier remains S-Tier under Patch 13.09. Tailwind dash and passive drift confirmed.",
+    patch: "13.09"
   },
   "omen": {
     type: "STRATEGY_UPDATED",
     date: "Oct 1, 2026",
     title: "Omen Ascent & Haven One-Ways Verified",
     desc: "Rechargeable dark cover timing tested. Synergizes with Sova recon darts for A Main one-ways.",
-    patch: "13.06"
+    patch: "13.09"
   },
   "vandal": {
     type: "BALLISTICS_CONFIRMED",
     date: "Oct 1, 2026",
     title: "Vandal Zero-Dropoff Damage Confirmed",
     desc: "160 headshot lethality verified across 0-50m. Recoil reset time remains 0.375s.",
-    patch: "13.06"
+    patch: "13.09"
   },
   "ascent": {
     type: "MAP_COMP_UPDATED",
     date: "Oct 1, 2026",
     title: "Ascent Pro Meta Comp Calibrated",
     desc: "Jett / Omen / Sova / Killjoy / KAY/O holds 96% synergy rating in VCT Pro Snapshots.",
-    patch: "13.06"
+    patch: "13.09"
   },
   "first-light": {
     type: "CANON_EVIDENCE",
@@ -510,8 +510,8 @@ export default function MyValorantProfilePage() {
                   type: "VERIFIED_RECORD",
                   date: "Oct 1, 2026",
                   title: `${slug.toUpperCase()} Database Entry`,
-                  desc: "Canonical stats, abilities, and relationship graph calibrated to Patch 13.06.",
-                  patch: "13.06"
+desc: "Canonical stats, abilities, and relationship graph calibrated to Patch 13.09.",
+    patch: "13.09"
                 };
 
                 return (

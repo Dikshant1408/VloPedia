@@ -736,8 +736,9 @@ const AGENT_STRENGTHS: Record<string, string[]> = {
   Yoru:       ["Fakeout creates perfect decoys","Gatecrash teleports are reusable","Dimensional Drift provides full invincibility"],
   Clove:      ["Can use abilities after death","Not Your Grave resurrects on kills","Pick-me-up can be saved and used later"],
   Vyse:       ["Shear wall blocks chokes completely","Arc Rose blinds through angles","Steel Garden traps multiple enemies"],
-  Tejo:       ["Guided Salvo hits precise targets","Stealth Drone scouts without risking self","Armageddon clears entire sites"],
+Tejo:       ["Guided Salvo hits precise targets","Stealth Drone scouts without risking self","Armageddon clears entire sites"],
   Waylay:     ["Relay bounces hit two targets","Interference disrupts enemy flanks","Phase Shift provides brief invincibility"],
+  Hush:       ["Flashbulb blinds through angles","Displacement pulls enemies into kill zone","Telekinesis passive picks up weapons from range"],
 };
 
 const AGENT_WEAKNESSES: Record<string, string[]> = {
@@ -752,7 +753,7 @@ const AGENT_WEAKNESSES: Record<string, string[]> = {
   Brimstone:  ["Must be in-range of site for smokes","Limited to 3 smokes per round","Stim and Molly are easy to dodge"],
   Sova:       ["Recon Bolt can be destroyed quickly","Dart lineups require significant study","Owl Drone requires positioning safely"],
   Fade:       ["Abilities require direct line of sight","Haunt can be shot down","Nightfall requires slow careful aim"],
-  Breach:     ["Abilities go both ways — can affect teammates","Must know wall lineups to use full value","Rolling Thunder is easy to move away from"],
+  Breach:     ["Abilities go both sides — can affect teammates","Must know wall lineups to use full value","Rolling Thunder is easy to move away from"],
   Killjoy:    ["Utilities are easily detectable and destroyable","Requires setup time — struggles on attacker side","Lockdown is slow to charge and easy to avoid"],
   Cypher:     ["No offensive capability whatsoever","Trapwires can be spotted and avoided","Cage utility requires very specific positioning"],
   Sage:       ["Slow Orb slows teammates too","Wall can be broken by enemies","Resurrection requires surviving, which can be difficult"],
@@ -767,6 +768,7 @@ const AGENT_WEAKNESSES: Record<string, string[]> = {
   Clove:      ["Regen ability requires kills to sustain","Complex ability timing — high skill floor","Resurrection is powerful but requires staying alive"],
   Vyse:       ["Steel Garden has delayed activation","Arc Rose can be pre-aimed","Low combat utility — mostly defensive"],
   Tejo:       ["Guided Salvo requires precise aim","Armageddon takes time to charge","Stealth Drone is slow and easily shot down"],
+  Hush:       ["Flashbulb and Displacement have wind-up time","Telekinesis range is limited","Low direct damage — relies on setup"],
   Waylay:     ["Relay Bounce angles are predictable","Limited range on all abilities","Phase Shift is very short duration"],
 };
 
@@ -798,6 +800,7 @@ const AGENT_BEST_MAPS: Record<string, string[]> = {
   Vyse:       ["Abyss","Pearl","Bind"],
   Tejo:       ["Breeze","Icebox","Lotus"],
   Waylay:     ["Abyss","Sunset","Pearl"],
+  Hush:       ["Ascent","Bind","Haven"],
 };
 
 /* ------------------------------------------------------------------ */

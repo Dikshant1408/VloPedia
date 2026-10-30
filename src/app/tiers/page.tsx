@@ -252,7 +252,7 @@ export default async function TiersPage() {
             );
           })}
 
-          {/* Patch 13.08 / Act 6 Ranked Intelligence Dossier */}
+          {/* Patch 13.09 / Act 5 Ranked Intelligence Dossier */}
           <section className="mt-16 border border-white/10 bg-[#0C1018] p-8 clip-diagonal relative overflow-hidden">
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10">
@@ -264,7 +264,7 @@ export default async function TiersPage() {
                   </span>
                 </div>
                 <span className="font-mono text-xs text-white/50 bg-white/5 px-2.5 py-1 border border-white/10">
-                  PATCH 13.08 CALIBRATION
+                  PATCH 13.09 CALIBRATION
                 </span>
               </div>
 

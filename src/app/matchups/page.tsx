@@ -39,6 +39,7 @@ const COUNTERS: Record<string, string[]> = {
   Vyse:       ["Sova","Breach","Fade","Jett"],
   Miks:       ["KAY/O","Cypher","Fade","Sova"],
   Veto:       ["Sova","KAY/O","Breach","Raze"],
+  Hush:       ["Sova","Breach","Fade","Jett"],
 };
 
 export default function MatchupsPage() {

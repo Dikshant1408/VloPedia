@@ -138,7 +138,7 @@ export default function AdminHealthPage() {
     setContentGaps(getContentGaps());
     setSatisfactionList(getSearchSatisfactionMetrics());
     setStaleList(PatchImpactEngine.scanStaleContent());
-    setIntegrityReport(GraphIntegrityEngine.runAudit("13.06"));
+    setIntegrityReport(GraphIntegrityEngine.runAudit("13.09"));
     setCoverageData(DataCoverageAuditor.runFullAudit());
     setOpportunities(SeoOpportunityEngine.getTopOpportunities(6));
     setAlmostRanking(SeoOpportunityEngine.getAlmostRankingQueries());

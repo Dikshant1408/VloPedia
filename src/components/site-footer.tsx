@@ -9,6 +9,9 @@ interface SiteFooterProps {
 }
 
 const PRIMARY_NAV = [
+  { label: "About",        href: "/about"        },
+  { label: "Contact",      href: "/contact"      },
+  { label: "Guides",       href: "/guides"       },
   { label: "Agents",       href: "/agents"       },
   { label: "Weapons",      href: "/weapons"      },
   { label: "Maps",         href: "/maps"         },
@@ -17,7 +20,6 @@ const PRIMARY_NAV = [
   { label: "Tools",        href: "/tools"        },
   { label: "Compare",      href: "/compare"      },
   { label: "Lore",         href: "/lore"         },
-  { label: "Guides",       href: "/guides"       },
   { label: "Data Sources", href: "/data-sources" },
   { label: "Methodology",  href: "/methodology"  },
   { label: "Changelog",    href: "/changelog"    },

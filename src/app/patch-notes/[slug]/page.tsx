@@ -20,7 +20,7 @@ type Props = {
 const KNOWN_AGENTS = new Set([
   "brimstone", "viper", "omen", "killjoy", "cypher", "sova", "sage", "phoenix",
   "jett", "reyna", "raze", "breach", "skye", "yoru", "astra", "kay/o", "kay-o",
-  "chamber", "neon", "fade", "harbor", "gekko", "deadlock", "iso", "clove", "vyse", "tejo", "veto", "waylay", "miks"
+  "chamber", "neon", "fade", "harbor", "gekko", "deadlock", "iso", "clove", "vyse", "tejo", "veto", "waylay", "miks", "hush"
 ]);
 
 const KNOWN_MAPS = new Set([

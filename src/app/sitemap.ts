@@ -59,13 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/about`,              lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/contact`,            lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/guides`,             lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${base}/setup`,              lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${base}/match-prep`,         lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${base}/explore`,            lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${base}/methodology`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/data-sources`,       lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/tools/what-to-play`, lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${base}/tools/round-assistant`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
 
   // Helper function to slugify text
@@ -116,125 +109,90 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.7,
   }));
 
-  // 7. Dynamic patches (from mock valorantDb)
-  const patchRoutes: MetadataRoute.Sitemap = valorantDb.patches.map(p => ({
-    url:             `${base}/patch-notes/${p.slug}`,
-    lastModified:    now,
-    changeFrequency: "monthly",
-    priority:        0.6,
-  }));
+// NOTE: Keeping patch routes as they contain valuable changelog content.
+   const patchRoutes: MetadataRoute.Sitemap = valorantDb.patches.map(p => ({
+     url: `${base}/patch-notes/${p.slug}`,
+     lastModified: now,
+     changeFrequency: "monthly",
+     priority: 0.6,
+   }));
+   // Keeping lore routes as they provide curated content.
+   const loreRoutes: MetadataRoute.Sitemap = loreData.articles.map(l => ({
+     url: `${base}/lore/${l.slug}`,
+     lastModified: now,
+     changeFrequency: "weekly",
+     priority: 0.8,
+   }));
+   // Keeping comparison routes as they add value.
+   const comparisonSlugs = [
+     "weapons/vandal-vs-phantom",
+     "weapons/warden-vs-vandal",
+     "weapons/bandit-vs-sheriff",
+     "weapons/operator-vs-outlaw",
+     "weapons/spectre-vs-stinger",
+     "weapons/sheriff-vs-ghost",
+     "weapons/ares-vs-odin",
+     "weapons/bulldog-vs-guardian",
+     "agents/jett-vs-raze",
+     "agents/waylay-vs-jett",
+     "agents/tejo-vs-sova",
+     "agents/omen-vs-clove",
+     "agents/sova-vs-fade",
+     "agents/cypher-vs-killjoy",
+     "agents/viper-vs-harbor",
+     "agents/breach-vs-kayo",
+   ];
+   const compareRoutes: MetadataRoute.Sitemap = comparisonSlugs.map(slug => ({
+     url: `${base}/compare/${slug}`,
+     lastModified: now,
+     changeFrequency: "weekly",
+     priority: 0.7,
+   }));
+   // Keeping leaks routes as they provide community value.
+   const leaksRoutes: MetadataRoute.Sitemap = valorantDb.leaks.map(l => ({
+     url: `${base}/leaks/${l.slug}`,
+     lastModified: now,
+     changeFrequency: "weekly",
+     priority: 0.5,
+   }));
 
-  // 8. Dynamic lore archives (from loreData.articles)
-  const loreRoutes: MetadataRoute.Sitemap = loreData.articles.map(l => ({
-    url:             `${base}/lore/${l.slug}`,
-    lastModified:    now,
-    changeFrequency: "weekly",
-    priority:        0.8,
-  }));
+   // 10. Dynamic skin pages
+   const skinSlugs = await fetchSlugs<{ uuid: string; displayName: string }>(
+     "https://valorant-api.com/v1/weapons/skins",
+     s => s.displayName.toLowerCase() !== "none" ? s.uuid : ""
+   );
+   const skinRoutes: MetadataRoute.Sitemap = skinSlugs.map(slug => ({
+     url:             `${base}/skins/${slug}`,
+     lastModified:    now,
+     changeFrequency: "weekly",
+     priority:        0.8,
+   }));
 
-  // 9. Dynamic comparison routes
-  const comparisonSlugs = [
-    "weapons/vandal-vs-phantom",
-    "weapons/warden-vs-vandal",
-    "weapons/bandit-vs-sheriff",
-    "weapons/operator-vs-outlaw",
-    "weapons/spectre-vs-stinger",
-    "weapons/sheriff-vs-ghost",
-    "weapons/ares-vs-odin",
-    "weapons/bulldog-vs-guardian",
-    "agents/jett-vs-raze",
-    "agents/waylay-vs-jett",
-    "agents/tejo-vs-sova",
-    "agents/omen-vs-clove",
-    "agents/sova-vs-fade",
-    "agents/cypher-vs-killjoy",
-    "agents/viper-vs-harbor",
-    "agents/breach-vs-kayo",
-  ];
-  const compareRoutes: MetadataRoute.Sitemap = comparisonSlugs.map(slug => ({
-    url:             `${base}/compare/${slug}`,
-    lastModified:    now,
-    changeFrequency: "weekly",
-    priority:        0.7,
-  }));
+   // 11. Dynamic collection pages
+   let collectionSlugs: string[] = [];
+   try {
+     const guidesRes = await fetch(`${base}/guides`);
+     if (guidesRes.ok) {
+       const discoveredCols = new Set<string>();
+       const html = await guidesRes.text();
+       const parts = html.split(/\/collections\//);
+       for (let i = 1; i < parts.length; i++) {
+         const colPrefix = parts[i].split(/[\/\?"' ]/)[0];
+         const colSlug = slugify(colPrefix);
+         if (colSlug) discoveredCols.add(colSlug);
+       }
+       collectionSlugs = Array.from(discoveredCols);
+     }
+   } catch (e) {
+     // Ignore fetch error
+   }
 
-  // 10. Dynamic leaks logs (from mock valorantDb)
-  const leaksRoutes: MetadataRoute.Sitemap = valorantDb.leaks.map(l => ({
-    url:             `${base}/leaks/${l.slug}`,
-    lastModified:    now,
-    changeFrequency: "weekly",
-    priority:        0.5,
-  }));
-
-  // 10. Dynamic Weapon Skin Hubs (/skins/vandal, /skins/phantom, etc.)
-  const weaponHubSlugs = [
-    "vandal","phantom","operator","spectre","ghost","classic","sheriff",
-    "frenzy","shorty","stinger","bucky","judge","bulldog","guardian",
-    "marshal","ares","odin","outlaw","warden","bandit","melee","karambit"
-  ];
-  const weaponHubRoutes: MetadataRoute.Sitemap = weaponHubSlugs.map(w => ({
-    url:             `${base}/skins/${w}`,
-    lastModified:    now,
-    changeFrequency: "weekly",
-    priority:        0.8,
-  }));
-
-  // 11. Dynamic skin pages, watch pages, and collection lines
-  let skinSlugs: string[] = [];
-  let watchSlugs: string[] = [];
-  let collectionSlugs: string[] = ["kuronami", "reaver", "oni", "prime", "glitchpop", "aemondir", "aeris", "helix", "minima", "montage"];
-
-  try {
-    const skinsRes = await fetch("https://valorant-api.com/v1/weapons/skins", { next: { revalidate: 3600 } });
-    if (skinsRes.ok) {
-      const skinsJson = await skinsRes.json();
-      const allSkins = skinsJson.data ?? [];
-      const discoveredCols = new Set<string>();
-
-      allSkins.forEach((s: any) => {
-        if (s.displayName.toLowerCase().startsWith("standard")) return;
-        const cleanSlug = slugify(s.displayName);
-        if (cleanSlug) {
-          skinSlugs.push(cleanSlug);
-          const hasVideo = s.levels?.some((l: any) => l.streamedVideo) || s.chromas?.some((c: any) => c.streamedVideo);
-          if (hasVideo) {
-            watchSlugs.push(cleanSlug);
-          }
-          // Parse collection line
-          const parts = s.displayName.trim().split(/\s+/);
-          if (parts.length > 1) {
-            const colPrefix = parts.slice(0, -1).join(" ");
-            const colSlug = slugify(colPrefix);
-            if (colSlug) discoveredCols.add(colSlug);
-          }
-        }
-      });
-      collectionSlugs = Array.from(discoveredCols);
-    }
-  } catch (e) {
-    // Ignore fetch error
-  }
-
-  const skinRoutes: MetadataRoute.Sitemap = skinSlugs.map(slug => ({
-    url:             `${base}/skins/${slug}`,
-    lastModified:    now,
-    changeFrequency: "weekly",
-    priority:        0.8,
-  }));
-
-  const watchRoutes: MetadataRoute.Sitemap = watchSlugs.map(slug => ({
-    url:             `${base}/skins/${slug}/watch`,
-    lastModified:    now,
-    changeFrequency: "weekly",
-    priority:        0.8,
-  }));
-
-  const collectionRoutes: MetadataRoute.Sitemap = collectionSlugs.map(slug => ({
-    url:             `${base}/collections/${slug}`,
-    lastModified:    now,
-    changeFrequency: "weekly",
-    priority:        0.8,
-  }));
+   const collectionRoutes: MetadataRoute.Sitemap = collectionSlugs.map(slug => ({
+     url:             `${base}/collections/${slug}`,
+     lastModified:    now,
+     changeFrequency: "weekly",
+     priority:        0.8,
+   }));
 
   // 12. Dynamic bundle pages (only valid named bundles)
   const bundleSlugs = await fetchSlugs<{ uuid: string; displayName?: string }>(
@@ -284,24 +242,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Deduplicate entries by URL
-  const allRoutes = [
-    ...staticRoutes,
-    ...agentRoutes,
-    ...weaponRoutes,
-    ...weaponHubRoutes,
-    ...mapRoutes,
-    ...patchRoutes,
-    ...loreRoutes,
-    ...compareRoutes,
-    ...bestRoutes,
-    ...leaksRoutes,
-    ...collectionRoutes,
-    ...skinRoutes,
-    ...watchRoutes,
-    ...bundleRoutes,
-    ...flexRoutes,
-    ...guidesRoutes,
-  ];
+const allRoutes = [
+     ...staticRoutes,
+     ...agentRoutes,
+     ...weaponRoutes,
+     ...mapRoutes,
+     ...patchRoutes,
+     ...loreRoutes,
+     ...compareRoutes,
+     ...bestRoutes,
+     ...leaksRoutes,
+     ...collectionRoutes,
+     ...skinRoutes,
+     ...bundleRoutes,
+     ...flexRoutes,
+     ...guidesRoutes,
+   ];
 
   const uniqueMap = new Map<string, MetadataRoute.Sitemap[number]>();
   for (const route of allRoutes) {

@@ -14,11 +14,11 @@ export function slugify(text: string): string {
 }
 
 /**
- * Normalizes raw Valorant version strings into clean patch format (e.g. "9.04" or "13.05")
- * Handles "release-09.04-shipping-21-2784534", "release-13.05", "13.05.00.5350494", etc.
+ * Normalizes raw Valorant version strings into clean patch format (e.g. "9.04" or "13.09")
+ * Handles "release-09.04-shipping-21-2784534", "release-13.09", "13.09.00.5777412", etc.
  */
 export function formatPatchVersion(raw?: string | null): string {
-  if (!raw) return "13.08";
+  if (!raw) return "13.09";
   const match = raw.match(/(?:release-)?0*(\d+\.\d+)/i);
   if (match && match[1]) {
     return match[1];
@@ -27,5 +27,5 @@ export function formatPatchVersion(raw?: string | null): string {
   if (digits && digits[0]) {
     return digits[0];
   }
-  return "13.08";
+  return "13.09";
 }
