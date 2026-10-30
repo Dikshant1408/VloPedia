@@ -1,4 +1,4 @@
-"use strict";
+"use client";
 
 export default function Error({
   error,
