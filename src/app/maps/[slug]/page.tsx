@@ -295,7 +295,7 @@ export default async function MapDetailPage({ params }: Props) {
                       </div>
                       <TacticalMapViewer
                         mapName={map.displayName}
-                        minimapUrl={map.displayIcon}
+                        minimapUrl={map.displayIcon?.startsWith("https://media.valorant-api.com/maps/") ? undefined : map.displayIcon}
                         fallbackSplashUrl={map.splash}
                         callouts={map.callouts}
                         xMultiplier={map.xMultiplier}
