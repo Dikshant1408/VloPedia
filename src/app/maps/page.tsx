@@ -26,7 +26,8 @@ async function fetchMaps(): Promise<MapData[]> {
     return raw
       .filter((m: any) => {
         const splash = typeof m.splash === "string" && m.splash.length > 0;
-        return splash && m.displayIcon;
+        const listView = typeof m.listViewIcon === "string" && m.listViewIcon.length > 0;
+        return (splash || listView) && m.displayIcon;
       })
       .map((m: any) => {
         const slug = m.displayName.toLowerCase().replace(/\s+/g, "-");
