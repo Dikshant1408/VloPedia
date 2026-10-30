@@ -67,6 +67,9 @@ export function MapGalleryClient({ map }: MapGalleryClientProps) {
           priority
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 800px"
           className="object-cover opacity-60 group-hover:scale-[1.01] transition-transform duration-500"
+          onError={(e) => {
+            console.error("Failed to load map slide:", activeSlide.url, e);
+          }}
         />
 
         {/* Minimap Schematic Overlay */}
@@ -79,6 +82,9 @@ export function MapGalleryClient({ map }: MapGalleryClientProps) {
                 fill
                 sizes="(max-width: 768px) 100vw, 600px"
                 className="object-contain filter invert hue-rotate-180 drop-shadow-[0_0_15px_rgba(255,70,85,0.4)] brightness-110 opacity-90"
+                onError={(e) => {
+                  console.error("Failed to load minimap:", map.minimapUrl, e);
+                }}
               />
             </div>
           </div>
@@ -138,6 +144,9 @@ export function MapGalleryClient({ map }: MapGalleryClientProps) {
                   fill
                   sizes="150px"
                   className={`object-cover ${isSelected ? "opacity-90 scale-105" : "opacity-40 group-hover:opacity-75"} transition-all`}
+                  onError={(e) => {
+                    console.error("Failed to load slide thumbnail:", slide.url, e);
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
                 <div className="absolute bottom-1.5 left-1.5 right-1.5">

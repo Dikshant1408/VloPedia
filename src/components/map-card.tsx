@@ -35,7 +35,7 @@ export function MapCard({ map, size = "small" }: MapCardProps) {
         .join(" ")}
       style={{ aspectRatio: "16/10" }}
     >
-      {/* Splash image */}
+        {/* Splash image */}
       <Image
         src={map.splashUrl}
         alt={map.name}
@@ -46,6 +46,9 @@ export function MapCard({ map, size = "small" }: MapCardProps) {
             : "(max-width:640px) 100vw, 33vw"
         }
         className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        onError={(e) => {
+          console.error("Failed to load map splash:", map.splashUrl, e);
+        }}
       />
 
       {/* Rotation Status Badge */}
