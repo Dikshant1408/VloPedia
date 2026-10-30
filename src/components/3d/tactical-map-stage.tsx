@@ -40,7 +40,12 @@ function MapMesh({
   onSelectCallout,
   onLoaded,
 }: MapMeshProps) {
-  const texture = useTexture(textureUrl);
+  let texture: THREE.Texture | null = null;
+  try {
+    texture = useTexture(textureUrl);
+  } catch {
+    texture = null;
+  }
 
   useEffect(() => {
     if (texture) {
