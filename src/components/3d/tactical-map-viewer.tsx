@@ -21,7 +21,7 @@ const TacticalMapStage = dynamic(
 
 export interface TacticalMapViewerProps {
   mapName: string;
-  minimapUrl: string;
+  minimapUrl: string | undefined;
   fallbackSplashUrl?: string;
   callouts?: ValorantCallout[] | null;
   xMultiplier?: number;
