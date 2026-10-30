@@ -40,24 +40,62 @@ function MapMesh({
   onSelectCallout,
   onLoaded,
 }: MapMeshProps) {
-  const texture = useTexture(textureUrl || "/images/map-ascent.webp");
+  const [texture, setTexture] = React.useState<THREE.Texture | null>(null);
+  const [textureError, setTextureError] = React.useState(false);
 
-  useEffect(() => {
-    if (texture) {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.generateMipmaps = false;
-      onLoaded?.();
+  React.useEffect(() => {
+    let cancelled = false;
+    useTexture(textureUrl)
+      .then((t) => {
+        if (!cancelled) {
+          setTexture(t);
+          setTextureError(false);
+          t.colorSpace = THREE.SRGBColorSpace;
+          t.minFilter = THREE.LinearFilter;
+          t.magFilter = THREE.LinearFilter;
+          t.generateMipmaps = false;
+          onLoaded?.();
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setTextureError(true);
+          setTexture(null);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [textureUrl, onLoaded]);
+
+  const fallbackTexture = React.useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.fillStyle = "#1a1a1a";
+      ctx.fillRect(0, 0, 512, 512);
+      ctx.fillStyle = "#333";
+      ctx.fillRect(0, 256, 512, 256);
+      ctx.fillRect(256, 0, 256, 256);
+      ctx.fillStyle = "#666";
+      ctx.font = "bold 40px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("NO DATA", 256, 256);
     }
-  }, [texture, onLoaded]);
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  const finalTexture = textureError || !texture ? fallbackTexture : texture;
 
   // Plane geometry & material
   const { geometry, material } = useMemo(() => {
     const size = 6.0;
     const geom = new THREE.PlaneGeometry(size, size);
     const mat = new THREE.MeshStandardMaterial({
-      map: texture,
+      map: finalTexture,
       transparent: true,
       alphaTest: 0.05,
       side: THREE.DoubleSide,
@@ -66,7 +104,7 @@ function MapMesh({
       depthWrite: false,
     });
     return { geometry: geom, material: mat };
-  }, [texture]);
+  }, [finalTexture]);
 
   useEffect(() => {
     return () => {
