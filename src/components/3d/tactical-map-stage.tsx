@@ -95,15 +95,40 @@ function MapMesh({
   const { geometry, material } = useMemo(() => {
     const size = 6.0;
     const geom = new THREE.PlaneGeometry(size, size);
-    const mat = new THREE.MeshStandardMaterial({
-      map: finalTexture,
+    const blueprintShader = {
+      uniforms: {
+        map: { value: finalTexture },
+        opacity: { value: 1 },
+        blueprintColor: { value: new THREE.Color(0x00ffff) },
+        bgColor: { value: new THREE.Color(0x050a0f) },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D map;
+        uniform float opacity;
+        uniform vec3 blueprintColor;
+        uniform vec3 bgColor;
+        varying vec2 vUv;
+        void main() {
+          vec4 tex = texture2D(map, vUv);
+          if (tex.a < 0.05) discard;
+          float luminance = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
+          float edge = smoothstep(0.3, 0.7, luminance);
+          vec3 color = mix(bgColor, blueprintColor, edge);
+          gl_FragColor = vec4(color, tex.a * opacity);
+        }
+      `,
       transparent: true,
-      alphaTest: 0.05,
       side: THREE.DoubleSide,
-      roughness: 0.4,
-      metalness: 0.15,
       depthWrite: false,
-    });
+    };
+    const mat = new THREE.ShaderMaterial(blueprintShader);
     return { geometry: geom, material: mat };
   }, [finalTexture]);
 
