@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { MapPin } from "lucide-react";
 
 interface MapCardMap {
@@ -17,11 +16,6 @@ interface MapCardProps {
   size?: "large" | "small";
 }
 
-/**
- * V2 Map card — cinematic full-bleed splash image.
- * Hover: translateY(-4px), scale 1.04, overlay darkens.
- * Does NOT use EntityCard.
- */
 export function MapCard({ map, size = "small" }: MapCardProps) {
   return (
     <Link
@@ -35,19 +29,14 @@ export function MapCard({ map, size = "small" }: MapCardProps) {
         .join(" ")}
       style={{ aspectRatio: "16/10" }}
     >
-        {/* Splash image */}
-      <Image
+      {/* Splash image */}
+      <img
         src={map.splashUrl}
         alt={map.name}
-        fill
-        sizes={
-          size === "large"
-            ? "(max-width:768px) 100vw, 66vw"
-            : "(max-width:640px) 100vw, 33vw"
-        }
-        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
         onError={(e) => {
           console.error("Failed to load map splash:", map.splashUrl, e);
+          (e.target as HTMLImageElement).src = "/images/map-ascent.webp";
         }}
       />
 

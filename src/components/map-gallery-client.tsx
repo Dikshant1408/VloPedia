@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { Eye, Grid, Layers } from "lucide-react";
 
 interface MapGalleryClientProps {
@@ -60,15 +59,13 @@ export function MapGalleryClient({ map }: MapGalleryClientProps) {
       <div className="relative aspect-[16/10] border border-border bg-background overflow-hidden flex items-center justify-center group">
         
         {/* Active Scene Backdrop */}
-        <Image
+        <img
           src={activeSlide.url}
           alt={`${map.name} ${activeSlide.label}`}
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 800px"
-          className="object-cover opacity-60 group-hover:scale-[1.01] transition-transform duration-500"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-[1.01] transition-transform duration-500"
           onError={(e) => {
             console.error("Failed to load map slide:", activeSlide.url, e);
+            (e.target as HTMLImageElement).src = map.splashUrl;
           }}
         />
 
@@ -76,14 +73,13 @@ export function MapGalleryClient({ map }: MapGalleryClientProps) {
         {showMinimap && map.minimapUrl && (
           <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/25">
             <div className="relative w-[85%] h-[85%] animate-pulse-subtle">
-              <Image
+              <img
                 src={map.minimapUrl}
                 alt={`${map.name} Blueprint`}
-                fill
-                sizes="(max-width: 768px) 100vw, 600px"
-                className="object-contain filter invert hue-rotate-180 drop-shadow-[0_0_15px_rgba(255,70,85,0.4)] brightness-110 opacity-90"
+                className="w-full h-full object-contain filter invert hue-rotate-180 drop-shadow-[0_0_15px_rgba(255,70,85,0.4)] brightness-110 opacity-90"
                 onError={(e) => {
                   console.error("Failed to load minimap:", map.minimapUrl, e);
+                  (e.target as HTMLImageElement).style.display = "none";
                 }}
               />
             </div>
@@ -138,14 +134,13 @@ export function MapGalleryClient({ map }: MapGalleryClientProps) {
                   isSelected ? "border-[#FF4655] ring-1 ring-[#FF4655]" : "border-border hover:border-primary/40"
                 }`}
               >
-                <Image
+                <img
                   src={slide.url}
                   alt={slide.label}
-                  fill
-                  sizes="150px"
-                  className={`object-cover ${isSelected ? "opacity-90 scale-105" : "opacity-40 group-hover:opacity-75"} transition-all`}
+                  className="w-full h-full object-cover transition-all"
                   onError={(e) => {
                     console.error("Failed to load slide thumbnail:", slide.url, e);
+                    (e.target as HTMLImageElement).src = map.splashUrl;
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
