@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo, useEffect, Suspense, forwardRef, useImperativeHandle, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useTexture, Html } from "@react-three/drei";
+import { OrbitControls, Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { ValorantCallout } from "@/lib/valorant-types";
 
@@ -41,28 +41,29 @@ function MapMesh({
   onLoaded,
 }: MapMeshProps) {
   const [texture, setTexture] = React.useState<THREE.Texture | null>(null);
-  const [textureError, setTextureError] = React.useState(false);
 
   React.useEffect(() => {
     let cancelled = false;
-    useTexture(textureUrl)
-      .then((t) => {
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      textureUrl,
+      (t) => {
         if (!cancelled) {
-          setTexture(t);
-          setTextureError(false);
           t.colorSpace = THREE.SRGBColorSpace;
           t.minFilter = THREE.LinearFilter;
           t.magFilter = THREE.LinearFilter;
           t.generateMipmaps = false;
+          setTexture(t);
           onLoaded?.();
         }
-      })
-      .catch(() => {
+      },
+      undefined,
+      () => {
         if (!cancelled) {
-          setTextureError(true);
           setTexture(null);
         }
-      });
+      }
+    );
     return () => {
       cancelled = true;
     };
@@ -88,7 +89,7 @@ function MapMesh({
     return new THREE.CanvasTexture(canvas);
   }, []);
 
-  const finalTexture = textureError || !texture ? fallbackTexture : texture;
+  const finalTexture = texture || fallbackTexture;
 
   // Plane geometry & material
   const { geometry, material } = useMemo(() => {
