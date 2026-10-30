@@ -40,12 +40,7 @@ function MapMesh({
   onSelectCallout,
   onLoaded,
 }: MapMeshProps) {
-  let texture: THREE.Texture | null = null;
-  try {
-    texture = useTexture(textureUrl);
-  } catch {
-    texture = null;
-  }
+  const texture = useTexture(textureUrl || "/images/map-ascent.webp");
 
   useEffect(() => {
     if (texture) {
