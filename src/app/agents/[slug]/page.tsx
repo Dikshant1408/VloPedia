@@ -78,7 +78,6 @@ export async function generateStaticParams() {
   const agents = await getAllAgents();
   const agentSlugs = agents.map(a => ({ slug: slugify(a.displayName) }));
   const legacySlugs = [
-    { slug: "hush" },
     { slug: "agent-31-hush" },
     { slug: "bandit-weapon" },
     { slug: "summit-map" },
@@ -123,7 +122,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const norm = slug.toLowerCase().trim();
 
   // Hush / Agent 31 upcoming dossier redirect
-  if (norm === "hush" || norm === "agent-31" || norm === "agent-31-hush") {
+  if (norm === "agent-31" || norm === "agent-31-hush") {
     return {
       title: "HUSH (Agent 31) Classified Leak & Intel | VloPedia",
       description: "Classified intelligence on the upcoming Cantonese Radiant Duelist 'Hush' (Agent 31). Telekinesis passive, aerial suspension nodes, and ability mimicry.",
@@ -210,7 +209,7 @@ export default async function AgentDetailPage({ params }: Props) {
   const norm = slug.toLowerCase().trim();
 
   // Hush / Agent 31 upcoming dossier redirect
-  if (norm === "hush" || norm === "agent-31" || norm === "agent-31-hush") {
+  if (norm === "agent-31" || norm === "agent-31-hush") {
     permanentRedirect("/leaks/agent-31-hush");
   }
 
