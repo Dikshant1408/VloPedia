@@ -295,8 +295,8 @@ export default async function MapDetailPage({ params }: Props) {
                       </div>
                       <TacticalMapViewer
                         mapName={map.displayName}
-                        minimapUrl={map.displayIcon}
-                        fallbackSplashUrl={map.splash}
+                        minimapUrl={map.listViewIcon || map.splash || map.displayIcon}
+                        fallbackSplashUrl={map.splash || map.listViewIcon}
                         callouts={map.callouts}
                         xMultiplier={map.xMultiplier}
                         yMultiplier={map.yMultiplier}
