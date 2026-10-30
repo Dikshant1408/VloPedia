@@ -27,7 +27,7 @@ async function getAllMaps(): Promise<ValorantMap[]> {
         return [];
       }
       const json = await res.json();
-      return (json.data ?? []).filter((m: ValorantMap) => m.splash && m.displayIcon);
+      return (json.data ?? []).filter((m: ValorantMap) => typeof m.splash === "string" && m.splash.length > 0 && m.displayIcon);
     } catch {
       mapsCache = null;
       return [];
