@@ -24,7 +24,10 @@ async function fetchMaps(): Promise<MapData[]> {
     const j = await fetchWithCache<{ data: any[] }>("https://valorant-api.com/v1/maps");
     const raw = j.data ?? [];
     return raw
-      .filter((m: any) => m.splash && m.displayIcon)
+      .filter((m: any) => {
+        const splash = typeof m.splash === "string" && m.splash.length > 0;
+        return splash && m.displayIcon;
+      })
       .map((m: any) => {
         const slug = m.displayName.toLowerCase().replace(/\s+/g, "-");
         let rotationStatus: "active" | "reserve" | "tdm" = "reserve";
@@ -34,7 +37,7 @@ async function fetchMaps(): Promise<MapData[]> {
           slug,
           name:      m.displayName.toUpperCase(),
           location:  m.coordinates ?? undefined,
-          splashUrl: m.splash || m.listViewIcon,
+          splashUrl: (typeof m.splash === "string" && m.splash.length > 0) ? m.splash : (m.listViewIcon ?? ""),
           lore:      m.narrativeDescription ?? undefined,
           rotationStatus,
         };
