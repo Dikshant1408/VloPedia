@@ -3483,14 +3483,6 @@ export const valorantDb = {
   ],
 leaks: [
     {
-        "slug": "agent-31-hush",
-        "codename": "HUSH",
-        "category": "AGENT",
-        "discoveredDate": "2026-09-28",
-        "details": "Chinese female Duelist codenamed 'Hush' showcased during VCT Champions grand finals. Features a telekinesis passive (picking up weapons & Spike from range), an aerial levitation anchor, throwable nearsighting mist cannon, and secondary signature ability mimicry from allies. OFFICIALLY RELEASED in Patch 13.09 (October 28, 2026).",
-        "credibility": "CONFIRMED"
-    },
-    {
         "slug": "custom-game-replay-system",
         "codename": "REPLAY_V2",
         "category": "MAP",
