@@ -143,7 +143,7 @@ export function TacticalMapViewer({
         style={{ aspectRatio }}
       >
         <SceneError
-          fallbackImageUrl={fallbackSplashUrl || minimapUrl}
+          fallbackImageUrl={fallbackSplashUrl || minimapUrl || "/images/map-ascent.webp"}
           itemName={mapName}
           reason="webgl-disabled"
         />
