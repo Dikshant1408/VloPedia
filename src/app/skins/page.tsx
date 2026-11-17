@@ -99,9 +99,6 @@ async function fetchFeaturedBundles(): Promise<Array<{uuid: string; displayName:
   }
 }
 
-import Link from "next/link";
-import { Container } from "@/components/container";
-
 export default async function SkinsIndexPage() {
   const skins = await fetchSkins();
   const featuredBundles = await fetchFeaturedBundles();
