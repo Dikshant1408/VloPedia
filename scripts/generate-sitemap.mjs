@@ -2,7 +2,7 @@ import { writeFileSync } from "fs";
 import { siteConfig } from "../src/lib/site.ts";
 import { valorantDb } from "../src/lib/valorant-db.ts";
 import { guidesDb } from "../src/lib/guides-db.ts";
-import loreData from "../data/lore-database.json";
+import loreData from "../src/data/lore-database.json";
 
 const base = siteConfig.url.replace(/\/+$/, "");
 const now = new Date().toISOString();
