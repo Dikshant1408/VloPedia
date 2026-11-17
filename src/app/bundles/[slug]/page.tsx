@@ -279,7 +279,7 @@ export default async function BundleDetailPage({ params }: Props) {
       <PageTransition>
         <div className="min-h-screen bg-background text-foreground">
 
-          {/* Cinematic PageHero — promo image full viewport width */}
+          {/* Cinematic PageHero — promo image */}
           <PageHero
             imageSrc={heroImage}
             imageAlt={bundle.displayName}
@@ -289,6 +289,7 @@ export default async function BundleDetailPage({ params }: Props) {
             priority
             overlayFrom={0.25}
             overlayTo={0.88}
+            minHeight="55vh"
           >
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/bundles">
