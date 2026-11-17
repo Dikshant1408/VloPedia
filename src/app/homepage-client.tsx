@@ -1676,23 +1676,36 @@ export function HomepageClient() {
                       </h3>
 
                       <p className="font-sans text-xs text-[#858B96] leading-relaxed">
-                        Tournament meta updates affecting {latestPatch.buffs.length} buffed abilities and {latestPatch.nerfs.length} agent nerfs.
+                        {latestPatch.buffs.length > 0 || latestPatch.nerfs.length > 0
+                          ? `Tournament meta updates affecting ${latestPatch.buffs.length} buffed abilities and ${latestPatch.nerfs.length} agent nerfs.`
+                          : latestPatch.updates?.[0] || "No major balance changes in this patch."}
                       </p>
 
-                      <div className="grid gap-2 pt-2 sm:grid-cols-2">
-                        {latestPatch.buffs.slice(0, 2).map((b: { subject: string; detail: string }, i: number) => (
-                          <div key={i} className="p-3 border border-emerald-500/20 bg-emerald-500/5 font-mono text-xs">
-                            <span className="text-emerald-400 font-bold block mb-1">BUFF: {b.subject}</span>
-                            <span className="text-[#858B96] text-[11px]">{b.detail}</span>
-                          </div>
-                        ))}
-                        {latestPatch.nerfs.slice(0, 2).map((n: { subject: string; detail: string }, i: number) => (
-                          <div key={i} className="p-3 border border-[#FF4655]/20 bg-[#FF4655]/5 font-mono text-xs">
-                            <span className="text-[#FF4655] font-bold block mb-1">NERF: {n.subject}</span>
-                            <span className="text-[#858B96] text-[11px]">{n.detail}</span>
-                          </div>
-                        ))}
-                      </div>
+                      {latestPatch.buffs.length > 0 || latestPatch.nerfs.length > 0 ? (
+                        <div className="grid gap-2 pt-2 sm:grid-cols-2">
+                          {latestPatch.buffs.slice(0, 2).map((b: { subject: string; detail: string }, i: number) => (
+                            <div key={i} className="p-3 border border-emerald-500/20 bg-emerald-500/5 font-mono text-xs">
+                              <span className="text-emerald-400 font-bold block mb-1">BUFF: {b.subject}</span>
+                              <span className="text-[#858B96] text-[11px]">{b.detail}</span>
+                            </div>
+                          ))}
+                          {latestPatch.nerfs.slice(0, 2).map((n: { subject: string; detail: string }, i: number) => (
+                            <div key={i} className="p-3 border border-[#FF4655]/20 bg-[#FF4655]/5 font-mono text-xs">
+                              <span className="text-[#FF4655] font-bold block mb-1">NERF: {n.subject}</span>
+                              <span className="text-[#858B96] text-[11px]">{n.detail}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="pt-2 grid gap-1 sm:grid-cols-2">
+                          {latestPatch.updates?.slice(0, 2).map((u: string, i: number) => (
+                            <div key={i} className="p-3 border border-white/10 bg-white/5 font-mono text-xs">
+                              <span className="text-[#FF4655] font-bold block mb-1">UPDATE:</span>
+                              <span className="text-[#858B96] text-[11px]">{u}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

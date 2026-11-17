@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { RichText } from "@/components/rich-text";
 import type { ValorantAbility } from "@/lib/valorant-types";
 
 // Map API slot names to familiar key labels
@@ -134,7 +135,7 @@ export function AbilitySelector({
                 </span>
               </div>
               <p className="text-sm leading-relaxed text-secondary font-sans max-w-3xl">
-                {active.description}
+                <RichText text={active.description} />
               </p>
             </motion.div>
           )}
