@@ -4,7 +4,7 @@ import type { ValorantWeapon } from "@/lib/valorant-types";
 
 interface WeaponCardProps {
   weapon: ValorantWeapon;
-  view?: "horizontal" | "compact";
+  view?: "horizontal" | "compact" | "grid";
 }
 
 /**
