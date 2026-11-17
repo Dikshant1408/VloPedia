@@ -19,8 +19,9 @@ const TAG_STYLES: Record<string, string> = {
 };
 
 function parseRichText(text: string): React.ReactNode {
-  // Regex to match opening and closing tags like <teal>...</teal>
-  const tagRegex = /<(\w+)>(.*?)<\/\1>/gs;
+  // Regex to match tags like <teal>text</ or <teal>text</teal>
+  // VALORANT API uses malformed tags: <tag>content</ (missing closing tag name and >)
+  const tagRegex = /<(\w+)>(.*?)<\/\1>?/gs;
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
 
@@ -41,7 +42,7 @@ function parseRichText(text: string): React.ReactNode {
       </span>
     );
 
-    lastIndex = tagStart + full.length;
+    lastIndex = match.index! + full.length;
   }
 
   // Add remaining text
