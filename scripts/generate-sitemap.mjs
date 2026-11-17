@@ -1,5 +1,8 @@
-import { writeFileSync } from "fs";
+import { writeFileSync, join } from "fs";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const base = "https://vlopedia.website";
 const now = new Date().toISOString();
 
@@ -62,13 +65,13 @@ for (let i = 0; i < 30; i++) {
 }
 
 // Dynamic weapon pages
-const weaponSlugs = ["vandal", "phantom", "operator", "guardian", "bulldog", "marshal", "ares", "odin", "spectre", "stinger", "bucky", "judge", "shorty", "frenzy", "ghost", "sheriff", "classic", "ghost", "sheriff", "melee", "warden", "outlaw", "bandit"];
+const weaponSlugs = ["vandal", "phantom", "operator", "guardian", "bulldog", "marshal", "ares", "odin", "spectre", "stinger", "bucky", "judge", "shorty", "frenzy", "ghost", "sheriff", "classic", "melee", "warden", "outlaw", "bandit"];
 for (const slug of weaponSlugs) {
   entries.push(urlEntry(`${base}/weapons/${slug}`, now, "weekly", 0.8));
 }
 
 // Dynamic map pages
-const mapSlugs = ["ascent", "bind", "haven", "split", "ascent", "icebox", "breeze", "fracture", "pearl", "lotus", "sunset", "abyss", "sunset", "corrode", "summit", "glitch", "piazza", "drift", "kasbah", "district", "breeze"];
+const mapSlugs = ["ascent", "bind", "haven", "split", "icebox", "breeze", "fracture", "pearl", "lotus", "sunset", "abyss", "corrode", "summit", "glitch", "piazza", "drift", "kasbah", "district", "breeze"];
 for (const slug of mapSlugs) {
   entries.push(urlEntry(`${base}/maps/${slug}`, now, "weekly", 0.8));
 }
@@ -108,5 +111,5 @@ ${entries.join("\n")}
 </urlset>
 `;
 
-writeFileSync("../public/sitemap.xml", sitemap);
+writeFileSync(join(__dirname, "../public/sitemap.xml"), sitemap);
 console.log(`Generated sitemap with ${entries.length} URLs`);
