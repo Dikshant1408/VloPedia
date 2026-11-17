@@ -6,11 +6,11 @@ import { fetchWithCache } from "@/lib/api-cache";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "VALORANT Agents Catalogue: Roles, Abilities & Stats | VloPedia",
-  description: "Explore details, stats, abilities, and origins for all VALORANT agents including upcoming operative Hush. Duelists, Controllers, Initiators, and Sentinels.",
+  title: "VALORANT Agents Directory: All Operatives & Abilities | VloPedia",
+  description: "Explore details, stats, abilities, and origins for all VALORANT agents. Duelists, Controllers, Initiators, and Sentinels.",
   openGraph: {
-    title: "VALORANT Agents Catalogue: Roles, Abilities & Stats | VloPedia",
-    description: "Explore details, stats, abilities, and origins for all VALORANT agents including upcoming operative Hush. Duelists, Controllers, Initiators, and Sentinels.",
+    title: "VALORANT Agents Directory | VloPedia",
+    description: "All VALORANT agent stats, abilities, and lore.",
   },
   alternates: {
     canonical: "/agents",
