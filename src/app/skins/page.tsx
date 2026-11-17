@@ -3,6 +3,9 @@ import { SkinsClient, type FlatSkin } from "./skins-client";
 import { fetchWithCache } from "@/lib/api-cache";
 import type { ValorantSkin } from "@/lib/valorant-types";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
+import Link from "next/link";
+import { Container } from "@/components/container";
+import Image from "next/image";
 
 export const dynamic = "force-static";
 
@@ -77,11 +80,31 @@ async function fetchSkins(): Promise<FlatSkin[]> {
   }
 }
 
+async function fetchFeaturedBundles(): Promise<Array<{uuid: string; displayName: string; price: number; verticalPromoImage: string | null; displayIcon: string | null}>> {
+  try {
+    const j = await fetchWithCache<{ data: any[] }>("https://valorant-api.com/v1/bundles");
+    const raw: any[] = j.data ?? [];
+    return raw
+      .filter(b => b.verticalPromoImage || b.displayIcon)
+      .slice(0, 6)
+      .map(b => ({
+        uuid: b.uuid,
+        displayName: b.displayName,
+        price: b.displayName.toLowerCase().includes("champions") ? 9900 : (b.price ?? 7100),
+        verticalPromoImage: b.verticalPromoImage ?? null,
+        displayIcon: b.displayIcon ?? null,
+      }));
+  } catch {
+    return [];
+  }
+}
+
 import Link from "next/link";
 import { Container } from "@/components/container";
 
 export default async function SkinsIndexPage() {
   const skins = await fetchSkins();
+  const featuredBundles = await fetchFeaturedBundles();
 
   // Group count by weapon
   const countMap: Record<string, number> = {};
@@ -98,6 +121,72 @@ export default async function SkinsIndexPage() {
   return (
     <>
       <SkinsClient initialSkins={skins} />
+
+      {/* Featured Bundles Section */}
+      {featuredBundles.length > 0 && (
+        <section className="border-t border-border bg-[#0B141A] py-16" aria-label="Featured Skin Bundles">
+          <Container>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-[2px] w-8 bg-primary" aria-hidden="true" />
+              <h2 className="font-display text-2xl uppercase tracking-tight text-foreground">
+                Featured Skin Bundles
+              </h2>
+            </div>
+            <p className="text-xs text-muted mb-8 max-w-3xl leading-relaxed">
+              Complete weapon skin collections with matching gun buddies, player cards, sprays, and finishing effects.
+            </p>
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+              {featuredBundles.map(bundle => (
+                <Link
+                  key={bundle.uuid}
+                  href={`/bundles/${bundle.uuid}`}
+                  className="group flex flex-col justify-between border border-[rgba(236,232,225,0.08)] bg-surface-card p-3.5 hover:border-primary/50 hover:bg-surface-card/80 transition-all rounded"
+                >
+                  <div className="aspect-square bg-black/20 overflow-hidden rounded-lg mb-3 flex items-center justify-center">
+                    {bundle.verticalPromoImage ? (
+                      <Image
+                        src={bundle.verticalPromoImage}
+                        alt={bundle.displayName}
+                        fill
+                        sizes="200px"
+                        className="object-cover group-hover:scale-[1.05] transition-transform duration-300"
+                        unoptimized
+                      />
+                    ) : bundle.displayIcon ? (
+                      <Image
+                        src={bundle.displayIcon}
+                        alt={bundle.displayName}
+                        fill
+                        sizes="200px"
+                        className="object-contain p-4 group-hover:scale-[1.05] transition-transform duration-300"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted text-[10px]">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                  <span className="font-display font-bold text-sm uppercase text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                    {bundle.displayName}
+                  </span>
+                  <span className="font-mono text-[10px] font-bold text-primary mt-1">
+                    {bundle.price.toLocaleString()} VP
+                  </span>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Link
+                href="/bundles"
+                className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-primary border border-primary/30 hover:bg-primary/10 hover:text-white transition-colors rounded"
+              >
+                View All Bundles →
+              </Link>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Server-Rendered Internal Link Mesh for Search Engines & Fast Weapon Filtering */}
       <section className="border-t border-border bg-[#0B141A] py-16" aria-label="Weapon Skin Directories">
