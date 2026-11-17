@@ -289,7 +289,8 @@ export default async function BundleDetailPage({ params }: Props) {
             priority
             overlayFrom={0.25}
             overlayTo={0.88}
-            minHeight="55vh"
+            minHeight="45vh"
+            className="max-h-[55vh]"
           >
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/bundles">
