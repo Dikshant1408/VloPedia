@@ -7,18 +7,23 @@ import loreData from "../data/lore-database.json";
 const base = siteConfig.url.replace(/\/+$/, "");
 const now = new Date().toISOString();
 
-function escapeXml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+function escapeXml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
-function urlEntry(loc: string, lastMod: string = now, changeFreq: string = "weekly", priority: number = 0.8): string {
+function urlEntry(loc, lastMod = now, changeFreq = "weekly", priority = 0.8) {
   return `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${lastMod}</lastmod>\n    <changefreq>${changeFreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 }
 
-const entries: string[] = [];
+const entries = [];
 
 // Static routes
-const staticRoutes: Array<{ url: string; freq: string; priority: number }> = [
+const staticRoutes = [
   { url: "/", freq: "daily", priority: 1.0 },
   { url: "/agents", freq: "weekly", priority: 0.9 },
   { url: "/weapons", freq: "weekly", priority: 0.9 },
