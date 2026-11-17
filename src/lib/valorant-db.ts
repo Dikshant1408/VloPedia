@@ -3095,6 +3095,24 @@ export const valorantDb = {
         ]
     },
     {
+        "slug": "patch-1310",
+        "version": "13.10",
+        "date": "NOVEMBER 7, 2026",
+        "title": "VALORANT Patch Notes 13.10",
+        "season": "Season 2026",
+        "act": "Act 5",
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-10/",
+        "tags": ["Bug Fixes", "Performance", "Competitive Integrity"],
+        "buffs": [],
+        "nerfs": [],
+        "updates": [
+            "Resolved competitive matchmaking queue stability issues",
+            "Updated anti-cheat detection for third-party software",
+            "Optimized frame timing on lower-end systems",
+            "Adjusted agent ability visual effects for improved clarity"
+        ]
+    },
+    {
         "slug": "patch-1200",
         "version": "12.00",
         "date": "JANUARY 6, 2026",

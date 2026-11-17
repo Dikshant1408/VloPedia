@@ -60,7 +60,7 @@ const EPISODES = [
   {
     episode: "Season 2026",
     period: "January 2026 – Present",
-    acts: ["Act I: Bandit & Summit", "Act II: Miks", "Act III: Veto & Warden", "Act IV: Champions 2026", "Act V: Patch 13.09"],
+    acts: ["Act I: Bandit & Summit", "Act II: Miks", "Act III: Veto & Warden", "Act IV: Champions 2026", "Act V: Patch 13.10"],
     highlight: "Miks, Veto, and HUSH joined roster. Summit map, Warden rifle, Bandit sidearm added. Active VCT Champions season.",
     current: true,
   },

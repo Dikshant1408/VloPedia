@@ -47,29 +47,29 @@ const VERIFIED_ENTITY_UPDATES: Record<string, { type: string; date: string; titl
     type: "BALANCE_VERIFIED",
     date: "Oct 1, 2026",
     title: "Jett Tailwind & Drift Calibrated",
-    desc: "Active competitive meta tier remains S-Tier under Patch 13.09. Tailwind dash and passive drift confirmed.",
-    patch: "13.09"
+    desc: "Active competitive meta tier remains S-Tier under Patch 13.10. Tailwind dash and passive drift confirmed.",
+    patch: "13.10"
   },
   "omen": {
     type: "STRATEGY_UPDATED",
     date: "Oct 1, 2026",
     title: "Omen Ascent & Haven One-Ways Verified",
     desc: "Rechargeable dark cover timing tested. Synergizes with Sova recon darts for A Main one-ways.",
-    patch: "13.09"
+    patch: "13.10"
   },
   "vandal": {
     type: "BALLISTICS_CONFIRMED",
     date: "Oct 1, 2026",
     title: "Vandal Zero-Dropoff Damage Confirmed",
     desc: "160 headshot lethality verified across 0-50m. Recoil reset time remains 0.375s.",
-    patch: "13.09"
+    patch: "13.10"
   },
   "ascent": {
     type: "MAP_COMP_UPDATED",
     date: "Oct 1, 2026",
     title: "Ascent Pro Meta Comp Calibrated",
     desc: "Jett / Omen / Sova / Killjoy / KAY/O holds 96% synergy rating in VCT Pro Snapshots.",
-    patch: "13.09"
+    patch: "13.10"
   },
   "first-light": {
     type: "CANON_EVIDENCE",
@@ -510,8 +510,8 @@ export default function MyValorantProfilePage() {
                   type: "VERIFIED_RECORD",
                   date: "Oct 1, 2026",
                   title: `${slug.toUpperCase()} Database Entry`,
-desc: "Canonical stats, abilities, and relationship graph calibrated to Patch 13.09.",
-    patch: "13.09"
+desc: "Canonical stats, abilities, and relationship graph calibrated to Patch 13.10.",
+    patch: "13.10"
                 };
 
                 return (

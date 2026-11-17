@@ -509,7 +509,7 @@ function CompBuilderInner() {
 
               <div className="mt-6 border-t border-[rgba(236,232,225,0.08)] pt-4 font-mono text-[10px] text-muted flex items-center justify-between">
                 <span>Map-weighted meta engine</span>
-                <span className="text-[#0DF2F2]">Patch 13.09 active</span>
+                <span className="text-[#0DF2F2]">Patch 13.10 active</span>
               </div>
             </div>
           </div>
