@@ -1,4 +1,5 @@
-import { writeFileSync, join } from "fs";
+import { writeFileSync } from "fs";
+import { join } from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
