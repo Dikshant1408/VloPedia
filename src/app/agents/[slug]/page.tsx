@@ -10,6 +10,7 @@ import { PageHero } from "@/components/page-hero";
 import { RoleBadge } from "@/components/role-badge";
 import { AbilitySelector } from "@/components/ability-selector";
 import { AgentRelatedWeapons } from "./related-weapons";
+import { RichText } from "@/components/rich-text";
 import type { ValorantAgent } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -472,7 +473,7 @@ export default async function AgentDetailPage({ params }: Props) {
                     {agent.displayName}
                   </h2>
                   <p className="font-sans text-sm leading-relaxed text-secondary">
-                    {agent.description}
+                    <RichText text={agent.description} />
                   </p>
                 </div>
               </Reveal>
