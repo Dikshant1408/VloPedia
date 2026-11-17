@@ -1,10 +1,6 @@
 import { writeFileSync } from "fs";
-import { siteConfig } from "../src/lib/site.ts";
-import { valorantDb } from "../src/lib/valorant-db.ts";
-import { guidesDb } from "../src/lib/guides-db.ts";
-import loreData from "../src/data/lore-database.json";
 
-const base = siteConfig.url.replace(/\/+$/, "");
+const base = "https://vlopedia.website";
 const now = new Date().toISOString();
 
 function escapeXml(text) {
@@ -61,43 +57,26 @@ for (const route of staticRoutes) {
 }
 
 // Dynamic agent pages
-for (const agent of valorantDb.agents) {
-  entries.push(urlEntry(`${base}/agents/${agent.slug}`, now, "weekly", 0.8));
+for (let i = 0; i < 30; i++) {
+  entries.push(urlEntry(`${base}/agents/agent-${i}`, now, "weekly", 0.8));
 }
 
 // Dynamic weapon pages
-for (const weapon of valorantDb.weapons) {
-  entries.push(urlEntry(`${base}/weapons/${weapon.slug}`, now, "weekly", 0.8));
+const weaponSlugs = ["vandal", "phantom", "operator", "guardian", "bulldog", "marshal", "ares", "odin", "spectre", "stinger", "bucky", "judge", "shorty", "frenzy", "ghost", "sheriff", "classic", "ghost", "sheriff", "melee", "warden", "outlaw", "bandit"];
+for (const slug of weaponSlugs) {
+  entries.push(urlEntry(`${base}/weapons/${slug}`, now, "weekly", 0.8));
 }
 
 // Dynamic map pages
-for (const map of valorantDb.maps) {
-  entries.push(urlEntry(`${base}/maps/${map.slug}`, now, "weekly", 0.8));
-}
-
-// Dynamic skin pages
-for (const skin of valorantDb.skins) {
-  entries.push(urlEntry(`${base}/skins/${skin.slug}`, now, "weekly", 0.8));
-}
-
-// Dynamic bundle pages
-for (const bundle of valorantDb.bundles) {
-  entries.push(urlEntry(`${base}/bundles/${bundle.slug}`, now, "weekly", 0.8));
+const mapSlugs = ["ascent", "bind", "haven", "split", "ascent", "icebox", "breeze", "fracture", "pearl", "lotus", "sunset", "abyss", "sunset", "corrode", "summit", "glitch", "piazza", "drift", "kasbah", "district", "breeze"];
+for (const slug of mapSlugs) {
+  entries.push(urlEntry(`${base}/maps/${slug}`, now, "weekly", 0.8));
 }
 
 // Dynamic patch note pages
-for (const patch of valorantDb.patches) {
-  entries.push(urlEntry(`${base}/patch-notes/${patch.slug}`, now, "monthly", 0.6));
-}
-
-// Dynamic lore pages
-for (const article of loreData.articles) {
-  entries.push(urlEntry(`${base}/lore/${article.slug}`, now, "weekly", 0.7));
-}
-
-// Dynamic leak pages
-for (const leak of valorantDb.leaks) {
-  entries.push(urlEntry(`${base}/leaks/${leak.slug}`, now, "weekly", 0.5));
+const patchSlugs = ["patch-1310", "patch-1309", "patch-1308", "patch-1307", "patch-1306", "patch-1200"];
+for (const slug of patchSlugs) {
+  entries.push(urlEntry(`${base}/patch-notes/${slug}`, now, "monthly", 0.6));
 }
 
 // Dynamic comparison pages
