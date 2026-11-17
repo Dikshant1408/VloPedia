@@ -17,9 +17,9 @@ interface AgentCardProps {
  * Supports live playable agents as well as upcoming teaser/leak dossiers.
  */
 export function AgentCard({ agent, featured = false }: AgentCardProps) {
-  const isUpcoming = agent.displayName.toUpperCase() === "HUSH" || !agent.isPlayableCharacter;
-  const slug = isUpcoming ? "agent-31-hush" : slugify(agent.displayName);
-  const targetHref = isUpcoming ? "/leaks/agent-31-hush" : `/agents/${slug}`;
+  const isUpcoming = !agent.isPlayableCharacter;
+  const slug = slugify(agent.displayName);
+  const targetHref = `/agents/${slug}`;
   const portrait = agent.fullPortrait || agent.bustPortrait || agent.displayIcon;
 
   return (
@@ -31,7 +31,7 @@ export function AgentCard({ agent, featured = false }: AgentCardProps) {
       >
         {/* Top-right tactical index marker */}
         <div className="absolute top-2 right-4 z-10 font-mono text-[9px] text-muted tracking-widest uppercase opacity-70 group-hover:text-primary group-hover:opacity-100 transition-colors">
-          {isUpcoming ? "LEAK // HUSH" : `OP // ${agent.displayName.slice(0, 3).toUpperCase()}`}
+          {isUpcoming ? "LEAK" : `OP // ${agent.displayName.slice(0, 3).toUpperCase()}`}
         </div>
 
         {/* Background gradient from agent colors */}
