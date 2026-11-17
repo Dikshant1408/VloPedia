@@ -83,7 +83,7 @@ export function WeaponsClient({ initialWeapons }: WeaponsClientProps) {
               >
                 <Container>
                   {/* Category header */}
-                  <div className="mb-6 flex items-center gap-6">
+                  <div className="mb-8 flex items-center gap-6">
                     <div className="flex items-center gap-3">
                       <span className="h-[2px] w-6 bg-primary" aria-hidden="true" />
                       <h2 className="font-display text-3xl uppercase tracking-wide text-white">
@@ -96,10 +96,10 @@ export function WeaponsClient({ initialWeapons }: WeaponsClientProps) {
                     </span>
                   </div>
 
-                  {/* Horizontal weapon cards */}
-                  <div className="space-y-3">
+                  {/* Weapon cards grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {catWeapons.map(weapon => (
-                      <WeaponCard key={weapon.uuid} weapon={weapon} view="horizontal" />
+                      <WeaponCard key={weapon.uuid} weapon={weapon} view="grid" />
                     ))}
                   </div>
                 </Container>

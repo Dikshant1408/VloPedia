@@ -44,61 +44,54 @@ export function WeaponCard({ weapon, view = "horizontal" }: WeaponCardProps) {
     );
   }
 
-  // Horizontal (default)
+  // Grid (default)
   return (
     <Link
       href={`/weapons/${slug}`}
-      className="group relative block overflow-hidden border border-border bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg clip-diagonal"
+      className="group relative block overflow-hidden border border-border bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-2xl clip-diagonal"
     >
-      {/* Top technical header bar */}
-      <div className="flex items-center justify-between border-b border-border/60 bg-surface px-4 py-2 font-mono text-[10px] text-muted">
-        <div className="flex items-center gap-2">
-          <span className="text-muted/60 select-none">+</span>
-          <span className="uppercase tracking-widest text-secondary font-bold">
-            {weapon.shopData?.categoryText ?? weapon.category.replace(/EEquippableCategory::/i, "")}
-          </span>
-        </div>
-        {weapon.weaponStats && (
-          <span className="tracking-wider">
-            MAG: <strong className="text-white">{weapon.weaponStats.magazineSize}</strong> · ROF: <strong className="text-white">{weapon.weaponStats.fireRate}</strong>
-          </span>
-        )}
-      </div>
-
-      {/* Weapon image — 3:1 ratio */}
-      <div className="relative w-full bg-black/30" style={{ aspectRatio: "3/1" }}>
+      {/* Weapon image */}
+      <div className="relative w-full bg-black/20 aspect-square" style={{ minHeight: "260px" }}>
         <Image
           src={weapon.displayIcon}
           alt={weapon.displayName}
           fill
-          sizes="(max-width:640px) 100vw, 50vw"
-          className="object-contain px-8 py-4 transition-transform duration-500 group-hover:scale-[1.04]"
+          sizes="(max-width:640px) 100vw, 25vw"
+          className="object-contain px-4 py-4 transition-transform duration-500 group-hover:scale-[1.08]"
           unoptimized
         />
-        {/* Subtle inner radial highlight */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(255,70,85,0.08) 0%, transparent 70%)",
-          }}
-        />
+        {/* Category badge */}
+        <div className="absolute top-3 left-3 z-10">
+          <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-primary bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md border border-white/10">
+            {weapon.shopData?.categoryText ?? weapon.category.replace(/EEquippableCategory::/i, "")}
+          </span>
+        </div>
+        {/* Cost badge */}
+        {cost && (
+          <div className="absolute bottom-3 right-3 z-10">
+            <span className="font-mono text-[10px] font-bold text-white bg-primary px-2 py-1 rounded-md">
+              {cost.toLocaleString()} VP
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Info row */}
-      <div className="flex items-center justify-between border-t border-border px-5 py-3 bg-surface-card">
-        <div>
-          <h3 className="font-display font-black text-xl uppercase tracking-wide text-white group-hover:text-primary transition-colors">
+      {/* Info */}
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h3 className="font-display font-black text-lg uppercase tracking-wide text-white group-hover:text-primary transition-colors line-clamp-1">
             {weapon.displayName}
           </h3>
+          {weapon.weaponStats && (
+            <span className="font-mono text-[10px] text-muted tracking-widest">
+              {weapon.weaponStats.magazineSize} RDS
+            </span>
+          )}
         </div>
-        {cost ? (
-          <span className="font-mono text-sm font-bold text-primary">
-            {cost.toLocaleString()} <span className="text-[10px] text-muted">VP</span>
-          </span>
-        ) : (
-          <span className="font-mono text-xs uppercase tracking-wider text-muted">Free Standard</span>
+        {weapon.weaponStats && (
+          <p className="font-sans text-[10px] text-secondary leading-relaxed">
+            {Math.round(weapon.weaponStats.fireRate)} RPM · {weapon.weaponStats.magazineSize} MAG
+          </p>
         )}
       </div>
 
