@@ -117,17 +117,15 @@ function MapMesh({
         varying vec2 vUv;
         void main() {
           vec4 tex = texture2D(map, vUv);
-          if (tex.a < 0.05) discard;
           // Convert to grayscale luminance
           float lum = dot(tex.rgb, vec3(0.2126, 0.7152, 0.0722));
-          // Strong threshold for clean blueprint lines
-          float edge = smoothstep(0.15, 0.35, lum);
-          // Invert: dark areas become blueprint lines, light areas become background
-          float line = 1.0 - edge;
-          // Add slight noise reduction
-          line = smoothstep(0.2, 0.8, line);
-          vec3 color = mix(bgColor, blueprintColor, line);
-          gl_FragColor = vec4(color, tex.a * opacity);
+          // Blend: lighter map areas show blueprint accent, dark areas show bg
+          float edge = smoothstep(0.1, 0.6, lum);
+          // Keep some of the original color to prevent full cyan blowout
+          vec3 blueprintTint = mix(bgColor, blueprintColor, edge * 0.7);
+          // Mix tint with original texture color (60% tinted, 40% original)
+          vec3 color = mix(blueprintTint, tex.rgb, 0.35);
+          gl_FragColor = vec4(color, opacity);
         }
       `,
       transparent: true,
