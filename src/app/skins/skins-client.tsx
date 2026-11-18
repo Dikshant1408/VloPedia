@@ -97,7 +97,7 @@ export function SkinsClient({ initialSkins }: SkinsClientProps) {
         </div>
 
         {/* Filter bar */}
-        <div className="sticky top-[57px] z-40 border-b border-border bg-background/95 backdrop-blur-sm">
+        <div className="sticky top-16 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
           <Container className="py-4">
             <div className="flex flex-wrap items-center gap-3">
               {/* Search */}

@@ -84,8 +84,14 @@ async function fetchFeaturedBundles(): Promise<Array<{uuid: string; displayName:
   try {
     const j = await fetchWithCache<{ data: any[] }>("https://valorant-api.com/v1/bundles");
     const raw: any[] = j.data ?? [];
-    return raw
-      .filter(b => b.verticalPromoImage || b.displayIcon)
+    const seen = new Set<string>();
+    const unique = raw.filter(b => {
+      if (!b.verticalPromoImage && !b.displayIcon) return false;
+      if (seen.has(b.displayName)) return false;
+      seen.add(b.displayName);
+      return true;
+    });
+    return unique
       .slice(0, 6)
       .map(b => ({
         uuid: b.uuid,
@@ -137,9 +143,9 @@ export default async function SkinsIndexPage() {
                 <Link
                   key={bundle.uuid}
                   href={`/bundles/${bundle.uuid}`}
-                  className="group flex flex-col justify-between border border-[rgba(236,232,225,0.08)] bg-surface-card p-3.5 hover:border-primary/50 hover:bg-surface-card/80 transition-all rounded"
+                  className="group relative flex flex-col justify-between border border-[rgba(236,232,225,0.08)] bg-surface-card p-3.5 hover:border-primary/50 hover:bg-surface-card/80 transition-all rounded"
                 >
-                  <div className="aspect-square bg-black/20 overflow-hidden rounded-lg mb-3 flex items-center justify-center">
+                  <div className="relative aspect-square bg-black/20 overflow-hidden rounded-lg mb-3 flex items-center justify-center">
                     {bundle.verticalPromoImage ? (
                       <Image
                         src={bundle.verticalPromoImage}
