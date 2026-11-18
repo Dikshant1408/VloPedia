@@ -9,6 +9,7 @@ import { siteConfig } from "@/lib/site";
 import { fetchWithCache } from "@/lib/api-cache";
 import type { ValorantWeapon, ValorantAgent } from "@/lib/valorant-types";
 import { ArrowLeft, GitCompare, CheckCircle, XCircle, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+import { RichText } from "@/components/rich-text";
 
 export const dynamic = "force-static";
 
@@ -286,7 +287,7 @@ export default async function ComparePage({ params }: Props) {
                 <h2 className="font-display font-black text-2xl uppercase text-white">{a1.displayName}</h2>
                 <span className="font-mono text-xs uppercase text-primary px-2 py-1 border border-primary/30">{a1.role?.displayName}</span>
               </div>
-              <p className="font-sans text-xs text-secondary line-clamp-3">{a1.description}</p>
+              <p className="font-sans text-xs text-secondary line-clamp-3"><RichText text={a1.description} /></p>
               <Link href={`/agents/${slug1}`} className="block text-center font-mono text-xs uppercase py-2 border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
                 View Full {a1.displayName} Dossier →
               </Link>
@@ -300,7 +301,7 @@ export default async function ComparePage({ params }: Props) {
                 <h2 className="font-display font-black text-2xl uppercase text-white">{a2.displayName}</h2>
                 <span className="font-mono text-xs uppercase text-[#0DF2F2] px-2 py-1 border border-[#0DF2F2]/30">{a2.role?.displayName}</span>
               </div>
-              <p className="font-sans text-xs text-secondary line-clamp-3">{a2.description}</p>
+              <p className="font-sans text-xs text-secondary line-clamp-3"><RichText text={a2.description} /></p>
               <Link href={`/agents/${slug2}`} className="block text-center font-mono text-xs uppercase py-2 border border-[#0DF2F2]/40 bg-[#0DF2F2]/10 text-[#0DF2F2] hover:bg-[#0DF2F2]/20 transition-colors">
                 View Full {a2.displayName} Dossier →
               </Link>

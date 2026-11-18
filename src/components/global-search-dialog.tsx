@@ -21,6 +21,7 @@ import { soundSystem } from "@/lib/sound-system";
 import loreData from "@/data/lore-database.json";
 import { getRecentViews, RecentViewItem } from "@/lib/recently-viewed";
 import { TacticalEmptyState } from "@/components/tactical-empty-state";
+import { stripRichText } from "@/components/rich-text";
 
 interface SearchItem {
   id: string;
@@ -106,7 +107,7 @@ export function GlobalSearchDialog() {
             id: `agent-${a.uuid}`,
             category: "Agents",
             title: a.displayName,
-            subtitle: `${a.role?.displayName ?? "Agent"} · ${a.description?.slice(0, 70)}...`,
+            subtitle: `${a.role?.displayName ?? "Agent"} · ${stripRichText(a.description)?.slice(0, 70)}...`,
             href: `/agents/${slugify(a.displayName)}`,
             badge: a.role?.displayName,
           }));

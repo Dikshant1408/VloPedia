@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { RichText } from "@/components/rich-text";
 
 interface EntityCardProps {
   title: string;
@@ -43,7 +44,7 @@ export function EntityCard({ title, description, href, imageUrl, badge, meta, cl
             {title}
           </h3>
           {description ? (
-            <p className="text-xs leading-relaxed text-secondary line-clamp-2">{description}</p>
+            <p className="text-xs leading-relaxed text-secondary line-clamp-2"><RichText text={description} /></p>
           ) : null}
         </div>
         <div className="flex items-center justify-between gap-4 pt-1 border-t border-border/50">

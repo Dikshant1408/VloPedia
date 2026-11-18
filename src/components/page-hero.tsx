@@ -3,6 +3,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { GlowEffect } from "./glow-effect";
+import { RichText } from "./rich-text";
 
 interface PageHeroProps {
   imageSrc: string;
@@ -113,7 +114,7 @@ export function PageHero({
 
             {subtitle && (
               <p className="max-w-xl text-base leading-relaxed text-secondary font-sans">
-                {subtitle}
+                {typeof subtitle === "string" ? <RichText text={subtitle} /> : subtitle}
               </p>
             )}
 

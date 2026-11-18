@@ -10,7 +10,7 @@ import { PageHero } from "@/components/page-hero";
 import { RoleBadge } from "@/components/role-badge";
 import { AbilitySelector } from "@/components/ability-selector";
 import { AgentRelatedWeapons } from "./related-weapons";
-import { RichText } from "@/components/rich-text";
+import { RichText, stripRichText } from "@/components/rich-text";
 import type { ValorantAgent } from "@/lib/valorant-types";
 import { siteConfig } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -255,7 +255,7 @@ export default async function AgentDetailPage({ params }: Props) {
       {
         "@type": "Article",
         "headline": `${agent.displayName} VALORANT Guide: Abilities, Role, Tips & Matchups`,
-        "description": agent.description,
+        "description": stripRichText(agent.description),
         "image": [agent.fullPortrait || agent.bustPortrait],
         "author": { "@type": "Organization", "name": "VloPedia" },
         "publisher": { "@type": "Organization", "name": "VloPedia", "url": siteConfig.url },

@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { Container } from "@/components/container";
 import { PageTransition, Reveal } from "@/components/motion-system";
 import { RoleBadge } from "@/components/role-badge";
+import { RichText } from "@/components/rich-text";
 import type { ValorantAgent } from "@/lib/valorant-types";
 
 /* ── Static counter data (community meta) ── */
@@ -142,7 +143,7 @@ export default function MatchupsPage() {
                       <div>
                         <h2 className="font-display text-3xl uppercase text-white">{selected.displayName}</h2>
                         <RoleBadge role={selected.role?.displayName ?? ""} size="sm" />
-                        <p className="mt-1 font-sans text-xs text-muted line-clamp-2">{selected.description}</p>
+                        <p className="mt-1 font-sans text-xs text-muted line-clamp-2"><RichText text={selected.description} /></p>
                       </div>
                     </div>
                   </Reveal>
