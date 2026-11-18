@@ -5,7 +5,6 @@ import type { ValorantSkin } from "@/lib/valorant-types";
 import { CONTENT_TIER_MAP } from "@/lib/valorant-types";
 import Link from "next/link";
 import { Container } from "@/components/container";
-import Image from "next/image";
 
 export const dynamic = "force-static";
 
@@ -145,24 +144,20 @@ export default async function SkinsIndexPage() {
                   href={`/bundles/${bundle.uuid}`}
                   className="group relative flex flex-col justify-between border border-[rgba(236,232,225,0.08)] bg-surface-card p-3.5 hover:border-primary/50 hover:bg-surface-card/80 transition-all rounded"
                 >
-                  <div className="relative aspect-square bg-black/20 overflow-hidden rounded-lg mb-3 flex items-center justify-center">
+                  <div className="w-full rounded-lg mb-3 bg-black/20 overflow-hidden" style={{aspectRatio: "1 / 1"}}>
                     {bundle.verticalPromoImage ? (
-                      <Image
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
                         src={bundle.verticalPromoImage}
                         alt={bundle.displayName}
-                        fill
-                        sizes="200px"
-                        className="object-cover group-hover:scale-[1.05] transition-transform duration-300"
-                        unoptimized
+                        className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300"
                       />
                     ) : bundle.displayIcon ? (
-                      <Image
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
                         src={bundle.displayIcon}
                         alt={bundle.displayName}
-                        fill
-                        sizes="200px"
-                        className="object-contain p-4 group-hover:scale-[1.05] transition-transform duration-300"
-                        unoptimized
+                        className="w-full h-full object-contain p-4 group-hover:scale-[1.05] transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-muted text-[10px]">
