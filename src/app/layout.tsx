@@ -104,6 +104,21 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Google Tag Manager — GTM-NGRWHB8Q (must be first in head) */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-NGRWHB8Q"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+            `,
+          }}
+        />
+
         {/* Riot CDN Anycast edge preconnections */}
         <link rel="preconnect" href="https://media.valorant-api.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://media.valorant-api.com" />
@@ -186,6 +201,17 @@ export default async function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-background text-foreground antialiased font-sans">
+        {/* Google Tag Manager (noscript) — GTM-NGRWHB8Q */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-NGRWHB8Q"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
+          />
+        </noscript>
+
         <Providers>
           <div className="relative isolate min-h-screen overflow-x-hidden">
             {/* Skip to content */}
