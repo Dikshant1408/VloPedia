@@ -35,7 +35,6 @@ async function fetchBundles(): Promise<BundleData[]> {
         displayIcon2: b.displayIcon2,
         verticalPromoImage: b.verticalPromoImage,
         assetPath: "",
-        price:  [8700, 7100, 6700, 5900, 5100][i % 5],
         active: i === 0,
       }));
   } catch {

@@ -152,12 +152,14 @@ async function getBundleItems(bundleName: string): Promise<BundleItemsPayload> {
   return {
     skins: matchedSkins,
     accessories,
-    totalCost: totalCost > 0 ? totalCost : 7100
+    totalCost
   };
 }
 
 export async function generateStaticParams() {
   const bundles = await getAllBundles();
+  // All bundles are still generated so internal links never break, but pages we
+  // cannot populate are marked noindex in generateMetadata.
   return bundles.map(b => ({ slug: b.uuid }));
 }
 
@@ -170,23 +172,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!bundle) return { title: "Bundle Not Found | VloPedia", robots: { index: false } };
 
   const img = bundle.verticalPromoImage ?? bundle.displayIcon2 ?? bundle.displayIcon;
-  const pageTitle = `${bundle.displayName} Bundle: Price, Included Skins & Overview | VloPedia`;
-  const pageDesc = `Complete ${bundle.displayName} bundle guide in VALORANT. View VP store pricing, included weapon skins, gun buddies, player cards, sprays, and store rotation rules.`;
+
+  // Only claim "included skins" when we can actually enumerate them.
+  const { skins: previewSkins, accessories: previewAccessories } = await getBundleItems(bundle.displayName);
+  const hasItems = previewSkins.length > 0 || previewAccessories.length > 0;
+
+  const pageTitle = hasItems
+    ? `${bundle.displayName} Bundle: Price, Included Skins & Overview | VloPedia`
+    : `${bundle.displayName} Bundle Overview | VloPedia`;
+  const pageDesc = hasItems
+    ? `Complete ${bundle.displayName} bundle guide in VALORANT. View VP store pricing, included weapon skins, gun buddies, player cards, sprays, and store rotation rules.`
+    : `${bundle.displayName} cosmetic bundle in VALORANT. Bundle contents are not published by Riot Games yet — check back for the full item breakdown.`;
 
   return {
     title: pageTitle,
     description: pageDesc,
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
+    robots: hasItems
+      ? {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        }
+      : { index: false, follow: true },
     openGraph: {
       type: "website",
       title: pageTitle,
@@ -235,7 +248,9 @@ export default async function BundleDetailPage({ params }: Props) {
         "mainEntity": {
           "@type": "Thing",
           "name": `${bundle.displayName} Bundle`,
-          "description": `Valuation: ${totalCost > 0 ? `${totalCost.toLocaleString()} VP` : "Limited Edition"}. Contains weapons and cosmetics.`
+          "description": includedSkins.length > 0
+            ? `Contains ${includedSkins.length} weapon skins with a combined individual value of ${totalCost.toLocaleString()} VP.`
+            : `Cosmetic bundle containing ${accessories.length} accessories.`
         }
       },
       {
@@ -246,7 +261,9 @@ export default async function BundleDetailPage({ params }: Props) {
             "name": `How much does the ${bundle.displayName} bundle cost in VALORANT?`,
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": `The individual item valuation of the ${bundle.displayName} collection is approximately ${totalCost.toLocaleString()} VP. Bundles purchased in the Featured Store generally grant the melee skin and player accessories at a discount or free of charge.`
+              "text": includedSkins.length > 0
+                ? `Buying every item in the ${bundle.displayName} individually would cost ${totalCost.toLocaleString()} VP. Bundles in the Featured Store are priced below that sum and usually include the melee weapon and accessories at no extra cost.`
+                : `Riot Games has not published an itemised price breakdown for the ${bundle.displayName} yet, so an exact individual-item valuation is not available.`
             }
           },
           {
@@ -254,7 +271,9 @@ export default async function BundleDetailPage({ params }: Props) {
             "name": `What items are included in the ${bundle.displayName} bundle?`,
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": `The ${bundle.displayName} bundle contains ${includedSkins.length} weapon cosmetics${accessories.length > 0 ? ` and ${accessories.length} accessories including gun buddies, player cards, and sprays.` : "."}`
+              "text": includedSkins.length > 0 || accessories.length > 0
+                ? `The ${bundle.displayName} bundle contains ${includedSkins.length} weapon skins${accessories.length > 0 ? ` and ${accessories.length} accessories including gun buddies, player cards, and sprays` : ""}.`
+                : `The full contents of the ${bundle.displayName} have not been published yet. This page will be updated once the item list is available.`
             }
           },
           {
@@ -335,20 +354,30 @@ export default async function BundleDetailPage({ params }: Props) {
                     </p>
                   )}
                   <div className="flex flex-wrap gap-4 pt-2 font-mono text-xs text-muted">
-                    <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
-                      <Layers className="h-3.5 w-3.5 text-primary" />
-                      <span>{includedSkins.length} WEAPON SKINS</span>
-                    </div>
+                    {includedSkins.length > 0 && (
+                      <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
+                        <Layers className="h-3.5 w-3.5 text-primary" />
+                        <span>{includedSkins.length} WEAPON SKINS</span>
+                      </div>
+                    )}
                     {accessories.length > 0 && (
                       <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
                         <Sparkles className="h-3.5 w-3.5 text-yellow-400" />
                         <span>{accessories.length} ACCESSORIES</span>
                       </div>
                     )}
-                    <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
-                      <ShoppingBag className="h-3.5 w-3.5 text-emerald-400" />
-                      <span>EST. {totalCost.toLocaleString()} VP</span>
-                    </div>
+                    {includedSkins.length > 0 && (
+                      <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
+                        <ShoppingBag className="h-3.5 w-3.5 text-emerald-400" />
+                        <span>{totalCost.toLocaleString()} VP INDIVIDUAL VALUE</span>
+                      </div>
+                    )}
+                    {includedSkins.length === 0 && accessories.length === 0 && (
+                      <div className="flex items-center gap-1.5 border border-border bg-surface-elevated px-3 py-1.5 clip-diagonal-sm">
+                        <Info className="h-3.5 w-3.5 text-muted" />
+                        <span>CONTENTS NOT YET PUBLISHED</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -558,7 +587,9 @@ export default async function BundleDetailPage({ params }: Props) {
                       How much does the {bundle.displayName} bundle cost in VALORANT?
                     </p>
                     <p className="text-xs leading-relaxed text-muted">
-                      The total standalone item valuation of the {bundle.displayName} collection is approximately {totalCost.toLocaleString()} VP. In-store featured bundles generally bundle weapon skins together with free melee weapons or accessory packs.
+                      {includedSkins.length > 0
+                        ? `Buying every weapon in the ${bundle.displayName} separately would cost ${totalCost.toLocaleString()} VP. Featured bundles are priced below that sum and normally include the melee weapon plus accessories at no extra cost.`
+                        : `Riot Games has not published an itemised contents list for the ${bundle.displayName} yet, so an exact standalone valuation is not available.`}
                     </p>
                   </div>
                   <div className="border border-border/60 bg-black/30 p-4 space-y-2">
